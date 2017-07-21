@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.proxy.local;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,6 +15,7 @@ import java.lang.reflect.Proxy;
  */
 
 public class LocalDynamicProxyActivity extends Activity {
+    public static final String EXTRA_DEST = "extra-dest" ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +27,12 @@ public class LocalDynamicProxyActivity extends Activity {
         CarShop carShop = new CarShop();
         carShop.startCar();
         ICar car2Proxy = (ICar) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{ICar.class}, invocationHandler);
-        Log.e("taylor ClassLoader" , "LocalDynamicProxyActivity.onCreate() "+ " isEngineOk="+car2Proxy.isEngineOk()) ;
+        Log.e("taylor ClassLoader", "LocalDynamicProxyActivity.onCreate() " + " isEngineOk=" + car2Proxy.isEngineOk());
+        //case3
+        ICar car3Proxy = (ICar) Proxy.newProxyInstance(this.getClass().getClassLoader() , new Class[]{ICar.class}, paramInvocationHandler);
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DEST,"JiaDing") ;
+        drive(1 , intent , car3Proxy);
     }
 
 
@@ -44,6 +51,11 @@ public class LocalDynamicProxyActivity extends Activity {
             boolean isEngineOk = false;
             Log.v("taylor", "Car.isEngineOk() " + "=" + isEngineOk);
             return isEngineOk;
+        }
+
+        @Override
+        public void drive(int direction, Intent intent) {
+            Log.v("taylor ", "Car.drive() " + " direction=" + direction + ",intent=" + intent);
         }
 
     }
@@ -80,6 +92,11 @@ public class LocalDynamicProxyActivity extends Activity {
                     Log.v("taylor intercept", "CarShop.isEngineOk() " + " ok=" + isEnglishOk);
                     return isEnglishOk;
                 }
+
+                @Override
+                public void drive(int direction, Intent intent) {
+                    Log.v("taylor " , "CarShop.drive() "+ " direction="+direction+",intent="+intent) ;
+                }
             };
         }
 
@@ -103,4 +120,49 @@ public class LocalDynamicProxyActivity extends Activity {
             return null;
         }
     };
+
+    /**
+     * case3:make a proxy of method param
+     * @param direction
+     * @param intent
+     * @param iCar
+     */
+    private void drive(int direction ,Intent intent,ICar iCar){
+        iCar.drive(direction , intent);
+        //read intent
+        String dest = intent.getStringExtra(EXTRA_DEST) ;
+        Log.e("taylor ttparam" , "LocalDynamicProxyActivity.drive() "+ " dest="+dest) ;
+    }
+
+    private InvocationHandler paramInvocationHandler = new InvocationHandler() {
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            switch (method.getName()) {
+                case ICar.METHOD_IS_ENGINE_OK:
+                    return true;
+                case ICar.METHOD_RUN:
+                    break;
+                case ICar.METHOD_DRIVE :
+                   drive(args) ;
+                default:
+                    break;
+            }
+            return null;
+        }
+
+        private void drive(Object[] args){
+            //find intent among params
+            int index = 0;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Intent) {
+                    index = i;
+                    break;
+                }
+            }
+            //tamper intent extra
+            Intent intent = ((Intent) args[index]);
+            intent.putExtra(EXTRA_DEST , "HeChuanLu") ;
+            args[index] = intent ;
+        }
+    } ;
 }

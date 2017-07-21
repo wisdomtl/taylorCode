@@ -44,7 +44,7 @@ public class ClipboardHook {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (QUERY_LOCAL_INTERFACE.equals(method.getName())) {
-                //we cant access the source code of IClipboard,but we know the package name.so forName comes in handy
+                //we cant access the source code of IClipboard,but we know the package name.so forName() comes in handy
                 Class<?> iClipboard = Class.forName("android.content.IClipboard");
                 return Proxy.newProxyInstance(MainActivity.class.getClassLoader(),
                         new Class[]{iClipboard},
