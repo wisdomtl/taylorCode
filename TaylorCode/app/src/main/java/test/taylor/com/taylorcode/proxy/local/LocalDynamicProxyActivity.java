@@ -23,7 +23,7 @@ public class LocalDynamicProxyActivity extends Activity {
         ICar car1 = new Car();
         ICar car1Proxy = (ICar) new DynamicProxy().newProxy(car1, new LogInvasion());
         car1Proxy.run();
-        //case3
+        //case2
         ICar car3Proxy = (ICar) Proxy.newProxyInstance(this.getClassLoader() , new Class[]{ICar.class}, paramInvocationHandler);
         Intent intent = new Intent();
         intent.putExtra(EXTRA_DEST,"JiaDing") ;
@@ -85,7 +85,7 @@ public class LocalDynamicProxyActivity extends Activity {
     };
 
     /**
-     * case3:make a proxy of method param
+     * case2:make proxy of interface for tampering it's param
      * @param direction
      * @param intent
      * @param iCar
