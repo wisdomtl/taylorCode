@@ -92,6 +92,7 @@ public class ClipboardHook {
      * 拦截系统剪贴板粘贴方法
      */
     private class IClipboardInvocationHandler implements InvocationHandler {
+        public static final String GET_PRIMARY_CLIP = "getPrimaryClip";
         private Object clipboardService;
 
         public IClipboardInvocationHandler(Object clipboardService) {
@@ -100,7 +101,7 @@ public class ClipboardHook {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if ("getPrimaryClip".equals(method.getName())) {
+            if (GET_PRIMARY_CLIP.equals(method.getName())) {
                 String clipText = null;
 //                ClipData originClipData = ((ClipData) method.invoke(iClipboard, args));
 //                if(originClipData != null && originClipData.getItemCount() > 0){
