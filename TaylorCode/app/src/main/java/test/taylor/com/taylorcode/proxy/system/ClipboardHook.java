@@ -35,6 +35,14 @@ public class ClipboardHook {
             Class stub = Class.forName("android.content.IClipboard$Stub");
             Method asInterface = stub.getDeclaredMethod("asInterface", IBinder.class);
             Object clipboardService = asInterface.invoke(null, clipboardServiceIBinder);
+            //the code below wont work,it will destroy the rest function of IClipboardManager
+//            Class clipboardManager = Class.forName("android.content.ClipboardManager");
+//            Field sService = clipboardManager.getDeclaredField("sService");
+//            sService.setAccessible(true);
+//            Class<?> iClipboard = Class.forName("android.content.IClipboard");
+//            Object iClipManager = Proxy.newProxyInstance(HookSystemServiceActivity.class.getClassLoader(), new Class[]{iClipboard}, new IClipboardInvocationHandler(null));
+//            sService.set(clipboardManager, iClipManager);
+
 
             /**
              * 2.生成假包
@@ -87,7 +95,7 @@ public class ClipboardHook {
         private Object clipboardService;
 
         public IClipboardInvocationHandler(Object clipboardService) {
-            this.clipboardService = clipboardService ;
+            this.clipboardService = clipboardService;
         }
 
         @Override
@@ -99,10 +107,6 @@ public class ClipboardHook {
 //                    clipText = originClipData.getItemAt(0).getText().toString() ;
 //                }
                 return ClipData.newPlainText(clipText, "程序员");
-            }
-            //hooking this method is a must,or crash will happen
-            if ("hasPrimaryClip".equals(method.getName())) {
-                return true;
             }
             return method.invoke(clipboardService, args);
         }
