@@ -1,19 +1,19 @@
-package test.taylor.com.taylorcode;
+package test.taylor.com.taylorcode.proxy.system;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 
-import test.taylor.com.taylorcode.proxy.ClipboardHook;
+import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.Taylor;
 
-public class MainActivity extends AppCompatActivity {
+public class HookSystemServiceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EditText et = new EditText(this) ;
-        setContentView(et);
-        new ClipboardHook().binder(this);
+        setContentView(R.layout.hook_system_service_activity);
+        ClipboardHook.getInstance().binder(this);
     }
 
     private Taylor taylor = new Taylor() {
