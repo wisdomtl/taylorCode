@@ -24,7 +24,11 @@ public class ClipboardHook {
         return ClipboardHookHolder.INSTANCE;
     }
 
-    public void binder(Activity activity) {
+    /**
+     * 篡改系统剪贴板服务
+     * @param activity 当期运行activity
+     */
+    public void init(Activity activity) {
         try {
             /**1.获得系统剪贴板服务实例**/
             Class serviceManager = Class.forName("android.os.ServiceManager");

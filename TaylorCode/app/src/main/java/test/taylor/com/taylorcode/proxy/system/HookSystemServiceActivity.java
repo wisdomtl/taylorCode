@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.proxy.system;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.Taylor;
@@ -13,7 +12,7 @@ public class HookSystemServiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hook_system_service_activity);
-        ClipboardHook.getInstance().binder(this);
+        ClipboardHook.getInstance().init(this);
     }
 
     private Taylor taylor = new Taylor() {
