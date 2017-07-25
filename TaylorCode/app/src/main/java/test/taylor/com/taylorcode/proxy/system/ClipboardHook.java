@@ -31,32 +31,27 @@ public class ClipboardHook {
     public void init(Activity activity) {
         try {
             /**1.获得系统剪贴板服务实例**/
+            //this is a must,or the rest function of IClipboard will be destroyed
             Class serviceManager = Class.forName("android.os.ServiceManager");
             Method getService = serviceManager.getDeclaredMethod("getService", String.class);
             getService.setAccessible(true);
             Object clipboardServiceIBinder = getService.invoke(null, Context.CLIPBOARD_SERVICE);
-            //if not using the 3 lines code below ,it will throw java.lang.IllegalArgumentException: Expected receiver of type android.content.IClipboard, but got android.os.BinderProxy
             Class stub = Class.forName("android.content.IClipboard$Stub");
             Method asInterface = stub.getDeclaredMethod("asInterface", IBinder.class);
             Object clipboardService = asInterface.invoke(null, clipboardServiceIBinder);
-            //the code below wont work,it will destroy the rest function of IClipboardManager
+            //the code below will also work
 //            Class clipboardManager = Class.forName("android.content.ClipboardManager");
 //            Field sService = clipboardManager.getDeclaredField("sService");
 //            sService.setAccessible(true);
 //            Class<?> iClipboard = Class.forName("android.content.IClipboard");
-//            Object iClipManager = Proxy.newProxyInstance(HookSystemServiceActivity.class.getClassLoader(), new Class[]{iClipboard}, new IClipboardInvocationHandler(null));
+//            Object iClipManager = Proxy.newProxyInstance(activity.getClassLoader(), new Class[]{iClipboard}, new IClipboardInvocationHandler(clipboardService));
 //            sService.set(clipboardManager, iClipManager);
 
-
-            /**
-             * 2.生成假包
-             * 创建一个能从queryLocalInterface中拿到自定义剪贴板接口的代理IBinder ,让这个IBinder发挥作用的是asInterface()接口
-             */
+            /**2.生成假包**/
+            //创建一个能从queryLocalInterface中拿到自定义剪贴板接口的代理IBinder ,让这个IBinder发挥作用的是asInterface()接口
             IBinder myClipboardService = (IBinder) Proxy.newProxyInstance(activity.getClassLoader(), new Class[]{IBinder.class}, new IBinderInvocationHandler(clipboardService));
-            /**
-             * 3.调包
-             * 将代理IBinder植入到系统中,为了让传入asInterface()的是代理IBinder,所以必须将其写入ServiceManager.sCache
-             */
+            /**3.调包**/
+            //将代理IBinder植入到系统中,为了让传入asInterface()的是代理IBinder,所以必须将其写入ServiceManager.sCache
             Class<?> serviceMangerClass = Class.forName("android.os.ServiceManager");
             Field field = serviceMangerClass.getDeclaredField("sCache");
             field.setAccessible(true);
