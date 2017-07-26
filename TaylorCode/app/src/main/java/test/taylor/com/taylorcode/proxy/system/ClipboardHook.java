@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
+import test.taylor.com.taylorcode.HookSystemServiceActivity;
+
 public class ClipboardHook {
 
     private ClipboardHook() {
@@ -26,9 +28,9 @@ public class ClipboardHook {
 
     /**
      * 篡改系统剪贴板服务
-     * @param activity 当期运行activity
+     * @param context
      */
-    public void init(Activity activity) {
+    public void init(Context context) {
         try {
             /**1.获得系统剪贴板服务实例**/
             //this is a must,or the rest function of IClipboard will be destroyed
@@ -49,7 +51,7 @@ public class ClipboardHook {
 
             /**2.生成假包**/
             //创建一个能从queryLocalInterface中拿到自定义剪贴板接口的代理IBinder ,让这个IBinder发挥作用的是asInterface()接口
-            IBinder myClipboardService = (IBinder) Proxy.newProxyInstance(activity.getClassLoader(), new Class[]{IBinder.class}, new IBinderInvocationHandler(clipboardService));
+            IBinder myClipboardService = (IBinder) Proxy.newProxyInstance(context.getClassLoader(), new Class[]{IBinder.class}, new IBinderInvocationHandler(clipboardService));
             /**3.调包**/
             //将代理IBinder植入到系统中,为了让传入asInterface()的是代理IBinder,所以必须将其写入ServiceManager.sCache
             Class<?> serviceMangerClass = Class.forName("android.os.ServiceManager");
