@@ -10,6 +10,9 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 import test.taylor.com.taylorcode.IMessage;
 
 /**
@@ -17,8 +20,12 @@ import test.taylor.com.taylorcode.IMessage;
  */
 
 public class ClientActivity extends Activity {
+    public static final String KEY = "map";
     private IMessage iMessage;
 
+    /**
+     * case1
+     */
     private IMessageResponse iMessageResponse = new IMessageResponse() {
         @Override
         public void onMessageTypeResponse(int messageType) {
@@ -29,12 +36,14 @@ public class ClientActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //case1
         getMessageType(2, iMessageResponse);
-        getMessageType(3, iMessageResponse);
+//        getMessageType(3, iMessageResponse);
     }
 
+
     /**
-     * getMessageType from another process in a async way
+     * case1:getMessageType from another process in a async way
      *
      * @param index
      * @param iMessageResponse
@@ -49,6 +58,10 @@ public class ClientActivity extends Activity {
                 try {
                     Log.v("taylor", "ClientActivity.onServiceConnected() " + " Thread=" + Thread.currentThread().getId());
                     messageType = iMessage.getMessageType(index);
+                    //case3:tamper value in local service by reflection
+                    Log.v("taylor ttreflection", "ClientActivity.onServiceConnected() " + "origin map value=" + iMessage.getMapValue());
+                    reflectLocalServiceValue();
+                    Log.v("taylor ttreflection", "ClientActivity.onServiceConnected() " + "tampered map value=" + iMessage.getMapValue());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                     iMessageResponse.onMessageTypeResponse(LocalServer.MESSAGE_TYPE_INVALID);
@@ -61,11 +74,33 @@ public class ClientActivity extends Activity {
                 iMessage = null;
             }
         };
+        //[bug]:bind twice
         this.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
 
     }
 
+    /**
+     * case1
+     */
     private interface IMessageResponse {
         void onMessageTypeResponse(int messageType);
+    }
+
+
+    /**
+     * case3:tamper member value in the same process by reflection
+     */
+    private void reflectLocalServiceValue() {
+        try {
+            Class localService = Class.forName("test.taylor.com.taylorcode.aidl.LocalServer");
+            Field mapField = localService.getDeclaredField("map");
+            mapField.setAccessible(true);
+            Map map = ((Map) mapField.get(null));
+            map.put(LocalServer.KEY, "tampered by the same process");
+            Log.v("taylor ttReflection", "ClientActivity.reflectLocalServiceValue() " + " map=" + map.get(LocalServer.KEY));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("taylor  ttReflection", "ClientActivity.reflectLocalServiceValue() " + " reflect failed");
+        }
     }
 }

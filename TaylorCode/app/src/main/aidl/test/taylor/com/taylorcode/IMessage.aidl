@@ -12,4 +12,6 @@ interface IMessage {
             double aDouble, String aString);
 
     int getMessageType(int index) ;
+
+    String getMapValue() ;
 }
