@@ -10,9 +10,11 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 import test.taylor.com.taylorcode.IRemoteService;
 
@@ -28,36 +30,38 @@ public class RemoteDynamicProxyActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("taylor servicePid", "RemoteDynamicProxyActivity.onCreate() " + " pid=" + android.os.Process.myPid());
+        //case1
         startRemoteService();
     }
 
+    /**
+     * case3:tamper value in remote service(another process) by reflection---failed,we could not reflect value in another process
+     */
+    private void reflectRemoteServiceValue() {
+        try {
+            Class remoteService = Class.forName("test.taylor.com.taylorcode.proxy.remote.RemoteService");
+            Field mapField = remoteService.getDeclaredField("map");
+            mapField.setAccessible(true);
+            Map map = ((Map) mapField.get(null));
+            map.put(RemoteService.KEY, "tampered by another process");
+            Log.v("taylor ttReflection", "RemoteDynamicProxyActivity.reflectRemoteServiceValue() " + " map=" + map.get(RemoteService.KEY));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("taylor  ttReflection", "RemoteDynamicProxyActivity.reflectRemoteServiceValue() " + " reflect failed");
+        }
+    }
+
+    /**
+     * case1:start remote service which is in another process
+     */
     private void startRemoteService() {
         Intent intent = new Intent(this, RemoteService.class);
         this.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            makeProxy(iBinder);
-            //[story IPC]4.client convert IBinder into aidl interface for using server function
-            iRemoteService = IRemoteService.Stub.asInterface(iBinder);
-            try {
-                Log.v("taylor servicePid", "RemoteDynamicProxyActivity.onServiceConnected() " + " Thread=" + Thread.currentThread().getId());
-                iRemoteService.sail();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            iRemoteService = null;
-        }
-    };
 
     /**
-     * make proxy for remote service
+     * case2:make proxy for remote service
      *
      * @param iBinder remote service
      */
@@ -84,7 +88,35 @@ public class RemoteDynamicProxyActivity extends Activity {
     }
 
     /**
-     * tamper queryLocalInterface() in Stub.asInterface()
+     * case1
+     */
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            //case2
+            makeProxy(iBinder);
+            //[story IPC]4.client convert IBinder into aidl interface for using server function
+            iRemoteService = IRemoteService.Stub.asInterface(iBinder);
+            try {
+                Log.v("taylor servicePid", "RemoteDynamicProxyActivity.onServiceConnected() " + " Thread=" + Thread.currentThread().getId());
+                iRemoteService.sail();
+                //case3
+                Log.v("taylor ttreflection", "RemoteDynamicProxyActivity.onServiceConnected() " + "origin value=" + iRemoteService.getMapValue());
+                reflectRemoteServiceValue();
+                Log.v("taylor ttreflection", "RemoteDynamicProxyActivity.onServiceConnected() " + " tampered value=" + iRemoteService.getMapValue());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            iRemoteService = null;
+        }
+    };
+
+    /**
+     * case2:tamper queryLocalInterface() in Stub.asInterface()
      */
     private class IBinderInvocationHandler implements InvocationHandler {
 
@@ -109,7 +141,7 @@ public class RemoteDynamicProxyActivity extends Activity {
     }
 
     /**
-     * tamper isEngineOk() in remote service
+     * case2:tamper isEngineOk() in remote service
      */
     private class RemoteServiceInvocationHandler implements InvocationHandler {
         public static final String METHOD_SAIL = "sail";

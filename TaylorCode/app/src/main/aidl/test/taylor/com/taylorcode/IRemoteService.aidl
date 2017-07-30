@@ -12,6 +12,7 @@ interface IRemoteService {
             double aDouble, String aString);
     void sail() ;
     boolean isEngineOk() ;
+    String getMapValue();
 }
 ///*
 // * this is the corresponding java file of aidl,This file is auto-generated.

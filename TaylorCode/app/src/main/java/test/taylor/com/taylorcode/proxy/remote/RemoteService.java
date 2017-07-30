@@ -7,6 +7,9 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import test.taylor.com.taylorcode.IRemoteService;
 
 
@@ -16,7 +19,9 @@ import test.taylor.com.taylorcode.IRemoteService;
  */
 
 public class RemoteService extends Service {
+    public static final String KEY = "map";
 
+    private static Map<String, String> map = new HashMap<>();
 
     /**
      * [story IPC]2.server implement aidl interface
@@ -38,10 +43,24 @@ public class RemoteService extends Service {
             Log.v("taylor tamperService", "RemoteService.isEngineOk() " + " isEngineOk = " + isEngineOk);
             return isEngineOk;
         }
+
+        /**
+         * case3:tamper value in remote service(another process) by reflection---failed,we could not reflect value in another process
+         * @return
+         * @throws RemoteException
+         */
+        @Override
+        public String getMapValue() throws RemoteException {
+            if (map != null) {
+                return map.get(KEY);
+            }
+            return "map is null";
+        }
     };
 
     /**
      * [story IPC]3.server wrap implemented aidl interface with IBinder and return it to client
+     *
      * @param intent
      * @return
      */
@@ -55,5 +74,7 @@ public class RemoteService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.v("taylor servicePid", "RemoteService.onCreate() " + " pid=" + android.os.Process.myPid());
+
+        map.put(KEY, "origin value");
     }
 }
