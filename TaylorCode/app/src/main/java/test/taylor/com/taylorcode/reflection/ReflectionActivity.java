@@ -25,8 +25,11 @@ public class ReflectionActivity extends Activity {
         reflectSameClassValue();
         Log.v("taylor ttReflection1", "ReflectionActivity.onCreate() " + " map value=" + map.get(KEY));
         //case2
-        reflectSamePackageValue();
-        Log.v("taylor ttReflection2", "ReflectionActivity.onCreate() " + " map value=" + ClassA.getMapValue());
+        reflectSamePackageStaticValue();
+        Log.v("taylor ttReflection2", "ReflectionActivity.onCreate() " + " map value=" + ClassA.getStaticMapValue());
+        //case3
+        ClassA classA = reflectSamePackageValue();
+        Log.v("taylor ttReflection3", "ReflectionActivity.onCreate() " + " map value=" + classA.getMapValue());
     }
 
     /**
@@ -47,23 +50,45 @@ public class ReflectionActivity extends Activity {
     }
 
     /**
-     * case2:tamper value of class which is in the same package by reflection
+     * case2:tamper static value of class which is in the same package by reflection
      */
-    private void reflectSamePackageValue() {
+    private void reflectSamePackageStaticValue() {
         //init ClassA
         new ClassA().onCreate();
         //reflect ClassA
         try {
             Class classA = Class.forName("test.taylor.com.taylorcode.reflection.ClassA");
-            Field mapField = classA.getDeclaredField("map");
+            Field mapField = classA.getDeclaredField("staticMap");
             mapField.setAccessible(true);
             Map map = ((Map) mapField.get(null));
-            map.put(ClassA.KEY, "tampered by the same package");
-            Log.v("taylor ttReflection2", "ReflectionActivity.reflectSamePackageValue() " + " map=" + map.get(ClassA.KEY));
+            map.put(ClassA.KEY, "tampered static value by the same package");
+            Log.v("taylor ttReflection2", "ReflectionActivity.reflectSamePackageStaticValue() " + " map=" + map.get(ClassA.KEY));
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("taylor  ttReflection2", "ReflectionActivity.reflectSameClassValue() " + " reflect failed");
+            Log.e("taylor  ttReflection2", "ReflectionActivity.reflectSamePackageStaticValue() " + " reflect failed");
         }
+    }
 
+    /**
+     * case3:tamper non-static value of class which is in the same package by reflection
+     */
+    private ClassA reflectSamePackageValue() {
+        //init ClassA
+        ClassA classAInstance = new ClassA() ;
+        classAInstance.onCreate();
+        //reflect ClassA
+        try {
+            Class classA = Class.forName("test.taylor.com.taylorcode.reflection.ClassA");
+            Field mapField = classA.getDeclaredField("map");
+            mapField.setAccessible(true);
+            Map map = ((Map) mapField.get(classAInstance));
+            map.put(ClassA.KEY, "tampered non-static value by the same package");
+            Log.v("taylor ttReflection3", "ReflectionActivity.reflectSamePackageValue() " + " map=" + map.get(ClassA.KEY));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("taylor  ttReflection3", "ReflectionActivity.reflectSameClassValue() " + " reflect failed");
+        }finally {
+            return classAInstance ;
+        }
     }
 }
