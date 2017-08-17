@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_purple"
+    android:columnCount="3"
+    android:orientation="vertical"
+    android:rowCount="2">
+
+    <!--case1:switch image when clicking-->
+    <CheckBox
+        android:id="@+id/iv_mic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/imageview_checked_selector"
+        android:button="@null" />
+</GridLayout>
