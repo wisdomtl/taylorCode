@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import test.taylor.com.taylorcode.proxy.system.ActivityHook;
-import test.taylor.com.taylorcode.proxy.system.ClipboardHook;
 import test.taylor.com.taylorcode.proxy.system.FakeActivity;
 
 public class HookSystemServiceActivity extends Activity {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_1th"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="define in the 1th place"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tv_2th"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="define in the 2th place"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tv_3th"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="define in the 3th place"
+        android:textSize="30dp" />
+
+</LinearLayout>
