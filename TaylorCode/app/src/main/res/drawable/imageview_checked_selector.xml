@@ -2,6 +2,7 @@
 <selector
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--this sentence should be above the next one,or there will be no effect-->
     <item android:drawable="@drawable/calling_mic_active" android:state_checked="true"/>
     <item android:drawable="@drawable/calling_mic_normal" />
 
