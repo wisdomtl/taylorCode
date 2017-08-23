@@ -17,6 +17,6 @@
         android:button="@null" />
 
     <include
-        layout="@layout/cootek_call_phonepad" />
+        layout="@layout/phonepad" />
 
 </GridLayout>
