@@ -15,4 +15,8 @@
         android:layout_margin="20dp"
         android:background="@drawable/imageview_checked_selector"
         android:button="@null" />
+
+    <include
+        layout="@layout/cootek_call_phonepad" />
+
 </GridLayout>

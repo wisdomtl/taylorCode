@@ -18,4 +18,8 @@ public class SelectorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selector_activity);
     }
+
+    public void onPhonePadClick(View view){
+
+    }
 }

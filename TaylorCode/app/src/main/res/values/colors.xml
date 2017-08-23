@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="cootek_323232">#323232</color>
+    <color name="cootek_383838">#383838</color>
 </resources>

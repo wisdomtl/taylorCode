@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="256dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="64dp"
+    android:columnCount="3"
+    android:rowCount="4">
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="1"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="2"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="3"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="4"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="5"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="6"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="7"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="8"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="9"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="*"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="0"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/cootek_phone_pad_selector"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:onClick="onPhonePadClick"
+        android:text="#"
+        android:textColor="#c7ffffff"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+</GridLayout>
