@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--case1:radio button with text on the left-->
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:button="@null"
+    android:drawableRight="@drawable/radiobutton_selector"/>
