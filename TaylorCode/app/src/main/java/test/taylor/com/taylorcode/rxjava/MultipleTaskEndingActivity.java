@@ -99,6 +99,9 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
 //        }).subscribeOn(Schedulers.newThread());
     }
 
+    /**
+     * case1: multiply async task execute in parallel and notify when the last task is done
+     */
     private void demoMultipleAsyncTask() {
         Observable asyncObservable1 = generateAsyncObservable(TASK1, TASK1_COUNT);
         Observable asyncObservable2 = generateAsyncObservable(TASK2, TASK2_COUNT);
