@@ -34,6 +34,12 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
         setContentView(btn);
     }
 
+    /**
+     * case2: create Observable from an time-consuming task
+     * @param tag
+     * @param cost
+     * @return
+     */
     private Observable<String> generateAsyncObservable(final String tag, final long cost) {
         /**
          *create Observable by SyncOnSubscribe
