@@ -29,11 +29,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".big_data.BigStringActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.RadioButtonActivity">
             <!--<intent-filter>-->
@@ -72,11 +72,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".rxjava.MultipleTaskEndingActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--case1:Holo theme is a must for showing action bar in activity-->
         <activity android:name=".ui.ActionBarActivity"

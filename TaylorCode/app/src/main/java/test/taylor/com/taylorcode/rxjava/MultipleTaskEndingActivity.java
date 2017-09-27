@@ -14,7 +14,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.SyncOnSubscribe;
 import rx.schedulers.Schedulers;
-import test.taylor.com.taylorcode.R;
 
 /**
  * Created by taylor  on 16/7/25.
@@ -108,7 +107,7 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
     /**
      * case1: multiply async task execute in parallel and notify when the last task is done
      */
-    private void demoMultipleAsyncTask() {
+    private void mergeMultipleAsyncTask() {
         Observable asyncObservable1 = generateAsyncObservable(TASK1, TASK1_COUNT);
         Observable asyncObservable2 = generateAsyncObservable(TASK2, TASK2_COUNT);
 
@@ -129,6 +128,7 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
             }
         });
 
+        //the code below had the same effect as the code above
 //        Observable.merge(asyncObservable2, asyncObservable1).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
 //            @Override
 //            public void onCompleted() {
@@ -145,6 +145,31 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
 //                Log.v("taylor ttmulti-end", o.toString());
 //            }
 //        });
+    }
+
+    /**
+     * case3: mergeWith null
+     */
+    private void mergeWithNull(){
+        Log.v("ttangliang ttnulti-end" , "MultipleTaskEndingActivity.mergeWithNull() "+ " ") ;
+        Observable asyncObservable1 = generateAsyncObservable(TASK1, TASK1_COUNT);
+
+        asyncObservable1.mergeWith(null).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                Log.v("taylor ttmulti-end", "Tasks.onCompleted() " + " thread id=" + Thread.currentThread().getId());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.v("taylor ttmulti-end", "Tasks.onError() " + e.toString() + " thread id=" + Thread.currentThread().getId());
+            }
+
+            @Override
+            public void onNext(String o) {
+                Log.v("taylor ttmulti-end", o.toString() + " thread id=" + Thread.currentThread().getId());
+            }
+        });
     }
 
     private void demoMultipleAsyncTaskOldStyle() {
@@ -208,7 +233,10 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
     @Override
     public void onClick(View v) {
         //case1:multiple time-consuming task execute parallel,and notified when the last task is done
-        demoMultipleAsyncTask();
+//        mergeMultipleAsyncTask();
 //                demoMultipleAsyncTaskOldStyle();
+
+        //case2:merge with null
+        mergeWithNull();
     }
 }
