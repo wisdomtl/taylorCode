@@ -60,18 +60,16 @@ public class ContactActivity extends Activity implements View.OnClickListener {
     /**
      * case2:update specified contact
      */
-    private void updateContact() {
-        int contactId = 1441;
+    private void updateContact(long contactId, String number) {
         ContentResolver resolver = this.getContentResolver();
         ContentValues values = new ContentValues();
-        //更新联系人号码
         values.clear();
-        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, "1111111");
+        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, number);
 
         String Where = ContactsContract.Data.RAW_CONTACT_ID + " = ? and " + ContactsContract.Data.MIMETYPE + " = ?";
         String[] WhereParams = new String[]{"" + contactId,
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE};
-        resolver.update(ContactsContract.Data.CONTENT_URI, values, Where, WhereParams);
+//        resolver.update(ContactsContract.Data.CONTENT_URI, values, Where, WhereParams);
 
 //        //更新联系人姓名
 //        values.clear();
@@ -80,13 +78,13 @@ public class ContactActivity extends Activity implements View.OnClickListener {
 //        Where = ContactsContract.Data.RAW_CONTACT_ID + " = ? and " + ContactsContract.Data.MIMETYPE + " = ?";
 //        WhereParams = new String[]{"" + item.getContactId(),
 //                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-        resolver.update(ContactsContract.Data.CONTENT_URI, values, Where, WhereParams);
+        int result = resolver.update(ContactsContract.Data.CONTENT_URI, values, Where, WhereParams);
     }
 
     @Override
     public void onClick(View v) {
         Log.v("taylor ttcontact", "ContactActivity.onClick() " + " ");
         //case2:update specified contact
-        updateContact();
+        updateContact(111,"+8623232222");
     }
 }
