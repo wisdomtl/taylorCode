@@ -241,5 +241,4 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
     }
 
 
-    //modified by master
 }
