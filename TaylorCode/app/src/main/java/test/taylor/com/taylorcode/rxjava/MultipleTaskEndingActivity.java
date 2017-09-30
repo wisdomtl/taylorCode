@@ -239,4 +239,7 @@ public class MultipleTaskEndingActivity extends Activity implements View.OnClick
         //case2:merge with null
         mergeWithNull();
     }
+
+
+    //modified by master
 }
