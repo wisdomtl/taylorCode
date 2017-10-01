@@ -95,4 +95,5 @@ public class DropoutActivity extends Activity {
     private void setupUi(Integer integer) {
         Log.v("ttangliang ttdropout", "DropoutActivity.setupUi() " + " result=" + integer + " thread id=" + Thread.currentThread().getId());
     }
+    //private branch change
 }
