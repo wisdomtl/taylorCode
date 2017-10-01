@@ -87,4 +87,6 @@ public class ContactActivity extends Activity implements View.OnClickListener {
         //case2:update specified contact
         updateContact(111,"+8623232222");
     }
+
+    //master branch change
 }
