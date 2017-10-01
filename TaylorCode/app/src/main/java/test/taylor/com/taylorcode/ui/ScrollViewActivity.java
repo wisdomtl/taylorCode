@@ -18,4 +18,5 @@ public class ScrollViewActivity extends Activity {
         //case1:wrap ScrollView with RelativeLayout for add scrolling ability
         setContentView(R.layout.scrollview_activity);
     }
+    //master branch change
 }
