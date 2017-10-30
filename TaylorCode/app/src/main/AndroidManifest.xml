@@ -3,8 +3,8 @@
     package="test.taylor.com.taylorcode">
 
 
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:name=".TaylorApplication"
@@ -22,11 +22,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".alarm.AlarmActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".HookSystemServiceActivity">
             <!--<intent-filter>-->
@@ -73,9 +73,9 @@
         </activity>
         <activity android:name=".ui.SelectorActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".audio.SoundPoolActivity">
@@ -100,7 +100,8 @@
             <!--</intent-filter>-->
         </activity>
         <!--case1:Holo theme is a must for showing action bar in activity-->
-        <activity android:name=".ui.ActionBarActivity"
+        <activity
+            android:name=".ui.ActionBarActivity"
             android:theme="@android:style/Theme.Holo">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
@@ -117,9 +118,9 @@
         </activity>
         <activity android:name=".ui.ViewZorderActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".aidl.ClientActivity">
@@ -153,10 +154,18 @@
         </activity>
         <activity android:name=".try_catch_finally.ExceptionActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".ui.NotificationActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name=".aidl.LocalServer" />

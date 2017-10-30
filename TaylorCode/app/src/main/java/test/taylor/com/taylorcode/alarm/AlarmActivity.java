@@ -29,6 +29,13 @@ public class AlarmActivity extends Activity {
         setAlarm(this, ALARM_HOUR_OF_DAY, ALARM_MINUTE, ALARM_INTERVAL);
     }
 
+    /**
+     * case1:running code repeatedly even when app is not running(because the alarm will be registered in system process)
+     * @param context
+     * @param hourOfDay
+     * @param minute
+     * @param interval
+     */
     private void setAlarm(Context context, int hourOfDay, int minute, int interval) {
         Log.v("ttaylor", String.format("AlarmActivity.setAlarm(): hourOfDay=%s ,minute=%s ,internal=%s",hourOfDay , minute ,interval));
         AlarmManager alarmManager = ((AlarmManager) this.getSystemService(ALARM_SERVICE));
