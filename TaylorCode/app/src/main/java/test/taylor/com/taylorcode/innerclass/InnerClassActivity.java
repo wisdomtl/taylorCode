@@ -23,7 +23,7 @@ public class InnerClassActivity extends Activity {
 
     public void create(View view) {
         Log.v("ttaylor", "InnerClassActivity.create(): ");
-        new OuterClass(1, 2);
+        new OuterClass(1,2,'d');
     }
 
     public void clear(View view) {
