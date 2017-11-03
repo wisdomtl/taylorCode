@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test.taylor.com.taylorcode.ui.CheckableActivity.NumberRow
+<test.taylor.com.taylorcode.ui.NumberRow
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -34,4 +34,4 @@
         android:duplicateParentState="true"
         android:src="?android:listChoiceIndicatorSingle" />
 
-</test.taylor.com.taylorcode.ui.CheckableActivity.NumberRow>
+</test.taylor.com.taylorcode.ui.NumberRow>
