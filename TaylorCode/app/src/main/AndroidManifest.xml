@@ -29,6 +29,13 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.CheckableActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".broadcast.BroadcastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -184,10 +191,12 @@
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
+        <service android:name=".broadcast.MyIntentService"/>
         <service
             android:name=".proxy.remote.RemoteService"
             android:process=":alienProcess" /><!--: means affiliated to current process-->
         <receiver android:name=".alarm.AlarmReceiver" />
+        <receiver android:name=".broadcast.Receiver"/>
     </application>
 
 </manifest>
