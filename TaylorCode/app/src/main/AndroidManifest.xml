@@ -36,6 +36,13 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".broadcast.BroadcastActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".date.DateActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
