@@ -31,6 +31,9 @@ dependencies {
     compile 'io.reactivex:rxjava:1.3.0'
     compile 'io.reactivex:rxandroid:1.2.1'//for AndroidSchedulers.mainThread()
 
+    //rating-bar
+    compile 'com.hedgehog.ratingbar:app:1.1.2'
+
 
     testCompile 'junit:junit:4.12'
 }

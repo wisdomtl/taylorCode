@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="myRatingBarBig" parent="@android:style/Widget.Holo.Light.RatingBar">
+        <!--<item name="android:progressDrawable">@drawable/rating_bar_self_big</item>-->
+        <item name="android:minWidth">300dp</item>
+        <!--<item name="android:maxHeight">30dip</item>-->
+    </style>
+
 </resources>
