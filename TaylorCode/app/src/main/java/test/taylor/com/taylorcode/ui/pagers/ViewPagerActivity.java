@@ -1,10 +1,7 @@
 package test.taylor.com.taylorcode.ui.pagers;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import test.taylor.com.taylorcode.R;
-import test.taylor.com.taylorcode.util.DimensionUtil;
 
 /**
  * Created by taylor on 2017/11/13.
@@ -33,8 +29,9 @@ public class ViewPagerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_activity);
         MyPagerAdapter adapter = new MyPagerAdapter(prepareViews());
-        ViewPager vp = ((ViewPager) findViewById(R.id.vp));
+        MyViewPager vp = ((MyViewPager) findViewById(R.id.vp));
         vp.setAdapter(adapter);
+        vp.setScrollable(false);
         setIndicator(vp);
         TextView tv = ((TextView) adapter.findViewById(R.id.tv_pager1));
         tv.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +70,7 @@ public class ViewPagerActivity extends Activity {
         private List<View> views;
 
         /**
-         * find views in ViewPagers
+         * case2:find views in ViewPagers
          * @param id
          * @return
          */
