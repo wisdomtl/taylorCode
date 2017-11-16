@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,8 @@ import test.taylor.com.taylorcode.util.DimensionUtil;
  */
 
 public class ViewPagerActivity extends Activity {
-    public static final int PAGE_NUMBER = 3 ;
+    public static final int[] PAGE_LAYOUT_ID = new int[]{R.layout.pager1, R.layout.page2};
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,27 +35,31 @@ public class ViewPagerActivity extends Activity {
         MyPagerAdapter adapter = new MyPagerAdapter(prepareViews());
         ViewPager vp = ((ViewPager) findViewById(R.id.vp));
         vp.setAdapter(adapter);
-        setIndicator(vp) ;
+        setIndicator(vp);
+        TextView tv = ((TextView) adapter.findViewById(R.id.tv_pager1));
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ViewPagerActivity.this, "tv1", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setIndicator(ViewPager viewPager) {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.mi);
         Indicator indicator = new Indicator(this);
-        indicator.setCircleCount(PAGE_NUMBER);
+        indicator.setCircleCount(PAGE_LAYOUT_ID.length);
         indicator.setLongColor(Color.DKGRAY);
         indicator.setShortColor(Color.GRAY);
         magicIndicator.setNavigator(indicator);
         ViewPagerHelper.bind(magicIndicator, viewPager);
-
     }
 
     private List<View> prepareViews() {
         List<View> views = new ArrayList<>();
-        for (int i = 0; i < PAGE_NUMBER; i++) {
-            TextView tv = new TextView(this);
-            tv.setText("" + i);
-            tv.setTextSize(30);
-            views.add(tv);
+        for (int layoutId : PAGE_LAYOUT_ID) {
+            View page = LayoutInflater.from(this).inflate(layoutId, null);
+            views.add(page);
         }
         return views;
     }
@@ -64,6 +71,21 @@ public class ViewPagerActivity extends Activity {
     private class MyPagerAdapter extends PagerAdapter {
 
         private List<View> views;
+
+        /**
+         * find views in ViewPagers
+         * @param id
+         * @return
+         */
+        public View findViewById(int id) {
+            for (View view : views) {
+                View findView = view.findViewById(id);
+                if (findView != null) {
+                    return findView;
+                }
+            }
+            return null;
+        }
 
         public MyPagerAdapter(List<View> views) {
             this.views = views;
@@ -92,9 +114,6 @@ public class ViewPagerActivity extends Activity {
             return views.get(position);
         }
     }
-
-
-
 
 
 }
