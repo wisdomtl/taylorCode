@@ -22,7 +22,7 @@
 
     <com.hedgehog.ratingbar.RatingBar
         xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/ratingbar"
+        android:id="@+id/rating_bar"
         android:layout_width="258dp"
         android:layout_height="30dp"
         android:layout_centerInParent="true"
