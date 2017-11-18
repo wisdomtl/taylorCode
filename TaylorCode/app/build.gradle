@@ -34,6 +34,8 @@ dependencies {
     //rating-bar
     compile 'com.hedgehog.ratingbar:app:1.1.2'
 
+    //TagView
+    compile 'com.hyman:flowlayout-lib:1.1.2'
 
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations-java5:15.0'
