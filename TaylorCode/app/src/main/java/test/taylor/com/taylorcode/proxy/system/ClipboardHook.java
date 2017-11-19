@@ -42,10 +42,10 @@ public class ClipboardHook {
             Method asInterface = stub.getDeclaredMethod("asInterface", IBinder.class);
             Object clipboardService = asInterface.invoke(null, clipboardServiceIBinder);
             //the code below will also work
-//            Class clipboardManager = Class.forName("android.content.ClipboardManager");
+//            Class clipboardManager = Class.forName("android.main_content.ClipboardManager");
 //            Field sService = clipboardManager.getDeclaredField("sService");
 //            sService.setAccessible(true);
-//            Class<?> iClipboard = Class.forName("android.content.IClipboard");
+//            Class<?> iClipboard = Class.forName("android.main_content.IClipboard");
 //            Object iClipManager = Proxy.newProxyInstance(activity.getClassLoader(), new Class[]{iClipboard}, new IClipboardInvocationHandler(clipboardService));
 //            sService.set(clipboardManager, iClipManager);
 

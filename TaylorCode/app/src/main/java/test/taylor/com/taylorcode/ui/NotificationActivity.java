@@ -31,7 +31,7 @@ public class NotificationActivity extends Activity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Log.v("ttaylor", "NotificationActivity.onClick(): ");
-        showNotification(this , 0 ,SelectorActivity.class, "notification title", "notification content");
+        showNotification(this , 0 ,SelectorActivity.class, "notification title", "notification main_content");
     }
 
     /**
@@ -53,7 +53,7 @@ public class NotificationActivity extends Activity implements View.OnClickListen
         );
 
         RemoteViews remoteView = new RemoteViews(context.getPackageName() ,R.layout.custom_notification);
-        remoteView.setTextViewText(R.id.tv_custom_notification , "####content of notification###");
+        remoteView.setTextViewText(R.id.tv_custom_notification , "####main_content of notification###");
         remoteView.setImageViewResource(R.id.iv_custom_notification ,R.drawable.calling_mic_normal);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 //this 3 attribute is a must for notification
