@@ -37,6 +37,9 @@ dependencies {
     //TagView
     compile 'com.hyman:flowlayout-lib:1.1.2'
 
+    //ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.0.0"
+
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations-java5:15.0'
 }
