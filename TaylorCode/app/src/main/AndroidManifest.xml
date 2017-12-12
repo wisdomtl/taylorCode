@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="test.taylor.com.taylorcode">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    package="test.taylor.com.taylorcode"
+    android:sharedUserId="android.uid.system">
+    <!--declare as an system app ,which have to do the following things :
+        1,sign this app with platform signature using "java -jar signapk.jar platform.x509.pem platform.pk8 unsigned.apk signed.apk"
+            platform.x509.pem and platform.pk8 is in the android source code ,the path is "framework/build/target/product/security"
+        2,"adb pushed xxx.apk /system/priv-app/\"
+        3,execute "adb reboot",when phone restart,this app will exits as system app.
+    -->
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+    <!--system permissions which used for system apps-->
+    <uses-permission
+        android:name="android.permission.SET_ACTIVITY_WATCHER"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.INJECT_EVENTS"
+        tools:ignore="ProtectedPermissions" />
+    <!--system permissions which used for system apps-->
 
     <application
         android:name=".TaylorApplication"
@@ -23,59 +39,59 @@
         </activity>
         <activity android:name=".rxjava.takeUntilActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.CheckableActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".broadcast.BroadcastActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".date.DateActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.RatingBarActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.pagers.ViewPagerActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.TagViewActivity">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.DrawerLayoutActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".alarm.AlarmActivity">
             <!--<intent-filter>-->
@@ -218,20 +234,40 @@
         <activity android:name=".ui.NotificationActivity">
 
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".system.AppStatusActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
-        <service android:name=".broadcast.MyIntentService"/>
+        <service android:name=".broadcast.MyIntentService" />
         <service
             android:name=".proxy.remote.RemoteService"
             android:process=":alienProcess" /><!--: means affiliated to current process-->
         <receiver android:name=".alarm.AlarmReceiver" />
-        <receiver android:name=".broadcast.Receiver"/>
+        <receiver android:name=".broadcast.Receiver" />
+
+        <receiver android:name=".system.AppStatusReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
