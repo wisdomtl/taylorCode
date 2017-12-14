@@ -255,19 +255,6 @@
             android:process=":alienProcess" /><!--: means affiliated to current process-->
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />
-
-        <receiver android:name=".system.AppStatusReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

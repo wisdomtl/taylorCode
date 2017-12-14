@@ -1,8 +1,6 @@
 package test.taylor.com.taylorcode.system;
 
-import android.app.ActivityManager;
 import android.app.IActivityController;
-import android.app.IProcessObserver;
 import android.app.IUidObserver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,39 +58,6 @@ public class AppStatusService {
         }
     };
 
-    //case1:monitor the other apps status
-    private IProcessObserver.Stub observer = new IProcessObserver.Stub() {
-        @Override
-        public void onForegroundActivitiesChanged(int pid, int uid, boolean foregroundActivities) throws RemoteException {
-            String pkgName = null;
-            //restore uid when a app is running
-            if (foregroundActivities) {
-                pkgName = getForegroundPackage();
-                AppStatusService.this.uid = uid;
-            }
-            Log.v("ttaylor", "AppStatusService.onForegroundActivitiesChanged(): pid=" + pid + ",uid=" + uid + ",foregroundActivities=" + foregroundActivities + " ,pkgName=" + pkgName);
-        }
-
-        @Override
-        public void onProcessStateChanged(int pid, int uid, int procState) throws RemoteException {
-            Log.v("ttaylor", "AppStatusService.onProcessStateChanged(): pid=" + pid + " ,uid=" + uid + " ,procState=" + procState);
-        }
-
-        @Override
-        public void onProcessDied(int pid, int uid) throws RemoteException {
-            //when app is died
-            if (uid == AppStatusService.this.uid){
-
-            }
-            Log.e("ttaylor", "AppStatusService.onProcessDied(): pid=" + pid + ",uid=" + uid);
-        }
-    };
-
-    private String getForegroundPackage() {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RecentTaskInfo> taskInfo = am.getRecentTasks(1, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
-        return taskInfo.isEmpty() ? null : taskInfo.get(0).baseIntent.getComponent().getPackageName();
-    }
 
     private IUidObserver.Stub uidObserver = new IUidObserver.Stub() {
         @Override
@@ -153,44 +118,8 @@ public class AppStatusService {
         }
     }
 
-    //case1:reflect IActivityManager.registerProcessObserver() for using our own monitor ,thus we could know the other apps' status
-    public void registerProcessObserver() {
-        try {
-            /**1.获得ActivityManagerService实例**/
-            Class<?> activityManagerNative = Class.forName("android.app.ActivityManagerNative");
-            Field gDefaultField = activityManagerNative.getDeclaredField("gDefault");
-            gDefaultField.setAccessible(true);
-            Object gDefault = gDefaultField.get(null);
-            Class<?> singleton = Class.forName("android.util.Singleton");
-            Field mInstanceField = singleton.getDeclaredField("mInstance");
-            mInstanceField.setAccessible(true);
-            Object ams = mInstanceField.get(gDefault);
 
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 || Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
-                Method registerProcessObserver = activityManagerNative.getMethod("registerProcessObserver", Class.forName("android.app.IProcessObserver"));
-                registerProcessObserver.invoke(ams, observer);//using our own monitor
-            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) {
-            }
-        } catch (ClassNotFoundException e) {
-            Log.v("ttaylor", "AppStatusService.setActivityController(): e=" + e);
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            Log.v("ttaylor", "AppStatusService.setActivityController(): e=" + e);
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            Log.v("ttaylor", "AppStatusService.setActivityController(): e=" + e);
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            Log.v("ttaylor", "AppStatusService.setActivityController(): e=" + e);
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            Log.v("ttaylor", "AppStatusService.setActivityController(): e=" + e);
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            Log.v("ttaylor", "AppStatusService.registerProcessObserver(): e=" + e);
-            e.printStackTrace();
-        }
-    }
+
 
     public void registerUidObserver() {
         try {
