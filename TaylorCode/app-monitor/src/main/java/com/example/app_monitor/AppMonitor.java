@@ -3,9 +3,11 @@ package com.example.app_monitor;
 import android.app.ActivityManager;
 import android.app.IProcessObserver;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ComponentInfo;
 import android.os.Build;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -26,25 +28,26 @@ public class AppMonitor {
 
     private Context context;
     private AppStateChangeListener stateChangeListener;
-    private String[] packages;
-    private HashMap<Integer, String> pkgMap;
+    private List<ComponentName> componentNames;
+    private HashMap<Integer, String> activityMap;
 
     /**
      * @param context should be ApplicationContext
      */
     public AppMonitor(Context context) {
         this.context = context;
+        //case2:monitor app uninstall
         IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_REMOVED);
         filter.addDataScheme("package");
         context.registerReceiver(new AppStatusReceiver(), filter);
     }
 
     //case1:reflect IActivityManager.registerProcessObserver() for using our own monitor ,thus we could know the other apps' status
-    public void startMonitor(String[] packages, AppStateChangeListener stateChangeListener) {
-        Log.v(TAG, "AppMonitor.startMonitor(): packages=" + packages + " ,listener=" + stateChangeListener);
-        this.packages = packages;
+    public void startMonitor(List<ComponentName> componentNames, AppStateChangeListener stateChangeListener) {
+        Log.v(TAG, "AppMonitor.startMonitor(): componentNames=" + componentNames + " ,listener=" + stateChangeListener);
+        this.componentNames = componentNames;
         this.stateChangeListener = stateChangeListener;
-        pkgMap = new HashMap<>();
+        activityMap = new HashMap<>();
         try {
             //get instance of ActivityManager
             Class<?> activityManagerNative = Class.forName("android.app.ActivityManagerNative");
@@ -89,21 +92,22 @@ public class AppMonitor {
     private IProcessObserver.Stub monitor = new IProcessObserver.Stub() {
         @Override
         public void onForegroundActivitiesChanged(int pid, int uid, boolean foregroundActivities) throws RemoteException {
-            Log.v(TAG, "AppStatusService.onForegroundActivitiesChanged(): pid=" + pid + ",uid=" + uid + ",foregroundActivities=" + foregroundActivities);
+            String activity1 = getForegroundActivity();
+            Log.e(TAG, "AppStatusService.onForegroundActivitiesChanged(): pid=" + pid + ",uid=" + uid + ",foregroundActivities=" + foregroundActivities+" ,activity="+activity1);
             if (foregroundActivities) {
-                String pkg = getForegroundPakage();
-                if (isMonitee(packages, pkg)) {
-                    Log.v(TAG, "AppMonitor.onForegroundActivitiesChanged(): key=" + uid + " ,value=" + pkg);
+                String activity = getForegroundActivity();
+                if (isMoniteeActivity(componentNames, activity)) {
                     int id = pid + uid;
-                    pkgMap.put(id, pkg);
+                    Log.v(TAG, "AppMonitor.onForegroundActivitiesChanged(): key=" + id + " ,value=" + activity);
+                    activityMap.put(id, activity);
                     if (stateChangeListener != null) {
-                        stateChangeListener.onActivityStateChange(pkg, true);
+                        stateChangeListener.onActivityStateChange(activity, true);
                     }
                 }
             } else {
                 int id = pid + uid;
-                String activity = pkgMap.get(id);
-                Log.v(TAG, "AppMonitor.onForegroundActivitiesChanged(): key=" + uid + " ,value=" + activity);
+                String activity = activityMap.get(id);
+                Log.v(TAG, "AppMonitor.onForegroundActivitiesChanged(): key=" + id + " ,value=" + activity);
                 if (!TextUtils.isEmpty(activity) && stateChangeListener != null) {
                     stateChangeListener.onActivityStateChange(activity, false);
                 }
@@ -122,25 +126,26 @@ public class AppMonitor {
     };
 
     /**
-     * whether the input activity is in the packages list which is monitored
+     * whether the input activity is in the componentInfos list which is monitored
      *
      * @param activities
      * @param activity
      * @return
      */
-    private boolean isMonitee(String[] activities, String activity) {
-        for (String ac : activities) {
-            if (!TextUtils.isEmpty(ac) && ac.equals(activity)) {
+    private boolean isMoniteeActivity(List<ComponentName> activities, String activity) {
+        for (ComponentName ac : activities) {
+            String activityClass = ac.getClassName();
+            if (!TextUtils.isEmpty(activityClass) && activityClass.equals(activity)) {
                 return true;
             }
         }
         return false;
     }
 
-    private String getForegroundPakage() {
+    private String getForegroundActivity() {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RecentTaskInfo> taskInfo = am.getRecentTasks(1, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
-        return taskInfo.isEmpty() ? null : taskInfo.get(0).baseIntent.getComponent().getPackageName();
+        return taskInfo.isEmpty() ? null : taskInfo.get(0).baseIntent.getComponent().getClassName();
     }
 
     public interface AppStateChangeListener {
@@ -161,6 +166,7 @@ public class AppMonitor {
         void onUninstall(String pkgName);
     }
 
+    //case2:monitor app uninstall
     public class AppStatusReceiver extends BroadcastReceiver {
 
         public AppStatusReceiver() {
@@ -171,11 +177,25 @@ public class AppMonitor {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
                 String pkgName = intent.getDataString();
+                int index = pkgName.indexOf(":") ;
+                if (index != -1){
+                    pkgName = pkgName.substring(index+1) ;
+                }
                 Log.v(TAG, "AppStatusReceiver.onReceive(): PACKAGE_REMOVED , pkgName=" + pkgName);
-                if (stateChangeListener != null) {
+                if (stateChangeListener != null && isMoniteePackage(componentNames, pkgName)) {
                     stateChangeListener.onUninstall(pkgName);
                 }
             }
         }
+    }
+
+    private boolean isMoniteePackage(List<ComponentName> componentNames, String pkgName) {
+        for (ComponentName ac : componentNames) {
+            String pkg = ac.getPackageName();
+            if (!TextUtils.isEmpty(pkg) && pkg.equals(pkgName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
