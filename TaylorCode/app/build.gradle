@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -41,7 +41,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
     //app-monitor
-    implementation project(':app-monitor')
+//    implementation project(':app-monitor')
 
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations-java5:15.0'
