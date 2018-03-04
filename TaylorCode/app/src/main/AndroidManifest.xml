@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="test.taylor.com.taylorcode"
-    android:sharedUserId="android.uid.system">
+    package="test.taylor.com.taylorcode">
+    <!--android:sharedUserId="android.uid.system">-->
     <!--declare as an system app ,which have to do the following things :
         1,sign this app with platform signature using "java -jar signapk.jar platform.x509.pem platform.pk8 unsigned.apk signed.apk"
             platform.x509.pem and platform.pk8 is in the android source code ,the path is "framework/build/target/product/security"
@@ -242,12 +242,32 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".system.AppStatusActivity">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".launch_mode.LaunchModeActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".launch_mode.ActivityB"
+            android:taskAffinity="test.taylor.com.taylorcode"></activity>
+        <activity android:name=".launch_mode.ActivityC"></activity>
+        <activity android:name=".launch_mode.ActivityA"></activity>
+        <activity android:name=".launch_mode.ActivityF"></activity>
+        <activity android:name=".launch_mode.ActivityE"
+            android:taskAffinity="com.taylor.activity2"></activity>
+        <activity
+            android:name=".launch_mode.ActivityD"
+            android:taskAffinity="com.taylor.activity"></activity>
         <activity
             android:name=".lockscreen.LockScreenActivity"
             android:launchMode="singleTask">

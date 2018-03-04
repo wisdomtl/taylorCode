@@ -13,7 +13,7 @@ public class TaylorApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ClipboardHook.getInstance().init(this);
-        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
+//        ClipboardHook.getInstance().init(this);
+//        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
     }
 }
