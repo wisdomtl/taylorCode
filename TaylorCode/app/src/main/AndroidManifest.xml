@@ -262,8 +262,15 @@
             android:taskAffinity="test.taylor.com.taylorcode"></activity>
         <activity android:name=".launch_mode.ActivityC"></activity>
         <activity android:name=".launch_mode.ActivityA"></activity>
+        <activity
+            android:name=".launch_mode.ActivityH"></activity>
         <activity android:name=".launch_mode.ActivityF"></activity>
-        <activity android:name=".launch_mode.ActivityE"
+        <activity
+            android:name=".launch_mode.ActivityG"
+            android:launchMode="singleInstance"
+            ></activity>
+        <activity
+            android:name=".launch_mode.ActivityE"
             android:taskAffinity="com.taylor.activity2"></activity>
         <activity
             android:name=".launch_mode.ActivityD"

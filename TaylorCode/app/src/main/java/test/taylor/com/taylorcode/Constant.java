@@ -6,4 +6,6 @@ package test.taylor.com.taylorcode;
 
 public class Constant {
     public static final String ACTION_INTENT_SERVICE_END = "ACTION_INTENT_SERVICE_END";
+
+    public static final String EXTRA_STRING = "EXTRA_STRING" ;
 }

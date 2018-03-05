@@ -14,6 +14,7 @@ public class LaunchModeActivity extends ActivityBase {
         super.onCreate(savedInstanceState);
         btn1.setText("STANDARD");
         btn2.setText("FLAG_ACTIVITY_NEW_TASK");
+        btn3.setText("SINGLE_INSTANCE");
     }
 
     @Override
@@ -34,17 +35,27 @@ public class LaunchModeActivity extends ActivityBase {
      */
     @Override
     public void onButton1Click() {
-        startActivity(ActivityB.class, null);
+        startActivity(ActivityB.class, null, null);
     }
 
     /**
-     * launch mode case3
+     * launch mode case3:FLAG_ACTIVITY_NEW_TASK
      * start an new activity with an different task affinity and FLAG_ACTIVITY_NEW_TASK,then the new activity will in new task
      * the new activity will be in current task if task affinity not set
      */
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
+    }
+
+    /**
+     * launch mode case8:SINGLE_INSTANCE
+     * start a new activity with singleInstance mode,and start another activity with standard mode
+     */
+    @Override
+    public void onButton3Click() {
+        super.onButton3Click();
+        startActivity(ActivityG.class,null, null);
     }
 }

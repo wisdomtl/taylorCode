@@ -38,7 +38,7 @@ public class ActivityB extends ActivityBase {
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityB.class, null);
+        startActivity(ActivityB.class, null, null);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ActivityB extends ActivityBase {
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-        startActivity(ActivityB.class, Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(ActivityB.class, Intent.FLAG_ACTIVITY_SINGLE_TOP, null);
     }
 
     /**
@@ -65,12 +65,12 @@ public class ActivityB extends ActivityBase {
     @Override
     public void onButton3Click() {
         super.onButton3Click();
-        startActivity(ActivityC.class, null);
+        startActivity(ActivityC.class, null, null);
     }
 
     @Override
     public void onButton4Click() {
         super.onButton4Click();
-        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 }

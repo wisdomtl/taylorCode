@@ -30,7 +30,7 @@ public class ActivityE extends ActivityBase {
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 
     /**
@@ -41,6 +41,6 @@ public class ActivityE extends ActivityBase {
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-        startActivity(ActivityD.class,Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityD.class,Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 }

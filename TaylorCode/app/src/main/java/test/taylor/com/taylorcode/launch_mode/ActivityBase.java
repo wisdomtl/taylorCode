@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import test.taylor.com.taylorcode.Constant;
 import test.taylor.com.taylorcode.R;
 
 /**
@@ -22,6 +24,7 @@ public abstract class ActivityBase extends Activity {
     protected Button btn4;
     protected Button btn5;
     protected Button btn6;
+    protected TextView tvContent ;
 
     abstract String getClassName();
 
@@ -49,10 +52,13 @@ public abstract class ActivityBase extends Activity {
         Log.d("ttaylor", "ActivityBase.onButton6Click(): ");
     }
 
-    public void startActivity(Class<?> targetClass, Integer flag) {
+    public void startActivity(Class<?> targetClass, Integer flag, String value) {
         Intent intent = new Intent(this, targetClass);
         if (flag != null) {
             intent.addFlags(flag);
+        }
+        if (!TextUtils.isEmpty(value)) {
+            intent.putExtra(Constant.EXTRA_STRING,value) ;
         }
         startActivity(intent);
     }
@@ -60,7 +66,7 @@ public abstract class ActivityBase extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("ttaylor", getClassName() + ".onCreate(): ");
+        Log.v("ttaylor", getClassName() + ".onCreate(): intent="+getIntent());
         setContentView(R.layout.launch_mode_activity);
         ((TextView) findViewById(R.id.tv_activity_name)).setText(getClassName());
 
@@ -70,6 +76,7 @@ public abstract class ActivityBase extends Activity {
         btn4 = ((Button) findViewById(R.id.btn_multiple_task));
         btn5 = ((Button) findViewById(R.id.btn_clear_top));
         btn6 = ((Button) findViewById(R.id.btn_clear_task));
+        tvContent = ((TextView) findViewById(R.id.tv_content)) ;
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +173,7 @@ public abstract class ActivityBase extends Activity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.v("ttaylor", getClassName() + ".onNewIntent(): ");
+        Log.v("ttaylor", getClassName() + ".onNewIntent(): intent="+getIntent());
     }
 
     @Override

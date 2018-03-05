@@ -26,6 +26,6 @@ public class ActivityF extends ActivityBase {
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityE.class, Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityE.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 }

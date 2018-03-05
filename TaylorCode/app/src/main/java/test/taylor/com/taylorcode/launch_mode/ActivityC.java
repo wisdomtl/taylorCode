@@ -28,12 +28,12 @@ public class ActivityC extends ActivityBase {
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityB.class, Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(ActivityB.class, Intent.FLAG_ACTIVITY_SINGLE_TOP, null);
     }
 
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-        startActivity(ActivityB.class,Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(ActivityB.class,Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 }
