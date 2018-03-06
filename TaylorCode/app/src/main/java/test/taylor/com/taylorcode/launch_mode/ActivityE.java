@@ -20,7 +20,7 @@ public class ActivityE extends ActivityBase {
         super.onCreate(savedInstanceState);
         btn1.setText("FLAG_ACTIVITY_NEW_TASK");
         btn2.setText("FLAG_ACTIVITY_NEW_TASK WITH EXIST ACTIVITY");
-        Log.v("ttaylor", "ActivityE.onCreate(): taskId="+getTaskId());
+        btn3.setText("SINGLE_TASK");
     }
 
     /**
@@ -42,5 +42,20 @@ public class ActivityE extends ActivityBase {
     public void onButton2Click() {
         super.onButton2Click();
         startActivity(ActivityD.class,Intent.FLAG_ACTIVITY_NEW_TASK, null);
+    }
+
+    /**
+     * launch mode case12:SINGLE_TASK
+     * start an existing singleTask activity not in the current task
+     * the target task will be brought to the front,and the activity above the target activity will be destroyed(different with NEW_TASK)
+     * the target lifecycle is like this:
+     * onNewIntent()
+     * onRestart()
+     * onResume()
+     */
+    @Override
+    public void onButton3Click() {
+        super.onButton3Click();
+        startActivity(ActivityI.class,null,null);
     }
 }

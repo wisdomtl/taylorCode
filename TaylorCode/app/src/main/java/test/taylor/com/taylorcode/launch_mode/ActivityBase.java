@@ -66,7 +66,7 @@ public abstract class ActivityBase extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("ttaylor", getClassName() + ".onCreate(): intent="+getIntent());
+        Log.v("ttaylor", getClassName() + ".onCreate(): intent="+getIntent()+" ,taskId="+getTaskId());
         setContentView(R.layout.launch_mode_activity);
         ((TextView) findViewById(R.id.tv_activity_name)).setText(getClassName());
 

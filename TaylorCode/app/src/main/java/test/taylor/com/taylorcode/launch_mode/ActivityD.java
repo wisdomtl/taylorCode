@@ -32,7 +32,7 @@ public class ActivityD extends ActivityBase {
      *
      * launch mode case6:FLAG_ACTIVITY_NEW_TASK
      * start an existed activity in the mid of another task
-     * new instance wont be created,and the target task will be brought to the front,the focused activity is the one above the target activity.
+     * new instance wont be created,and the target task will be brought to the front,the focused activity is the one above the target activity.(different with SINGLE_TASK)
      */
     @Override
     public void onButton1Click() {
@@ -54,9 +54,6 @@ public class ActivityD extends ActivityBase {
     }
 
     /**
-     * launch mode case6:FLAG_ACTIVITY_NEW_TASK
-     * start an activity by FLAG_ACTIVITY_NEW_TASK with no task affinity set in a new task,the new activity will be created in the first task of app
-     * <p>
      * launch mode case5:FLAG_ACTIVITY_NEW_TASK
      * start activity which already exists in another task
      * new instance of this activity wont be created,instead,the task which this activity is in will be brought to the front

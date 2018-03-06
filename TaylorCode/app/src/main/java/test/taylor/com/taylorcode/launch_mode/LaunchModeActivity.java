@@ -15,6 +15,7 @@ public class LaunchModeActivity extends ActivityBase {
         btn1.setText("STANDARD");
         btn2.setText("FLAG_ACTIVITY_NEW_TASK");
         btn3.setText("SINGLE_INSTANCE");
+        btn4.setText("SINGLE_TASK");
     }
 
     @Override
@@ -57,5 +58,15 @@ public class LaunchModeActivity extends ActivityBase {
     public void onButton3Click() {
         super.onButton3Click();
         startActivity(ActivityG.class,null, null);
+    }
+
+    /**
+     * launch mode case10:SINGLE_TASK
+     * a new activity will be created in the current task
+     */
+    @Override
+    public void onButton4Click() {
+        super.onButton4Click();
+        startActivity(ActivityI.class,null,null);
     }
 }
