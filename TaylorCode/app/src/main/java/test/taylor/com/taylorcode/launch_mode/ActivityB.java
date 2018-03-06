@@ -34,11 +34,16 @@ public class ActivityB extends ActivityBase {
      * ActivityB.onNewIntent()
      * ActivityB.onResume()
      * ActivityB.onPostResume()
+     * <p>
+     * launch mode case14:FLAG_ACTIVITY_REORDER_TO_FRONT
+     * start an exist activity with this flag,if the activity is not on the top of task,it will be brought to the front like a bubble
      */
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityB.class, null, null);
+//        startActivity(ActivityB.class, null, null);
+        startActivity(LaunchModeActivity.class, Intent.FLAG_ACTIVITY_REORDER_TO_FRONT, null);//case14:no new instance created
+//        startActivity(LaunchModeActivity.class, null, null);//case14:a new instance will be created
     }
 
     /**
