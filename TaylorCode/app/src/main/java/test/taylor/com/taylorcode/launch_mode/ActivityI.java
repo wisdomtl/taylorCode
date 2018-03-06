@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.launch_mode;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 /**

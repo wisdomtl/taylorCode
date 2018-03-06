@@ -50,8 +50,8 @@ public class LaunchModeActivity extends ActivityBase {
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-//        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
-        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK, null);//case15
+        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
+//        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK, null);//case15
     }
 
     /**
@@ -69,11 +69,13 @@ public class LaunchModeActivity extends ActivityBase {
 
     /**
      * launch mode case10:SINGLE_TASK
-     * a new activity will be created in the current task
+     * if task affinity is not set,a new activity will be created in the current task,or a new task will be created
+     * if task affinity is set,a new task will be created,and singleTask activity will be root activity of new task
      */
     @Override
     public void onButton4Click() {
         super.onButton4Click();
         startActivity(ActivityI.class, null, null);
     }
+
 }
