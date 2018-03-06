@@ -69,7 +69,7 @@ public class LaunchModeActivity extends ActivityBase {
 
     /**
      * launch mode case10:SINGLE_TASK
-     * if task affinity is not set,a new activity will be created in the current task,or a new task will be created
+     * if task affinity is not set,a new activity will be created in the current task
      * if task affinity is set,a new task will be created,and singleTask activity will be root activity of new task
      */
     @Override

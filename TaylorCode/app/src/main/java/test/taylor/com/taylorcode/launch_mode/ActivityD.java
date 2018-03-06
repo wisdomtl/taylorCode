@@ -19,6 +19,7 @@ public class ActivityD extends ActivityBase {
         super.onCreate(savedInstanceState);
         btn1.setText("STANDARD");
         btn2.setText("STANDARD BUT THE ACTIVITY EXIST IN OTHER TASK");
+        btn3.setText("SINGLE_TASK");
     }
 
     /**
@@ -37,12 +38,22 @@ public class ActivityD extends ActivityBase {
 
     /**
      * launch mode case5:FLAG_ACTIVITY_NEW_TASK
-     * start an activity which already exists in another task with no task affinity set
+     * start an new activity with no task affinity set
      * a new instance of activity will be created in the first task of app
      */
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-        startActivity(LaunchModeActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);//2
+        startActivity(ActivityH.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
+    }
+
+    /**
+     * launch mode case16:SINGLE_TASK
+     * start an new activity without task affinity set,then the new activity will be created in the first task of app(the same as case5:NEW_TASK)
+     */
+    @Override
+    public void onButton3Click() {
+        super.onButton3Click();
+        startActivity(ActivityI.class,null,null);
     }
 }
