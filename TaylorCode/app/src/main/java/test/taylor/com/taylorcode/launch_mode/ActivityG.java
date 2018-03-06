@@ -1,7 +1,6 @@
 package test.taylor.com.taylorcode.launch_mode;
 
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Created on 2018/3/5.
@@ -17,7 +16,6 @@ public class ActivityG extends ActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         btn1.setText("STANDARD");
-        Log.v("ttaylor", "ActivityG.onCreate(): intent="+getIntent());
     }
 
     /**

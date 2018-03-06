@@ -19,16 +19,11 @@ public class ActivityD extends ActivityBase {
         super.onCreate(savedInstanceState);
         btn1.setText("STANDARD");
         btn2.setText("STANDARD BUT THE ACTIVITY EXIST IN OTHER TASK");
-        btn3.setText("FLAG_ACTIVITY_NEW_TASK");
-        Log.v("ttaylor", "ActivityD.onCreate(): taskId=" + getTaskId());
     }
 
     /**
-     * launch mode case4
-     * by default,the activity will had the same task affinity with it's starter activity
-     * <p>
-     * launch mode case3
-     * the initial stack is D--(start E by standard)--D,E--(start D by FLAG_ACTIVITY_NEW_TASK)--D,E
+     * launch mode case4:STANDARD
+     * a new instance of activity with be created in the current task,by default,the activity will had the same task affinity with it's starter activity
      *
      * launch mode case6:FLAG_ACTIVITY_NEW_TASK
      * start an existed activity in the mid of another task
@@ -41,26 +36,13 @@ public class ActivityD extends ActivityBase {
     }
 
     /**
-     * launch mode case5
-     * start an activity with different flag ,which already exists in another task
-     * 1.with standard flag:a new instance of activity with be created in the current task
-     * 2.with FLAG_ACTIVITY_NEW_TASK:a new instance of activity will be created in the first task of app,there will be two instance of this activity
+     * launch mode case5:FLAG_ACTIVITY_NEW_TASK
+     * start an activity which already exists in another task with no task affinity set
+     * a new instance of activity will be created in the first task of app
      */
     @Override
     public void onButton2Click() {
         super.onButton2Click();
-//        startActivity(LaunchModeActivity.class, null);//1
         startActivity(LaunchModeActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);//2
-    }
-
-    /**
-     * launch mode case5:FLAG_ACTIVITY_NEW_TASK
-     * start activity which already exists in another task
-     * new instance of this activity wont be created,instead,the task which this activity is in will be brought to the front
-     */
-    @Override
-    public void onButton3Click() {
-        super.onButton3Click();
-        startActivity(ActivityE.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
     }
 }

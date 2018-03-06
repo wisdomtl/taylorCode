@@ -18,30 +18,23 @@ public class ActivityE extends ActivityBase {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        btn1.setText("FLAG_ACTIVITY_NEW_TASK");
-        btn2.setText("FLAG_ACTIVITY_NEW_TASK WITH EXIST ACTIVITY");
-        btn3.setText("SINGLE_TASK");
+        btn1.setText("FLAG_ACTIVITY_NEW_TASK WITH EXIST ACTIVITY");
+        btn2.setText("SINGLE_TASK_WITH_EXIST_ACTIVITY");
     }
 
     /**
-     * launch mode case3:FLAG_ACTIVITY_NEW_TASK
-     * the initial stack is D--(start E by standard)--D,E--(start D by FLAG_ACTIVITY_NEW_TASK)--D,E
+     * launch mode case6:FLAG_ACTIVITY_NEW_TASK
+     * if start an existed activity in the mid of another task
+     * new instance wont be created,and the target task will be brought to the front,the focused activity is the one above the target activity.(different with SINGLE_TASK)
+     *
+     * launch mode case13:FLAG_ACTIVITY_CLEAR_TOP
+     * based on case6,if FLAG_ACTIVITY_CLEAR_TOP is not set,then the activity above target activity wont be destroyed,if set,the activity above will be destroyed
      */
     @Override
     public void onButton1Click() {
         super.onButton1Click();
-        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
-    }
-
-    /**
-     * launch mode case5:FLAG_ACTIVITY_NEW_TASK
-     * start activity which already exists in another task
-     * new instance of this activity wont be created,instead,the task which this activity is in will be brought to the front
-     */
-    @Override
-    public void onButton2Click() {
-        super.onButton2Click();
-        startActivity(ActivityD.class,Intent.FLAG_ACTIVITY_NEW_TASK, null);
+        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);//case6
+//        startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP, null);//case13
     }
 
     /**
@@ -54,8 +47,8 @@ public class ActivityE extends ActivityBase {
      * onResume()
      */
     @Override
-    public void onButton3Click() {
-        super.onButton3Click();
-        startActivity(ActivityI.class,null,null);
+    public void onButton2Click() {
+        super.onButton2Click();
+        startActivity(ActivityI.class, null, null);
     }
 }
