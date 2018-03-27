@@ -250,11 +250,11 @@
         </activity>
         <activity android:name=".launch_mode.LaunchModeActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
 
         </activity>
         <activity
@@ -290,14 +290,21 @@
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
+        <activity android:name=".service.ServiceActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
         <service android:name=".broadcast.MyIntentService" />
         <service
             android:name=".proxy.remote.RemoteService"
-            android:process=":alienProcess" /><!--: means affiliated to current process-->
+            android:process=":alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
         <service android:name=".lockscreen.LockScreenService" />
+        <service android:name=".service.ServiceA"/>
 
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />
