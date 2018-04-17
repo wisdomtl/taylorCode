@@ -22,6 +22,12 @@ android {
         }
     }
 
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
 }
 
 dependencies {
@@ -31,6 +37,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+//    implementation 'com.loopj.android:android-async-http:1.4.9'
 }
 
 
@@ -42,7 +50,7 @@ task makeJar(type: Jar) {
     destinationDir = file(OUTPUT_DIR)//目的地
 
     from('build/intermediates/classes/release')
-    from(project.zipTree(project.rootDir.path + '/app-monitor/libs/log-1.1.5-sources.jar'))
+    from(project.zipTree(project.rootDir.path + '/app-monitor/libs/android-async-http-1.4.9.jar'))
 
     exclude('**/BuildConfig.class')
     exclude('**/BuildConfig\$*.class')
