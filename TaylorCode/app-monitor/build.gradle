@@ -32,3 +32,26 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+
+def OUTPUT_DIR = project.rootDir.path + '/libs'
+
+//make this module into a jar including third-party library
+task makeJar(type: Jar) {
+    baseName ='app-monitor-with-log-library'
+    destinationDir = file(OUTPUT_DIR)//目的地
+
+    from('build/intermediates/classes/release')
+    from(project.zipTree(project.rootDir.path + '/app-monitor/libs/log-1.1.5-sources.jar'))
+
+    exclude('**/BuildConfig.class')
+    exclude('**/BuildConfig\$*.class')
+    exclude('**/R.class')
+    exclude('**/R\$*.class')
+    exclude('android/support')
+    exclude('com/google')
+    exclude('andorid/app')
+
+}
+makeJar.dependsOn(build)
+
