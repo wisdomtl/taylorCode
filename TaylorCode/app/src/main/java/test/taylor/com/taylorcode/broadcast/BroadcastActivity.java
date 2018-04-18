@@ -20,7 +20,8 @@ import test.taylor.com.taylorcode.Constant;
 
 public class BroadcastActivity extends Activity implements View.OnClickListener {
 
-    private Button btn ;
+    private Button btn;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,15 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         setContentView(btn);
         IntentFilter intentFilter = new IntentFilter(Constant.ACTION_INTENT_SERVICE_END);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+
+        /**
+         * broadcast case2:send local broadcast to a receiver in anonymous inner class
+         * although the receiver is in the anonymous inner class, it will last longer than the lifecycle of the class
+         */
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent("action_interactive_ad_show");
+        manager.sendBroadcast(intent);
+        Log.v("taylor ", "BroadcastActivity.onCreate() " + " broadcast action_interactive_ad_show sent");
     }
 
     @Override
@@ -42,7 +52,7 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.v("ttaylor", "BroadcastActivity.onReceive(): intent=" + intent);
-            updateButtonName() ;
+            updateButtonName();
         }
     };
 

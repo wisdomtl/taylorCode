@@ -1,14 +1,23 @@
 package test.taylor.com.taylorcode.system;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 
 import com.example.app_monitor.AppMonitor;
 
 import java.util.Arrays;
+
+import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.broadcast.BroadcastActivity;
 
 /**
  * Created on 2017/12/5.
@@ -30,6 +39,7 @@ public class AppStatusActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.app_status_activity);
 //        new AppStatusService(this).setActivityController();
 //        new AppStatusService(this).registerUidObserver();
 
@@ -49,5 +59,41 @@ public class AppStatusActivity extends Activity {
                 Log.v("ttaylor", "AppStatusActivity.onUninstall(): activity=" + s);
             }
         });
+
+        //broadcast case2:register BroadcastReceiver in an anonymous inner class,it will last even if onClick() finished
+        findViewById(R.id.tv_within).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppStatusActivity.this, BroadcastActivity.class);
+                startActivity(intent);
+                LocalBroadcastManager.getInstance(AppStatusActivity.this).registerReceiver(broadcastReceiver, new IntentFilter("action_interactive_ad_show"));
+            }
+        });
+
+        //broadcast case2:control group,the receiver defined above will also receive broadcast
+        findViewById(R.id.tv_without).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppStatusActivity.this, BroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+    //broadcast case3:unregister receiver the time one broadcast arrive
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            LocalBroadcastManager.getInstance(AppStatusActivity.this).unregisterReceiver(broadcastReceiver);
+        }
+    };
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v("taylor ", "AppStatusActivity.onReceive() " + " ");
+            //we have to post the unregister action,or it cant be done
+            findViewById(R.id.tv_without).postDelayed(runnable, 100);
+        }
+    };
 }
