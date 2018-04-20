@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--launch mode case-->
+<!--resource case-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="test.taylor.com.taylorcode">
@@ -131,11 +133,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ui.RadioButtonActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".contact.ContactActivity">
             <!--<intent-filter>-->
@@ -249,11 +251,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".system.AppStatusActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".launch_mode.LaunchModeActivity">
 

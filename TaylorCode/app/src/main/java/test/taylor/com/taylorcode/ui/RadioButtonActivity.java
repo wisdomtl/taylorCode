@@ -2,17 +2,16 @@ package test.taylor.com.taylorcode.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.util.ResUtil;
 
 /**
  * Created by taylor on 2017/9/7.
@@ -39,6 +38,10 @@ public class RadioButtonActivity extends Activity implements RadioGroup.OnChecke
         }
         //case2:default checked for radio button
         rg.check(0);
+
+        //resource case1:get resource by getResources().getIdentifier()
+        int resId = ResUtil.getTypeId(this,"tv_name") ;
+        ((TextView) findViewById(resId)).setText("get id by getIdentifier");
     }
 
     @Override
