@@ -67,3 +67,16 @@ task makeJar(type: Jar) {
 }
 makeJar.dependsOn(build)
 
+task t1{
+    group 'taylor'
+    println("---task 1---")
+}
+
+task t2{
+    group 'taylor'
+    description 'test for dependsOn'
+    println("---task 2---")
+}
+//gradle case1:run tasks in sequence
+t2.dependsOn t1
+
