@@ -42,19 +42,19 @@ dependencies {
 }
 
 
-def OUTPUT_DIR = project.rootDir.path + '/libs'
+def OUTPUT_DIR = project.rootDir.path + '/app/libs'
 
 //make this module into a jar including third-party library
 task makeJar(type: Jar) {
-    baseName ='app-monitor-with-log-library'
+    baseName ='app-monitor-with-another-library'
     //delete the former one jar
-    delete(project.rootDir.path+'/libs/'+baseName+".jar")
+//    delete(project.rootDir.path+'/libs/'+baseName+".jar")
     destinationDir = file(OUTPUT_DIR)
 
     from('build/intermediates/classes/release')
     //this has the same effect as the above
 //    from(project.zipTree(project.rootDir.path + '/feedsnews/build/intermediates/bundles/release/classes.jar'))
-    from(project.zipTree(project.rootDir.path + '/app-monitor/libs/android-async-http-1.4.9.jar'))
+    from(project.zipTree(project.rootDir.path + '/app-monitor/libs/classes.jar'))
 
     exclude('**/BuildConfig.class')
     exclude('**/BuildConfig\$*.class')
@@ -63,6 +63,8 @@ task makeJar(type: Jar) {
     exclude('android/support')
     exclude('com/google')
     exclude('andorid/app')
+    //exclude specific classes
+    exclude('rx/android/plugins/RxAndroidPlugins.class')
 
 }
 makeJar.dependsOn(build)
