@@ -82,5 +82,6 @@ task t2{
     println("---task 2---")
 }
 //gradle case1:run tasks in sequence
-t2.dependsOn t1
+//t2.dependsOn t1
+t2.mustRunAfter(t1)
 
