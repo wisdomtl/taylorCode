@@ -49,4 +49,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation 'com.android.support:design:25.3.1'
 }
