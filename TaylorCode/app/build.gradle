@@ -28,8 +28,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //ReactiveX
-//    implementation 'io.reactivex:rxjava:1.3.0'
-//    implementation 'io.reactivex:rxandroid:1.2.1'//for AndroidSchedulers.mainThread()
+    implementation 'io.reactivex:rxjava:1.3.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'//for AndroidSchedulers.mainThread()
 
     //rating-bar
     implementation 'com.hedgehog.ratingbar:app:1.1.2'
@@ -41,9 +41,11 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
     //app-monitor
-//    implementation project(':app-monitor')
+    implementation project(':app-monitor')
 
-    implementation 'io.reactivex:rxjava:1.1.6'
+    //ConstraintLayout
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
 
     testImplementation 'junit:junit:4.12'
     implementation 'org.jetbrains:annotations-java5:15.0'
