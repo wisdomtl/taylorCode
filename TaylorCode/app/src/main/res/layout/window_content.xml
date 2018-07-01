@@ -1,16 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/window_shape"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_window_content"
-        android:text="this is a window"
-        android:textSize="18sp"
+    <Button
+        android:id="@+id/btn_sexual_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
         android:gravity="center"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:paddingBottom="18dp"
+        android:paddingTop="18dp"
+        android:text="Sexual Content"
+        android:textAllCaps="false"
+        android:textColor="#ff464646"
+        android:textSize="16sp" />
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#ffededed" />
+
+    <Button
+        android:id="@+id/btn_violent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:paddingBottom="18dp"
+        android:paddingTop="18dp"
+        android:text="Violent or Repulsive Content"
+        android:textAllCaps="false"
+        android:textColor="#ff464646"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#ffededed" />
+
+    <Button
+        android:id="@+id/btn_spam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:paddingBottom="18dp"
+        android:paddingTop="18dp"
+        android:text="Spam or Misleading"
+        android:textAllCaps="false"
+        android:textColor="#ff464646"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="#fff2f2f2" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:paddingBottom="18dp"
+        android:paddingTop="18dp"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="#ff464646"
+        android:textSize="16sp" />
+</LinearLayout>

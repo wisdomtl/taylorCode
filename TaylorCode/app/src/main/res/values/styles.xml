@@ -28,6 +28,10 @@
     </style>
 
 
-
+    <!--window in and out animation-->
+    <style name="popup_window_anim">
+        <item name="android:windowEnterAnimation">@anim/window_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/window_out_anim</item>
+    </style>
 
 </resources>

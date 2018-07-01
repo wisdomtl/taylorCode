@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_window_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_show_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show window"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/btn_show_popup_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show popup window"
+        android:textSize="20dp" />
+</LinearLayout>
