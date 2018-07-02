@@ -125,6 +125,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT, this);
 
+            popupWindow.setBackgroundDrawable(new BitmapDrawable());
             popupWindow.setOutsideTouchable(true);
             popupWindow.setOnItemClickListener(this);
         }
