@@ -29,6 +29,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         setContentView(content);
         findViewById(R.id.btn_show_window).setOnClickListener(this);
         findViewById(R.id.btn_show_popup_window).setOnClickListener(this);
+        findViewById(R.id.btn_outside).setOnClickListener(this);
     }
 
     private View getWindowView(Context context) {
@@ -125,8 +126,6 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT, this);
 
-            popupWindow.setBackgroundDrawable(new BitmapDrawable());
-            popupWindow.setOutsideTouchable(true);
             popupWindow.setOnItemClickListener(this);
         }
 
@@ -164,6 +163,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             case R.id.btn_show_popup_window:
                 showBottomPopupWindow2(this);
                 break;
+            case R.id.btn_outside:
+                Toast.makeText(this, "btn out side of pop up window", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.btn_violent:
                 Log.v("ttaylor", "WindowActivity.onClick()" + "  violent");
                 popupWindow.dismiss();
@@ -189,16 +191,16 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         int id = view.getId();
         switch (id) {
             case R.id.btn_violent:
-                Toast.makeText(this,"btn_violent",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "btn_violent", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_sexual_content:
-                Toast.makeText(this,"btn_sexual_content",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "btn_sexual_content", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_spam:
-                Toast.makeText(this,"btn_spam",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "btn_spam", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_cancel:
-                Toast.makeText(this,"btn_cancel",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "btn_cancel", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui.window;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -47,6 +48,10 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         }
         gestureDetector = new GestureDetector(windowView.getContext(), new GestureListener(windowView));
         this.setTouchInterceptor(this);
+        //this is a must ,i dont know why. if not,PopupWindow wont receive touch event
+        this.setBackgroundDrawable(new BitmapDrawable());
+        //this is a must ,or PopupWindow wont consume the touch event when clicking outside of itself
+        this.setOutsideTouchable(true);
     }
 
 
