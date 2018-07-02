@@ -50,8 +50,10 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         this.setTouchInterceptor(this);
         //this is a must ,i dont know why. if not,PopupWindow wont receive touch event
         this.setBackgroundDrawable(new BitmapDrawable());
-        //this is a must ,or PopupWindow wont consume the touch event when clicking outside of itself
+        //this is a must ,or PopupWindow wont receive the touch event when clicking outside of itself
         this.setOutsideTouchable(true);
+        //this is a must ,or PopupWindow wont consume the touch event when clicking outside of itself
+        this.setFocusable(true);
     }
 
 
@@ -267,4 +269,3 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         }
     }
 }
-
