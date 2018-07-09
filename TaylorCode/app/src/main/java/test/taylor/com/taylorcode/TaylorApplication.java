@@ -3,6 +3,8 @@ package test.taylor.com.taylorcode;
 import android.app.Application;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.ArrayList;
 
 import test.taylor.com.taylorcode.proxy.system.ActivityHook;
@@ -30,6 +32,8 @@ public class TaylorApplication extends Application {
                 origin) {
             Log.v("ttaylor", "TaylorApplication.onCreate()" + "  str="+str);
         }
+
+        Stetho.initializeWithDefaults(this);
     }
 
     private void makeChange(ArrayList<String> origin) {
