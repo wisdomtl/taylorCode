@@ -26,7 +26,7 @@ import android.widget.PopupWindow;
 public class CustomPopupWindow extends PopupWindow implements View.OnTouchListener {
 
     private float dimAlpha = 0.5f;
-    private int animateDuration = 300;
+    public static final int ANIMATION_DURATION = 300;
     private Activity hostActivity;
     private ViewGroup windowView;
     private int gravity;
@@ -80,7 +80,7 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         }
         switch (gravity) {
             case Gravity.BOTTOM:
-                animateFromBottom(windowView, animateDuration);
+                animateFromBottom(windowView, ANIMATION_DURATION);
                 break;
         }
     }
@@ -118,7 +118,7 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         windowView.post(new Runnable() {
             @Override
             public void run() {
-                animateToBottom(windowView, animateDuration);
+                animateToBottom(windowView, ANIMATION_DURATION);
             }
         });
 
@@ -128,7 +128,7 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
             public void run() {
                 CustomPopupWindow.super.dismiss();
             }
-        }, animateDuration);
+        }, ANIMATION_DURATION);
 
         changeBackgroundAlpha(hostActivity, 1.0f);
     }
@@ -143,7 +143,7 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
         ViewCompat.animate(windowView)
                 .translationY(windowView.getMeasuredHeight())
                 .setInterpolator(new LinearOutSlowInInterpolator())
-                .setDuration(this.animateDuration)
+                .setDuration(animateDuration)
                 .start();
     }
 
@@ -216,9 +216,9 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
             Log.v("ttaylor", "GestureListener.onSingleTapUp()" + "  click position=" + position);
             if (position != INVALID_POSITION) {
                 View item = viewGroup.getChildAt(position);
+                dismiss();
                 if (onItemClickListener != null) {
                     onItemClickListener.onWindowItemClick(item);
-                    dismiss();
                 }
             }
             return false;

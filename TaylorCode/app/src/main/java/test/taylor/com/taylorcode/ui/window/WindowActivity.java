@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.ui.window;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
@@ -32,8 +30,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_outside).setOnClickListener(this);
     }
 
-    private View getWindowView(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.window_content, null);
+    private View getWindowView(Context context, int layoutId) {
+        View view = LayoutInflater.from(context).inflate(layoutId, null);
         return view;
     }
 
@@ -58,7 +56,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.gravity = Gravity.CENTER;
-        windowManager.addView(getWindowView(context), layoutParams);
+        windowManager.addView(getWindowView(context, R.layout.window_content), layoutParams);
     }
 
     //transition is much more customizable than setAnimationStyle() but there is api level constraint
@@ -119,9 +117,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     }
 
 
-    public void showBottomPopupWindow2(Context context) {
+    public void showBottomPopupWindow2(Context context, int layoutId) {
         if (popupWindow == null) {
-            View windowView = getWindowView(context);
+            View windowView = getWindowView(context, layoutId);
             popupWindow = new CustomPopupWindow((ViewGroup) windowView,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT, this);
@@ -161,7 +159,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 showWindow(this);
                 break;
             case R.id.btn_show_popup_window:
-                showBottomPopupWindow2(this);
+                showBottomPopupWindow2(this, R.layout.window_content);
                 break;
             case R.id.btn_outside:
                 Toast.makeText(this, "btn out side of pop up window", Toast.LENGTH_SHORT).show();
@@ -198,6 +196,14 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 break;
             case R.id.btn_spam:
                 Toast.makeText(this, "btn_spam", Toast.LENGTH_SHORT).show();
+                popupWindow = null;
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        showBottomPopupWindow2(WindowActivity.this, R.layout.window_more_options);
+                    }
+                }, 500);
                 break;
             case R.id.btn_cancel:
                 Toast.makeText(this, "btn_cancel", Toast.LENGTH_SHORT).show();
