@@ -33,7 +33,7 @@ public class TaylorApplication extends Application {
             Log.v("ttaylor", "TaylorApplication.onCreate()" + "  str="+str);
         }
 
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this);//then type "chrome://inspect/#devices" at chrome ,fun start
     }
 
     private void makeChange(ArrayList<String> origin) {
