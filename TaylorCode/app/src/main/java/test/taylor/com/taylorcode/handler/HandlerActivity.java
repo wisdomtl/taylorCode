@@ -7,6 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.TextView;
+
+import java.awt.font.TextAttribute;
+
+import test.taylor.com.taylorcode.R;
 
 /**
  * Created on 17/7/22.
@@ -17,6 +22,8 @@ public class HandlerActivity extends Activity {
     public static final int WHAT_1 = 1;
     public static final int WHAT_2 = 2;
     public static final String EXTRA_NUMBER = "extra-number";
+
+    private TextView tv;
     /**
      *handler case1:intercept one type of message and keep the rest intact
      */
@@ -45,7 +52,12 @@ public class HandlerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //handler case1
+        setContentView(R.layout.handler_activity);
+        tv = (TextView) findViewById(R.id.tv);
+        /**
+         *
+         handler case1
+         */
 //        myHandler = new MyHandler(myCallback);
 //        Message message1 = myHandler.obtainMessage();
 //        message1.what = WHAT_1;
@@ -76,7 +88,12 @@ public class HandlerActivity extends Activity {
          *
          handler case3:static handler and static runnable,no Activity reference holding,no memory leak happened
          */
-        memoryLeakHandler.postDelayed(memoryLeakRunnable, DELAY_MILLISECOND);
+//        memoryLeakHandler.postDelayed(memoryLeakRunnable, DELAY_MILLISECOND);
+
+        /**
+         * handler case4:post delay with view,memory leak will happen
+         */
+        tv.postDelayed(memoryLeakRunnable,DELAY_MILLISECOND) ;
     }
 
     /**
