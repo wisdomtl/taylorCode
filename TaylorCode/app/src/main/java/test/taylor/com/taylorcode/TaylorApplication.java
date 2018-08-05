@@ -8,10 +8,13 @@ import android.util.Log;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.proxy.system.ActivityHook;
 import test.taylor.com.taylorcode.proxy.system.ClipboardHook;
 import test.taylor.com.taylorcode.ui.window.SuspendWindow;
+import test.taylor.com.taylorcode.ui.window.WindowActivity;
 
 /**
  * Created on 17/7/26.
@@ -41,9 +44,13 @@ public class TaylorApplication extends Application {
         registerActivityLifecycleCallbacks(new TaylorActivityLifeCycle(new AppStatusListener() {
             @Override
             public void onAppBackground() {
-                SuspendWindow.getInstance().dismiss();
             }
         }));
+        registerActivityLifecycleCallbacks(SuspendWindow.getInstance().getAppStatusListener());
+        List<Class> whiteList = new ArrayList<Class>();
+        whiteList.add(ActivityB.class);
+        whiteList.add(WindowActivity.class);
+        SuspendWindow.getInstance().setWhiteList(whiteList);
     }
 
     private void makeChange(ArrayList<String> origin) {

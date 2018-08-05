@@ -3,17 +3,22 @@ package test.taylor.com.taylorcode.ui.window;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * suspending window in app,it shows throughout the whole app
+ */
 public class SuspendWindow {
     /**
      * the content view of window
@@ -23,8 +28,20 @@ public class SuspendWindow {
      * the layout param for windowView
      */
     private WindowManager.LayoutParams layoutParam;
-
     private Context context;
+    /**
+     * show or dismiss the window according to the app lifecycle
+     */
+    private AppStatusListener appStatusListener;
+    /**
+     * this list records the activities which shows this window
+     */
+    private List<Class> whiteList;
+    /**
+     * if true,whiteList will be used to depend which activity could show window
+     * if false,all activities in app is allow to show window
+     */
+    private boolean enableWhileList;
 
     private static volatile SuspendWindow INSTANCE;
 
@@ -45,9 +62,15 @@ public class SuspendWindow {
     }
 
     private SuspendWindow() {
+        appStatusListener = new AppStatusListener();
+        whiteList = new ArrayList<>();
     }
 
-    public void show(Context context) {
+    public AppStatusListener getAppStatusListener() {
+        return appStatusListener;
+    }
+
+    private void show(Context context) {
         if (context == null) {
             return;
         }
@@ -62,9 +85,13 @@ public class SuspendWindow {
         if (layoutParam == null) {
             layoutParam = generateDefaultLayoutParam();
         }
-        windowManager.addView(windowView, layoutParam);
+        //in case of "IllegalStateException :has already been added to the window manager."
+        if (windowView.getParent() == null) {
+            windowManager.addView(windowView, layoutParam);
+        }
         windowView.setVisibility(View.VISIBLE);
     }
+
 
     private WindowManager.LayoutParams generateDefaultLayoutParam() {
         if (context == null) {
@@ -94,11 +121,12 @@ public class SuspendWindow {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(layoutParams);
         tv.setText("window view");
+        tv.setTextColor(Color.parseColor("#00ff00"));
         tv.setTextSize(30);
         return tv;
     }
 
-    public void dismiss() {
+    private void dismiss() {
         if (context == null) {
             return;
         }
@@ -108,10 +136,9 @@ public class SuspendWindow {
         }
     }
 
-    public void hide() {
-        if (windowView != null) {
-            windowView.setVisibility(View.GONE);
-        }
+    public void setWhiteList(List<Class> whiteList) {
+        enableWhileList = true;
+        this.whiteList = whiteList;
     }
 
     public SuspendWindow setView(View view) {
@@ -122,5 +149,73 @@ public class SuspendWindow {
     public SuspendWindow setLayoutParam(WindowManager.LayoutParams layoutParam) {
         this.layoutParam = layoutParam;
         return this;
+    }
+
+    /**
+     * the listener control the timing of showing or dismissing the window
+     */
+    private class AppStatusListener implements Application.ActivityLifecycleCallbacks {
+
+        private int foregroundActivityCount = 0;
+        private boolean isConfigurationChange = false;
+
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+            if (isConfigurationChange) {
+                isConfigurationChange = false;
+                return;
+            }
+
+            //show the window when app is in foreground again
+            if (enableWhileList) {
+                if (whiteList.contains(activity.getClass())) {
+                    show(activity.getApplicationContext());
+                } else {
+                    dismiss();
+                }
+            } else {
+                show(activity.getApplicationContext());
+            }
+            foregroundActivityCount++;
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+            if (activity.isChangingConfigurations()) {
+                isConfigurationChange = true;
+                return;
+            }
+            foregroundActivityCount--;
+            if (foregroundActivityCount == 0) {
+                //dismiss the window when app is in background
+                dismiss();
+            }
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
     }
 }

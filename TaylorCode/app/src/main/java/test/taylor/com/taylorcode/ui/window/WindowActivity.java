@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.rxjava.TimeoutActivity;
 
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
@@ -36,8 +39,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_outside).setOnClickListener(this);
         findViewById(R.id.btn_application_window).setOnClickListener(this);
         findViewById(R.id.btn_start_activity).setOnClickListener(this);
-
-        SuspendWindow.getInstance().show(this);
+        findViewById(R.id.btn_start_activityB).setOnClickListener(this);
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -198,6 +200,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             case R.id.btn_start_activity:
                 startAnotherActivity();
                 break;
+            case R.id.btn_start_activityB:
+                startAnotherActivityB();
+                break;
             default:
                 break;
         }
@@ -285,6 +290,11 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
     private void startAnotherActivity() {
         Intent intent = new Intent(this, TimeoutActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void startAnotherActivityB() {
+        Intent intent = new Intent(this, ActivityB.class);
         this.startActivity(intent);
     }
 }
