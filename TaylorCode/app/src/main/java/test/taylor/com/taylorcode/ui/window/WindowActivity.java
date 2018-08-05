@@ -273,7 +273,6 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     @Override
     protected void onPause() {
         super.onPause();
-        SuspendWindow.getInstance().dismiss();
     }
 
     /**

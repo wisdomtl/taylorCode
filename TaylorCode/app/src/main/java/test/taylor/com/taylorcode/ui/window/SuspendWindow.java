@@ -1,7 +1,10 @@
 package test.taylor.com.taylorcode.ui.window;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Gravity;

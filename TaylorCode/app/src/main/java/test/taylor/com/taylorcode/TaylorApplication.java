@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import test.taylor.com.taylorcode.proxy.system.ActivityHook;
 import test.taylor.com.taylorcode.proxy.system.ClipboardHook;
+import test.taylor.com.taylorcode.ui.window.SuspendWindow;
 
 /**
  * Created on 17/7/26.
@@ -29,21 +30,36 @@ public class TaylorApplication extends Application {
         origin.add("a");
         origin.add("b");
         origin.add("c");
-        makeChange(origin) ;
+        makeChange(origin);
         for (String str :
                 origin) {
-            Log.v("ttaylor", "TaylorApplication.onCreate()" + "  str="+str);
+            Log.v("ttaylor", "TaylorApplication.onCreate()" + "  str=" + str);
         }
 
         Stetho.initializeWithDefaults(this);//then type "chrome://inspect/#devices" at chrome ,fun start
+
+        registerActivityLifecycleCallbacks(new TaylorActivityLifeCycle(new AppStatusListener() {
+            @Override
+            public void onAppBackground() {
+                SuspendWindow.getInstance().dismiss();
+            }
+        }));
     }
 
     private void makeChange(ArrayList<String> origin) {
-        origin.remove(0) ;
+        origin.remove(0);
     }
 
 
-    private class TaylorActivityLifeCycle implements ActivityLifecycleCallbacks{
+    private class TaylorActivityLifeCycle implements ActivityLifecycleCallbacks {
+
+        private int forgroundActivityCount = 0;
+        private boolean isConfigurationChange = false;
+        private AppStatusListener appStatusListener;
+
+        public TaylorActivityLifeCycle(AppStatusListener appStatusListener) {
+            this.appStatusListener = appStatusListener;
+        }
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -52,7 +68,12 @@ public class TaylorApplication extends Application {
 
         @Override
         public void onActivityStarted(Activity activity) {
+            if (isConfigurationChange) {
+                isConfigurationChange = false;
+                return;
+            }
 
+            forgroundActivityCount++;
         }
 
         @Override
@@ -67,7 +88,16 @@ public class TaylorApplication extends Application {
 
         @Override
         public void onActivityStopped(Activity activity) {
-
+            if (activity.isChangingConfigurations()) {
+                isConfigurationChange = true;
+                return;
+            }
+            forgroundActivityCount--;
+            if (forgroundActivityCount == 0) {
+                if (appStatusListener != null) {
+//                    appStatusListener.onAppBackground();
+                }
+            }
         }
 
         @Override
@@ -79,5 +109,10 @@ public class TaylorApplication extends Application {
         public void onActivityDestroyed(Activity activity) {
 
         }
+    }
+
+    private interface AppStatusListener {
+        void onAppBackground();
+
     }
 }
