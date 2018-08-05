@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,7 +21,7 @@ import java.util.List;
 /**
  * suspending window in app,it shows throughout the whole app
  */
-public class SuspendWindow {
+public class SuspendWindow implements View.OnTouchListener {
     /**
      * the content view of window
      */
@@ -28,6 +30,10 @@ public class SuspendWindow {
      * the layout param for windowView
      */
     private WindowManager.LayoutParams layoutParam;
+    private float x;
+    private float y;
+    private float lastX;
+    private float lastY;
     private Context context;
     /**
      * show or dismiss the window according to the app lifecycle
@@ -57,10 +63,6 @@ public class SuspendWindow {
         return INSTANCE;
     }
 
-    public void init(Context context) {
-        this.context = context.getApplicationContext();
-    }
-
     private SuspendWindow() {
         appStatusListener = new AppStatusListener();
         whiteList = new ArrayList<>();
@@ -82,6 +84,7 @@ public class SuspendWindow {
         if (windowView == null) {
             windowView = generateDefaultWindowView();
         }
+        windowView.setOnTouchListener(this);
         if (layoutParam == null) {
             layoutParam = generateDefaultLayoutParam();
         }
@@ -132,7 +135,7 @@ public class SuspendWindow {
         }
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
-            windowManager.removeView(windowView);
+            windowManager.removeViewImmediate(windowView);
         }
     }
 
@@ -149,6 +152,44 @@ public class SuspendWindow {
     public SuspendWindow setLayoutParam(WindowManager.LayoutParams layoutParam) {
         this.layoutParam = layoutParam;
         return this;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int action = event.getAction();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                onActionDown(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                onActionMove(event);
+                break;
+        }
+        return false;
+    }
+
+    private void onActionMove(MotionEvent event) {
+        float dx = event.getRawX() - lastX;
+        float dy = event.getRawY() - lastY;
+        lastX = event.getRawX();
+        lastY = event.getRawY();
+        Log.v("ttaylor", "SuspendWindow.onActionMove()" + "  dx=" + dx + " ,dy=" + dy);
+        layoutParam.x += dx;
+        layoutParam.y += dy;
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager != null) {
+            windowManager.updateViewLayout(windowView, layoutParam);
+        }
+
+    }
+
+    private void onActionDown(MotionEvent event) {
+        x = event.getRawX();
+        y = event.getRawY();
+        lastX = x;
+        lastY = y;
+        Log.v("ttaylor", "SuspendWindow.onActionDown()" + "  x=" + x + " ,y=" + y);
     }
 
     /**
