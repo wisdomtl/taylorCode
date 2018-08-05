@@ -2,8 +2,12 @@ package test.taylor.com.taylorcode.ui.window;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.rxjava.TimeoutActivity;
 
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
 
@@ -28,6 +34,10 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_show_window).setOnClickListener(this);
         findViewById(R.id.btn_show_popup_window).setOnClickListener(this);
         findViewById(R.id.btn_outside).setOnClickListener(this);
+        findViewById(R.id.btn_application_window).setOnClickListener(this);
+        findViewById(R.id.btn_start_activity).setOnClickListener(this);
+
+        SuspendWindow.getInstance().show(this);
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -180,6 +190,16 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 Log.v("ttaylor", "WindowActivity.onClick()" + "  ");
                 popupWindow.dismiss();
                 break;
+            case R.id.btn_application_window:
+                View windowView = generateWindowView();
+                WindowManager.LayoutParams layoutParams = generateWindowLayoutParam(this, windowView);
+                showApplicationWindow(this, windowView, layoutParams);
+                break;
+            case R.id.btn_start_activity:
+                startAnotherActivity();
+                break;
+            default:
+                break;
         }
     }
 
@@ -208,6 +228,64 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             case R.id.btn_cancel:
                 Toast.makeText(this, "btn_cancel", Toast.LENGTH_SHORT).show();
                 break;
+
+            default:
+                break;
         }
+    }
+
+    private View generateWindowView() {
+        TextView tv = new TextView(this);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(layoutParams);
+        tv.setText("window view");
+        tv.setTextSize(40);
+        return tv;
+    }
+
+    /**
+     * window case3:show window in application above all activity
+     *
+     * @param context
+     * @param windowView
+     * @return
+     */
+    private WindowManager.LayoutParams generateWindowLayoutParam(Context context, View windowView) {
+        WindowManager windowManager = (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;//this is the key point let window be above all activity
+//        layoutParams.token = getWindow().getDecorView().getWindowToken();
+        layoutParams.format = PixelFormat.TRANSLUCENT;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.x = 0;
+        layoutParams.y = screenHeight / 3;
+        return layoutParams;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SuspendWindow.getInstance().dismiss();
+    }
+
+    /**
+     * @param context application context
+     */
+    private void showApplicationWindow(Context context, View windowView, WindowManager.LayoutParams layoutParam) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.addView(windowView, layoutParam);
+    }
+
+    private void startAnotherActivity() {
+        Intent intent = new Intent(this, TimeoutActivity.class);
+        this.startActivity(intent);
     }
 }
