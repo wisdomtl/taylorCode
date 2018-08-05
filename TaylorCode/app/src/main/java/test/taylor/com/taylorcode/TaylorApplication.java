@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import test.taylor.com.taylorcode.launch_mode.ActivityB;
-import test.taylor.com.taylorcode.proxy.system.ActivityHook;
-import test.taylor.com.taylorcode.proxy.system.ClipboardHook;
-import test.taylor.com.taylorcode.ui.window.SuspendWindow;
+import test.taylor.com.taylorcode.ui.window.FloatWindow;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
 
 /**
@@ -46,11 +44,11 @@ public class TaylorApplication extends Application {
             public void onAppBackground() {
             }
         }));
-        registerActivityLifecycleCallbacks(SuspendWindow.getInstance().getAppStatusListener());
+        registerActivityLifecycleCallbacks(FloatWindow.getInstance().getAppStatusListener());
         List<Class> whiteList = new ArrayList<Class>();
         whiteList.add(ActivityB.class);
         whiteList.add(WindowActivity.class);
-        SuspendWindow.getInstance().setWhiteList(whiteList);
+        FloatWindow.getInstance().setWhiteList(whiteList);
     }
 
     private void makeChange(ArrayList<String> origin) {

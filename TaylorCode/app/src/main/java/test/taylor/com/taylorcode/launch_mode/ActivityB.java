@@ -3,6 +3,12 @@ package test.taylor.com.taylorcode.launch_mode;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.ui.window.FloatWindow;
 
 /**
  * Created on 2018/2/27.
@@ -17,6 +23,11 @@ public class ActivityB extends ActivityBase {
         btn2.setText("FLAG_ACTIVITY_SINGLE_TOP");
         btn3.setText("STANDARD");
         btn4.setText("FLAG_ACTIVITY_NEW_TASK");
+
+        /**
+         * window case4:update window content
+         */
+        updateWindowView();
     }
 
     @Override
@@ -77,5 +88,21 @@ public class ActivityB extends ActivityBase {
     public void onButton4Click() {
         super.onButton4Click();
         startActivity(ActivityD.class, Intent.FLAG_ACTIVITY_NEW_TASK, null);
+    }
+
+    /**
+     * window case4:update window content
+     */
+    private void updateWindowView(){
+        FloatWindow.getInstance().updateWindowView(new FloatWindow.IWindowUpdater() {
+            @Override
+            public void updateWindowView(View windowView) {
+                Log.v("ttaylor", "ActivityB.updateWindowView()" + "  ");
+                if (windowView != null) {
+                    TextView tv = ((TextView) windowView.findViewById(R.id.tv_float_window));
+                    tv.setText("changed by ActivityB");
+                }
+            }
+        });
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import test.taylor.com.taylorcode.R;
+
 /**
  * suspending window in app,it shows throughout the whole app
  */
-public class SuspendWindow implements View.OnTouchListener {
+public class FloatWindow implements View.OnTouchListener {
     /**
      * the content view of window
      */
@@ -49,27 +52,37 @@ public class SuspendWindow implements View.OnTouchListener {
      */
     private boolean enableWhileList;
 
-    private static volatile SuspendWindow INSTANCE;
+    private static volatile FloatWindow INSTANCE;
 
-    public static SuspendWindow getInstance() {
+    public static FloatWindow getInstance() {
         if (INSTANCE == null) {
-            synchronized (SuspendWindow.class) {
+            synchronized (FloatWindow.class) {
                 if (INSTANCE == null) {
                     //in case of memory leak for singleton
-                    INSTANCE = new SuspendWindow();
+                    INSTANCE = new FloatWindow();
                 }
             }
         }
         return INSTANCE;
     }
 
-    private SuspendWindow() {
+    private FloatWindow() {
         appStatusListener = new AppStatusListener();
         whiteList = new ArrayList<>();
     }
 
     public AppStatusListener getAppStatusListener() {
         return appStatusListener;
+    }
+
+    public void updateWindowView(IWindowUpdater updater) {
+        if (updater != null) {
+            updater.updateWindowView(windowView);
+        }
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager != null) {
+            windowManager.updateViewLayout(windowView, layoutParam);
+        }
     }
 
     private void show(Context context) {
@@ -120,13 +133,10 @@ public class SuspendWindow implements View.OnTouchListener {
     }
 
     private View generateDefaultWindowView() {
-        TextView tv = new TextView(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.float_window, null);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tv.setLayoutParams(layoutParams);
-        tv.setText("window view");
-        tv.setTextColor(Color.parseColor("#00ff00"));
-        tv.setTextSize(30);
-        return tv;
+        view.setLayoutParams(layoutParams);
+        return view;
     }
 
     private void dismiss() {
@@ -144,12 +154,12 @@ public class SuspendWindow implements View.OnTouchListener {
         this.whiteList = whiteList;
     }
 
-    public SuspendWindow setView(View view) {
+    public FloatWindow setView(View view) {
         this.windowView = view;
         return this;
     }
 
-    public SuspendWindow setLayoutParam(WindowManager.LayoutParams layoutParam) {
+    public FloatWindow setLayoutParam(WindowManager.LayoutParams layoutParam) {
         this.layoutParam = layoutParam;
         return this;
     }
@@ -164,6 +174,8 @@ public class SuspendWindow implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_MOVE:
                 onActionMove(event);
+                break;
+            default:
                 break;
         }
         return false;
@@ -258,5 +270,12 @@ public class SuspendWindow implements View.OnTouchListener {
         public void onActivityDestroyed(Activity activity) {
 
         }
+    }
+
+    /**
+     * let ui decide how to update window
+     */
+    public interface IWindowUpdater {
+        void updateWindowView(View windowView);
     }
 }
