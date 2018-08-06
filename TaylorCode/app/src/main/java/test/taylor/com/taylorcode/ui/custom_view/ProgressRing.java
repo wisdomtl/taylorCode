@@ -88,7 +88,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
         START_ANGLE = -90f;
         progress = 0.3f;
         textSize = 25;
-        textStrokeWidth = 20 ;
+        textStrokeWidth = 20;
 
     }
 
@@ -109,8 +109,8 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
         }
         circlePaint.setColor(Color.parseColor("#BDBD93"));
         circlePaint.setStyle(Paint.Style.STROKE);
-        circlePaint.setStrokeWidth(innerRingWidth);
         circlePaint.setAntiAlias(true);
+        circlePaint.setStrokeWidth(innerRingWidth);
         return circlePaint;
     }
 
@@ -128,12 +128,13 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
 
     private Paint getTextPaint() {
         if (textPaint == null) {
-            textPaint = new Paint();
+            textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
         }
         textPaint.setColor(Color.parseColor("#FFDD00"));
         textPaint.setStrokeWidth(textStrokeWidth);
         circlePaint.setStyle(Paint.Style.STROKE);
         textPaint.setTextSize(textSize);
+        textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
         return textPaint;
     }
@@ -168,8 +169,9 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
                 paint.getTextBounds(text, 0, text.length(), textRect);
             }
             Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
+            //baseline is the key for drawing text
             int baseline = (getMeasuredHeight() - fontMetricsInt.bottom + fontMetricsInt.top) / 2 - fontMetricsInt.top;
-            canvas.drawText(text, getMeasuredWidth() / 2 - textRect.width() / 2, baseline, paint);
+            canvas.drawText(text, getMeasuredWidth() / 2, baseline, paint);
         }
     }
 }
