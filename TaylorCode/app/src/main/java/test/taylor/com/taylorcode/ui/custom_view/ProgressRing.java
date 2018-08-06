@@ -104,6 +104,7 @@ public class ProgressRing extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(progressRingWidth);
         paint.setAntiAlias(true);
+        paint.setStrokeCap(Paint.Cap.ROUND);
         return paint;
     }
 
