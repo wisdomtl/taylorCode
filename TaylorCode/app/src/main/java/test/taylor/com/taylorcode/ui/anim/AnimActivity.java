@@ -2,12 +2,19 @@ package test.taylor.com.taylorcode.ui.anim;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import test.taylor.com.taylorcode.R;
 
@@ -16,6 +23,8 @@ public class AnimActivity extends Activity implements View.OnClickListener {
 
     private ImageView ivFrameAnim;
     private AnimationDrawable animationDrawable;
+
+    private TextView tvScaleAnim;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,10 +38,15 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         animationDrawable = createAnimationDrawable(this);
         ivFrameAnim.setBackground(animationDrawable);
         ivFrameAnim.setOnClickListener(this);
+
+        tvScaleAnim = createTextView(this) ;
+        ((LinearLayout) findViewById(R.id.ll_animi_activity_root)).addView(tvScaleAnim);
+        tvScaleAnim.startAnimation(createScaleAnimation());
     }
 
     /**
      * frame anim case 1:create frame anim
+     *
      * @param context
      * @return
      */
@@ -62,6 +76,30 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
         drawable.setOneShot(true);
         return drawable;
+    }
+
+    private TextView createTextView(Context context){
+        TextView tv = new TextView(context) ;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tv.setText("+1");
+        tv.setTextSize(20);
+        tv.setTextColor(Color.parseColor("#FFDD00"));
+        tv.setTypeface(Typeface.DEFAULT_BOLD);
+        tv.setLayoutParams(params);
+        return tv ;
+    }
+
+    /**
+     * scale anim case1: create scale anim
+     * @return
+     */
+    private ScaleAnimation createScaleAnimation() {
+        ScaleAnimation animation = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setFillBefore(true);
+        animation.setDuration(300);
+        animation.setRepeatCount(100);
+        animation.setRepeatMode(Animation.INFINITE);
+        return animation;
     }
 
     @Override
