@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <test.taylor.com.taylorcode.ui.custom_view.RingProgress
+    <test.taylor.com.taylorcode.ui.custom_view.ProgressRing
         android:layout_width="54dp"
         android:layout_height="54dp"/>
 

@@ -4,65 +4,71 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import test.taylor.com.taylorcode.util.DimensionUtil;
 
-public class RingProgress extends View {
+public class ProgressRing extends View {
 
     private static final float END_ANGLE = 360;
 
-    private float INNER_RING_RADIUS;
-    private float OUT_RING_WIDTH;
-    private float INNER_RING_WIDTH;
-    private float PROGRESS_RING_WIDTH;
+    private float innerRingRadius;
+    private float outRingWidth;
+    private float innerRingWidth;
+    private float progressRingWidth;
     private float START_ANGLE;
+    private RectF progressRingRect;
 
     private float progress;
     private Paint paint;
 
-    public RingProgress(Context context) {
+    public ProgressRing(Context context) {
         super(context);
         init(getContext());
     }
 
-    public RingProgress(Context context, @Nullable AttributeSet attrs) {
+    public ProgressRing(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(getContext());
     }
 
-    public RingProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProgressRing(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(getContext());
     }
 
     public void setInnerRingRadius(float innerRingRadius) {
-        this.INNER_RING_RADIUS = innerRingRadius;
+        this.innerRingRadius = innerRingRadius;
     }
 
     public void setOutRingWidth(float outRingWidth) {
-        this.OUT_RING_WIDTH = outRingWidth;
+        this.outRingWidth = outRingWidth;
     }
 
     public void setInnerRingWidth(float innerRingWidth) {
-        this.INNER_RING_WIDTH = innerRingWidth;
+        this.innerRingWidth = innerRingWidth;
     }
 
     public void setProgressBarWidth(float progressBarWidth) {
-        this.PROGRESS_RING_WIDTH = progressBarWidth;
+        this.progressRingWidth = progressBarWidth;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+        invalidate();
     }
 
     private void init(Context context) {
         paint = new Paint();
 
         //get default value
-        INNER_RING_RADIUS = DimensionUtil.dp2px(context, 24);
-        OUT_RING_WIDTH = DimensionUtil.dp2px(context, 4);
-        INNER_RING_WIDTH = DimensionUtil.dp2px(context, 6);
-        PROGRESS_RING_WIDTH = DimensionUtil.dp2px(context, 3);
+        innerRingRadius = DimensionUtil.dp2px(context, 24);
+        outRingWidth = DimensionUtil.dp2px(context, 4);
+        innerRingWidth = DimensionUtil.dp2px(context, 6);
+        progressRingWidth = DimensionUtil.dp2px(context, 3);
         START_ANGLE = -90f;
         progress = 0.3f;
     }
@@ -73,7 +79,7 @@ public class RingProgress extends View {
         }
         paint.setColor(Color.parseColor("#4B4B4B"));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(OUT_RING_WIDTH);
+        paint.setStrokeWidth(outRingWidth);
         paint.setAntiAlias(true);
         return paint;
     }
@@ -84,7 +90,7 @@ public class RingProgress extends View {
         }
         paint.setColor(Color.parseColor("#BDBD93"));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(INNER_RING_WIDTH);
+        paint.setStrokeWidth(innerRingWidth);
         paint.setAntiAlias(true);
         return paint;
     }
@@ -95,7 +101,7 @@ public class RingProgress extends View {
         }
         paint.setColor(Color.parseColor("#FFDD00"));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(PROGRESS_RING_WIDTH);
+        paint.setStrokeWidth(progressRingWidth);
         paint.setAntiAlias(true);
         return paint;
     }
@@ -107,16 +113,19 @@ public class RingProgress extends View {
 
         //draw out ring
         float ringCenterX = getWidth() / 2;
-        float outRingRadius = getWidth() / 2 - OUT_RING_WIDTH;
+        float outRingRadius = getWidth() / 2 - outRingWidth;
         canvas.drawCircle(ringCenterX, ringCenterX, outRingRadius, getOutRingPaint());
 
         //draw inner ring
-        float innerRingRadius = this.INNER_RING_RADIUS - INNER_RING_WIDTH;
+        float innerRingRadius = this.innerRingRadius - innerRingWidth;
         canvas.drawCircle(ringCenterX, ringCenterX, innerRingRadius, getInnerRingPaint());
 
         //draw progress bar
-        float progressRingLeft = ringCenterX - outRingRadius + PROGRESS_RING_WIDTH;
-        float progressRingRight = ringCenterX + outRingRadius - PROGRESS_RING_WIDTH;
-        canvas.drawArc(progressRingLeft, progressRingLeft, progressRingRight, progressRingRight, START_ANGLE, progress * END_ANGLE, false, getProgressRingPaint());
+        float progressRingLeft = ringCenterX - outRingRadius + progressRingWidth;
+        float progressRingRight = ringCenterX + outRingRadius - progressRingWidth;
+        if (progressRingRect == null) {
+            progressRingRect = new RectF(progressRingLeft, progressRingLeft, progressRingRight, progressRingRight);
+        }
+        canvas.drawArc(progressRingRect, START_ANGLE, progress * END_ANGLE, false, getProgressRingPaint());
     }
 }
