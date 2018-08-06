@@ -1,5 +1,8 @@
 package test.taylor.com.taylorcode.ui.anim;
 
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,8 +11,10 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -31,7 +36,11 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.anim_activity);
         initView();
+
+        createValueAnimator();
     }
+
+
 
     private void initView() {
         ivFrameAnim = ((ImageView) findViewById(R.id.frame_anim));
@@ -101,6 +110,22 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         animation.setRepeatMode(Animation.INFINITE);
         return animation;
     }
+
+    /**
+     * value animator case1:create value animator
+     */
+    private void createValueAnimator() {
+        ValueAnimator animator = ValueAnimator.ofFloat(15,25);
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value="+animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
 
     @Override
     public void onClick(View v) {
