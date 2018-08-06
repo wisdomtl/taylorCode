@@ -8,7 +8,7 @@ import android.content.Context;
  */
 public final class DimensionUtil {
 
-    public static int dip2px(Context context, double dpValue) {
+    public static int dp2px(Context context, double dpValue) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * density + 0.5);
     }
