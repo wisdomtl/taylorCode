@@ -7,13 +7,14 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import test.taylor.com.taylorcode.util.DimensionUtil;
 
 public class ProgressRing extends View {
 
-    private static final float END_ANGLE = 360;
+    private static final float ANGLE_SPAN = 360;
 
     private float innerRingRadius;
     private float outRingWidth;
@@ -126,6 +127,6 @@ public class ProgressRing extends View {
         if (progressRingRect == null) {
             progressRingRect = new RectF(progressRingLeft, progressRingLeft, progressRingRight, progressRingRight);
         }
-        canvas.drawArc(progressRingRect, START_ANGLE, progress * END_ANGLE, false, getProgressRingPaint());
+        canvas.drawArc(progressRingRect, START_ANGLE, progress * ANGLE_SPAN, false, getProgressRingPaint());
     }
 }
