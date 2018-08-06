@@ -21,7 +21,10 @@ public class CustomViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_view_activity);
 
-        //custom view case1:update custom view periodically
+        /**
+         *
+         custom view case1:update custom view periodically
+         */
         progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
         animationDrawable = createAnimationDrawable(this);
         progressRing.setBackground(animationDrawable);
