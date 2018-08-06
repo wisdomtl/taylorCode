@@ -31,6 +31,11 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         ivFrameAnim.setOnClickListener(this);
     }
 
+    /**
+     * frame anim case 1:create frame anim
+     * @param context
+     * @return
+     */
     public AnimationDrawable createAnimationDrawable(Context context) {
         AnimationDrawable drawable = new AnimationDrawable();
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);

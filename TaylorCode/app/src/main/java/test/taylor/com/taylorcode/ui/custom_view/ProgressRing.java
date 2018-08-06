@@ -7,12 +7,11 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
+
 
 import test.taylor.com.taylorcode.util.DimensionUtil;
 
-public class ProgressRing extends View {
+public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
 
     private static final float ANGLE_SPAN = 360;
 
