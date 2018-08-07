@@ -99,8 +99,8 @@ public class ActivityB extends ActivityBase {
             public void updateWindowView(View windowView) {
                 Log.v("ttaylor", "ActivityB.updateWindowView()" + "  ");
                 if (windowView != null) {
-                    TextView tv = ((TextView) windowView.findViewById(R.id.tv_float_window));
-                    tv.setText("changed by ActivityB");
+//                    TextView tv = ((TextView) windowView.findViewById(R.id.tv_float_window));
+//                    tv.setText("changed by ActivityB");
                 }
             }
         });

@@ -3,7 +3,6 @@ package test.taylor.com.taylorcode.ui.window;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -14,12 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.util.DimensionUtil;
 
 /**
  * suspending window in app,it shows throughout the whole app
@@ -125,8 +124,8 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.width = DimensionUtil.dp2px(context ,54);
+        layoutParams.height = DimensionUtil.dp2px(context,54) ;
         layoutParams.x = 0;
         layoutParams.y = screenHeight / 3;
         return layoutParams;

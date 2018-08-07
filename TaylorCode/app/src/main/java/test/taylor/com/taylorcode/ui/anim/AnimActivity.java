@@ -45,7 +45,7 @@ public class AnimActivity extends Activity implements View.OnClickListener {
     private void initView() {
         ivFrameAnim = ((ImageView) findViewById(R.id.frame_anim));
         animationDrawable = createAnimationDrawable(this);
-        ivFrameAnim.setBackground(animationDrawable);
+        ivFrameAnim.setImageDrawable(animationDrawable);
         ivFrameAnim.setOnClickListener(this);
 
         tvScaleAnim = createTextView(this) ;

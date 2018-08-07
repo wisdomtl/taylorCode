@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.widget.LinearLayout;
 
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.util.DimensionUtil;
 import test.taylor.com.taylorcode.util.Timer;
 
 public class CustomViewActivity extends Activity {
@@ -20,6 +23,7 @@ public class CustomViewActivity extends Activity {
     public static final int VALUE_ANIM_DURATION = 800;
     private ProgressRing progressRing;
     private AnimationDrawable animationDrawable;
+    private LinearLayout llContainer ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +34,10 @@ public class CustomViewActivity extends Activity {
          *
          custom view case1:update custom view periodically
          */
-        progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
+//        progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
+        progressRing = new ProgressRing(this);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(DimensionUtil.dp2px(this,54),DimensionUtil.dp2px(this,54)) ;
+        progressRing.setLayoutParams(params);
         animationDrawable = createAnimationDrawable(this);
         progressRing.setBackground(animationDrawable);
         new Timer(new Timer.TimerListener() {
@@ -43,12 +50,12 @@ public class CustomViewActivity extends Activity {
 
                 if (mod == 0) {
                     doFrameAnimation();
-                    doValueAnimator(15, 42, progressRing, VALUE_ANIM_DURATION);
+                    doValueAnimator(15, 51, progressRing, VALUE_ANIM_DURATION);
                 }
-
-
             }
         }).start(0, 50);
+        llContainer = ((LinearLayout) findViewById(R.id.ll_custom_view));
+        llContainer.addView(progressRing);
     }
 
     private void doFrameAnimation() {

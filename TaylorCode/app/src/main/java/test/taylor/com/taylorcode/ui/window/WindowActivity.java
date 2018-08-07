@@ -1,14 +1,15 @@
 package test.taylor.com.taylorcode.ui.window;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.Build;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.transition.Transition;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,15 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.rxjava.TimeoutActivity;
+import test.taylor.com.taylorcode.ui.custom_view.ProgressRing;
+import test.taylor.com.taylorcode.util.Timer;
 
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
-
+    public static final int VALUE_ANIM_DURATION = 800;
+    private final float FULL_TIME_MILLISECOND = 3 * 1000;
     //    private PopupWindow popupWindow;
     private CustomPopupWindow popupWindow;
 
@@ -40,6 +44,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_application_window).setOnClickListener(this);
         findViewById(R.id.btn_start_activity).setOnClickListener(this);
         findViewById(R.id.btn_start_activityB).setOnClickListener(this);
+
+        FloatWindow.getInstance().setView(generateWindowView());
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -240,12 +246,108 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     }
 
     private View generateWindowView() {
-        TextView tv = new TextView(this);
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tv.setLayoutParams(layoutParams);
-        tv.setText("window view");
-        tv.setTextSize(40);
-        return tv;
+//        TextView tv = new TextView(this);
+//        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        tv.setLayoutParams(layoutParams);
+//        tv.setText("window view");
+//        tv.setTextSize(40);
+//        return tv;
+        final ProgressRing progressRing = new ProgressRing(this);
+        final AnimationDrawable animationDrawable = createAnimationDrawable(this);
+        progressRing.setImageDrawable(animationDrawable);
+        new Timer(new Timer.TimerListener() {
+            @Override
+            public void onTick(long pastMillisecond) {
+                float mod = pastMillisecond % FULL_TIME_MILLISECOND;
+
+                Log.v("ttaylor", "CustomViewActivity.onTick()" + " mod=" + mod + ",past=" + pastMillisecond);
+                float progress = getProgress(mod, FULL_TIME_MILLISECOND);
+                progressRing.setProgress(progress);
+                if (mod == 0) {
+                    doFrameAnimation(animationDrawable);
+                    doValueAnimator(10, 42, progressRing, VALUE_ANIM_DURATION);
+                }
+            }
+        }).start(0, 50);
+        return progressRing ;
+    }
+
+    private void doFrameAnimation(AnimationDrawable animationDrawable) {
+        if (animationDrawable.isRunning()) {
+            animationDrawable.stop();
+        }
+        animationDrawable.start();
+    }
+
+    private float getProgress(float mod, float totalTime) {
+        float i = mod == 0 ? 1 : mod;
+        return i / totalTime;
+    }
+
+    private void doValueAnimator(float start, float end, final ProgressRing ring, int duration) {
+        ValueAnimator animator = ValueAnimator.ofFloat(start, end);
+        animator.setInterpolator(new AnticipateOvershootInterpolator());
+        animator.setDuration(duration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value=" + animation.getAnimatedValue());
+                float size = (Float) animation.getAnimatedValue();
+                ring.setTextSize(size);
+            }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.v("ttaylor", "CustomViewActivity.onAnimationEnd()" + "  ");
+                ring.setText("");
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        ring.setText("+1");
+        animator.start();
+    }
+
+    private AnimationDrawable createAnimationDrawable(Context context) {
+        AnimationDrawable drawable = new AnimationDrawable();
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_2), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_3), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_4), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_5), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_6), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_7), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_8), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_9), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_10), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_12), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_13), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_14), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_15), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_16), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_17), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_18), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_19), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_20), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_21), 23);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_22), VALUE_ANIM_DURATION);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
+        drawable.setOneShot(true);
+        return drawable;
     }
 
     /**
@@ -281,6 +383,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     }
 
     /**
+     * window case3:show window in application above all activity
+     *
      * @param context application context
      */
     private void showApplicationWindow(Context context, View windowView, WindowManager.LayoutParams layoutParam) {
