@@ -13,6 +13,7 @@ import java.util.List;
 import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.ui.window.FloatWindow;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
+import test.taylor.com.taylorcode.util.DimensionUtil;
 
 /**
  * Created on 17/7/26.
@@ -49,6 +50,8 @@ public class TaylorApplication extends Application {
         whiteList.add(ActivityB.class);
         whiteList.add(WindowActivity.class);
         FloatWindow.getInstance().setWhiteList(whiteList);
+        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(this,54));
+        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(this,54));
     }
 
     private void makeChange(ArrayList<String> origin) {

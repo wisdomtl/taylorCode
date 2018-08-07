@@ -24,6 +24,9 @@ import test.taylor.com.taylorcode.util.DimensionUtil;
  * suspending window in app,it shows throughout the whole app
  */
 public class FloatWindow implements View.OnTouchListener {
+
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 100;
     /**
      * the content view of window
      */
@@ -32,6 +35,8 @@ public class FloatWindow implements View.OnTouchListener {
      * the layout param for windowView
      */
     private WindowManager.LayoutParams layoutParam;
+    private int width;
+    private int height;
     private float x;
     private float y;
     private float lastX;
@@ -84,6 +89,14 @@ public class FloatWindow implements View.OnTouchListener {
         }
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     private void show(Context context) {
         if (context == null) {
             return;
@@ -97,9 +110,7 @@ public class FloatWindow implements View.OnTouchListener {
             windowView = generateDefaultWindowView();
         }
         windowView.setOnTouchListener(this);
-        if (layoutParam == null) {
-            layoutParam = generateDefaultLayoutParam();
-        }
+        layoutParam = generateLayoutParam();
         //in case of "IllegalStateException :has already been added to the window manager."
         if (windowView.getParent() == null) {
             windowManager.addView(windowView, layoutParam);
@@ -108,7 +119,7 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
 
-    private WindowManager.LayoutParams generateDefaultLayoutParam() {
+    private WindowManager.LayoutParams generateLayoutParam() {
         if (context == null) {
             return new WindowManager.LayoutParams();
         }
@@ -124,8 +135,8 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-        layoutParams.width = DimensionUtil.dp2px(context ,54);
-        layoutParams.height = DimensionUtil.dp2px(context,54) ;
+        layoutParams.width = width == 0 ? DEFAULT_WIDTH : width;
+        layoutParams.height = height == 0 ? DEFAULT_HEIGHT : height;
         layoutParams.x = 0;
         layoutParams.y = screenHeight / 3;
         return layoutParams;
@@ -155,11 +166,6 @@ public class FloatWindow implements View.OnTouchListener {
 
     public FloatWindow setView(View view) {
         this.windowView = view;
-        return this;
-    }
-
-    public FloatWindow setLayoutParam(WindowManager.LayoutParams layoutParam) {
-        this.layoutParam = layoutParam;
         return this;
     }
 
