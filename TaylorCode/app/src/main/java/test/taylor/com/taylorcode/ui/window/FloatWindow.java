@@ -155,7 +155,10 @@ public class FloatWindow implements View.OnTouchListener {
         }
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
-            windowManager.removeViewImmediate(windowView);
+            //in case of "IllegalStateException :not attached to window manager."
+            if (windowView.getParent() != null) {
+                windowManager.removeViewImmediate(windowView);
+            }
         }
     }
 
