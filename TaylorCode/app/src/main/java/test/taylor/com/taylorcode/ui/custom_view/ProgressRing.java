@@ -159,8 +159,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
             int baseline = (getMeasuredHeight() - fontMetricsInt.bottom + fontMetricsInt.top) / 2 - fontMetricsInt.top;
             canvas.drawText(text, getMeasuredWidth() / 2, baseline, paint);
         }
+        //key point:move super.onDraw() here make the custom drawing below the real content of ImageView
         super.onDraw(canvas);
     }
-
-
 }
