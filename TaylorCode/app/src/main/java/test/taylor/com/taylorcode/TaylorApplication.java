@@ -50,8 +50,8 @@ public class TaylorApplication extends Application {
         whiteList.add(ActivityB.class);
         whiteList.add(WindowActivity.class);
         FloatWindow.getInstance().setWhiteList(whiteList);
-        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(this,54));
-        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(this,54));
+        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54));
+        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54));
     }
 
     private void makeChange(ArrayList<String> origin) {

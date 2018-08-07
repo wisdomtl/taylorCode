@@ -38,13 +38,13 @@ public class Indicator extends View implements IPagerNavigator {
     }
 
     private void init(Context context) {
-        strokeWidth = DimensionUtil.dp2px(context, 1);
-        longTabWidth = DimensionUtil.dp2px(context, 17);
-        shortTabWidth = DimensionUtil.dp2px(context, 6);
-        tabGap = DimensionUtil.dp2px(context, 6);
+        strokeWidth = DimensionUtil.dp2px(1);
+        longTabWidth = DimensionUtil.dp2px(17);
+        shortTabWidth = DimensionUtil.dp2px(6);
+        tabGap = DimensionUtil.dp2px(6);
         tabIndex = 0;
-        rx = DimensionUtil.dp2px(context, 5);
-        ry = DimensionUtil.dp2px(context, 5);
+        rx = DimensionUtil.dp2px(5);
+        ry = DimensionUtil.dp2px(5);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 

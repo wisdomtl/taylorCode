@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * 博客: http://hackware.lucode.net
@@ -8,9 +9,9 @@ import android.content.Context;
  */
 public final class DimensionUtil {
 
-    public static int dp2px(Context context, double dpValue) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * density + 0.5);
+    public static int dp2px(double dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     public static int getScreenWidth(Context context) {

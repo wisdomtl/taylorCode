@@ -36,7 +36,7 @@ public class CustomViewActivity extends Activity {
          */
 //        progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
         progressRing = new ProgressRing(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(DimensionUtil.dp2px(this,54),DimensionUtil.dp2px(this,54)) ;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(DimensionUtil.dp2px(54),DimensionUtil.dp2px(54)) ;
         progressRing.setLayoutParams(params);
         animationDrawable = createAnimationDrawable(this);
         progressRing.setBackground(animationDrawable);
