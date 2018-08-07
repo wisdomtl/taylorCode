@@ -11,11 +11,14 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 
 
-import test.taylor.com.taylorcode.util.DimensionUtil;
-
+/**
+ * a special ImageView which has customized circular background and progress ring
+ */
 public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
 
     private static final float ANGLE_SPAN = 360;
+    private static final int DEFAULT_OUT_RING_WIDTH = 7;
+    private static final int DEFAULT_PROGRESS_WIDTH = 6;
 
     private float outRingWidth;
     private float progressRingWidth;
@@ -54,7 +57,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
     }
 
 
-    public void setProgressBarWidth(float progressBarWidth) {
+    public void setProgressRingWidth(float progressBarWidth) {
         this.progressRingWidth = progressBarWidth;
     }
 
@@ -72,8 +75,12 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
         circlePaint = new Paint();
 
         //get default value
-        outRingWidth = DimensionUtil.dp2px(context, 4);
-        progressRingWidth = DimensionUtil.dp2px(context, 3);
+        if (outRingWidth == 0) {
+            outRingWidth = DEFAULT_OUT_RING_WIDTH;
+        }
+        if (progressRingWidth == 0) {
+            progressRingWidth = DEFAULT_PROGRESS_WIDTH ;
+        }
         START_ANGLE = -90f;
         progress = 0.3f;
         textSize = 25;
