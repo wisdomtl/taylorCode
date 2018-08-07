@@ -32,6 +32,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private final float FULL_TIME_MILLISECOND = 3 * 1000;
     //    private PopupWindow popupWindow;
     private CustomPopupWindow popupWindow;
+    private Timer timer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +45,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_application_window).setOnClickListener(this);
         findViewById(R.id.btn_start_activity).setOnClickListener(this);
         findViewById(R.id.btn_start_activityB).setOnClickListener(this);
+        findViewById(R.id.btn_stop_timer).setOnClickListener(this);
+        findViewById(R.id.btn_start_timer).setOnClickListener(this);
+
 
         FloatWindow.getInstance().setView(generateWindowView());
     }
@@ -209,8 +213,26 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             case R.id.btn_start_activityB:
                 startAnotherActivityB();
                 break;
+            case R.id.btn_stop_timer:
+                stopTimer();
+                break;
+            case R.id.btn_start_timer:
+                startTimer();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void startTimer() {
+        if (timer != null) {
+            timer.start(0,20);
+        }
+    }
+
+    private void stopTimer() {
+        if (timer != null) {
+            timer.pause();
         }
     }
 
@@ -255,7 +277,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         final ProgressRing progressRing = new ProgressRing(this);
         final AnimationDrawable animationDrawable = createAnimationDrawable(this);
         progressRing.setImageDrawable(animationDrawable);
-        new Timer(new Timer.TimerListener() {
+        timer = new Timer(new Timer.TimerListener() {
             @Override
             public void onTick(long pastMillisecond) {
                 float mod = pastMillisecond % FULL_TIME_MILLISECOND;
@@ -268,8 +290,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                     doValueAnimator(10, 42, progressRing, VALUE_ANIM_DURATION);
                 }
             }
-        }).start(0, 50);
-        return progressRing ;
+        });
+        timer.start(0, 50);
+        return progressRing;
     }
 
     private void doFrameAnimation(AnimationDrawable animationDrawable) {

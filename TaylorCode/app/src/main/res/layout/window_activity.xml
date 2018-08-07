@@ -46,4 +46,16 @@
         android:id="@+id/btn_start_activityB"
         android:text="start activityB"
         android:textSize="20dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_stop_timer"
+        android:text="stop_timer"
+        android:textSize="20dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_start_timer"
+        android:text="start_timer"
+        android:textSize="20dp"/>
 </LinearLayout>

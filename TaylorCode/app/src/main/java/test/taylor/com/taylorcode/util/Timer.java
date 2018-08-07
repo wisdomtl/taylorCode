@@ -8,6 +8,7 @@ import android.os.Message;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,9 +17,15 @@ import java.util.concurrent.TimeUnit;
 public class Timer {
 
     private int interval;
+    /**
+     * the past time after Timer started
+     */
+    private long pastMillisecond;
     private TimerListener listener;
     private CountdownHandler handler;
     private ScheduledExecutorService executor;
+    private ScheduledFuture scheduledFuture;
+    private CountDownRunnable countDownRunnable;
 
     public Timer(TimerListener timerListener) {
         executor = Executors.newSingleThreadScheduledExecutor();
@@ -27,17 +34,34 @@ public class Timer {
     }
 
     /**
-     * start countdown
+     * start ticktock
      */
     public void start(int delayMillisecond, int intervalMillisecond) {
         this.interval = intervalMillisecond;
         if (!executor.isShutdown()) {
-            executor.scheduleAtFixedRate(new CountDownRunnable(), delayMillisecond, intervalMillisecond, TimeUnit.MILLISECONDS);
+            if (countDownRunnable == null) {
+                countDownRunnable = new CountDownRunnable();
+            }
+            //avoid to schedule several runnable into executor
+            if (scheduledFuture == null || scheduledFuture.isCancelled()) {
+                scheduledFuture = executor.scheduleAtFixedRate(countDownRunnable, delayMillisecond, intervalMillisecond, TimeUnit.MILLISECONDS);
+            }
         }
     }
 
     /**
-     * stop countdown
+     * pause ticktock
+     *
+     * @return
+     */
+    public void pause() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
+
+    /**
+     * stop ticktock,Timer is no longer need
      */
     public void stop() {
         if (executor != null) {
@@ -46,8 +70,6 @@ public class Timer {
     }
 
     private class CountdownHandler extends Handler {
-
-        private long pastMillisecond;
 
         private CountdownHandler(Looper looper) {
             super(looper);
