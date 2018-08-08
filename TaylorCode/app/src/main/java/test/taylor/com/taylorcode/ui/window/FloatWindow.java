@@ -7,6 +7,8 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,9 +41,12 @@ public class FloatWindow implements View.OnTouchListener {
     private int height;
     private float x;
     private float y;
-    private float lastX;
-    private float lastY;
+    private float lastTouchX;
+    private float lastTouchY;
+    private int screenWidth;
+    private int screenHeight;
     private Context context;
+    private GestureDetector gestureDetector;
     /**
      * show or dismiss the window according to the app lifecycle
      */
@@ -55,7 +60,11 @@ public class FloatWindow implements View.OnTouchListener {
      * if false,all activities in app is allow to show window
      */
     private boolean enableWhileList;
-    private View.OnClickListener onClickListener;
+    /**
+     * whether to show or hide this window
+     * true by default
+     */
+    private boolean enable = true;
 
     private static volatile FloatWindow INSTANCE;
 
@@ -91,7 +100,6 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
-        this.onClickListener = listener;
         if (windowView != null) {
             windowView.setOnClickListener(listener);
         }
@@ -105,7 +113,18 @@ public class FloatWindow implements View.OnTouchListener {
         this.height = height;
     }
 
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+
     private void show(Context context) {
+        if (!enable) {
+            return;
+        }
+        if (windowView == null) {
+            return;
+        }
         if (context == null) {
             return;
         }
@@ -114,28 +133,19 @@ public class FloatWindow implements View.OnTouchListener {
         if (windowManager == null) {
             return;
         }
-        if (windowView == null) {
-            return;
-        }
-        windowView.setOnTouchListener(this);
-        layoutParam = generateLayoutParam();
+        gestureDetector = new GestureDetector(context, new GestureListener());
+        layoutParam = generateLayoutParam(screenWidth, screenHeight);
         //in case of "IllegalStateException :has already been added to the window manager."
         if (windowView.getParent() == null) {
             windowManager.addView(windowView, layoutParam);
         }
-        windowView.setVisibility(View.VISIBLE);
     }
 
 
-    private WindowManager.LayoutParams generateLayoutParam() {
+    private WindowManager.LayoutParams generateLayoutParam(int screenWidth, int screenHeight) {
         if (context == null) {
             return new WindowManager.LayoutParams();
         }
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(dm);
-        int screenWidth = dm.widthPixels;
-        int screenHeight = dm.heightPixels;
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;//this is the key point let window be above all activity
@@ -143,10 +153,12 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-        layoutParams.width = width == 0 ? DEFAULT_WIDTH : width;
-        layoutParams.height = height == 0 ? DEFAULT_HEIGHT : height;
-        layoutParams.x = 0;
-        layoutParams.y = screenHeight / 3;
+        layoutParams.width = this.width == 0 ? DEFAULT_WIDTH : this.width;
+        layoutParams.height = this.height == 0 ? DEFAULT_HEIGHT : this.height;
+        int defaultX = screenWidth - layoutParams.width;
+        int defaultY = screenHeight / 3;
+        layoutParams.x = layoutParam == null ? defaultX : layoutParam.x;
+        layoutParams.y = layoutParam == null ? defaultY : layoutParam.y;
         return layoutParams;
     }
 
@@ -176,34 +188,39 @@ public class FloatWindow implements View.OnTouchListener {
      */
     public FloatWindow setView(View view) {
         this.windowView = view;
+        windowView.setOnTouchListener(this);
         return this;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        int action = event.getAction();
-
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                onActionDown(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                onActionMove(event);
-                break;
-            default:
-                break;
-        }
-        return false;
+//        int action = event.getAction();
+//
+//        switch (action) {
+//            case MotionEvent.ACTION_DOWN:
+//                onActionDown(event);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                onActionMove(event);
+//                break;
+//            default:
+//                break;
+//        }
+        gestureDetector.onTouchEvent(event);
+        return true;
     }
 
+
     private void onActionMove(MotionEvent event) {
-        float dx = event.getRawX() - lastX;
-        float dy = event.getRawY() - lastY;
-        lastX = event.getRawX();
-        lastY = event.getRawY();
-        Log.v("ttaylor", "SuspendWindow.onActionMove()" + "  dx=" + dx + " ,dy=" + dy);
+        float dx = event.getRawX() - lastTouchX;
+        float dy = event.getRawY() - lastTouchY;
+        lastTouchX = event.getRawX();
+        lastTouchY = event.getRawY();
+        Log.v("ttaylor", "FloatWindow.onActionMove()" + "  movex=" + lastTouchX + " ,movey=" + lastTouchY);
+//        Log.v("ttaylor", "SuspendWindow.onActionMove()" + "  dx=" + dx + " ,dy=" + dy);
         layoutParam.x += dx;
         layoutParam.y += dy;
+//        Log.v("ttaylor", "FloatWindow.onActionMove()" + "  layoutx="+layoutParam.x+" ,layoutY="+layoutParam.y);
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
             windowManager.updateViewLayout(windowView, layoutParam);
@@ -214,9 +231,9 @@ public class FloatWindow implements View.OnTouchListener {
     private void onActionDown(MotionEvent event) {
         x = event.getRawX();
         y = event.getRawY();
-        lastX = x;
-        lastY = y;
-        Log.v("ttaylor", "SuspendWindow.onActionDown()" + "  x=" + x + " ,y=" + y);
+        Log.v("ttaylor", "FloatWindow.onActionDown()" + "  downx=" + x + " ,downy=" + y);
+        lastTouchX = x;
+        lastTouchY = y;
     }
 
     /**
@@ -230,21 +247,21 @@ public class FloatWindow implements View.OnTouchListener {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+            prepareScreenDimension(activity);
         }
 
         @Override
         public void onActivityStarted(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
             if (isConfigurationChange) {
                 isConfigurationChange = false;
                 return;
             }
 
+            foregroundActivityCount++;
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
             //show the window when app is in foreground again
             if (enableWhileList) {
                 if (whiteList.contains(activity.getClass())) {
@@ -255,7 +272,6 @@ public class FloatWindow implements View.OnTouchListener {
             } else {
                 show(activity.getApplicationContext());
             }
-            foregroundActivityCount++;
         }
 
         @Override
@@ -287,10 +303,61 @@ public class FloatWindow implements View.OnTouchListener {
         }
     }
 
+    private void prepareScreenDimension(Activity activity) {
+        if (screenWidth != 0 && screenHeight != 0) {
+            return;
+        }
+        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager != null) {
+            DisplayMetrics dm = new DisplayMetrics();
+            Display display = windowManager.getDefaultDisplay();
+            if (display != null) {
+                windowManager.getDefaultDisplay().getMetrics(dm);
+                screenWidth = dm.widthPixels;
+                screenHeight = dm.heightPixels;
+            }
+        }
+    }
+
     /**
      * let ui decide how to update window
      */
     public interface IWindowUpdater {
         void updateWindowView(View windowView);
+    }
+
+
+    private class GestureListener implements GestureDetector.OnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            onActionDown(e);
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            onActionMove(e2);
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
+
     }
 }
