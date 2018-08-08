@@ -55,6 +55,7 @@ public class FloatWindow implements View.OnTouchListener {
      * if false,all activities in app is allow to show window
      */
     private boolean enableWhileList;
+    private View.OnClickListener onClickListener;
 
     private static volatile FloatWindow INSTANCE;
 
@@ -89,6 +90,13 @@ public class FloatWindow implements View.OnTouchListener {
         }
     }
 
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.onClickListener = listener;
+        if (windowView != null) {
+            windowView.setOnClickListener(listener);
+        }
+    }
+
     public void setWidth(int width) {
         this.width = width;
     }
@@ -107,7 +115,7 @@ public class FloatWindow implements View.OnTouchListener {
             return;
         }
         if (windowView == null) {
-            windowView = generateDefaultWindowView();
+            return;
         }
         windowView.setOnTouchListener(this);
         layoutParam = generateLayoutParam();
@@ -142,13 +150,6 @@ public class FloatWindow implements View.OnTouchListener {
         return layoutParams;
     }
 
-    private View generateDefaultWindowView() {
-        View view = LayoutInflater.from(context).inflate(R.layout.float_window, null);
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(layoutParams);
-        return view;
-    }
-
     private void dismiss() {
         if (context == null) {
             return;
@@ -167,6 +168,12 @@ public class FloatWindow implements View.OnTouchListener {
         this.whiteList = whiteList;
     }
 
+    /**
+     * invoking this method is a must ,or window has no content to show
+     *
+     * @param view the content view of window
+     * @return
+     */
     public FloatWindow setView(View view) {
         this.windowView = view;
         return this;
