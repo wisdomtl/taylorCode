@@ -5,6 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -29,7 +34,15 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         btn.setOnClickListener(this);
         setContentView(btn);
         IntentFilter intentFilter = new IntentFilter(Constant.ACTION_INTENT_SERVICE_END);
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+        /**
+           broadcast case1:listener to network change
+          LocalBroadcastManager wont receive NETWORK_CHANGE broadcast
+         *
+         */
+        registerReceiver(receiver,intentFilter);
+
 
         /**
          * broadcast case2:send local broadcast to a receiver in anonymous inner class
@@ -39,6 +52,32 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         Intent intent = new Intent("action_interactive_ad_show");
         manager.sendBroadcast(intent);
         Log.v("taylor ", "BroadcastActivity.onCreate() " + " broadcast action_interactive_ad_show sent");
+    }
+
+    private class NetWorkCallBack extends ConnectivityManager.NetworkCallback{
+        @Override
+        public void onAvailable(Network network) {
+            super.onAvailable(network);
+            Log.v("ttaylor", "NetWorkCallBack.onAvailable()" );
+        }
+
+        @Override
+        public void onLosing(Network network, int maxMsToLive) {
+            super.onLosing(network, maxMsToLive);
+            Log.v("ttaylor", "NetWorkCallBack.onLosing()" + "  ");
+        }
+
+        @Override
+        public void onLost(Network network) {
+            super.onLost(network);
+            Log.v("ttaylor", "NetWorkCallBack.onLost()" + "  ");
+        }
+
+        @Override
+        public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
+            super.onLinkPropertiesChanged(network, linkProperties);
+            Log.v("ttaylor", "NetWorkCallBack.onLinkPropertiesChanged()" + "  ");
+        }
     }
 
     @Override
@@ -53,6 +92,14 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         public void onReceive(Context context, Intent intent) {
             Log.v("ttaylor", "BroadcastActivity.onReceive(): intent=" + intent);
             updateButtonName();
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isAvailable()) {
+                Log.v("ttaylor", "BroadcastActivity.onReceive()" + "  network available");
+//                requestReward();
+            }else {
+                Log.v("ttaylor", "BroadcastActivity.onReceive()" + "  network unavailable");
+            }
         }
     };
 

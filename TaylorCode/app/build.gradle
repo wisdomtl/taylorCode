@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
