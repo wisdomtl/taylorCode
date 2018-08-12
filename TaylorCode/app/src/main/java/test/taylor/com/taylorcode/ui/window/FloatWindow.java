@@ -1,26 +1,19 @@
 package test.taylor.com.taylorcode.ui.window;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.os.Bundle;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import test.taylor.com.taylorcode.R;
-import test.taylor.com.taylorcode.util.DimensionUtil;
 
 /**
  * suspending window in app,it shows throughout the whole app
@@ -41,6 +34,7 @@ public class FloatWindow implements View.OnTouchListener {
     private int height;
     private float x;
     private float y;
+    //    private Rect windowRect;
     private float lastTouchX;
     private float lastTouchY;
     private int screenWidth;
@@ -49,7 +43,6 @@ public class FloatWindow implements View.OnTouchListener {
     private GestureDetector gestureDetector;
     private OnWindowViewClickListener clickListener;
     private OnWindowStatusChangeListener onWindowStatusChangeListener;
-    private OnWindowMoveListener onWindowMoveListener;
     /**
      * this list records the activities which shows this window
      */
@@ -93,9 +86,6 @@ public class FloatWindow implements View.OnTouchListener {
         }
     }
 
-    public void setOnWindowMoveListener(OnWindowMoveListener onWindowMoveListener) {
-        this.onWindowMoveListener = onWindowMoveListener;
-        }
 
     public void setOnClickListener(OnWindowViewClickListener listener) {
         clickListener = listener;
@@ -134,7 +124,7 @@ public class FloatWindow implements View.OnTouchListener {
         }
         prepareScreenDimension(context);
         if (gestureDetector == null) {
-        gestureDetector = new GestureDetector(context, new GestureListener());
+            gestureDetector = new GestureDetector(context, new GestureListener());
         }
         layoutParam = generateLayoutParam(screenWidth, screenHeight);
         //in case of "IllegalStateException :has already been added to the window manager."
@@ -224,36 +214,41 @@ public class FloatWindow implements View.OnTouchListener {
 
 
     private void onActionMove(MotionEvent event) {
-        float dx = event.getRawX() - lastTouchX;
-        float dy = event.getRawY() - lastTouchY;
-        lastTouchX = event.getRawX();
-        lastTouchY = event.getRawY();
+        float currentX = event.getRawX();
+        float currentY = event.getRawY();
+        float dx = currentX - lastTouchX;
+        float dy = currentY - lastTouchY;
+        lastTouchX = currentX;
+        lastTouchY = currentY;
         layoutParam.x += dx;
         layoutParam.y += dy;
+//        windowRect.set(layoutParam.x, layoutParam.y, layoutParam.x + layoutParam.width, layoutParam.y + layoutParam.height);
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
-            WindowManager.LayoutParams partnerParams = null;
-            if (onWindowMoveListener != null) {
-                partnerParams = onWindowMoveListener.onWindowMove(dx, dy, screenWidth, screenHeight, layoutParam);
-            }
             int rightMost = screenWidth - layoutParam.width;
             int leftMost = 0;
-//            if (partnerParams != null) {
-//                int partnerVisibleWidth = partnerParams.width - layoutParam.width / 2;
-//                if (partnerParams.x < layoutParam.x) {
-//                    leftMost = leftMost + partnerVisibleWidth;
-//                } else {
-//                    rightMost = rightMost - partnerVisibleWidth;
-//                }
-//            }
+            int topMost = 0;
+            int bottomMost = screenHeight - layoutParam.height;
+            WindowManager.LayoutParams partnerParam = null;
+            if (onWindowStatusChangeListener != null) {
+                partnerParam = onWindowStatusChangeListener.onWindowMove(dx, dy, screenWidth, screenHeight, layoutParam);
+            }
+            //adjust move area according to partner window
+            if (partnerParam != null) {
+                if (partnerParam.x < layoutParam.x) {
+                    leftMost = partnerParam.width - layoutParam.width / 2;
+                } else if (partnerParam.x > layoutParam.x) {
+                    rightMost = screenWidth - (layoutParam.width / 2 + partnerParam.width);
+                }
+            }
+
+            //make window float inside screen
             if (layoutParam.x < leftMost) {
                 layoutParam.x = leftMost;
             }
             if (layoutParam.x > rightMost) {
                 layoutParam.x = rightMost;
             }
-            int topMost = 0;
-            int bottomMost = screenHeight - layoutParam.height;
             if (layoutParam.y < topMost) {
                 layoutParam.y = topMost;
             }
@@ -304,10 +299,8 @@ public class FloatWindow implements View.OnTouchListener {
         void onShow();
 
         void onDismiss();
-    }
 
-    public interface OnWindowMoveListener {
-        WindowManager.LayoutParams onWindowMove(float dx, float dy, int screenWidth, int screenHeight, WindowManager.LayoutParams hostParams);
+        WindowManager.LayoutParams onWindowMove(float dx, float dy, int screenWidth, int screenHeight, WindowManager.LayoutParams layoutParams);
     }
 
     private class GestureListener implements GestureDetector.OnGestureListener {

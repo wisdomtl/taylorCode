@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -231,7 +232,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 startTimer();
                 break;
             case R.id.start_window_partner:
-                showFloatWindowPartner(this) ;
+                showFloatWindowPartner(this);
                 break;
             default:
                 break;
@@ -305,7 +306,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 }
             }
         });
-        timer.start(0, 50);
+        timer.start(0, 250);
         return progressRing;
     }
 
@@ -440,23 +441,85 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         this.startActivity(intent);
     }
 
-    private void showFloatWindowPartner(Context context) {
+    private void showFloatWindowPartner(final Context context) {
         Log.v("ttaylor", "WindowActivity.showFloatWindowPartner()" + "  ");
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager == null) {
             return;
         }
 
-        View floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
+        final View floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
         Pair<Integer, Integer> screenDimension = prepareScreenDimension(this);
-        WindowManager.LayoutParams layoutParams = FloatWindow.getInstance().getLayoutParam() ;
-        WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second,layoutParams,floatWindowPartnerView);
+        WindowManager.LayoutParams layoutParams = FloatWindow.getInstance().getLayoutParam();
+        final WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second, layoutParams, floatWindowPartnerView);
         if (floatWindowPartnerView.getParent() == null) {
             windowManager.addView(floatWindowPartnerView, params);
+            FloatWindow.getInstance().setOnWindowStatusChangeListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
         }
     }
 
-    private WindowManager.LayoutParams createFloatWindowPartnerLayoutParam(int screenWidth,int screenHeight, WindowManager.LayoutParams rewardBallParam , View floatWindowPartnerView) {
+    private class OnWindowStatusListener implements FloatWindow.OnWindowStatusChangeListener {
+        private View partnerView;
+        private WindowManager windowManager;
+        private WindowManager.LayoutParams layoutParams;
+
+        public OnWindowStatusListener(WindowManager windowManager, View partnerView, WindowManager.LayoutParams layoutParams) {
+            this.windowManager = windowManager;
+            this.partnerView = partnerView;
+            this.layoutParams = layoutParams;
+
+        }
+
+        @Override
+        public void onShow() {
+
+        }
+
+        @Override
+        public void onDismiss() {
+
+        }
+
+        @Override
+        public WindowManager.LayoutParams onWindowMove(float dx, float dy, int screenWidth, int screenHeight, WindowManager.LayoutParams layoutParams) {
+            this.layoutParams.x += dx;
+            this.layoutParams.y += dy;
+
+
+            int rightMost = screenWidth - this.layoutParams.width;
+            int leftMost = 0;
+            int topMost = 0;
+            int bottomMost = screenHeight - this.layoutParams.height;
+            if (layoutParams != null) {
+                if (this.layoutParams.x < layoutParams.x) {
+                    rightMost = screenWidth - (this.layoutParams.width + layoutParams.width / 2);
+                } else {
+                    leftMost = layoutParams.width / 2;
+                }
+                topMost = (layoutParams.height - this.layoutParams.height) / 2;
+                bottomMost = screenHeight - this.layoutParams.height -(layoutParams.height - this.layoutParams.height) / 2 ;
+            }
+
+            if (this.layoutParams.x < leftMost) {
+                this.layoutParams.x = leftMost;
+            }
+            if (this.layoutParams.x > rightMost) {
+                this.layoutParams.x = rightMost;
+            }
+            if (this.layoutParams.y < topMost) {
+                this.layoutParams.y = topMost;
+            }
+            if (this.layoutParams.y > bottomMost) {
+                this.layoutParams.y = bottomMost;
+            }
+            if (windowManager != null) {
+                windowManager.updateViewLayout(partnerView, this.layoutParams);
+            }
+            return this.layoutParams;
+        }
+    }
+
+    private WindowManager.LayoutParams createFloatWindowPartnerLayoutParam(int screenWidth, int screenHeight, WindowManager.LayoutParams rewardBallParam, View floatWindowPartnerView) {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
         layoutParams.format = PixelFormat.TRANSLUCENT;
