@@ -45,11 +45,11 @@ public class TaylorApplication extends Application {
             public void onAppBackground() {
             }
         }));
-        registerActivityLifecycleCallbacks(FloatWindow.getInstance().getAppStatusListener());
-        List<Class> whiteList = new ArrayList<Class>();
-        whiteList.add(ActivityB.class);
-        whiteList.add(WindowActivity.class);
-        FloatWindow.getInstance().setWhiteList(whiteList);
+//        registerActivityLifecycleCallbacks(FloatWindow.getInstance().getAppStatusListener());
+//        List<Class> whiteList = new ArrayList<Class>();
+//        whiteList.add(ActivityB.class);
+//        whiteList.add(WindowActivity.class);
+//        FloatWindow.getInstance().setWhiteList(whiteList);
         FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54));
         FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54));
     }

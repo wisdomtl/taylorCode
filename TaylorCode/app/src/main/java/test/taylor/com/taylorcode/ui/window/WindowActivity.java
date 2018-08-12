@@ -50,12 +50,13 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
 
         FloatWindow.getInstance().setView(generateWindowView());
-        FloatWindow.getInstance().setOnClickListener(new View.OnClickListener() {
+        FloatWindow.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
             @Override
-            public void onClick(View v) {
-                Log.v("ttaylor", "WindowActivity.onClick()" + "  ");
+            public void onWindowViewClick() {
+                Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  "); 
             }
         });
+        FloatWindow.getInstance().show(this);
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -409,6 +410,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     @Override
     protected void onPause() {
         super.onPause();
+        FloatWindow.getInstance().dismiss();
     }
 
     /**

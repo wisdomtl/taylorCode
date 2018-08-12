@@ -47,10 +47,9 @@ public class FloatWindow implements View.OnTouchListener {
     private int screenHeight;
     private Context context;
     private GestureDetector gestureDetector;
-    /**
-     * show or dismiss the window according to the app lifecycle
-     */
-    private AppStatusListener appStatusListener;
+    private OnWindowViewClickListener clickListener;
+    private OnWindowStatusChangeListener onWindowStatusChangeListener;
+    private OnWindowMoveListener onWindowMoveListener;
     /**
      * this list records the activities which shows this window
      */
@@ -81,12 +80,7 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     private FloatWindow() {
-        appStatusListener = new AppStatusListener();
         whiteList = new ArrayList<>();
-    }
-
-    public AppStatusListener getAppStatusListener() {
-        return appStatusListener;
     }
 
     public void updateWindowView(IWindowUpdater updater) {
@@ -99,10 +93,12 @@ public class FloatWindow implements View.OnTouchListener {
         }
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        if (windowView != null) {
-            windowView.setOnClickListener(listener);
+    public void setOnWindowMoveListener(OnWindowMoveListener onWindowMoveListener) {
+        this.onWindowMoveListener = onWindowMoveListener;
         }
+
+    public void setOnClickListener(OnWindowViewClickListener listener) {
+        clickListener = listener;
     }
 
     public void setWidth(int width) {
@@ -117,8 +113,11 @@ public class FloatWindow implements View.OnTouchListener {
         this.enable = enable;
     }
 
+    public void setOnWindowStatusChangeListener(OnWindowStatusChangeListener onWindowStatusChangeListener) {
+        this.onWindowStatusChangeListener = onWindowStatusChangeListener;
+    }
 
-    private void show(Context context) {
+    public void show(Context context) {
         if (!enable) {
             return;
         }
@@ -133,11 +132,17 @@ public class FloatWindow implements View.OnTouchListener {
         if (windowManager == null) {
             return;
         }
+        prepareScreenDimension(context);
+        if (gestureDetector == null) {
         gestureDetector = new GestureDetector(context, new GestureListener());
+        }
         layoutParam = generateLayoutParam(screenWidth, screenHeight);
         //in case of "IllegalStateException :has already been added to the window manager."
         if (windowView.getParent() == null) {
             windowManager.addView(windowView, layoutParam);
+            if (onWindowStatusChangeListener != null) {
+                onWindowStatusChangeListener.onShow();
+            }
         }
     }
 
@@ -148,7 +153,7 @@ public class FloatWindow implements View.OnTouchListener {
         }
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;//this is the key point let window be above all activity
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;//this is the key point let window be above all activity
 //        layoutParams.token = getWindow().getDecorView().getWindowToken();
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -156,13 +161,17 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.width = this.width == 0 ? DEFAULT_WIDTH : this.width;
         layoutParams.height = this.height == 0 ? DEFAULT_HEIGHT : this.height;
         int defaultX = screenWidth - layoutParams.width;
-        int defaultY = screenHeight / 3;
+        int defaultY = 2 * screenHeight / 3;
         layoutParams.x = layoutParam == null ? defaultX : layoutParam.x;
         layoutParams.y = layoutParam == null ? defaultY : layoutParam.y;
         return layoutParams;
     }
 
-    private void dismiss() {
+    public WindowManager.LayoutParams getLayoutParam() {
+        return layoutParam;
+    }
+
+    public void dismiss() {
         if (context == null) {
             return;
         }
@@ -171,6 +180,9 @@ public class FloatWindow implements View.OnTouchListener {
             //in case of "IllegalStateException :not attached to window manager."
             if (windowView.getParent() != null) {
                 windowManager.removeViewImmediate(windowView);
+                if (onWindowStatusChangeListener != null) {
+                    onWindowStatusChangeListener.onDismiss();
+                }
             }
         }
     }
@@ -216,13 +228,38 @@ public class FloatWindow implements View.OnTouchListener {
         float dy = event.getRawY() - lastTouchY;
         lastTouchX = event.getRawX();
         lastTouchY = event.getRawY();
-        Log.v("ttaylor", "FloatWindow.onActionMove()" + "  movex=" + lastTouchX + " ,movey=" + lastTouchY);
-//        Log.v("ttaylor", "SuspendWindow.onActionMove()" + "  dx=" + dx + " ,dy=" + dy);
         layoutParam.x += dx;
         layoutParam.y += dy;
-//        Log.v("ttaylor", "FloatWindow.onActionMove()" + "  layoutx="+layoutParam.x+" ,layoutY="+layoutParam.y);
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
+            WindowManager.LayoutParams partnerParams = null;
+            if (onWindowMoveListener != null) {
+                partnerParams = onWindowMoveListener.onWindowMove(dx, dy, screenWidth, screenHeight, layoutParam);
+            }
+            int rightMost = screenWidth - layoutParam.width;
+            int leftMost = 0;
+//            if (partnerParams != null) {
+//                int partnerVisibleWidth = partnerParams.width - layoutParam.width / 2;
+//                if (partnerParams.x < layoutParam.x) {
+//                    leftMost = leftMost + partnerVisibleWidth;
+//                } else {
+//                    rightMost = rightMost - partnerVisibleWidth;
+//                }
+//            }
+            if (layoutParam.x < leftMost) {
+                layoutParam.x = leftMost;
+            }
+            if (layoutParam.x > rightMost) {
+                layoutParam.x = rightMost;
+            }
+            int topMost = 0;
+            int bottomMost = screenHeight - layoutParam.height;
+            if (layoutParam.y < topMost) {
+                layoutParam.y = topMost;
+            }
+            if (layoutParam.y > bottomMost) {
+                layoutParam.y = bottomMost;
+            }
             windowManager.updateViewLayout(windowView, layoutParam);
         }
 
@@ -231,79 +268,12 @@ public class FloatWindow implements View.OnTouchListener {
     private void onActionDown(MotionEvent event) {
         x = event.getRawX();
         y = event.getRawY();
-        Log.v("ttaylor", "FloatWindow.onActionDown()" + "  downx=" + x + " ,downy=" + y);
         lastTouchX = x;
         lastTouchY = y;
     }
 
-    /**
-     * the listener control the timing of showing or dismissing the window
-     */
-    private class AppStatusListener implements Application.ActivityLifecycleCallbacks {
 
-        private int foregroundActivityCount = 0;
-        private boolean isConfigurationChange = false;
-
-
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            prepareScreenDimension(activity);
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-            if (isConfigurationChange) {
-                isConfigurationChange = false;
-                return;
-            }
-
-            foregroundActivityCount++;
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            //show the window when app is in foreground again
-            if (enableWhileList) {
-                if (whiteList.contains(activity.getClass())) {
-                    show(activity.getApplicationContext());
-                } else {
-                    dismiss();
-                }
-            } else {
-                show(activity.getApplicationContext());
-            }
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-            if (activity.isChangingConfigurations()) {
-                isConfigurationChange = true;
-                return;
-            }
-            foregroundActivityCount--;
-            if (foregroundActivityCount == 0) {
-                //dismiss the window when app is in background
-                dismiss();
-            }
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-
-        }
-    }
-
-    private void prepareScreenDimension(Activity activity) {
+    private void prepareScreenDimension(Context activity) {
         if (screenWidth != 0 && screenHeight != 0) {
             return;
         }
@@ -326,6 +296,19 @@ public class FloatWindow implements View.OnTouchListener {
         void updateWindowView(View windowView);
     }
 
+    public interface OnWindowViewClickListener {
+        void onWindowViewClick();
+    }
+
+    public interface OnWindowStatusChangeListener {
+        void onShow();
+
+        void onDismiss();
+    }
+
+    public interface OnWindowMoveListener {
+        WindowManager.LayoutParams onWindowMove(float dx, float dy, int screenWidth, int screenHeight, WindowManager.LayoutParams hostParams);
+    }
 
     private class GestureListener implements GestureDetector.OnGestureListener {
 
@@ -341,6 +324,9 @@ public class FloatWindow implements View.OnTouchListener {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
+            if (clickListener != null) {
+                clickListener.onWindowViewClick();
+            }
             return false;
         }
 
