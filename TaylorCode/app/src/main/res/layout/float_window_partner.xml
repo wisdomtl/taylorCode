@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical">-->
+
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/notify_log_in_window_background"
+        android:gravity="center_vertical"
+        android:lines="2"
+        android:text="Log in to get your watching reward"
+        android:textColor="#ffffffff"
+        android:textSize="12sp" />
+
+<!--</LinearLayout>-->

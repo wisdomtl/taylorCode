@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.rxjava.TimeoutActivity;
 import test.taylor.com.taylorcode.ui.custom_view.ProgressRing;
+import test.taylor.com.taylorcode.util.DimensionUtil;
 import test.taylor.com.taylorcode.util.Timer;
 
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
@@ -47,13 +50,14 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.btn_start_activityB).setOnClickListener(this);
         findViewById(R.id.btn_stop_timer).setOnClickListener(this);
         findViewById(R.id.btn_start_timer).setOnClickListener(this);
+        findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
         FloatWindow.getInstance().setView(generateWindowView());
         FloatWindow.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
             @Override
             public void onWindowViewClick() {
-                Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  "); 
+                Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
         FloatWindow.getInstance().show(this);
@@ -226,6 +230,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             case R.id.btn_start_timer:
                 startTimer();
                 break;
+            case R.id.start_window_partner:
+                showFloatWindowPartner(this) ;
+                break;
             default:
                 break;
         }
@@ -233,7 +240,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
     private void startTimer() {
         if (timer != null) {
-            timer.start(0,20);
+            timer.start(0, 20);
         }
     }
 
@@ -431,5 +438,70 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private void startAnotherActivityB() {
         Intent intent = new Intent(this, ActivityB.class);
         this.startActivity(intent);
+    }
+
+    private void showFloatWindowPartner(Context context) {
+        Log.v("ttaylor", "WindowActivity.showFloatWindowPartner()" + "  ");
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager == null) {
+            return;
+        }
+
+        View floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
+        Pair<Integer, Integer> screenDimension = prepareScreenDimension(this);
+        WindowManager.LayoutParams layoutParams = FloatWindow.getInstance().getLayoutParam() ;
+        WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second,layoutParams,floatWindowPartnerView);
+        if (floatWindowPartnerView.getParent() == null) {
+            windowManager.addView(floatWindowPartnerView, params);
+        }
+    }
+
+    private WindowManager.LayoutParams createFloatWindowPartnerLayoutParam(int screenWidth,int screenHeight, WindowManager.LayoutParams rewardBallParam , View floatWindowPartnerView) {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
+        layoutParams.format = PixelFormat.TRANSLUCENT;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        layoutParams.width = DimensionUtil.dp2px(140);
+        layoutParams.height = DimensionUtil.dp2px(42);
+
+        if ((rewardBallParam.x + layoutParams.width - rewardBallParam.width / 2) > screenWidth) {
+            //left side
+            layoutParams.x = rewardBallParam.x - (layoutParams.width - rewardBallParam.width / 2);
+            layoutParams.y = rewardBallParam.y + (rewardBallParam.height - layoutParams.height) / 2;
+            int left = DimensionUtil.dp2px(10);
+            int top = DimensionUtil.dp2px(2);
+            int right = DimensionUtil.dp2px(33);
+            int bottom = DimensionUtil.dp2px(2);
+            floatWindowPartnerView.setPadding(left, top, right, bottom);
+        } else {
+            //right side
+            layoutParams.x = rewardBallParam.x + rewardBallParam.width / 2;
+            layoutParams.y = rewardBallParam.y + (rewardBallParam.height - layoutParams.height) / 2;
+            int left = DimensionUtil.dp2px(33);
+            int top = DimensionUtil.dp2px(2);
+            int right = DimensionUtil.dp2px(5);
+            int bottom = DimensionUtil.dp2px(2);
+            floatWindowPartnerView.setPadding(left, top, right, bottom);
+        }
+        return layoutParams;
+    }
+
+    private Pair<Integer, Integer> prepareScreenDimension(Context activity) {
+        int screenWidth = 0;
+        int screenHeight = 0;
+        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager != null) {
+            DisplayMetrics dm = new DisplayMetrics();
+            Display display = windowManager.getDefaultDisplay();
+            if (display != null) {
+                windowManager.getDefaultDisplay().getMetrics(dm);
+                screenWidth = dm.widthPixels;
+                screenHeight = dm.heightPixels;
+            }
+        }
+
+        Pair<Integer, Integer> screenDimension = new Pair<>(screenWidth, screenHeight);
+        return screenDimension;
     }
 }
