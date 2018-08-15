@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 
 
 /**
@@ -32,6 +33,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
     private float textSize;
     private String text;
     private float textStrokeWidth;
+    private int textAlpha = 255;
 
     public ProgressRing(Context context) {
         super(context);
@@ -67,6 +69,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
     }
 
     public void setTextSize(float textSize) {
+        Log.v("ttaylor", "ProgressRing.setTextSize()" + " textSize= " + textSize);
         this.textSize = textSize;
         invalidate();
     }
@@ -79,13 +82,18 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
             outRingWidth = DEFAULT_OUT_RING_WIDTH;
         }
         if (progressRingWidth == 0) {
-            progressRingWidth = DEFAULT_PROGRESS_WIDTH ;
+            progressRingWidth = DEFAULT_PROGRESS_WIDTH;
         }
         START_ANGLE = -90f;
         progress = 0.3f;
         textSize = 25;
         textStrokeWidth = 20;
 
+    }
+
+    public void setTextAlpha(int alpha) {
+        this.textAlpha = alpha;
+        invalidate();
     }
 
     private Paint getOutRingPaint() {
@@ -129,6 +137,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
         textPaint.setStrokeWidth(textStrokeWidth);
         circlePaint.setStyle(Paint.Style.STROKE);
         textPaint.setTextSize(textSize);
+        textPaint.setAlpha(textAlpha);
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
         return textPaint;

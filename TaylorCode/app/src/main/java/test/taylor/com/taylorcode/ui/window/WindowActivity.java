@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.ui.window;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
@@ -37,6 +40,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     //    private PopupWindow popupWindow;
     private CustomPopupWindow popupWindow;
     private Timer timer;
+    private int d1 = 400;
+    private int d2 = 400;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -323,41 +328,43 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     }
 
     private void doValueAnimator(float start, float end, final ProgressRing ring, int duration) {
+        ring.setTextAlpha(255);
         ValueAnimator animator = ValueAnimator.ofFloat(start, end);
-        animator.setInterpolator(new AnticipateOvershootInterpolator());
+        animator.setInterpolator(new AccelerateInterpolator());
         animator.setDuration(duration);
+
+        ValueAnimator animator1 = ValueAnimator.ofFloat(end, end);
+        animator1.setDuration(d1);
+
+        ValueAnimator animator2 = ValueAnimator.ofInt(255, 0);
+        animator2.setDuration(d2);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(animator,animator1,animator2);
+
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value=" + animation.getAnimatedValue());
                 float size = (Float) animation.getAnimatedValue();
                 ring.setTextSize(size);
             }
         });
-        animator.addListener(new Animator.AnimatorListener() {
+        animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float size = (Float) animation.getAnimatedValue();
+                ring.setTextSize(size);
             }
-
+        });
+        animator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.v("ttaylor", "CustomViewActivity.onAnimationEnd()" + "  ");
-                ring.setText("");
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int alpha = (Integer) animation.getAnimatedValue();
+                ring.setTextAlpha(alpha);
             }
         });
         ring.setText("+1");
-        animator.start();
+        set.start();
     }
 
     private AnimationDrawable createAnimationDrawable(Context context) {
@@ -382,7 +389,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_19), 23);
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_20), 23);
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_21), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_22), VALUE_ANIM_DURATION);
+        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_22), VALUE_ANIM_DURATION+d1+d2);
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
         drawable.setOneShot(true);
         return drawable;
