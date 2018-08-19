@@ -6,9 +6,13 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +41,7 @@ import test.taylor.com.taylorcode.util.Timer;
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
     public static final int VALUE_ANIM_DURATION = 800;
     private final float FULL_TIME_MILLISECOND = 3 * 1000;
+    private static final int BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100;
     //    private PopupWindow popupWindow;
     private CustomPopupWindow popupWindow;
     private Timer timer;
@@ -369,30 +374,60 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
     private AnimationDrawable createAnimationDrawable(Context context) {
         AnimationDrawable drawable = new AnimationDrawable();
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_2), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_3), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_4), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_5), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_6), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_7), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_8), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_9), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_10), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_12), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_13), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_14), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_15), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_16), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_17), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_18), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_19), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_20), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_21), 23);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_22), VALUE_ANIM_DURATION+d1+d2);
-        drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
+        int frameDuration = BOMB_ANIM_DURATION_IN_MILLISECOND / 21;
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_1, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_2, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_3, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_4, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_5, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_6, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_7, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_8, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_9, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_10, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_11, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_12, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_13, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_14, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_15, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_16, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_17, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_18, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_19, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_20, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_21, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_22, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.setOneShot(true);
         return drawable;
+    }
+
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        // 使用获取到的inSampleSize值再次解析图片
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // 源图片的高度和宽度
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
     }
 
     /**
