@@ -1,5 +1,7 @@
 package test.taylor.com.taylorcode.ui.anim;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -31,11 +33,15 @@ import test.taylor.com.taylorcode.util.DimensionUtil;
 
 public class AnimActivity extends Activity implements View.OnClickListener {
     private static final int BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100;
+    private static final int VALUE_ANIM_DURATION_IN_MILLISECOND = 500;
+    private static final int REWARD_NUMBER_STAY_TIME_IN_MILLISECOND = 1500;
+    private static final int REWARD_NUMBER_FADE_TIME_IN_MILLISECOND = 500;
 
     private ImageView ivFrameAnim;
     private AnimationDrawable animationDrawable;
 
     private TextView tvScaleAnim;
+    private TextView tvValueAnimator ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         initView();
 
         createValueAnimator();
+        doAnimatorSet(20,50) ;
     }
 
 
@@ -53,6 +60,8 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         animationDrawable = createAnimationDrawable(this);
         ivFrameAnim.setImageDrawable(animationDrawable);
         ivFrameAnim.setOnClickListener(this);
+
+        tvValueAnimator = ((TextView) findViewById(R.id.tv_value_animator));
 
         tvScaleAnim = createTextView(this) ;
         ((LinearLayout) findViewById(R.id.ll_animi_activity_root)).addView(tvScaleAnim);
@@ -160,6 +169,91 @@ public class AnimActivity extends Activity implements View.OnClickListener {
             }
         });
         animator.start();
+    }
+
+    /**
+     * value animator case3:create several value animator and put them together in AnimatorSet
+     */
+    private void doAnimatorSet(int start ,int end){
+        tvValueAnimator.setAlpha(1);
+        ValueAnimator animator = ValueAnimator.ofFloat(start, end);
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.setDuration(VALUE_ANIM_DURATION_IN_MILLISECOND);
+
+        ValueAnimator animator1 = ValueAnimator.ofFloat(end, end);
+        animator1.setDuration(REWARD_NUMBER_STAY_TIME_IN_MILLISECOND);
+
+        ValueAnimator animator2 = ValueAnimator.ofInt(1, 0);
+        animator2.setDuration(REWARD_NUMBER_FADE_TIME_IN_MILLISECOND);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(animator, animator1, animator2);
+        set.setStartDelay(BOMB_ANIM_DURATION_IN_MILLISECOND);
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float size = (Float) animation.getAnimatedValue();
+                tvValueAnimator.setTextSize(size);
+            }
+        });
+        animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float size = (Float) animation.getAnimatedValue();
+                tvValueAnimator.setTextSize(size);
+            }
+        });
+        animator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int alpha = (Integer) animation.getAnimatedValue();
+                tvValueAnimator.setAlpha(alpha);
+            }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                tvValueAnimator.setText("+" + 1);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator2.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                tvValueAnimator.setText("");
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        set.start();
     }
 
 
