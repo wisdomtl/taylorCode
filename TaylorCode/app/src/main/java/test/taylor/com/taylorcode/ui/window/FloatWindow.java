@@ -32,11 +32,9 @@ public class FloatWindow implements View.OnTouchListener {
     private WindowManager.LayoutParams layoutParam;
     private int width;
     private int height;
-    private float x;
-    private float y;
     //    private Rect windowRect;
-    private float lastTouchX;
-    private float lastTouchY;
+    private int lastTouchX;
+    private int lastTouchY;
     private int screenWidth;
     private int screenHeight;
     private Context context;
@@ -219,32 +217,33 @@ public class FloatWindow implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-//        int action = event.getAction();
-//
-//        switch (action) {
-//            case MotionEvent.ACTION_DOWN:
-//                onActionDown(event);
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                onActionMove(event);
-//                break;
-//            default:
-//                break;
-//        }
-        gestureDetector.onTouchEvent(event);
+        int action = event.getAction();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                onActionDown(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                onActionMove(event);
+                break;
+            default:
+                break;
+        }
+//        gestureDetector.onTouchEvent(event);
         return true;
     }
 
 
     private void onActionMove(MotionEvent event) {
-        float currentX = event.getRawX();
-        float currentY = event.getRawY();
-        float dx = currentX - lastTouchX;
-        float dy = currentY - lastTouchY;
+        int currentX = (int)event.getRawX();
+        int currentY = (int)event.getRawY();
+        int dx = currentX - lastTouchX;
+        int dy = currentY - lastTouchY;
         lastTouchX = currentX;
         lastTouchY = currentY;
         layoutParam.x += dx;
         layoutParam.y += dy;
+        Log.v("ttaylor", "FloatWindow.onActionMove()" + "  dx+"+dx+" ,dy="+dy+" ,currentx="+currentX+" ,currenty="+currentY);
 //        windowRect.set(layoutParam.x, layoutParam.y, layoutParam.x + layoutParam.width, layoutParam.y + layoutParam.height);
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
@@ -284,10 +283,9 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     private void onActionDown(MotionEvent event) {
-        x = event.getRawX();
-        y = event.getRawY();
-        lastTouchX = x;
-        lastTouchY = y;
+        Log.v("ttaylor", "FloatWindow.onActionDown()" + "  lastx="+lastTouchX+" ,lasty="+lastTouchY);
+        lastTouchX = (int)event.getRawX();
+        lastTouchY = (int)event.getRawY();
     }
 
 
