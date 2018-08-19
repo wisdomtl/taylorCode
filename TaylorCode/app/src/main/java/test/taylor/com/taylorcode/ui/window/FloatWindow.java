@@ -72,6 +72,19 @@ public class FloatWindow implements View.OnTouchListener {
         return INSTANCE;
     }
 
+
+    private int getNavigationBarHeight(Context context) {
+        int result = 0;
+        int resourceId = 0;
+        int rid = context.getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+        if (rid != 0) {
+            resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            return context.getResources().getDimensionPixelSize(resourceId);
+        } else {
+            return 0;
+        }
+    }
+
     private FloatWindow() {
         whiteList = new ArrayList<>();
     }
@@ -143,8 +156,7 @@ public class FloatWindow implements View.OnTouchListener {
         }
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;//this is the key point let window be above all activity
-//        layoutParams.token = getWindow().getDecorView().getWindowToken();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
@@ -174,6 +186,17 @@ public class FloatWindow implements View.OnTouchListener {
                     onWindowStatusChangeListener.onDismiss();
                 }
             }
+        }
+    }
+
+    public boolean isShowing() {
+        if (windowView == null) {
+            return false;
+        }
+        if (windowView.getParent() == null) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -228,7 +251,7 @@ public class FloatWindow implements View.OnTouchListener {
             int rightMost = screenWidth - layoutParam.width;
             int leftMost = 0;
             int topMost = 0;
-            int bottomMost = screenHeight - layoutParam.height;
+            int bottomMost = screenHeight - layoutParam.height - getNavigationBarHeight(context);
             WindowManager.LayoutParams partnerParam = null;
             if (onWindowStatusChangeListener != null) {
                 partnerParam = onWindowStatusChangeListener.onWindowMove(dx, dy, screenWidth, screenHeight, layoutParam);
