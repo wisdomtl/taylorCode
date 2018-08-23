@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.ui.window;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -10,12 +9,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -27,8 +24,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
@@ -71,7 +66,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
-        FloatWindow.getInstance().init(this).show();
+        FloatWindow.getInstance().init(this).show(this);
     }
 
     private View getWindowView(Context context, int layoutId) {

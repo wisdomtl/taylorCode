@@ -9,12 +9,8 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
-
-import org.intellij.lang.annotations.Flow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,6 @@ public class FloatWindow implements View.OnTouchListener {
     private int screenWidth;
     private int screenHeight;
     private Context context;
-    private WindowManager windowManager;
     private GestureDetector gestureDetector;
     private OnWindowViewClickListener clickListener;
     private OnWindowStatusChangeListener onWindowStatusChangeListener;
@@ -82,9 +77,8 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     public FloatWindow init(Context context) {
-        this.context = context;
         whiteList = new ArrayList<>();
-        windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
+        WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         prepareScreenDimension(windowManager);
         gestureDetector = new GestureDetector(context, new GestureListener());
         return this ;
@@ -110,6 +104,7 @@ public class FloatWindow implements View.OnTouchListener {
         if (updater != null) {
             updater.updateWindowView(windowView);
         }
+        WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
             windowManager.updateViewLayout(windowView, layoutParam);
         }
@@ -136,16 +131,18 @@ public class FloatWindow implements View.OnTouchListener {
         this.onWindowStatusChangeListener = onWindowStatusChangeListener;
     }
 
-    public void show() {
+    public void show(Context context) {
         if (!enable) {
             return;
         }
         if (windowView == null) {
             return;
         }
+        this.context = context ;
         layoutParam = generateLayoutParam(screenWidth, screenHeight);
         //in case of "IllegalStateException :has already been added to the window manager."
         if (windowView.getParent() == null) {
+            WindowManager windowManager = ((WindowManager) this.context.getSystemService(Context.WINDOW_SERVICE));
             windowManager.addView(windowView, layoutParam);
             if (onWindowStatusChangeListener != null) {
                 onWindowStatusChangeListener.onShow();
@@ -177,6 +174,7 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     public void dismiss() {
+        WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
             //in case of "IllegalStateException :not attached to window manager."
             if (windowView.getParent() != null) {
@@ -264,6 +262,7 @@ public class FloatWindow implements View.OnTouchListener {
                     if (layoutParam != null) {
                         layoutParam.x = x;
                     }
+                    WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
                     if (windowManager != null) {
                         windowManager.updateViewLayout(windowView, layoutParam);
                     }
@@ -285,6 +284,7 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParam.x += dx;
         layoutParam.y += dy;
 //        windowRect.set(layoutParam.x, layoutParam.y, layoutParam.x + layoutParam.width, layoutParam.y + layoutParam.height);
+        WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
             int rightMost = screenWidth - layoutParam.width;
             int leftMost = 0;
