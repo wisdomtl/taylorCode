@@ -53,8 +53,9 @@ public class NotificationActivity extends Activity implements View.OnClickListen
         );
 
         RemoteViews remoteView = new RemoteViews(context.getPackageName() ,R.layout.custom_notification);
-        remoteView.setTextViewText(R.id.tv_custom_notification , "####main_content of notification###");
-        remoteView.setImageViewResource(R.id.iv_custom_notification ,R.drawable.calling_mic_normal);
+        remoteView.setTextViewText(R.id.tv_title,"djfklslkfjldsjlk  dlkfjlsdjflksjdl kjl");
+        remoteView.setImageViewResource(R.id.iv_auther,R.drawable.watch_reward_1);
+        remoteView.setTextViewText(R.id.tv_content,"dsfsdfsdfadfewfwefwgewrg rgre gregfd fd");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 //this 3 attribute is a must for notification
                 .setSmallIcon(R.drawable.calling_mic_active)
