@@ -282,7 +282,7 @@
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".ui.NotificationActivity">
+        <activity android:name=".ui.notification.NotificationActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -357,6 +357,11 @@
 
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />
+        <receiver android:name="test.taylor.com.taylorcode.ui.notification.NotificationReceiver">
+            <intent-filter>
+                <action android:name="BROADCAST_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
