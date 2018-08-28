@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import test.taylor.com.taylorcode.Constant;
 import test.taylor.com.taylorcode.R;
@@ -97,7 +98,7 @@ public class NotificationActivity extends Activity implements View.OnClickListen
     private void showBroadcastNotification(Context context, int id, Class broadcastClass, CharSequence title, CharSequence content) {
         Intent notifyIntent = new Intent(this, broadcastClass);
         notifyIntent.setAction(Constant.ACTION_NOTIFICATION_BROADCAST);
-        notifyIntent.putExtra(Constant.EXTRA_NOTIFICATION_ID,id) ;
+//        notifyIntent.putExtra(Constant.EXTRA_NOTIFICATION_ID,id) ;
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.custom_notification);

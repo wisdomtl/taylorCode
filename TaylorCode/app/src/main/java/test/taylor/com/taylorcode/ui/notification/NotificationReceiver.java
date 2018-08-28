@@ -20,9 +20,9 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (Constant.ACTION_NOTIFICATION_BROADCAST.equals(action)) {
             Log.v("ttaylor", "NotificationReceiver.onReceive()" + " ACTION_NOTIFICATION_BROADCAST ");
             Toast.makeText(context, "receive message after notification has clickec", Toast.LENGTH_LONG).show();
-            NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-            int notificationId = intent.getIntExtra(Constant.EXTRA_NOTIFICATION_ID, -1) ;
-            notificationManager.cancel(notificationId);
+//            NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+//            int notificationId = intent.getIntExtra(Constant.EXTRA_NOTIFICATION_ID, -1) ;
+//            notificationManager.cancel(notificationId);
         }
     }
 }
