@@ -5,6 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import test.taylor.com.taylorcode.Constant;
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.ui.SelectorActivity;
+import test.taylor.com.taylorcode.util.BitmapUtil;
 
 /**
  * Created by taylor on 2017/10/30.
@@ -105,6 +109,9 @@ public class NotificationActivity extends Activity implements View.OnClickListen
         remoteView.setTextViewText(R.id.tv_title, title);
         remoteView.setImageViewResource(R.id.iv_auther, R.drawable.watch_reward_1);
         remoteView.setTextViewText(R.id.tv_content, content);
+
+        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.watch_reward_1).copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap foreground = BitmapFactory.decodeResource(getResources(), R.drawable.stop).copy(Bitmap.Config.ARGB_8888, true);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 //this 3 attribute is a must for notification
                 .setSmallIcon(R.drawable.calling_mic_active)
@@ -113,10 +120,13 @@ public class NotificationActivity extends Activity implements View.OnClickListen
                 //cancel by clicking notification
                 .setAutoCancel(true)
                 //customize notification ui
-                .setContent(remoteView);
+                .setContent(remoteView)
+                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(BitmapUtil.combineBitmap(background, foreground)));
         builder.setContentIntent(pendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(id, builder.build());
     }
+
+
 }
