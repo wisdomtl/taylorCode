@@ -52,6 +52,11 @@ public class TaylorApplication extends Application {
 //        FloatWindow.getInstance().setWhiteList(whiteList);
         FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54));
         FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54));
+
+        String d = "asdfgh" ;
+        int index = d.indexOf("f") ;
+        String subs = d.substring(index,d.length()) ;
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + " subString= "+subs);
     }
 
     private void makeChange(ArrayList<String> origin) {

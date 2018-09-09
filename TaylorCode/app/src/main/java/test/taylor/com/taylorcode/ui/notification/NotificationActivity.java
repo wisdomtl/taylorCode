@@ -105,10 +105,11 @@ public class NotificationActivity extends Activity implements View.OnClickListen
 //        notifyIntent.putExtra(Constant.EXTRA_NOTIFICATION_ID,id) ;
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.video_big_notificaiton);
         remoteView.setTextViewText(R.id.tv_title, title);
         remoteView.setImageViewResource(R.id.iv_auther, R.drawable.watch_reward_1);
         remoteView.setTextViewText(R.id.tv_content, content);
+        remoteView.setImageViewResource(R.id.iv_video,R.drawable.watch_reward_1);
 
         Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.watch_reward_1).copy(Bitmap.Config.ARGB_8888, true);
         Bitmap foreground = BitmapFactory.decodeResource(getResources(), R.drawable.stop).copy(Bitmap.Config.ARGB_8888, true);
@@ -120,8 +121,9 @@ public class NotificationActivity extends Activity implements View.OnClickListen
                 //cancel by clicking notification
                 .setAutoCancel(true)
                 //customize notification ui
-                .setContent(remoteView)
-                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(BitmapUtil.combineBitmap(background, foreground)));
+//                .setContent(remoteView)
+        .setCustomBigContentView(remoteView);
+//                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(BitmapUtil.combineBitmap(background, foreground)));
         builder.setContentIntent(pendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
