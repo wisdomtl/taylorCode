@@ -3,7 +3,6 @@ package test.taylor.com.taylorcode.ui.anim;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -15,16 +14,20 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import test.taylor.com.taylorcode.R;
@@ -41,7 +44,9 @@ public class AnimActivity extends Activity implements View.OnClickListener {
     private AnimationDrawable animationDrawable;
 
     private TextView tvScaleAnim;
-    private TextView tvValueAnimator ;
+    private TextView tvValueAnimator;
+    private ImageView ivArrow;
+    private TextView tvTranslateAnimation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +55,8 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         initView();
 
         createValueAnimator();
-        doAnimatorSet(20,50) ;
+        doAnimatorSet(20, 50);
     }
-
 
 
     private void initView() {
@@ -62,10 +66,15 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         ivFrameAnim.setOnClickListener(this);
 
         tvValueAnimator = ((TextView) findViewById(R.id.tv_value_animator));
+        tvTranslateAnimation = (TextView) findViewById(R.id.tv_anim_translation);
+        ivArrow = ((ImageView) findViewById(R.id.iv_notify_down));
+        ivArrow.setOnClickListener(this);
+        tvTranslateAnimation.setOnClickListener(this);
 
-        tvScaleAnim = createTextView(this) ;
-        ((LinearLayout) findViewById(R.id.ll_animi_activity_root)).addView(tvScaleAnim);
-        tvScaleAnim.startAnimation(createScaleAnimation());
+        // scale anim case1: create scale anim
+//        tvScaleAnim = createTextView(this);
+//        ((LinearLayout) findViewById(R.id.ll_animi_activity_root)).addView(tvScaleAnim);
+//        tvScaleAnim.startAnimation(createScaleAnimation());
     }
 
     /**
@@ -132,19 +141,20 @@ public class AnimActivity extends Activity implements View.OnClickListener {
         return inSampleSize;
     }
 
-    private TextView createTextView(Context context){
-        TextView tv = new TextView(context) ;
+    private TextView createTextView(Context context) {
+        TextView tv = new TextView(context);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tv.setText("+1");
         tv.setTextSize(20);
         tv.setTextColor(Color.parseColor("#FFDD00"));
         tv.setTypeface(Typeface.DEFAULT_BOLD);
         tv.setLayoutParams(params);
-        return tv ;
+        return tv;
     }
 
     /**
      * scale anim case1: create scale anim
+     *
      * @return
      */
     private ScaleAnimation createScaleAnimation() {
@@ -157,24 +167,24 @@ public class AnimActivity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * value animator case1:create value animator
+     * animator case1:create value animator
      */
     private void createValueAnimator() {
-        ValueAnimator animator = ValueAnimator.ofFloat(15,25);
+        ValueAnimator animator = ValueAnimator.ofFloat(15, 25);
         animator.setInterpolator(new AccelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value="+animation.getAnimatedValue());
+                Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value=" + animation.getAnimatedValue());
             }
         });
         animator.start();
     }
 
     /**
-     * value animator case3:create several value animator and put them together in AnimatorSet
+     * animator case3:create several value animator and put them together in AnimatorSet
      */
-    private void doAnimatorSet(int start ,int end){
+    private void doAnimatorSet(int start, int end) {
         tvValueAnimator.setAlpha(1);
         ValueAnimator animator = ValueAnimator.ofFloat(start, end);
         animator.setInterpolator(new AccelerateInterpolator());
@@ -268,8 +278,46 @@ public class AnimActivity extends Activity implements View.OnClickListener {
                 }
                 animationDrawable.start();
                 break;
+            case R.id.tv_anim_translation:
+//                doTranslateAnimation();
+                doReverseTranslateAnimationByValueAnimator();
+                break;
+            case R.id.iv_notify_down:
+                doVerticalTranslateAnimation();
+                break;
             default:
                 break;
         }
+    }
+
+    private void doVerticalTranslateAnimation() {
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ivArrow, "translationY", 0, DimensionUtil.dp2px(10), 0, DimensionUtil.dp2px(10));
+        objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        objectAnimator.setDuration(600);
+        objectAnimator.start();
+    }
+
+    /**
+     * animation case1:do TranslateAnimation back and forth by INFINITE repeat mode
+     */
+    private void doTranslateAnimation() {
+        TranslateAnimation animation = new TranslateAnimation(0, 100, 0, 0);
+        animation.setDuration(300);
+        animation.setRepeatMode(Animation.INFINITE);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
+        animation.setRepeatCount(100);
+        tvTranslateAnimation.startAnimation(animation);
+    }
+
+
+    /**
+     * animator case4:do animation back and forth by ObjectAnimator
+     */
+    private void doReverseTranslateAnimationByValueAnimator() {
+        int originLeft = tvTranslateAnimation.getLeft();
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(tvTranslateAnimation, "translationX", originLeft, originLeft + 100, 0);
+        objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        objectAnimator.setDuration(300);
+        objectAnimator.start();
     }
 }

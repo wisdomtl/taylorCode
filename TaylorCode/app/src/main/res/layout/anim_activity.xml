@@ -17,4 +17,19 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textColor="#FFDD00"/>
+
+    <TextView
+        android:id="@+id/tv_anim_translation"
+        android:layout_marginLeft="30dp"
+        android:layout_width="wrap_content"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:text="translation animation"/>
+    <ImageView
+        android:id="@+id/iv_notify_down"
+        android:layout_width="10dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="20dp" android:layout_gravity="center_horizontal"
+        android:paddingBottom="26dp"
+         android:src="@drawable/arrow"/>
 </LinearLayout>
