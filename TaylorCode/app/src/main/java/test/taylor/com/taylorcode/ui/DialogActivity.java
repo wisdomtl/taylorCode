@@ -42,11 +42,11 @@ public class DialogActivity extends Activity implements View.OnClickListener {
      * dialog case2:show dialog in the center of screen
      */
     private void show3() {
-        Dialog bottomDialog = new Dialog(this);
+        Dialog bottomDialog = new Dialog(this,R.style.TransparentDialog);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content, null);
         bottomDialog.setContentView(contentView);
         bottomDialog.setCanceledOnTouchOutside(false);
-        bottomDialog.getWindow().setGravity(Gravity.CENTER);
+//        bottomDialog.getWindow().setGravity(Gravity.CENTER);
         bottomDialog.show();
     }
 

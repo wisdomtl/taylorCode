@@ -21,6 +21,16 @@
         <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
     </style>
 
+
+    <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--<item name="android:windowFrame">@null</item>&lt;!&ndash;边框&ndash;&gt;-->
+        <!--<item name="android:windowIsFloating">true</item>&lt;!&ndash;是否浮现在activity之上&ndash;&gt;-->
+        <!--<item name="android:windowIsTranslucent">true</item>&lt;!&ndash;半透明&ndash;&gt;-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
+    </style>
+
     <!--dialog in and out animation-->
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/translate_in</item>
