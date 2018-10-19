@@ -6,15 +6,19 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="*"
-        android:divider="@drawable/table_layout_divider">
+        android:divider="@drawable/table_layout_divider"
+        android:showDividers="beginning|middle|end"
+        android:stretchColumns="*">
 
         <TableRow
-            android:background="#00ff00">
+            android:background="#00ff00"
+            android:showDividers="beginning|middle|end"
+            android:divider="@drawable/table_layout_divider">
 
+            <!--set TableRow height by it's child-->
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:text="11"
                 android:textSize="15sp" />
