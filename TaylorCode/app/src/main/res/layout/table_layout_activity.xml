@@ -4,16 +4,17 @@
     android:layout_height="match_parent">
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/table_layout_border"
         android:divider="@drawable/table_layout_divider"
+        android:padding="1dp"
         android:showDividers="beginning|middle|end"
         android:stretchColumns="*">
 
         <TableRow
-            android:background="#00ff00"
-            android:showDividers="beginning|middle|end"
-            android:divider="@drawable/table_layout_divider">
+            android:divider="@drawable/table_layout_divider"
+            android:showDividers="beginning|middle|end">
 
             <!--set TableRow height by it's child-->
             <TextView
