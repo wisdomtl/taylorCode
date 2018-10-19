@@ -14,7 +14,7 @@
 
         <TableRow
             android:divider="@drawable/table_layout_divider"
-            android:showDividers="beginning|middle|end">
+            android:showDividers="middle">
 
             <!--set TableRow height by it's child-->
             <TextView
@@ -26,21 +26,30 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
                 android:text="12"
                 android:textSize="15sp" />
         </TableRow>
 
-        <TableRow android:divider="@drawable/table_layout_divider">
+        <TableRow android:divider="@drawable/table_layout_divider"
+            android:weightSum="2"
+            android:showDividers="middle">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
                 android:text="21"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="22"
                 android:textSize="15sp" />
