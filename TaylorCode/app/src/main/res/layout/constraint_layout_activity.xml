@@ -122,5 +122,36 @@
         app:layout_constraintRight_toRightOf="parent"
         android:textSize="16sp"/>
 
+    <!--ConstraintLayout case5:margin top with percentage-->
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".609" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="tv3"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/gl_tv3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".703" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="tv4"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/gl_tv4" />
+
 
 </android.support.constraint.ConstraintLayout>
