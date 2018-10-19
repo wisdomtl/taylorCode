@@ -111,5 +111,16 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".7" />
 
+    <!--ConstraintLayout case4:center in parent-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="16sp"/>
+
 
 </android.support.constraint.ConstraintLayout>
