@@ -1,60 +1,424 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TableLayout
-        android:layout_width="300dp"
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/table_layout_border"
-        android:divider="@drawable/table_layout_divider"
-        android:padding="1dp"
-        android:showDividers="beginning|middle|end"
-        android:stretchColumns="*">
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".044" />
 
-        <TableRow
-            android:divider="@drawable/table_layout_divider"
-            android:showDividers="middle">
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".956" />
 
-            <!--set TableRow height by it's child-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:text="11"
-                android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:text="12"
-                android:textSize="15sp" />
-        </TableRow>
+    <!--row1-->
+    <TextView
+        android:id="@+id/tv_vip_state"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/table_row_border_top_start_gray"
+        android:gravity="center"
+        android:text="VIP Status"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TableRow android:divider="@drawable/table_layout_divider"
-            android:weightSum="2"
-            android:showDividers="middle">
+    <TextView
+        android:id="@+id/tv_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end_gray"
+        android:gravity="center"
+        android:text="Watching Reward/Tasks"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip_state" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:text="21"
-                android:textSize="15sp" />
+    <TextView
+        android:id="@+id/tv_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end_gray"
+        android:gravity="center"
+        android:text="Max Bet"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip_state" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="22"
-                android:textSize="15sp" />
-        </TableRow>
+    <!--row2-->
+    <TextView
+        android:id="@+id/tv_vip1"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 1"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip_state" />
 
-    </TableLayout>
+    <TextView
+        android:id="@+id/tv_vip1_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.1"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip1" />
 
+    <TextView
+        android:id="@+id/tv_vip1_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="200"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip1" />
+
+    <!--row3-->
+    <TextView
+        android:id="@+id/tv_vip2"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 2"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip1" />
+
+    <TextView
+        android:id="@+id/tv_vip2_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.2"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip2" />
+
+    <TextView
+        android:id="@+id/tv_vip2_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="400"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip2" />
+
+    <!--row4-->
+    <TextView
+        android:id="@+id/tv_vip3"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 3"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip2" />
+
+    <TextView
+        android:id="@+id/tv_vip3_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.3"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip3" />
+
+    <TextView
+        android:id="@+id/tv_vip3_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="700"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip3" />
+    <!--row5-->
+    <TextView
+        android:id="@+id/tv_vip4"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 4"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip3" />
+
+    <TextView
+        android:id="@+id/tv_vip4_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.5"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip4" />
+
+    <TextView
+        android:id="@+id/tv_vip4_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="800"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip4" />
+    <!--row6-->
+    <TextView
+        android:id="@+id/tv_vip5"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 5"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip4" />
+
+    <TextView
+        android:id="@+id/tv_vip5_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.6"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip5" />
+
+    <TextView
+        android:id="@+id/tv_vip5_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="1,500"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip5" />
+    <!--row7-->
+    <TextView
+        android:id="@+id/tv_vip6"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_top_start"
+        android:gravity="center"
+        android:text="VIP 6"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip5" />
+
+    <TextView
+        android:id="@+id/tv_vip6_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="X1.7"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip6" />
+
+    <TextView
+        android:id="@+id/tv_vip6_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_top_end"
+        android:gravity="center"
+        android:text="3,000"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip6" />
+    <!--row8-->
+    <TextView
+        android:id="@+id/tv_vip7"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="@drawable/table_row_border_bottom_start"
+        android:gravity="center"
+        android:text="VIP 7"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_watch_reward"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/tv_vip6" />
+
+    <TextView
+        android:id="@+id/tv_vip7_watch_reward"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_bottom_end"
+        android:gravity="center"
+        android:text="X2.0"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_bet"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tv_vip_state"
+        app:layout_constraintTop_toTopOf="@id/tv_vip7" />
+
+    <TextView
+        android:id="@+id/tv_vip7_max_bet"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@drawable/table_row_border_bottom_end"
+        android:gravity="center"
+        android:text="5,000"
+        android:textColor="#222222"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/gl_right"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_watch_reward"
+        app:layout_constraintTop_toTopOf="@id/tv_vip7" />
 </android.support.constraint.ConstraintLayout>
