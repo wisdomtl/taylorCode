@@ -26,21 +26,10 @@ public class FloatWindow implements View.OnTouchListener {
     private static final int DEFAULT_HEIGHT = 100;
     private static final long WELT_ANIMATION_DURATION = 150;
     /**
-     * the current showing content view of window
-     */
-//    private View windowView;
-    /**
-     * the current showing layout param for windowView
-     */
-//    private WindowManager.LayoutParams layoutParam;
-    /**
      * several window content stored by String tag ;
      */
     private HashMap<String, WindowContent> windowContentMap;
     private WindowContent windowContent;
-    private int width;
-    private int height;
-    //    private Rect windowRect;
     private int lastTouchX;
     private int lastTouchY;
     private int lastWeltX;
@@ -59,11 +48,6 @@ public class FloatWindow implements View.OnTouchListener {
      * if false,all activities in app is allow to show window
      */
     private boolean enableWhileList;
-    /**
-     * whether to show or hide this window
-     * true by default
-     */
-//    private boolean enable = true;
 
     private static volatile FloatWindow INSTANCE;
     /**
@@ -112,7 +96,7 @@ public class FloatWindow implements View.OnTouchListener {
             updater.updateWindowView(windowContent.windowView);
         }
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
-        if (windowManager != null&&windowContent != null && windowContent.windowView != null && windowContent.windowView.getParent() != null){
+        if (windowManager != null && windowContent != null && windowContent.windowView != null && windowContent.windowView.getParent() != null) {
             windowManager.updateViewLayout(windowContent.windowView, windowContent.layoutParams);
         }
     }
@@ -122,12 +106,24 @@ public class FloatWindow implements View.OnTouchListener {
         clickListener = listener;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public void setWidth(int width, String tag) {
+        if (windowContentMap == null) {
+            return;
+        }
+        WindowContent windowContent = windowContentMap.get(tag);
+        if (windowContent != null) {
+            windowContent.width = width;
+        }
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public void setHeight(int height, String tag) {
+        if (windowContentMap == null) {
+            return;
+        }
+        WindowContent windowContent = windowContentMap.get(tag);
+        if (windowContent != null) {
+            windowContent.height = height;
+        }
     }
 
     public void setEnable(boolean enable, String tag) {
@@ -182,8 +178,8 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-        layoutParams.width = this.width == 0 ? DEFAULT_WIDTH : this.width;
-        layoutParams.height = this.height == 0 ? DEFAULT_HEIGHT : this.height;
+        layoutParams.width = windowContent.width == 0 ? DEFAULT_WIDTH : windowContent.width;
+        layoutParams.height = windowContent.height == 0 ? DEFAULT_HEIGHT : windowContent.height;
         int defaultX = screenWidth - layoutParams.width;
         int defaultY = 2 * screenHeight / 3;
         layoutParams.x = windowContent.layoutParams == null ? defaultX : windowContent.layoutParams.x;
@@ -212,7 +208,7 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     public boolean isShowing() {
-        if (windowContent != null) {
+        if (windowContent == null) {
             return false;
         }
         if (windowContent.windowView == null) {
@@ -248,34 +244,16 @@ public class FloatWindow implements View.OnTouchListener {
         return this;
     }
 
-    private void saveWindowContent(String tag) {
-        if (windowContentMap == null) {
-            windowContentMap = new HashMap<>();
-        }
-        windowContentMap.put(tag, windowContent);
-    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-//        int action = event.getAction();
-//
-//        switch (action) {
-//            case MotionEvent.ACTION_DOWN:
-//                onActionDown(event);
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                onActionMove(event);
-//                break;
-//            default:
-//                break;
-//        }
         //let GestureDetector take care of touch event,in order to parsing touch event into different gesture
         gestureDetector.onTouchEvent(event);
         //there is no ACTION_UP event in GestureDetector
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_UP:
-                onActionUp(event, screenWidth, width);
+                onActionUp(event, screenWidth, windowContent.width);
                 break;
             default:
                 break;
@@ -284,6 +262,9 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     private void onActionUp(MotionEvent event, int screenWidth, int width) {
+        if (windowContentMap == null || windowContent.windowView == null || windowContent.layoutParams == null) {
+            return;
+        }
         int upX = ((int) event.getRawX());
         int endX;
         if (upX > screenWidth / 2) {
@@ -323,7 +304,6 @@ public class FloatWindow implements View.OnTouchListener {
 
         windowContent.layoutParams.x += dx;
         windowContent.layoutParams.y += dy;
-//        windowRect.set(layoutParam.x, layoutParam.y, layoutParam.x + layoutParam.width, layoutParam.y + layoutParam.height);
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
             int rightMost = screenWidth - windowContent.layoutParams.width;
@@ -458,6 +438,14 @@ public class FloatWindow implements View.OnTouchListener {
          * whether this window content is allow to show
          */
         public boolean enable = true;
+        /**
+         * the width of window content
+         */
+        private int width;
+        /**
+         * the height of window content
+         */
+        private int height;
 
     }
 }

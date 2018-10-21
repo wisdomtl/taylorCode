@@ -63,6 +63,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
 
         FloatWindow.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
+        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
         FloatWindow.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
             @Override
             public void onWindowViewClick() {

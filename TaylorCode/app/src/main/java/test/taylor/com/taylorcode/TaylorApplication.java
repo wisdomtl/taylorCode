@@ -8,9 +8,7 @@ import android.util.Log;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.ui.window.FloatWindow;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
 import test.taylor.com.taylorcode.util.DimensionUtil;
@@ -50,8 +48,6 @@ public class TaylorApplication extends Application {
 //        whiteList.add(ActivityB.class);
 //        whiteList.add(WindowActivity.class);
 //        FloatWindow.getInstance().setWhiteList(whiteList);
-        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54));
-        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54));
 
         String d = "asdfgh" ;
         int index = d.indexOf("f") ;
