@@ -37,6 +37,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     public static final int VALUE_ANIM_DURATION = 800;
     private final float FULL_TIME_MILLISECOND = 3 * 1000;
     private static final int BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100;
+
+    public static final String TAG_WINDOW_A = "A";
+    public static final String TAG_WINDOW_B = "B";
     //    private PopupWindow popupWindow;
     private CustomPopupWindow popupWindow;
     private Timer timer;
@@ -59,14 +62,15 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
-        FloatWindow.getInstance().setView(generateWindowView());
+        FloatWindow.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
         FloatWindow.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
             @Override
             public void onWindowViewClick() {
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
-        FloatWindow.getInstance().init(this).show(this);
+        FloatWindow.getInstance().init(this).show(this, TAG_WINDOW_A);
+
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -340,7 +344,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         animator2.setDuration(d2);
 
         AnimatorSet set = new AnimatorSet();
-        set.playSequentially(animator,animator1,animator2);
+        set.playSequentially(animator, animator1, animator2);
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -534,7 +538,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                     leftMost = layoutParams.width / 2;
                 }
                 topMost = (layoutParams.height - this.layoutParams.height) / 2;
-                bottomMost = screenHeight - this.layoutParams.height -(layoutParams.height - this.layoutParams.height) / 2 ;
+                bottomMost = screenHeight - this.layoutParams.height - (layoutParams.height - this.layoutParams.height) / 2;
             }
 
             if (this.layoutParams.x < leftMost) {
@@ -558,7 +562,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 
     private WindowManager.LayoutParams createFloatWindowPartnerLayoutParam(int screenWidth, int screenHeight, WindowManager.LayoutParams rewardBallParam, View floatWindowPartnerView) {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;

@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,13 +26,18 @@ public class FloatWindow implements View.OnTouchListener {
     private static final int DEFAULT_HEIGHT = 100;
     private static final long WELT_ANIMATION_DURATION = 150;
     /**
-     * the content view of window
+     * the current showing content view of window
      */
-    private View windowView;
+//    private View windowView;
     /**
-     * the layout param for windowView
+     * the current showing layout param for windowView
      */
-    private WindowManager.LayoutParams layoutParam;
+//    private WindowManager.LayoutParams layoutParam;
+    /**
+     * several window content stored by String tag ;
+     */
+    private HashMap<String, WindowContent> windowContentMap;
+    private WindowContent windowContent;
     private int width;
     private int height;
     //    private Rect windowRect;
@@ -56,7 +63,7 @@ public class FloatWindow implements View.OnTouchListener {
      * whether to show or hide this window
      * true by default
      */
-    private boolean enable = true;
+//    private boolean enable = true;
 
     private static volatile FloatWindow INSTANCE;
     /**
@@ -81,7 +88,7 @@ public class FloatWindow implements View.OnTouchListener {
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         prepareScreenDimension(windowManager);
         gestureDetector = new GestureDetector(context, new GestureListener());
-        return this ;
+        return this;
     }
 
 
@@ -102,11 +109,11 @@ public class FloatWindow implements View.OnTouchListener {
 
     public void updateWindowView(IWindowUpdater updater) {
         if (updater != null) {
-            updater.updateWindowView(windowView);
+            updater.updateWindowView(windowContent.windowView);
         }
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
-        if (windowManager != null) {
-            windowManager.updateViewLayout(windowView, layoutParam);
+        if (windowManager != null&&windowContent != null && windowContent.windowView != null && windowContent.windowView.getParent() != null){
+            windowManager.updateViewLayout(windowContent.windowView, windowContent.layoutParams);
         }
     }
 
@@ -123,27 +130,42 @@ public class FloatWindow implements View.OnTouchListener {
         this.height = height;
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public void setEnable(boolean enable, String tag) {
+        if (windowContentMap == null) {
+            return;
+        }
+        WindowContent windowContent = windowContentMap.get(tag);
+        if (windowContent == null) {
+            throw new RuntimeException("no such window view,please invoke setView() first");
+        }
+        windowContent.enable = enable;
     }
 
     public void setOnWindowStatusChangeListener(OnWindowStatusChangeListener onWindowStatusChangeListener) {
         this.onWindowStatusChangeListener = onWindowStatusChangeListener;
     }
 
-    public void show(Context context) {
-        if (!enable) {
+    public void show(Context context, String tag) {
+        if (windowContentMap == null) {
             return;
         }
-        if (windowView == null) {
+        windowContent = windowContentMap.get(tag);
+        if (windowContent == null) {
+            Log.v("ttaylor", "there is no view to show,please invoke setView() first");
             return;
         }
-        this.context = context ;
-        layoutParam = generateLayoutParam(screenWidth, screenHeight);
+        if (!windowContent.enable) {
+            return;
+        }
+        if (windowContent.windowView == null) {
+            return;
+        }
+        this.context = context;
+        windowContent.layoutParams = generateLayoutParam(screenWidth, screenHeight);
         //in case of "IllegalStateException :has already been added to the window manager."
-        if (windowView.getParent() == null) {
+        if (windowContent.windowView.getParent() == null) {
             WindowManager windowManager = ((WindowManager) this.context.getSystemService(Context.WINDOW_SERVICE));
-            windowManager.addView(windowView, layoutParam);
+            windowManager.addView(windowContent.windowView, windowContent.layoutParams);
             if (onWindowStatusChangeListener != null) {
                 onWindowStatusChangeListener.onShow();
             }
@@ -164,21 +186,24 @@ public class FloatWindow implements View.OnTouchListener {
         layoutParams.height = this.height == 0 ? DEFAULT_HEIGHT : this.height;
         int defaultX = screenWidth - layoutParams.width;
         int defaultY = 2 * screenHeight / 3;
-        layoutParams.x = layoutParam == null ? defaultX : layoutParam.x;
-        layoutParams.y = layoutParam == null ? defaultY : layoutParam.y;
+        layoutParams.x = windowContent.layoutParams == null ? defaultX : windowContent.layoutParams.x;
+        layoutParams.y = windowContent.layoutParams == null ? defaultY : windowContent.layoutParams.y;
         return layoutParams;
     }
 
     public WindowManager.LayoutParams getLayoutParam() {
-        return layoutParam;
+        if (windowContent != null) {
+            return windowContent.layoutParams;
+        }
+        return null;
     }
 
     public void dismiss() {
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
             //in case of "IllegalStateException :not attached to window manager."
-            if (windowView.getParent() != null) {
-                windowManager.removeViewImmediate(windowView);
+            if (windowContent != null && windowContent.windowView != null && windowContent.windowView.getParent() != null) {
+                windowManager.removeViewImmediate(windowContent.windowView);
                 if (onWindowStatusChangeListener != null) {
                     onWindowStatusChangeListener.onDismiss();
                 }
@@ -187,10 +212,13 @@ public class FloatWindow implements View.OnTouchListener {
     }
 
     public boolean isShowing() {
-        if (windowView == null) {
+        if (windowContent != null) {
             return false;
         }
-        if (windowView.getParent() == null) {
+        if (windowContent.windowView == null) {
+            return false;
+        }
+        if (windowContent.windowView.getParent() == null) {
             return false;
         } else {
             return true;
@@ -206,12 +234,25 @@ public class FloatWindow implements View.OnTouchListener {
      * invoking this method is a must ,or window has no content to show
      *
      * @param view the content view of window
+     * @param tag
      * @return
      */
-    public FloatWindow setView(View view) {
-        this.windowView = view;
-        windowView.setOnTouchListener(this);
+    public FloatWindow setView(View view, String tag) {
+        if (windowContentMap == null) {
+            windowContentMap = new HashMap<>();
+        }
+        WindowContent windowContent = new WindowContent();
+        windowContent.windowView = view;
+        windowContentMap.put(tag, windowContent);
+        windowContent.windowView.setOnTouchListener(this);
         return this;
+    }
+
+    private void saveWindowContent(String tag) {
+        if (windowContentMap == null) {
+            windowContentMap = new HashMap<>();
+        }
+        windowContentMap.put(tag, windowContent);
     }
 
     @Override
@@ -252,24 +293,24 @@ public class FloatWindow implements View.OnTouchListener {
         }
 
         if (weltAnimator == null) {
-            weltAnimator = ValueAnimator.ofInt(layoutParam.x, endX);
+            weltAnimator = ValueAnimator.ofInt(windowContent.layoutParams.x, endX);
             weltAnimator.setInterpolator(new LinearInterpolator());
             weltAnimator.setDuration(WELT_ANIMATION_DURATION);
             weltAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     int x = ((int) animation.getAnimatedValue());
-                    if (layoutParam != null) {
-                        layoutParam.x = x;
+                    if (windowContent.layoutParams != null) {
+                        windowContent.layoutParams.x = x;
                     }
                     WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
-                    if (windowManager != null) {
-                        windowManager.updateViewLayout(windowView, layoutParam);
+                    if (windowManager != null && windowContent.windowView.getParent() != null) {
+                        windowManager.updateViewLayout(windowContent.windowView, windowContent.layoutParams);
                     }
                 }
             });
         }
-        weltAnimator.setIntValues(layoutParam.x, endX);
+        weltAnimator.setIntValues(windowContent.layoutParams.x, endX);
         weltAnimator.start();
     }
 
@@ -279,46 +320,46 @@ public class FloatWindow implements View.OnTouchListener {
         int currentY = (int) event.getRawY();
         int dx = currentX - lastTouchX;
         int dy = currentY - lastTouchY;
-        lastTouchX = currentX;
-        lastTouchY = currentY;
-        layoutParam.x += dx;
-        layoutParam.y += dy;
+
+        windowContent.layoutParams.x += dx;
+        windowContent.layoutParams.y += dy;
 //        windowRect.set(layoutParam.x, layoutParam.y, layoutParam.x + layoutParam.width, layoutParam.y + layoutParam.height);
         WindowManager windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         if (windowManager != null) {
-            int rightMost = screenWidth - layoutParam.width;
+            int rightMost = screenWidth - windowContent.layoutParams.width;
             int leftMost = 0;
             int topMost = 0;
-            int bottomMost = screenHeight - layoutParam.height - getNavigationBarHeight(context);
+            int bottomMost = screenHeight - windowContent.layoutParams.height - getNavigationBarHeight(context);
             WindowManager.LayoutParams partnerParam = null;
             if (onWindowStatusChangeListener != null) {
-                partnerParam = onWindowStatusChangeListener.onWindowMove(dx, dy, screenWidth, screenHeight, layoutParam);
+                partnerParam = onWindowStatusChangeListener.onWindowMove(dx, dy, screenWidth, screenHeight, windowContent.layoutParams);
             }
             //adjust move area according to partner window
             if (partnerParam != null) {
-                if (partnerParam.x < layoutParam.x) {
-                    leftMost = partnerParam.width - layoutParam.width / 2;
-                } else if (partnerParam.x > layoutParam.x) {
-                    rightMost = screenWidth - (layoutParam.width / 2 + partnerParam.width);
+                if (partnerParam.x < windowContent.layoutParams.x) {
+                    leftMost = partnerParam.width - windowContent.layoutParams.width / 2;
+                } else if (partnerParam.x > windowContent.layoutParams.x) {
+                    rightMost = screenWidth - (windowContent.layoutParams.width / 2 + partnerParam.width);
                 }
             }
 
             //make window float inside screen
-            if (layoutParam.x < leftMost) {
-                layoutParam.x = leftMost;
+            if (windowContent.layoutParams.x < leftMost) {
+                windowContent.layoutParams.x = leftMost;
             }
-            if (layoutParam.x > rightMost) {
-                layoutParam.x = rightMost;
+            if (windowContent.layoutParams.x > rightMost) {
+                windowContent.layoutParams.x = rightMost;
             }
-            if (layoutParam.y < topMost) {
-                layoutParam.y = topMost;
+            if (windowContent.layoutParams.y < topMost) {
+                windowContent.layoutParams.y = topMost;
             }
-            if (layoutParam.y > bottomMost) {
-                layoutParam.y = bottomMost;
+            if (windowContent.layoutParams.y > bottomMost) {
+                windowContent.layoutParams.y = bottomMost;
             }
-            windowManager.updateViewLayout(windowView, layoutParam);
+            windowManager.updateViewLayout(windowContent.windowView, windowContent.layoutParams);
         }
-
+        lastTouchX = currentX;
+        lastTouchY = currentY;
     }
 
     private void onActionDown(MotionEvent event) {
@@ -395,6 +436,28 @@ public class FloatWindow implements View.OnTouchListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             return false;
         }
+
+    }
+
+    public void onDestroy() {
+        if (windowContentMap != null) {
+            windowContentMap.clear();
+        }
+    }
+
+    private class WindowContent {
+        /**
+         * the content view of window
+         */
+        public View windowView;
+        /**
+         * the layout param of window content view
+         */
+        public WindowManager.LayoutParams layoutParams;
+        /**
+         * whether this window content is allow to show
+         */
+        public boolean enable = true;
 
     }
 }
