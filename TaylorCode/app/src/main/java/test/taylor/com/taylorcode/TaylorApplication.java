@@ -49,10 +49,16 @@ public class TaylorApplication extends Application {
 //        whiteList.add(WindowActivity.class);
 //        FloatWindow.getInstance().setWhiteList(whiteList);
 
+        //java string index case1
         String d = "asdfgh" ;
         int index = d.indexOf("f") ;
         String subs = d.substring(index,d.length()) ;
         Log.v("ttaylor", "TaylorApplication.onCreate()" + " subString= "+subs);
+
+        //java round case1:
+        int i = ((int) Math.round(4.5d));
+        int j = ((int) Math.round(4.1d));
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i="+i+ " ,j="+j);
     }
 
     private void makeChange(ArrayList<String> origin) {
