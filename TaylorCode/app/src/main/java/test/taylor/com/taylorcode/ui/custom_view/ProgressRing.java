@@ -1,6 +1,8 @@
 package test.taylor.com.taylorcode.ui.custom_view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -35,6 +37,11 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
     private float textStrokeWidth;
     private int textAlpha = 255;
 
+    private Bitmap bitmap;
+    private Rect bitmapSrc;
+    private Rect bitmapDest;
+    private Paint bitmapPaint;
+
     public ProgressRing(Context context) {
         super(context);
         init(getContext());
@@ -48,6 +55,17 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
     public ProgressRing(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(getContext());
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        bitmapSrc = new Rect(0, 0, width, height);
+        bitmapDest = new Rect();
+        bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bitmapPaint.setFilterBitmap(true);
+        bitmapPaint.setDither(true);
     }
 
     public void setText(String text) {
@@ -174,6 +192,10 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
             //baseline is the key for drawing text
             int baseline = (getMeasuredHeight() - fontMetricsInt.bottom + fontMetricsInt.top) / 2 - fontMetricsInt.top;
             canvas.drawText(text, getMeasuredWidth() / 2, baseline, paint);
+        }
+
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, bitmapSrc, bitmapSrc, bitmapPaint);
         }
         //key point:move super.onDraw() here make the custom drawing below the real content of ImageView
         super.onDraw(canvas);

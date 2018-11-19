@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,29 +25,34 @@ public class CustomViewActivity extends Activity {
     public static final int VALUE_ANIM_DURATION = 800;
     private ProgressRing progressRing;
     private AnimationDrawable animationDrawable;
-    private LinearLayout llContainer ;
+    private LinearLayout llContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_view_activity);
 
-        /**
-         *
-         custom view case1:update custom view periodically
-         */
-//        progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
+        addProgressRing();
+    }
+
+    /**
+     * custom view case1:update custom view periodically
+     */
+    private void addProgressRing() {
+        //        progressRing = ((ProgressRing) findViewById(R.id.progress_ring));
         progressRing = new ProgressRing(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(DimensionUtil.dp2px(54),DimensionUtil.dp2px(54)) ;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(DimensionUtil.dp2px(54), DimensionUtil.dp2px(54));
         progressRing.setLayoutParams(params);
         animationDrawable = createAnimationDrawable(this);
         progressRing.setBackground(animationDrawable);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cootek_radiobutton_active) ;
+        progressRing.setBitmap(bitmap);
         new Timer(new Timer.TimerListener() {
             @Override
             public void onTick(long pastMillisecond) {
                 float mod = pastMillisecond % FULL_TIME_MILLISECOND;
 
-                Log.v("ttaylor", "CustomViewActivity.onTick()" + " mod="+mod+",past="+pastMillisecond);
+                Log.v("ttaylor", "CustomViewActivity.onTick()" + " mod=" + mod + ",past=" + pastMillisecond);
                 updateProgress(mod, FULL_TIME_MILLISECOND);
 
                 if (mod == 0) {
@@ -58,6 +65,7 @@ public class CustomViewActivity extends Activity {
         llContainer.addView(progressRing);
     }
 
+
     private void doFrameAnimation() {
         if (animationDrawable.isRunning()) {
             animationDrawable.stop();
@@ -68,7 +76,7 @@ public class CustomViewActivity extends Activity {
     private void updateProgress(float mod, float totalTime) {
         float i = mod == 0 ? 1 : mod;
         float progress = i / totalTime;
-        progressRing.setProgress(progress) ;
+        progressRing.setProgress(progress);
     }
 
     private void doValueAnimator(float start, float end, final ProgressRing ring, int duration) {
