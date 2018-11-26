@@ -53,6 +53,9 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
 
+    //WorkManager
+    implementation "android.arch.work:work-runtime:1.0.0-alpha01"
+
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha01'
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha01'
 
