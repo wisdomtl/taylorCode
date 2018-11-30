@@ -52,6 +52,13 @@
         </activity>
         <activity android:name=".list.ListActivity"></activity>
         <activity android:name=".aysnc.workmanager.WorkManagerActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".ui.Factory2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
