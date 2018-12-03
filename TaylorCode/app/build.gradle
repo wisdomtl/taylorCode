@@ -41,11 +41,8 @@ dependencies {
     implementation 'com.hyman:flowlayout-lib:1.1.2'
 
     //ViewModel and LiveData
-//    implementation "android.arch.lifecycle:extensions:1.0.0"
     def lifecycle_version = "1.1.1"
-//    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "android.arch.lifecycle:runtime:$lifecycle_version"
-
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
