@@ -42,6 +42,14 @@
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
+        
+        <activity android:name=".optional.OptionalActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".ui.custom_view.CustomViewActivity">
             <!--<intent-filter>-->
@@ -66,11 +74,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity2">
             <!--<intent-filter>-->

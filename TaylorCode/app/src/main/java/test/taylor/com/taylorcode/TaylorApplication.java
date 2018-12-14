@@ -59,6 +59,7 @@ public class TaylorApplication extends Application {
         int i = ((int) Math.round(4.5d));
         int j = ((int) Math.round(4.1d));
         Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i="+i+ " ,j="+j);
+
     }
 
     private void makeChange(ArrayList<String> origin) {
