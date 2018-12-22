@@ -27,6 +27,7 @@ import test.taylor.com.taylorcode.R;
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int REQUEST_CODE_TAKE_PICTURE = 1;
+    public static final int REQUEST_CODE_PICK_PICTURE = 2;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private Uri imageUri;
     private static String[] PERMISSIONS_STORAGE = {
@@ -51,6 +52,7 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_pick_photo:
+                pickPhoto();
                 break;
             case R.id.btn_take_photo:
                 takePicture();
@@ -59,6 +61,12 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
                 verifyStoragePermission(this);
                 break;
         }
+    }
+
+    private void pickPhoto() {
+        Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        openAlbumIntent.setType("image/*");
+        startActivityForResult(openAlbumIntent, REQUEST_CODE_PICK_PICTURE);//打开相册
     }
 
     private void takePictureAndStore() {
@@ -83,24 +91,47 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_OK) {
-            //show thumbnail
-            if (data != null) {
-                Bundle extras = data.getExtras();
-                Bitmap bitmap = ((Bitmap) extras.get("data"));
-                ((ImageView) findViewById(R.id.iv_pic)).setImageBitmap(bitmap);
+        if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
+            if (resultCode != RESULT_OK) {
+                return;
             }
-            //show origin image
-            if (imageUri != null) {
-                try {
-                    Bitmap bitmap1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                    ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
-                    showImageInGallery(imageUri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+            showPictureTaken(data);
 
+        } else if (requestCode == REQUEST_CODE_PICK_PICTURE) {
+            if (resultCode != RESULT_OK) {
+                return;
             }
+            showPicturePicked(data);
+        }
+    }
+
+    private void showPicturePicked(Intent data) {
+        Uri uri = data.getData();
+        try {
+            Bitmap bitmap1  = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showPictureTaken(Intent data) {
+        //show thumbnail
+        if (data != null) {
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = ((Bitmap) extras.get("data"));
+            ((ImageView) findViewById(R.id.iv_pic)).setImageBitmap(bitmap);
+        }
+        //show origin image
+        else if (imageUri != null) {
+            try {
+                Bitmap bitmap1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
+                showImageInGallery(imageUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -142,6 +173,8 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+        } else {
+            takePictureAndStore();
         }
     }
 
