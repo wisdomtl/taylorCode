@@ -140,35 +140,19 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
             return;
         }
         UCrop.Options options = new UCrop.Options();
-        // 修改标题栏颜色
         options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-        // 修改状态栏颜色
         options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        // 隐藏底部工具
         options.setHideBottomControls(true);
-        // 图片格式
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-        // 设置图片压缩质量
-        options.setCompressionQuality(100);
-        // 是否让用户调整范围(默认false)，如果开启，可能会造成剪切的图片的长宽比不是设定的
-        // 如果不开启，用户不能拖动选框，只能缩放图片
-        options.setFreeStyleCropEnabled(true);
-        // 设置图片压缩质量
-        options.setCompressionQuality(100);
-        // 圆
+        options.setCompressionQuality(50);
         options.setCircleDimmedLayer(true);
-        // 不显示网格线
         options.setShowCropGrid(false);
 
         File cropFile = createImageFile();
 
-        // 设置源uri及目标uri
         UCrop.of(uri, Uri.fromFile(cropFile))
-                // 长宽比
                 .withAspectRatio(1, 1)
-                // 图片大小
                 .withMaxResultSize(200, 200)
-                // 配置参数
                 .withOptions(options)
                 .start(this);
     }
