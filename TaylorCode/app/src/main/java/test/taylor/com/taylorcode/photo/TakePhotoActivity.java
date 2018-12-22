@@ -29,10 +29,11 @@ import test.taylor.com.taylorcode.R;
 
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final int REQUEST_CODE_TAKE_PICTURE = 1;
-    public static final int REQUEST_CODE_TAKE_ORIGIN_PICTURE = 3;
-    public static final int REQUEST_CODE_PICK_PICTURE = 2;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static final int REQUEST_CODE_TAKE_PHOTO = 1;
+    public static final int REQUEST_CODE_TAKE_ORIGIN_PHOTO = 3;
+    public static final int REQUEST_CODE_PICK_PHOTO = 2;
+    private static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_TAKE_PHOTO = 5;
+    private static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_PICK_PHOTO = 6;
     private Uri imageUri;
     private ImageView originImageView;
     private static String[] PERMISSIONS_STORAGE = {
@@ -58,13 +59,13 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_pick_photo:
-                pickPhoto();
+                verifyStoragePermission(this, REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_PICK_PHOTO, () -> pickPhoto());
                 break;
             case R.id.btn_take_photo:
-                takePicture();
+                takePhoto();
                 break;
             case R.id.btn_take_photo_store:
-                verifyStoragePermission(this);
+                verifyStoragePermission(this, REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_TAKE_PHOTO, () -> takePhotoAndStore());
                 break;
         }
     }
@@ -72,25 +73,25 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     private void pickPhoto() {
         Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openAlbumIntent.setType("image/*");
-        startActivityForResult(openAlbumIntent, REQUEST_CODE_PICK_PICTURE);//打开相册
+        startActivityForResult(openAlbumIntent, REQUEST_CODE_PICK_PHOTO);//打开相册
     }
 
-    private void takePictureAndStore() {
+    private void takePhotoAndStore() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             File imageFile = createImageFile();
             imageUri = getImageUri(imageFile);
             if (imageUri != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, REQUEST_CODE_TAKE_ORIGIN_PICTURE);
+                startActivityForResult(intent, REQUEST_CODE_TAKE_ORIGIN_PHOTO);
             }
         }
     }
 
-    private void takePicture() {
+    private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+            startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
         }
     }
 
@@ -100,12 +101,12 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
+        if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
             showPictureTaken(data);
-        } else if (requestCode == REQUEST_CODE_TAKE_ORIGIN_PICTURE) {
+        } else if (requestCode == REQUEST_CODE_TAKE_ORIGIN_PHOTO) {
 //            showOriginPictureTaken(imageUri);
             cropPicture(imageUri);
-        } else if (requestCode == REQUEST_CODE_PICK_PICTURE) {
+        } else if (requestCode == REQUEST_CODE_PICK_PHOTO) {
 //            showPicturePicked(data);
             cropPicture(data.getData());
         } else if (requestCode == UCrop.REQUEST_CROP) {
@@ -208,15 +209,17 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         return imageUri;
     }
 
-    public void verifyStoragePermission(AppCompatActivity activity) {
+    public void verifyStoragePermission(AppCompatActivity activity, int requestCode, IPermission iPermission) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, requestCode);
         } else {
-            takePictureAndStore();
+            if (iPermission != null) {
+                iPermission.onHavePermission();
+            }
         }
     }
 
@@ -224,12 +227,22 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case REQUEST_CODE_TAKE_PICTURE: {
+            case REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_TAKE_PHOTO: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    takePictureAndStore();
-                } else {
+                    takePhotoAndStore();
                 }
+                break;
+            }
+            case REQUEST_EXTERNAL_STORAGE_PERMISSION_FOR_PICK_PHOTO: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickPhoto();
+                }
+                break;
             }
         }
+    }
+
+    private interface IPermission {
+        void onHavePermission();
     }
 }
