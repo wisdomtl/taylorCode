@@ -18,6 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.yalantis.ucrop.UCrop;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,9 +30,11 @@ import test.taylor.com.taylorcode.R;
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int REQUEST_CODE_TAKE_PICTURE = 1;
+    public static final int REQUEST_CODE_TAKE_ORIGIN_PICTURE = 3;
     public static final int REQUEST_CODE_PICK_PICTURE = 2;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private Uri imageUri;
+    private ImageView originImageView;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -46,6 +51,7 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.btn_take_photo).setOnClickListener(this);
         findViewById(R.id.btn_pick_photo).setOnClickListener(this);
         findViewById(R.id.btn_take_photo_store).setOnClickListener(this);
+        originImageView = findViewById(R.id.iv_pic_origin);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
             imageUri = getImageUri(imageFile);
             if (imageUri != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+                startActivityForResult(intent, REQUEST_CODE_TAKE_ORIGIN_PICTURE);
             }
         }
     }
@@ -91,24 +97,83 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
-            if (resultCode != RESULT_OK) {
-                return;
-            }
-            showPictureTaken(data);
-
-        } else if (requestCode == REQUEST_CODE_PICK_PICTURE) {
-            if (resultCode != RESULT_OK) {
-                return;
-            }
-            showPicturePicked(data);
+        if (resultCode != RESULT_OK) {
+            return;
         }
+        if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
+            showPictureTaken(data);
+        } else if (requestCode == REQUEST_CODE_TAKE_ORIGIN_PICTURE) {
+//            showOriginPictureTaken(imageUri);
+            cropPicture(imageUri);
+        } else if (requestCode == REQUEST_CODE_PICK_PICTURE) {
+//            showPicturePicked(data);
+            cropPicture(data.getData());
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (isFinishing()) {
+                return;
+            }
+            Glide.with(this)
+                    .load(UCrop.getOutput(data))
+                    .into(originImageView);
+        }
+    }
+
+    private void showOriginPictureTaken(Uri imageUri) {
+        //show origin image
+        // if (imageUri != null) {
+        try {
+            Bitmap bitmap1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+            ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
+            showImageInGallery(imageUri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void cropPicture(Uri uri) {
+        if (uri == null) {
+            return;
+        }
+        UCrop.Options options = new UCrop.Options();
+        // 修改标题栏颜色
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        // 修改状态栏颜色
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        // 隐藏底部工具
+        options.setHideBottomControls(true);
+        // 图片格式
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        // 设置图片压缩质量
+        options.setCompressionQuality(100);
+        // 是否让用户调整范围(默认false)，如果开启，可能会造成剪切的图片的长宽比不是设定的
+        // 如果不开启，用户不能拖动选框，只能缩放图片
+        options.setFreeStyleCropEnabled(true);
+        // 设置图片压缩质量
+        options.setCompressionQuality(100);
+        // 圆
+        options.setCircleDimmedLayer(true);
+        // 不显示网格线
+        options.setShowCropGrid(false);
+
+        File cropFile = createImageFile();
+
+        // 设置源uri及目标uri
+        UCrop.of(uri, Uri.fromFile(cropFile))
+                // 长宽比
+                .withAspectRatio(1, 1)
+                // 图片大小
+                .withMaxResultSize(200, 200)
+                // 配置参数
+                .withOptions(options)
+                .start(this);
     }
 
     private void showPicturePicked(Intent data) {
         Uri uri = data.getData();
         try {
-            Bitmap bitmap1  = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            Bitmap bitmap1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
             ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -122,17 +187,7 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
             Bitmap bitmap = ((Bitmap) extras.get("data"));
             ((ImageView) findViewById(R.id.iv_pic)).setImageBitmap(bitmap);
         }
-        //show origin image
-        else if (imageUri != null) {
-            try {
-                Bitmap bitmap1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                ((ImageView) findViewById(R.id.iv_pic_origin)).setImageBitmap(bitmap1);
-                showImageInGallery(imageUri);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
 
-        }
     }
 
     private void showImageInGallery(Uri imageUri) {
