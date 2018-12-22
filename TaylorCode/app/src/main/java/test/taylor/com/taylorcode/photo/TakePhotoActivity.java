@@ -112,8 +112,11 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
             if (isFinishing()) {
                 return;
             }
+
             Glide.with(this)
                     .load(UCrop.getOutput(data))
+                    .crossFade()
+                    .bitmapTransform(new GlideCircleTransform(this))
                     .into(originImageView);
         }
     }
