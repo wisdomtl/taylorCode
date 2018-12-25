@@ -22,5 +22,8 @@ public class ConstraintLayoutActivity extends Activity {
                 group.setVisibility(View.GONE);
             }
         });
+
+        //ConstraintLayout  case7:one member of chain is gone,the rest will full the chain
+        findViewById(R.id.btn5).setVisibility(View.GONE);
     }
 }

@@ -196,11 +196,11 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name="test.taylor.com.taylorcode.ui.ConstraintLayoutActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="test.taylor.com.taylorcode.ui.TableLayoutActivity">
             <!--<intent-filter>-->
@@ -428,10 +428,10 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".photo.TakePhotoActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <service android:name=".aidl.LocalServer" />
