@@ -6,13 +6,17 @@
     <fragment
         android:id="@+id/f1"
         android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment1" >
-
+        <action
+            android:id="@+id/action_to_f2"
+            app:destination="@id/f2"/>
     </fragment>
 
     <fragment
         android:id="@+id/f2"
         android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment2" >
-
+        <!--<action-->
+            <!--android:id="@+id/action_back_to_f1"-->
+            <!--app:popUpTo="@id/f1"/>-->
     </fragment>
 
     <fragment
