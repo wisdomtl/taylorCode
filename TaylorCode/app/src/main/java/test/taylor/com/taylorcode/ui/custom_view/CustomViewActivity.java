@@ -11,21 +11,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.util.DimensionUtil;
 import test.taylor.com.taylorcode.util.Timer;
 
-public class CustomViewActivity extends Activity {
+public class CustomViewActivity extends Activity implements View.OnClickListener {
 
     private final float FULL_TIME_MILLISECOND = 3 * 1000;
     public static final int VALUE_ANIM_DURATION = 800;
     private ProgressRing progressRing;
     private AnimationDrawable animationDrawable;
     private LinearLayout llContainer;
+    private ImageView selector;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +36,24 @@ public class CustomViewActivity extends Activity {
         setContentView(R.layout.custom_view_activity);
 
         addProgressRing();
+//        initSelector();
+        initCustomSelector();
+    }
+
+    /**
+     * custom view case2:wrap business logic into a single view
+     */
+    private void initCustomSelector() {
+        Selector selector = findViewById(R.id.select);
+        selector.getTitle().setText(R.string.app_name);
+        selector.getIcon().setImageResource(R.drawable.watch_reward_1);
+        selector.getSelect().setImageResource(R.drawable.iv_selector);
+    }
+
+    private void initSelector() {
+        selector = findViewById(R.id.iv);
+        selector.setOnClickListener(this);
+        selector.setSelected(true);
     }
 
     /**
@@ -45,7 +66,7 @@ public class CustomViewActivity extends Activity {
         progressRing.setLayoutParams(params);
         animationDrawable = createAnimationDrawable(this);
         progressRing.setBackground(animationDrawable);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cootek_radiobutton_active) ;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cootek_radiobutton_active);
         progressRing.setBitmap(bitmap);
         new Timer(new Timer.TimerListener() {
             @Override
@@ -150,5 +171,19 @@ public class CustomViewActivity extends Activity {
         drawable.addFrame(ContextCompat.getDrawable(context, R.drawable.watch_reward_1), 23);
         drawable.setOneShot(true);
         return drawable;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv:
+                switchSelector();
+                break;
+        }
+    }
+
+    private void switchSelector() {
+        boolean isSelect = selector.isSelected();
+        selector.setSelected(!isSelect);
     }
 }

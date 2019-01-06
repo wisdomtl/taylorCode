@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_custom_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!--<test.taylor.com.taylorcode.ui.custom_view.ProgressRing-->
-        <!--android:id="@+id/progress_ring"-->
-        <!--android:layout_width="54dp"-->
-        <!--android:layout_height="54dp"/>-->
+    <!--android:id="@+id/progress_ring"-->
+    <!--android:layout_width="54dp"-->
+    <!--android:layout_height="54dp"/>-->
 
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/iv_selector" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.Selector
+        android:id="@+id/select"
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
 </LinearLayout>
