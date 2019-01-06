@@ -87,6 +87,8 @@ public class Selector extends FrameLayout implements View.OnClickListener {
     private void switchSelector() {
         boolean isSelect = ivSelect.isSelected();
         ivSelect.setSelected(!isSelect);
+        //make Selector's select state accord with the ivSelect
+        this.setSelected(!isSelect);
     }
 
     public interface OnSelectorClick {

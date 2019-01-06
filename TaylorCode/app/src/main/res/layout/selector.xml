@@ -31,6 +31,7 @@
         android:id="@+id/iv_select"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:src="@drawable/iv_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
