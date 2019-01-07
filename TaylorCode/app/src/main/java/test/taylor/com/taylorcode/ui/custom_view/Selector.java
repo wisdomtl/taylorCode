@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.ui.custom_view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,24 +33,25 @@ public class Selector extends FrameLayout implements View.OnClickListener {
      */
     private OnSelectorClick onSelectorClick;
 
+
     public Selector(Context context) {
         super(context);
-        initView();
+        initView(context, null);
     }
 
 
     public Selector(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        initView(context, attrs);
     }
 
     public Selector(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
+        initView(context, attrs);
     }
 
-
-    private void initView() {
+    private void initView(Context context, AttributeSet attrs) {
+        //inflate views
         View view = LayoutInflater.from(this.getContext()).inflate(R.layout.selector, null);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         this.addView(view, params);
@@ -57,19 +59,20 @@ public class Selector extends FrameLayout implements View.OnClickListener {
         ivIcon = view.findViewById(R.id.iv_icon);
         ivSelect = view.findViewById(R.id.iv_select);
         this.setOnClickListener(this);
-    }
 
+        //read declared attributes
+        if (attrs != null) {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Selector);
+            String text = typedArray.getString(R.styleable.Selector_text);
+            int iconResId = typedArray.getResourceId(R.styleable.Selector_img, 0);
+            int selectorResId = typedArray.getResourceId(R.styleable.Selector_indicator, 0);
 
-    public TextView getTitle() {
-        return tvTitle;
-    }
+            tvTitle.setText(text);
+            ivIcon.setImageResource(iconResId);
+            ivSelect.setImageResource(selectorResId);
 
-    public ImageView getIcon() {
-        return ivIcon;
-    }
-
-    public ImageView getSelect() {
-        return ivSelect;
+            typedArray.recycle();
+        }
     }
 
     public void setOnSelectorClick(OnSelectorClick onSelectorClick) {

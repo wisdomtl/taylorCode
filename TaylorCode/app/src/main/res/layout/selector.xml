@@ -7,7 +7,6 @@
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="match_parent"
-        android:src="@drawable/watch_reward_1"
         android:scaleType="fitXY"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/tv_title"
@@ -21,7 +20,6 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="dkfjksjfkdl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_icon"
         app:layout_constraintVertical_chainStyle="spread"
@@ -31,7 +29,6 @@
         android:id="@+id/iv_select"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/iv_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

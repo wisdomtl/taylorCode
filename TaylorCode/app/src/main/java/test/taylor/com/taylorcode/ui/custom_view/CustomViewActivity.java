@@ -45,9 +45,6 @@ public class CustomViewActivity extends Activity implements View.OnClickListener
      */
     private void initCustomSelector() {
         Selector selector = findViewById(R.id.select);
-        selector.getTitle().setText(R.string.app_name);
-        selector.getIcon().setImageResource(R.drawable.watch_reward_1);
-        selector.getSelect().setImageResource(R.drawable.iv_selector);
     }
 
     private void initSelector() {
