@@ -27,10 +27,10 @@ public class NavFragment1 extends StateFragment {
         view.findViewById(R.id.btn1).setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_to_f2);
         });
-        selector = view.findViewById(R.id.selector1);
-        selector.setOnSelectorClick(() -> {
-            Navigation.findNavController(view).navigate(R.id.action_to_f2);
-        });
+//        selector = view.findViewById(R.id.selector1);
+//        selector.setOnSelectorClick(() -> {
+//            Navigation.findNavController(view).navigate(R.id.action_to_f2);
+//        });
     }
 
     @Override

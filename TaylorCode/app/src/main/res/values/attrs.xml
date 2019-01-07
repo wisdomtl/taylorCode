@@ -4,5 +4,7 @@
         <attr name="text" format="string" />
         <attr name="img" format="reference" />
         <attr name="indicator" format="reference" />
+        <attr name="text_size" format="integer" />
+        <attr name="text_color" format="color" />
     </declare-styleable>
 </resources>

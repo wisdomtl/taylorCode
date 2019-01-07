@@ -23,13 +23,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv1" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".35" />
+
     <test.taylor.com.taylorcode.ui.custom_view.Selector
-        android:id="@+id/selector1"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        app:text ="abcdeffggg"
-        app:img = "@drawable/watch_reward_3"
-        app:indicator="@drawable/iv_selector"
-        app:layout_constraintTop_toBottomOf="@id/btn1" />
+        android:id="@+id/selector_male"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:img="@drawable/user_portrait_gender_male"
+        app:indicator="@drawable/selector"
+        app:layout_constraintDimensionRatio="122:150"
+        app:layout_constraintEnd_toStartOf="@id/selector_female"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gl_icon"
+        app:layout_constraintWidth_percent=".338"
+        app:text="male"
+        app:text_color="#FF222222"
+        app:text_size="16" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.Selector
+        android:id="@+id/selector_female"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:img="@drawable/user_portrait_gender_female"
+        app:indicator="@drawable/selector"
+        app:layout_constraintDimensionRatio="122:150"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/selector_male"
+        app:layout_constraintTop_toBottomOf="@id/gl_icon"
+        app:layout_constraintWidth_percent=".338"
+        app:text="female"
+        app:text_color="#FF222222"
+        app:text_size="16" />
 
 </android.support.constraint.ConstraintLayout>

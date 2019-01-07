@@ -2,7 +2,9 @@ package test.taylor.com.taylorcode.ui.custom_view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ public class Selector extends FrameLayout implements View.OnClickListener {
      */
     private ImageView ivIcon;
     /**
-     * Selector part3:selector indicator at right top of Selector
+     * Selector part3:selector indicator shows selector state
      */
     private ImageView ivSelect;
     /**
@@ -57,7 +59,7 @@ public class Selector extends FrameLayout implements View.OnClickListener {
         this.addView(view, params);
         tvTitle = view.findViewById(R.id.tv_title);
         ivIcon = view.findViewById(R.id.iv_icon);
-        ivSelect = view.findViewById(R.id.iv_select);
+        ivSelect = view.findViewById(R.id.iv_selector);
         this.setOnClickListener(this);
 
         //read declared attributes
@@ -66,8 +68,12 @@ public class Selector extends FrameLayout implements View.OnClickListener {
             String text = typedArray.getString(R.styleable.Selector_text);
             int iconResId = typedArray.getResourceId(R.styleable.Selector_img, 0);
             int selectorResId = typedArray.getResourceId(R.styleable.Selector_indicator, 0);
+            int textColor = typedArray.getColor(R.styleable.Selector_text_color, Color.parseColor("#FF222222"));
+            int textSize = typedArray.getInteger(R.styleable.Selector_text_size, 15);
 
             tvTitle.setText(text);
+            tvTitle.setTextColor(textColor);
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             ivIcon.setImageResource(iconResId);
             ivSelect.setImageResource(selectorResId);
 
