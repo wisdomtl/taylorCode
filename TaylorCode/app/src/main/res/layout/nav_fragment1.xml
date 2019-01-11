@@ -43,6 +43,7 @@
         app:layout_constraintTop_toBottomOf="@id/gl_icon"
         app:layout_constraintWidth_percent=".338"
         app:text="male"
+        app:tag="male"
         app:text_color="#FF222222"
         app:text_size="16" />
 
@@ -58,6 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/gl_icon"
         app:layout_constraintWidth_percent=".338"
         app:text="female"
+        app:tag="female"
         app:text_color="#FF222222"
         app:text_size="16" />
 

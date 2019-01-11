@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import androidx.navigation.Navigation;
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.ui.custom_view.Selector;
+import test.taylor.com.taylorcode.ui.custom_view.SelectorGroup;
 
-public class NavFragment1 extends StateFragment {
+public class NavFragment1 extends StateFragment implements Selector.OnSelectorStateListener {
     private Selector selector;
+    private SelectorGroup selectorGroup = new SelectorGroup();
     private static final String KEY_SELECT_STATE = "KEY_SELECT_STATE";
 
     @Nullable
@@ -31,6 +33,12 @@ public class NavFragment1 extends StateFragment {
 //        selector.setOnSelectorClick(() -> {
 //            Navigation.findNavController(view).navigate(R.id.action_to_f2);
 //        });
+        Selector maleSelector = view.findViewById(R.id.selector_male);
+        Selector femaleSelector = view.findViewById(R.id.selector_female);
+        maleSelector.setSelectorStateListener(this);
+        femaleSelector.setSelectorStateListener(this);
+        selectorGroup.addSelector(maleSelector);
+        selectorGroup.addSelector(femaleSelector);
     }
 
     @Override
@@ -45,6 +53,14 @@ public class NavFragment1 extends StateFragment {
         if (selector != null) {
             boolean isSelect = state.getBoolean(KEY_SELECT_STATE);
             selector.setSelected(isSelect);
+        }
+    }
+
+    @Override
+    public void onStateChange(Selector selector, boolean isSelect) {
+        if (isSelect) {
+            selectorGroup.setSelected(selector);
+        } else {
         }
     }
 }

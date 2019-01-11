@@ -6,5 +6,6 @@
         <attr name="indicator" format="reference" />
         <attr name="text_size" format="integer" />
         <attr name="text_color" format="color" />
+        <attr name="tag" format="string" />
     </declare-styleable>
 </resources>

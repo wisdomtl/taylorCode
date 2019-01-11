@@ -3,6 +3,7 @@ package test.taylor.com.taylorcode.ui.custom_view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -12,10 +13,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import test.taylor.com.taylorcode.R;
 
 /**
- * wrap business logic into a single view
+ * it is a customized view acts like a checkbox.
+ * it can be selected or unselected, the background will change accordingly. wrapping this business logic into a single view for clean code in Fragment
+ * this class couple with a layout (R.layout.selector)
  */
 public class Selector extends FrameLayout implements View.OnClickListener {
     /**
@@ -33,8 +40,9 @@ public class Selector extends FrameLayout implements View.OnClickListener {
     /**
      * click listener for Selector
      */
-    private OnSelectorClick onSelectorClick;
+    private OnSelectorStateListener stateListener;
 
+    private String tag;
 
     public Selector(Context context) {
         super(context);
@@ -70,6 +78,7 @@ public class Selector extends FrameLayout implements View.OnClickListener {
             int selectorResId = typedArray.getResourceId(R.styleable.Selector_indicator, 0);
             int textColor = typedArray.getColor(R.styleable.Selector_text_color, Color.parseColor("#FF222222"));
             int textSize = typedArray.getInteger(R.styleable.Selector_text_size, 15);
+            tag = typedArray.getString(R.styleable.Selector_tag);
 
             tvTitle.setText(text);
             tvTitle.setTextColor(textColor);
@@ -81,26 +90,50 @@ public class Selector extends FrameLayout implements View.OnClickListener {
         }
     }
 
-    public void setOnSelectorClick(OnSelectorClick onSelectorClick) {
-        this.onSelectorClick = onSelectorClick;
+    public String getTag() {
+        return tag;
+    }
+
+    public void setImage(@DrawableRes int id) {
+        if (ivIcon != null) {
+            ivIcon.setImageResource(id);
+        }
+    }
+
+    public void setSelectorStateListener(OnSelectorStateListener stateListener) {
+        this.stateListener = stateListener;
     }
 
     @Override
     public void onClick(View v) {
-        switchSelector();
-        if (onSelectorClick != null) {
-            onSelectorClick.onClick();
+        boolean isSelect = switchSelector();
+        if (stateListener != null) {
+            stateListener.onStateChange(this, isSelect);
         }
     }
 
-    private void switchSelector() {
+    public boolean switchSelector() {
         boolean isSelect = ivSelect.isSelected();
         ivSelect.setSelected(!isSelect);
         //make Selector's select state accord with the ivSelect
         this.setSelected(!isSelect);
+        return !isSelect;
     }
 
-    public interface OnSelectorClick {
-        void onClick();
+    @Override
+    public int hashCode() {
+        return this.tag.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Selector) {
+            return ((Selector) obj).tag.equals(this.tag);
+        }
+        return false;
+    }
+
+    public interface OnSelectorStateListener {
+        void onStateChange(Selector selector, boolean isSelect);
     }
 }
