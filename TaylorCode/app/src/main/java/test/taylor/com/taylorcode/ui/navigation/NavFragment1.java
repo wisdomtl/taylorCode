@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.ui.navigation;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +34,12 @@ public class NavFragment1 extends StateFragment implements Selector.OnSelectorSt
 //        });
         Selector maleSelector = view.findViewById(R.id.selector_male);
         Selector femaleSelector = view.findViewById(R.id.selector_female);
-        maleSelector.setSelectorStateListener(this);
-        femaleSelector.setSelectorStateListener(this);
+        maleSelector.setOnSelectorStateListener(this);
+        femaleSelector.setOnSelectorStateListener(this);
         selectorGroup.addSelector(maleSelector);
         selectorGroup.addSelector(femaleSelector);
+        maleSelector.setSelectorGroup(selectorGroup);
+        femaleSelector.setSelectorGroup(selectorGroup);
     }
 
     @Override
@@ -58,9 +59,5 @@ public class NavFragment1 extends StateFragment implements Selector.OnSelectorSt
 
     @Override
     public void onStateChange(Selector selector, boolean isSelect) {
-        if (isSelect) {
-            selectorGroup.setSelected(selector);
-        } else {
-        }
     }
 }

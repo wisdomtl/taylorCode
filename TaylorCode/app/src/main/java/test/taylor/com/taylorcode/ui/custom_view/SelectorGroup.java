@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * a group contains several Selectors
+ * a select state controller
  */
 public class SelectorGroup {
 

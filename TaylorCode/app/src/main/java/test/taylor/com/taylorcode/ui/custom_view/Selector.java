@@ -23,6 +23,10 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
      * the unique tag for a selector
      */
     private String tag;
+    /**
+     * the group which this Selector belongs to
+     */
+    private SelectorGroup selectorGroup;
 
     public Selector(Context context) {
         super(context);
@@ -55,11 +59,24 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
             int textColor = typedArray.getColor(R.styleable.Selector_text_color, Color.parseColor("#FF222222"));
             int textSize = typedArray.getInteger(R.styleable.Selector_text_size, 15);
             tag = typedArray.getString(R.styleable.Selector_tag);
-            onBindView(text,iconResId,selectorResId,textColor,textSize);
+            onBindView(text, iconResId, selectorResId, textColor, textSize);
             typedArray.recycle();
         }
     }
 
+    public void setSelectorGroup(SelectorGroup selectorGroup) {
+        this.selectorGroup = selectorGroup;
+    }
+
+    /**
+     * bind the resource to the view which is created from {@link #onCreateView()}
+     *
+     * @param text           the title of Selector
+     * @param iconResId      the image of Selector
+     * @param indicatorResId the image show when Selector is in selected state
+     * @param textColorResId text color of Selector's text
+     * @param textSize       text size of Selector's text
+     */
     protected abstract void onBindView(String text, int iconResId, int indicatorResId, int textColorResId, int textSize);
 
     /**
@@ -73,13 +90,16 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
         return tag;
     }
 
-    public void setSelectorStateListener(OnSelectorStateListener stateListener) {
+    public void setOnSelectorStateListener(OnSelectorStateListener stateListener) {
         this.stateListener = stateListener;
     }
 
     @Override
     public void onClick(View v) {
         boolean isSelect = switchSelector();
+        if(selectorGroup!=null){
+            selectorGroup.setSelected(this);
+        }
         if (stateListener != null) {
             stateListener.onStateChange(this, isSelect);
         }
