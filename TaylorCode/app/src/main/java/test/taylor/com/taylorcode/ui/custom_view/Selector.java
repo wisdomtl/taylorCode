@@ -66,6 +66,7 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
 
     public void setSelectorGroup(SelectorGroup selectorGroup) {
         this.selectorGroup = selectorGroup;
+        selectorGroup.addSelector(this);
     }
 
     /**

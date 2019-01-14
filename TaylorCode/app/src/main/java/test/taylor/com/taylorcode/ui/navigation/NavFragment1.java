@@ -36,8 +36,6 @@ public class NavFragment1 extends StateFragment implements Selector.OnSelectorSt
         Selector femaleSelector = view.findViewById(R.id.selector_female);
         maleSelector.setOnSelectorStateListener(this);
         femaleSelector.setOnSelectorStateListener(this);
-        selectorGroup.addSelector(maleSelector);
-        selectorGroup.addSelector(femaleSelector);
         maleSelector.setSelectorGroup(selectorGroup);
         femaleSelector.setSelectorGroup(selectorGroup);
     }
