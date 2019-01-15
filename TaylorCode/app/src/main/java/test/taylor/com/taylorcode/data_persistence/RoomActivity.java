@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.data_persistence;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +9,17 @@ import android.view.View;
 import test.taylor.com.taylorcode.R;
 
 public class RoomActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityViewModel activityViewModel ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.room_activity);
         initView();
+        initViewModel();
+    }
+
+    private void initViewModel() {
+        activityViewModel = ViewModelProviders.of(this).get(ActivityViewModel.class) ;
     }
 
     private void initView() {
@@ -46,6 +54,14 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void insert() {
+        Activity activity = new Activity() ;
+        activity.setId("1234");
+        activity.setTime(String.valueOf(System.currentTimeMillis()));
+        activity.setTitle("init");
+        activity.setType("a");
+        activity.setUserAvatarUrl("fdfsdfdfdsf");
+        activity.setUserName("taylor");
+        activityViewModel.insert(activity);
     }
 
     private void createTable() {

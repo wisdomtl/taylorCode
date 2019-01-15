@@ -63,9 +63,12 @@ dependencies {
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha01'
     //Room
     implementation "android.arch.persistence.room:runtime:1.1.0"
+    annotationProcessor  'android.arch.persistence.room:compiler:1.1.0'
+    //for debug database on browse
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
     //UCrop
     implementation 'com.github.yalantis:ucrop:2.2.2'
     //Glide
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'  
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
 }
