@@ -5,24 +5,39 @@
     app:startDestination="@id/f1">
     <fragment
         android:id="@+id/f1"
-        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment1" >
+        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment1">
         <action
             android:id="@+id/action_to_f2"
-            app:destination="@id/f2"/>
+            app:destination="@id/f2"
+            app:enterAnim="@anim/slide_right_in"
+            app:popEnterAnim="@anim/slide_left_in"
+            app:popExitAnim="@anim/slide_right_out"
+            app:exitAnim="@anim/slide_left_out" />
     </fragment>
 
     <fragment
         android:id="@+id/f2"
-        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment2" >
+        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment2">
         <!--<action-->
-            <!--android:id="@+id/action_back_to_f1"-->
-            <!--app:popUpTo="@id/f1"/>-->
+        <!--android:id="@+id/action_back_to_f1"-->
+        <!--app:popUpTo="@id/f1"/>-->
+        <action
+            android:id="@+id/action_to_f3"
+            app:destination="@id/f3" />
     </fragment>
 
     <fragment
         android:id="@+id/f3"
-        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment3" >
+        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment3">
+        <action
+            android:id="@+id/action_to_f4"
+            app:destination="@id/f4" />
 
     </fragment>
 
+    <fragment
+        android:id="@+id/f4"
+        android:name="test.taylor.com.taylorcode.ui.navigation.NavFragment3">
+
+    </fragment>
 </navigation>
