@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Activity.class}, version = 1)
+@Database(entities = {Activity.class}, version = 1,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     public static final String DATABASE_NAME = "veeu_activities";
 

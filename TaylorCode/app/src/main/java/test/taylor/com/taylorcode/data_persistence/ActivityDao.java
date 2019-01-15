@@ -17,6 +17,6 @@ public interface ActivityDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(List<Activity> products);
 
-//    @Query("select * from activity limit :start, :count")
-//    LiveData<List<Activity>> queryActivity(int start,int count);
+    @Query("select * from activity order by time limit :start, :count")
+    LiveData<List<Activity>> queryActivities(int start, int count);
 }

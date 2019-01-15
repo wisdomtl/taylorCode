@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.data_persistence;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.util.Log;
 
@@ -28,6 +29,7 @@ public class ActivityRepository {
 
     public void insertAll(List<Activity> activities) {
         if (executorService == null) {
+            Log.v("ttaylor", "ActivityRepository.insertAll()" + "  ExecutorService is null");
             return;
         }
         if (appDataBase != null) {
@@ -37,6 +39,17 @@ public class ActivityRepository {
         executorService.submit(() -> {
             appDataBase.runInTransaction(() -> activityDao.insertAll(activities));
         });
+    }
+
+    public LiveData<List<Activity>> queryActivities(int start, int count) {
+//        if (executorService == null) {
+//            Log.v("ttaylor", "ActivityRepository.queryActivities()" + "  ExecutorService is null");
+//            return;
+//        }
+//        if (appDataBase != null) {
+//            Log.v("ttaylor", "ActivityRepository.queryActivities()" + "  AppDatabase is null");
+//            return;
+        return activityDao.queryActivities(start,count) ;
     }
 
     public void stop() {

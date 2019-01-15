@@ -1,9 +1,11 @@
 package test.taylor.com.taylorcode.data_persistence;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        findViewById(R.id.btn_create_table).setOnClickListener(this);
         findViewById(R.id.btn_insert).setOnClickListener(this);
         findViewById(R.id.btn_insert_all).setOnClickListener(this);
         findViewById(R.id.btn_query).setOnClickListener(this);
@@ -49,6 +50,11 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void query() {
+        activityViewModel.queryActivities(0, 2).observe(this, activities -> {
+            for (Activity activity : activities) {
+                Log.v("ttaylor", "RoomActivity.query()" + "  name=" + activity.getUserName() + " ,time=" + activity.getTime() + " ,type=" + activity.getType() + " ,url=" + activity.getUserAvatarUrl() + " ,title=" + activity.getTitle());
+            }
+        });
     }
 
     private void insertAll() {
@@ -83,7 +89,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     private void insert() {
         Activity activity = new Activity();
         activity.setId("1234");
-        activity.setTime("2017-07-28T08:28:47.776Z");
+        activity.setTime("2017-07-20T08:28:47.776Z");
         activity.setTitle("init");
         activity.setType("a");
         activity.setUserAvatarUrl("fdfsdfdfdsf");
