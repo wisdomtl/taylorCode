@@ -32,6 +32,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_insert).setOnClickListener(this);
         findViewById(R.id.btn_insert_all).setOnClickListener(this);
         findViewById(R.id.btn_query).setOnClickListener(this);
+        findViewById(R.id.btn_delete).setOnClickListener(this);
     }
 
     @Override
@@ -46,7 +47,14 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_query:
                 query();
                 break;
+            case R.id.btn_delete:
+                delete();
+                break;
         }
+    }
+
+    private void delete() {
+        activityViewModel.deleteActivity("5678");
     }
 
     private void query() {

@@ -37,4 +37,10 @@ public class ActivityViewModel extends AndroidViewModel {
         return null ;
     }
 
+    public void deleteActivity(String id){
+        if(activityRepository!=null){
+            activityRepository.deleteActivity(id);
+        }
+    }
+
 }

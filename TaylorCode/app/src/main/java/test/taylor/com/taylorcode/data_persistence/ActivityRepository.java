@@ -32,7 +32,7 @@ public class ActivityRepository {
             Log.v("ttaylor", "ActivityRepository.insertAll()" + "  ExecutorService is null");
             return;
         }
-        if (appDataBase != null) {
+        if (appDataBase == null) {
             Log.v("ttaylor", "ActivityRepository.insertAll()" + "  AppDatabase is null");
             return;
         }
@@ -42,14 +42,15 @@ public class ActivityRepository {
     }
 
     public LiveData<List<Activity>> queryActivities(int start, int count) {
-//        if (executorService == null) {
-//            Log.v("ttaylor", "ActivityRepository.queryActivities()" + "  ExecutorService is null");
-//            return;
-//        }
-//        if (appDataBase != null) {
-//            Log.v("ttaylor", "ActivityRepository.queryActivities()" + "  AppDatabase is null");
-//            return;
-        return activityDao.queryActivities(start,count) ;
+        return activityDao.queryActivities(start, count);
+    }
+
+    public void deleteActivity(String id) {
+        if (executorService == null) {
+            Log.v("ttaylor", "ActivityRepository.deleteActivity()" + "  ExecutorService is null");
+            return;
+        }
+        executorService.submit(() -> activityDao.delete(id));
     }
 
     public void stop() {

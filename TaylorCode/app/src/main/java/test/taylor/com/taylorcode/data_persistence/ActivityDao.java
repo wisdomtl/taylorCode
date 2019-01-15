@@ -19,4 +19,7 @@ public interface ActivityDao {
 
     @Query("select * from activity order by time limit :start, :count")
     LiveData<List<Activity>> queryActivities(int start, int count);
+
+    @Query("delete from activity where id like :id")
+    void delete(String id);
 }
