@@ -4,6 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 public class ActivityViewModel extends AndroidViewModel {
     private ActivityRepository activityRepository;
 
@@ -16,6 +18,12 @@ public class ActivityViewModel extends AndroidViewModel {
     public void insert(Activity activity){
         if(activityRepository!=null){
             activityRepository.insert(activity);
+        }
+    }
+
+    public void insertAll(List<Activity> activities){
+        if(activityRepository!=null){
+            activityRepository.insertAll(activities);
         }
     }
 

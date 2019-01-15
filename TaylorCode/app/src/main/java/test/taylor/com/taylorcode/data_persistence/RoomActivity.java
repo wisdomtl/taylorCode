@@ -6,10 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import test.taylor.com.taylorcode.R;
 
 public class RoomActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityViewModel activityViewModel ;
+    private ActivityViewModel activityViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +23,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initViewModel() {
-        activityViewModel = ViewModelProviders.of(this).get(ActivityViewModel.class) ;
+        activityViewModel = ViewModelProviders.of(this).get(ActivityViewModel.class);
     }
 
     private void initView() {
@@ -32,9 +36,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_create_table:
-                createTable();
-                break;
             case R.id.btn_insert:
                 insert();
                 break;
@@ -51,19 +52,42 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void insertAll() {
+        Activity activity = new Activity();
+        activity.setId("5678");
+        activity.setTime("2017-07-29T08:28:47.776Z");
+        activity.setTitle("init");
+        activity.setType("a");
+        activity.setUserAvatarUrl("fdfs3333333333");
+        activity.setUserName("t2222");
+        Activity activity1 = new Activity();
+        activity1.setId("8901");
+        activity1.setTime("2017-07-29T09:28:47.776Z");
+        activity1.setTitle("init2");
+        activity1.setType("a");
+        activity1.setUserAvatarUrl("22222222");
+        activity1.setUserName("t3333r");
+        Activity activity2 = new Activity();
+        activity2.setId("6666");
+        activity2.setTime("2017-07-29T09:30:47.776Z");
+        activity2.setTitle("init3");
+        activity2.setType("a");
+        activity2.setUserAvatarUrl("333333333");
+        activity2.setUserName("t4444lor");
+        List<Activity> activities = new ArrayList<>();
+        activities.add(activity);
+        activities.add(activity1);
+        activities.add(activity2);
+        activityViewModel.insertAll(activities);
     }
 
     private void insert() {
-        Activity activity = new Activity() ;
+        Activity activity = new Activity();
         activity.setId("1234");
-        activity.setTime(String.valueOf(System.currentTimeMillis()));
+        activity.setTime("2017-07-28T08:28:47.776Z");
         activity.setTitle("init");
         activity.setType("a");
         activity.setUserAvatarUrl("fdfsdfdfdsf");
         activity.setUserName("taylor");
         activityViewModel.insert(activity);
-    }
-
-    private void createTable() {
     }
 }

@@ -5,12 +5,6 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_create_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="create table" />
-
-    <Button
         android:id="@+id/btn_insert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,4 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="query" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="delete" />
 </LinearLayout>
