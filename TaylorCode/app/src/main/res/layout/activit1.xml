@@ -7,10 +7,10 @@
     <TextView
         android:id="@+id/tv1"
         android:layout_width="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="0"
         android:textColor="#00f000"
         android:textSize="50sp" />
@@ -20,6 +20,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="start another activity"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_change_livedata1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="change livedata1"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_change_livedata2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="change livedata2"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_mediator12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="20sp" />
 
 </LinearLayout>

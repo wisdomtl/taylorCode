@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui.state_cross_activities;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
@@ -17,6 +18,10 @@ import test.taylor.com.taylorcode.R;
 
 public class Activity1 extends AppCompatActivity implements View.OnClickListener {
     private TextView tv1;
+    private TextView tvMediator;
+    private MutableLiveData<Integer> liveData1 = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveData2 = new MutableLiveData<>();
+    private MediatorLiveData<Integer> mediatorLiveData = new MediatorLiveData<>();
 
     /**
      * LiveData case1:observer wont be notified until it's lifecycle component is at STARTED or RESUMED status
@@ -29,7 +34,10 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activit1);
         tv1 = findViewById(R.id.tv1);
         tv1.setOnClickListener(this);
+        tvMediator = findViewById(R.id.tv_mediator12);
         findViewById(R.id.btn_start_activity2).setOnClickListener(this);
+        findViewById(R.id.btn_change_livedata1).setOnClickListener(this);
+        findViewById(R.id.btn_change_livedata2).setOnClickListener(this);
 
         /**
          * LiveData case1:observer wont be notified until it's lifecycle component is at STARTED or RESUMED status
@@ -53,6 +61,13 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
             }
         });
         StringLiveData.getInstance().setValue(String.valueOf(0));
+
+        /**
+         * LiveData case3:combine 2 LiveData into one
+         */
+        mediatorLiveData.addSource(liveData1, value -> mediatorLiveData.setValue(value));
+        mediatorLiveData.addSource(liveData2, value -> mediatorLiveData.setValue(value));
+        mediatorLiveData.observe(this, integer -> tvMediator.setText(String.valueOf(integer)));
     }
 
     @Override
@@ -72,8 +87,14 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
                 StringLiveData.getInstance().setValue(String.valueOf(integer));
                 break;
             case R.id.btn_start_activity2:
-                Intent intent = new Intent(this,Activity2.class);
+                Intent intent = new Intent(this, Activity2.class);
                 startActivity(intent);
+                break;
+            case R.id.btn_change_livedata1:
+                liveData1.setValue(1);
+                break;
+            case R.id.btn_change_livedata2:
+                liveData2.setValue(2);
                 break;
         }
     }
