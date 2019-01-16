@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import test.taylor.com.taylorcode.R;
 
 public class Activity1 extends AppCompatActivity implements View.OnClickListener {
@@ -21,7 +24,10 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
     private TextView tvMediator;
     private MutableLiveData<Integer> liveData1 = new MutableLiveData<>();
     private MutableLiveData<Integer> liveData2 = new MutableLiveData<>();
-    private MediatorLiveData<Integer> mediatorLiveData = new MediatorLiveData<>();
+    private MediatorLiveData<List<Integer>> mediatorLiveData = new MediatorLiveData<>();
+    private boolean isLiveData1Update;
+    private boolean isLiveData2Update;
+    private List<Integer> finalIntegers = new ArrayList<>();
 
     /**
      * LiveData case1:observer wont be notified until it's lifecycle component is at STARTED or RESUMED status
@@ -65,9 +71,28 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
         /**
          * LiveData case3:combine 2 LiveData into one
          */
-        mediatorLiveData.addSource(liveData1, value -> mediatorLiveData.setValue(value));
-        mediatorLiveData.addSource(liveData2, value -> mediatorLiveData.setValue(value));
-        mediatorLiveData.observe(this, integer -> tvMediator.setText(String.valueOf(integer)));
+        mediatorLiveData.addSource(liveData1, value -> {
+            isLiveData1Update = true;
+            finalIntegers.add(value);
+            if (isLiveData1Update && isLiveData2Update) {
+                mediatorLiveData.setValue(finalIntegers);
+            }
+        });
+        mediatorLiveData.addSource(liveData2, value -> {
+            isLiveData2Update = true;
+            finalIntegers.add(value);
+            if (isLiveData2Update && isLiveData1Update) {
+                mediatorLiveData.setValue(finalIntegers);
+            }
+        });
+        mediatorLiveData.observe(this, integers -> {
+            StringBuilder sb = new StringBuilder();
+            for (int integer : integers) {
+                sb.append(String.valueOf(integer));
+                sb.append(",");
+            }
+            tvMediator.setText(sb.toString());
+        });
     }
 
     @Override
