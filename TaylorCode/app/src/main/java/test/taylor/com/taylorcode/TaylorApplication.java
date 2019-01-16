@@ -7,11 +7,12 @@ import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
-import test.taylor.com.taylorcode.ui.window.FloatWindow;
-import test.taylor.com.taylorcode.ui.window.WindowActivity;
-import test.taylor.com.taylorcode.util.DimensionUtil;
 
 /**
  * Created on 17/7/26.
@@ -23,6 +24,15 @@ public class TaylorApplication extends Application {
         super.onCreate();
 //        ClipboardHook.getInstance().init(this);
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
+
+        long time = 0;
+        try {
+            time = utcToTimestamp("2019-01-16T15:13:56Z");
+        } catch (ParseException e) {
+            Log.v("ttaylor", "TaylorApplication.onCreate()" + "  e="+e);
+            e.printStackTrace();
+        }
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  time="+time);
 
 
         //java quote case1:
@@ -50,16 +60,29 @@ public class TaylorApplication extends Application {
 //        FloatWindow.getInstance().setWhiteList(whiteList);
 
         //java string index case1
-        String d = "asdfgh" ;
-        int index = d.indexOf("f") ;
-        String subs = d.substring(index,d.length()) ;
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + " subString= "+subs);
+        String d = "asdfgh";
+        int index = d.indexOf("f");
+        String subs = d.substring(index, d.length());
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + " subString= " + subs);
 
         //java round case1:
         int i = ((int) Math.round(4.5d));
         int j = ((int) Math.round(4.1d));
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i="+i+ " ,j="+j);
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j);
 
+    }
+
+    /**
+     * time case: convert utc to timestamp
+     * @param time
+     * @return
+     * @throws ParseException
+     */
+    public  long utcToTimestamp(String time) throws ParseException {
+        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        df2.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = df2.parse(time);
+        return date.getTime();
     }
 
     private void makeChange(ArrayList<String> origin) {
@@ -131,4 +154,5 @@ public class TaylorApplication extends Application {
         void onAppBackground();
 
     }
+
 }
