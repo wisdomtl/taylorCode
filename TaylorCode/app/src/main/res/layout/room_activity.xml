@@ -27,4 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="delete" />
+    <Button
+        android:id="@+id/btn_query_earlier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="query earlier" />
 </LinearLayout>

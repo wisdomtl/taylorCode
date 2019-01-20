@@ -41,6 +41,10 @@ public class ActivityRepository {
         });
     }
 
+    public LiveData<List<Activity>> queryActivityEarlier(long now) {
+        return activityDao.queryActivitiesEarlier(now);
+    }
+
     public LiveData<List<Activity>> queryActivities(int start, int count) {
         return activityDao.queryActivities(start, count);
     }

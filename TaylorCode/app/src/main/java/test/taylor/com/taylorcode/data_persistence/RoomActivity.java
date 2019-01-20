@@ -33,6 +33,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_insert_all).setOnClickListener(this);
         findViewById(R.id.btn_query).setOnClickListener(this);
         findViewById(R.id.btn_delete).setOnClickListener(this);
+        findViewById(R.id.btn_query_earlier).setOnClickListener(this);
     }
 
     @Override
@@ -50,7 +51,19 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_delete:
                 delete();
                 break;
+            case R.id.btn_query_earlier:
+                queryEarlier() ;
+                break;
         }
+    }
+
+    private void queryEarlier() {
+        activityViewModel.queryActivityEarlier(System.currentTimeMillis()).observe(this, activities -> {
+            Log.v("ttaylor", "RoomActivity.queryEarlier()" + "  size="+activities.size());
+            for (Activity activity : activities) {
+                Log.v("ttaylor", "RoomActivity.queryEarlier()" + "  name=" + activity.getUserName() + " ,time=" + activity.getTime() + " ,type=" + activity.getType() + " ,url=" + activity.getUserAvatarUrl() + " ,title=" + activity.getTitle());
+            }
+        });
     }
 
     private void delete() {
@@ -68,21 +81,21 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     private void insertAll() {
         Activity activity = new Activity();
         activity.setId("5678");
-        activity.setTime("2017-07-29T08:28:47.776Z");
+        activity.setTime("2017-07-29T08:28:47Z");
         activity.setTitle("init");
         activity.setType("a");
         activity.setUserAvatarUrl("fdfs3333333333");
         activity.setUserName("t2222");
         Activity activity1 = new Activity();
         activity1.setId("8901");
-        activity1.setTime("2017-07-29T09:28:47.776Z");
+        activity1.setTime("2020-07-29T09:28:47.77Z");
         activity1.setTitle("init2");
         activity1.setType("a");
         activity1.setUserAvatarUrl("22222222");
         activity1.setUserName("t3333r");
         Activity activity2 = new Activity();
         activity2.setId("6666");
-        activity2.setTime("2017-07-29T09:30:47.776Z");
+        activity2.setTime("2020-07-29T09:30:47.77Z");
         activity2.setTitle("init3");
         activity2.setType("a");
         activity2.setUserAvatarUrl("333333333");

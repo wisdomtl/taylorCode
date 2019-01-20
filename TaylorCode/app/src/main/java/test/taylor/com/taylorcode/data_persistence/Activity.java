@@ -3,15 +3,18 @@ package test.taylor.com.taylorcode.data_persistence;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "activity")
+@Entity(tableName = "taylor")
+@TypeConverters(DataConverter.class)
 public class Activity {
     @ColumnInfo(name = "user_name")
     private String userName;
     @ColumnInfo(name = "user_avatar_url")
     private String userAvatarUrl;
     private String title;
+    @TypeConverters(DataConverter.class)
     private String time;
     private String type;
     @PrimaryKey

@@ -29,6 +29,13 @@ public class ActivityViewModel extends AndroidViewModel {
         }
     }
 
+    public LiveData<List<Activity>> queryActivityEarlier(long now){
+        if (activityRepository != null) {
+            return activityRepository.queryActivityEarlier(now);
+        }
+        return null ;
+    }
+
     public LiveData<List<Activity>> queryActivities(int start, int count) {
         if (activityRepository != null) {
             return activityRepository.queryActivities(start, count);
