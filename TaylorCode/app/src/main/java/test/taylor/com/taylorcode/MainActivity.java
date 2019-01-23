@@ -8,6 +8,7 @@ import android.view.View;
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity;
 import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1;
+import test.taylor.com.taylorcode.ui.window.WindowActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         findViewById(R.id.btn_room).setOnClickListener(this);
         findViewById(R.id.btn_livedata).setOnClickListener(this);
+        findViewById(R.id.btn_window).setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_livedata:
                 startActivity(Activity1.class);
+                break;
+            case R.id.btn_window:
+                startActivity(WindowActivity.class);
                 break;
         }
 

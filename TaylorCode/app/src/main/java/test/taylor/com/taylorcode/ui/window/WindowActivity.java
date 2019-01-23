@@ -263,7 +263,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     }
 
     @Override
-    public void onWindowItemClick(View view) {
+    public boolean onWindowItemClick(View view) {
         Log.v("ttaylor", "WindowActivity.onWindowItemClick()" + "  ");
         int id = view.getId();
         switch (id) {
@@ -291,6 +291,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             default:
                 break;
         }
+        return false;
     }
 
     private View generateWindowView() {

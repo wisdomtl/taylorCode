@@ -79,4 +79,10 @@
         android:textAllCaps="false"
         android:textColor="#ff464646"
         android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/et"
+        android:hint="input something"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

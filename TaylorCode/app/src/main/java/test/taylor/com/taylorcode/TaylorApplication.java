@@ -68,7 +68,8 @@ public class TaylorApplication extends Application {
         //java round case1:
         int i = ((int) Math.round(4.5d));
         int j = ((int) Math.round(4.1d));
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j);
+        int k = (int) (10/2.3) ;
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j+" ,k="+k);
 
     }
 

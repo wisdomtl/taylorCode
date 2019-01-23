@@ -182,7 +182,11 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
      * this method make it possible that clicking event is implemented outside of PopupWindow
      */
     public interface OnItemClickListener {
-        void onWindowItemClick(View view);
+        /**
+         * @param view
+         * @return whether to dismiss window once the window is clicked
+         */
+        boolean onWindowItemClick(View view);
     }
 
     /**
@@ -216,9 +220,11 @@ public class CustomPopupWindow extends PopupWindow implements View.OnTouchListen
             Log.v("ttaylor", "GestureListener.onSingleTapUp()" + "  click position=" + position);
             if (position != INVALID_POSITION) {
                 View item = viewGroup.getChildAt(position);
-                dismiss();
                 if (onItemClickListener != null) {
-                    onItemClickListener.onWindowItemClick(item);
+                    boolean isAutoDismiss = onItemClickListener.onWindowItemClick(item);
+                    if (isAutoDismiss) {
+                        dismiss();
+                    }
                 }
             }
             return false;
