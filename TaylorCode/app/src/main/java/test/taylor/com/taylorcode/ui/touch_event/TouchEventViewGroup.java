@@ -1,0 +1,46 @@
+package test.taylor.com.taylorcode.ui.touch_event;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.widget.RelativeLayout;
+
+public class TouchEventViewGroup extends RelativeLayout {
+    public TouchEventViewGroup(Context context) {
+        super(context);
+    }
+
+    public TouchEventViewGroup(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public TouchEventViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.e("ttaylor", "TouchEventViewGroup.onTouchEvent()" + " event=" + event.getAction());
+        boolean b = super.onTouchEvent(event);
+        Log.v("ttaylor", "TouchEventViewGroup.onTouchEvent()" + "  return "+b);
+        return b;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Log.e("ttaylor", "TouchEventViewGroup.dispatchTouchEvent()" + " event=" + ev.getAction());
+//        boolean b = super.dispatchTouchEvent(ev);
+        boolean b = true ;
+        Log.v("ttaylor", "TouchEventViewGroup.dispatchTouchEvent()" + "  return "+b);
+        return b;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.e("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + " event=" + ev.getAction());
+        boolean b = super.onInterceptTouchEvent(ev);
+        Log.v("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + "  return "+b);
+        return b;
+    }
+}

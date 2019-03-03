@@ -20,4 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="window" />
+    <Button
+        android:id="@+id/btn_touch_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="touch event" />
 </LinearLayout>
