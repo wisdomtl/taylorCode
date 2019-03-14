@@ -23,16 +23,18 @@ public class TouchEventViewGroup extends RelativeLayout {
     public boolean onTouchEvent(MotionEvent event) {
         Log.e("ttaylor", "TouchEventViewGroup.onTouchEvent()" + " event=" + event.getAction());
         boolean b = super.onTouchEvent(event);
-        Log.v("ttaylor", "TouchEventViewGroup.onTouchEvent()" + "  return "+b);
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            b = true;
+        }
+        Log.v("ttaylor", "TouchEventViewGroup.onTouchEvent()" + "  return " + b);
         return b;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.e("ttaylor", "TouchEventViewGroup.dispatchTouchEvent()" + " event=" + ev.getAction());
-//        boolean b = super.dispatchTouchEvent(ev);
-        boolean b = true ;
-        Log.v("ttaylor", "TouchEventViewGroup.dispatchTouchEvent()" + "  return "+b);
+        boolean b = super.dispatchTouchEvent(ev);
+        Log.v("ttaylor", "TouchEventViewGroup.dispatchTouchEvent()" + "  return " + b);
         return b;
     }
 
@@ -40,7 +42,10 @@ public class TouchEventViewGroup extends RelativeLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.e("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + " event=" + ev.getAction());
         boolean b = super.onInterceptTouchEvent(ev);
-        Log.v("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + "  return "+b);
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            b = true;
+        }
+        Log.v("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + "  return " + b);
         return b;
     }
 }

@@ -27,7 +27,8 @@ public class TouchEventView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.e("ttaylor", "TouchEventView.onTouchEvent()" + " event=" + event.getAction());
-        boolean b = super.onTouchEvent(event);
+//        boolean b = super.onTouchEvent(event);
+        boolean b = true;
         Log.v("ttaylor", "TouchEventView.onTouchEvent()" + "  return " + b);
         return b;
     }
