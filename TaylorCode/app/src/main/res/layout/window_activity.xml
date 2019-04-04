@@ -7,12 +7,12 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_show_window"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="show window"
-        android:textSize="20dp" />
+    <!--<Button-->
+        <!--android:id="@+id/btn_show_window"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="show window"-->
+        <!--android:textSize="20dp" />-->
 
     <Button
         android:id="@+id/btn_show_popup_window"
@@ -27,41 +27,41 @@
         android:id="@+id/btn_outside"
         android:text="button outside of popupwindow"
         android:textSize="20dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_application_window"
-        android:text="show application window "
-        android:textSize="20dp"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_application_window"-->
+        <!--android:text="show application window "-->
+        <!--android:textSize="20dp"/>-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_start_activity"
-        android:text="start activity"
-        android:textSize="20dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_start_activityB"
-        android:text="start activityB"
-        android:textSize="20dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_stop_timer"
-        android:text="stop_timer"
-        android:textSize="20dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_start_timer"
-        android:text="start_timer"
-        android:textSize="20dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_window_partner"
-        android:text="start_window_partner"
-        android:textSize="20dp"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_start_activity"-->
+        <!--android:text="start activity"-->
+        <!--android:textSize="20dp"/>-->
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_start_activityB"-->
+        <!--android:text="start activityB"-->
+        <!--android:textSize="20dp"/>-->
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_stop_timer"-->
+        <!--android:text="stop_timer"-->
+        <!--android:textSize="20dp"/>-->
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_start_timer"-->
+        <!--android:text="start_timer"-->
+        <!--android:textSize="20dp"/>-->
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/start_window_partner"-->
+        <!--android:text="start_window_partner"-->
+        <!--android:textSize="20dp"/>-->
 </LinearLayout>

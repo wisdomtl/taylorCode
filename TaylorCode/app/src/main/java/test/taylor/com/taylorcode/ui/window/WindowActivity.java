@@ -45,21 +45,22 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private Timer timer;
     private int d1 = 400;
     private int d2 = 400;
+    private View floatWindowPartnerView ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View content = LayoutInflater.from(this).inflate(R.layout.window_activity, null);
         setContentView(content);
-        findViewById(R.id.btn_show_window).setOnClickListener(this);
+//        findViewById(R.id.btn_show_window).setOnClickListener(this);
         findViewById(R.id.btn_show_popup_window).setOnClickListener(this);
         findViewById(R.id.btn_outside).setOnClickListener(this);
-        findViewById(R.id.btn_application_window).setOnClickListener(this);
-        findViewById(R.id.btn_start_activity).setOnClickListener(this);
-        findViewById(R.id.btn_start_activityB).setOnClickListener(this);
-        findViewById(R.id.btn_stop_timer).setOnClickListener(this);
-        findViewById(R.id.btn_start_timer).setOnClickListener(this);
-        findViewById(R.id.start_window_partner).setOnClickListener(this);
+//        findViewById(R.id.btn_application_window).setOnClickListener(this);
+//        findViewById(R.id.btn_start_activity).setOnClickListener(this);
+//        findViewById(R.id.btn_start_activityB).setOnClickListener(this);
+//        findViewById(R.id.btn_stop_timer).setOnClickListener(this);
+//        findViewById(R.id.btn_start_timer).setOnClickListener(this);
+//        findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
         FloatWindow.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
@@ -97,7 +98,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         //this flag allow touching outside window
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         //android.permission.SYSTEM_ALERT_WINDOW is needed,or permission denied for window type 2003
-        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+//        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.gravity = Gravity.CENTER;
@@ -200,9 +202,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            case R.id.btn_show_window:
-                showWindow(this);
-                break;
+//            case R.id.btn_show_window:
+//                showWindow(this);
+//                break;
             case R.id.btn_show_popup_window:
                 showBottomPopupWindow2(this, R.layout.window_content);
                 break;
@@ -225,26 +227,26 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 Log.v("ttaylor", "WindowActivity.onClick()" + "  ");
                 popupWindow.dismiss();
                 break;
-            case R.id.btn_application_window:
-                View windowView = generateWindowView();
-                WindowManager.LayoutParams layoutParams = generateWindowLayoutParam(this, windowView);
-                showApplicationWindow(this, windowView, layoutParams);
-                break;
-            case R.id.btn_start_activity:
-                startAnotherActivity();
-                break;
-            case R.id.btn_start_activityB:
-                startAnotherActivityB();
-                break;
-            case R.id.btn_stop_timer:
-                stopTimer();
-                break;
-            case R.id.btn_start_timer:
-                startTimer();
-                break;
-            case R.id.start_window_partner:
-                showFloatWindowPartner(this);
-                break;
+//            case R.id.btn_application_window:
+//                View windowView = generateWindowView();
+//                WindowManager.LayoutParams layoutParams = generateWindowLayoutParam(this, windowView);
+//                showApplicationWindow(this, windowView, layoutParams);
+//                break;
+//            case R.id.btn_start_activity:
+//                startAnotherActivity();
+//                break;
+//            case R.id.btn_start_activityB:
+//                startAnotherActivityB();
+//                break;
+//            case R.id.btn_stop_timer:
+//                stopTimer();
+//                break;
+//            case R.id.btn_start_timer:
+//                startTimer();
+//                break;
+//            case R.id.start_window_partner:
+//                showFloatWindowPartner(this);
+//                break;
             default:
                 break;
         }
@@ -399,6 +401,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_20, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_21, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_22, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
+        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_1, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.setOneShot(true);
         return drawable;
     }
@@ -492,11 +495,13 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             return;
         }
 
-        final View floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
+        if (floatWindowPartnerView == null) {
+            floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
+        }
         Pair<Integer, Integer> screenDimension = prepareScreenDimension(this);
         WindowManager.LayoutParams layoutParams = FloatWindow.getInstance().getLayoutParam();
         final WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second, layoutParams, floatWindowPartnerView);
-        if (floatWindowPartnerView.getParent() == null) {
+        if (floatWindowPartnerView!=null && floatWindowPartnerView.getParent() == null) {
             windowManager.addView(floatWindowPartnerView, params);
             FloatWindow.getInstance().setOnWindowStatusChangeListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
         }

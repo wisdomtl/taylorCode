@@ -1,9 +1,11 @@
 package test.taylor.com.taylorcode;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity;
@@ -18,6 +20,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         initView();
+        Log.v("ttaylor", "MainActivity.onCreate()" + "  ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v("ttaylor", "MainActivity.onStart()" + "  ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("ttaylor", "MainActivity.onResume()" + "  ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("ttaylor", "MainActivity.onPause()" + "  ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v("ttaylor", "MainActivity.onStop()" + "  ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v("ttaylor", "MainActivity.onDestroy()" + "  ");
     }
 
     private void initView() {
@@ -25,6 +58,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_livedata).setOnClickListener(this);
         findViewById(R.id.btn_window).setOnClickListener(this);
         findViewById(R.id.btn_touch_event).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.v("ttaylor", "MainActivity.onSaveInstanceState()" + "  ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v("ttaylor", "MainActivity.onRestart()" + "  ");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.v("ttaylor", "MainActivity.onRestoreInstanceState()" + "  ");
     }
 
     @Override
