@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity;
+import test.taylor.com.taylorcode.ui.SelectorActivity;
+import test.taylor.com.taylorcode.ui.custom_view.SelectorDemoActivity;
+import test.taylor.com.taylorcode.ui.navigation.NavigationActivity;
 import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1;
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_livedata).setOnClickListener(this);
         findViewById(R.id.btn_window).setOnClickListener(this);
         findViewById(R.id.btn_touch_event).setOnClickListener(this);
+        findViewById(R.id.btn_selector).setOnClickListener(this);
+
     }
 
     @Override
@@ -90,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_window:
                 startActivity(WindowActivity.class);
                 break;
+            case R.id.btn_selector:
+                startActivity(SelectorDemoActivity.class);
+                break;
+
             case R.id.btn_touch_event:
                 startActivity(TouchEventActivity.class);
                 break;

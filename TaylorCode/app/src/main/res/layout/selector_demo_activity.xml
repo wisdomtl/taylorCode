@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Selector age"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+        android:id="@+id/selector_10"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:img="@drawable/teenage"
+        app:indicator="@drawable/age_selctor_shape"
+        app:layout_constraintBottom_toTopOf="@id/gl_center"
+        app:layout_constraintDimensionRatio="122:150"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent=".338"
+        app:tag="teenage"
+        app:text="teenage"
+        app:text_color="#FF222222"
+        app:text_size="16" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+        android:id="@+id/selector_20"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:img="@drawable/man"
+        app:indicator="@drawable/age_selctor_shape"
+        app:layout_constraintDimensionRatio="122:150"
+        app:layout_constraintEnd_toStartOf="@id/selector_30"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gl_center"
+        app:layout_constraintWidth_percent=".338"
+        app:tag="man"
+        app:text="man"
+        app:text_color="#FF222222"
+        app:text_size="16" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+        android:id="@+id/selector_30"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:img="@drawable/old_man"
+        app:indicator="@drawable/age_selctor_shape"
+        app:layout_constraintDimensionRatio="122:150"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/selector_20"
+        app:layout_constraintTop_toBottomOf="@id/gl_center"
+        app:layout_constraintWidth_percent=".338"
+        app:tag="old man"
+        app:text="old man"
+        app:text_color="#FF222222"
+        app:text_size="16" />
+</android.support.constraint.ConstraintLayout>

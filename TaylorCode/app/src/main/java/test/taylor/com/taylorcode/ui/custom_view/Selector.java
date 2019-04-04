@@ -64,9 +64,10 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
         }
     }
 
-    public void setSelectorGroup(SelectorGroup selectorGroup) {
+    public Selector setSelectorGroup(SelectorGroup selectorGroup) {
         this.selectorGroup = selectorGroup;
         selectorGroup.addSelector(this);
+        return this;
     }
 
     /**
@@ -91,14 +92,15 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
         return tag;
     }
 
-    public void setOnSelectorStateListener(OnSelectorStateListener stateListener) {
+    public Selector setOnSelectorStateListener(OnSelectorStateListener stateListener) {
         this.stateListener = stateListener;
+        return this;
     }
 
     @Override
     public void onClick(View v) {
         boolean isSelect = switchSelector();
-        if(selectorGroup!=null){
+        if (selectorGroup != null) {
             selectorGroup.setSelected(this);
         }
         if (stateListener != null) {
@@ -109,8 +111,11 @@ public abstract class Selector extends FrameLayout implements View.OnClickListen
     public boolean switchSelector() {
         boolean isSelect = this.isSelected();
         this.setSelected(!isSelect);
+        onSwitchSelected(!isSelect);
         return !isSelect;
     }
+
+    protected abstract void onSwitchSelected(boolean isSelect);
 
     @Override
     public int hashCode() {
