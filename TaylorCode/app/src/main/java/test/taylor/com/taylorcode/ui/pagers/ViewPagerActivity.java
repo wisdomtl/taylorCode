@@ -31,7 +31,7 @@ public class ViewPagerActivity extends Activity {
         MyPagerAdapter adapter = new MyPagerAdapter(prepareViews());
         MyViewPager vp = ((MyViewPager) findViewById(R.id.vp));
         vp.setAdapter(adapter);
-        vp.setScrollable(false);
+        vp.setScrollable(true);
         setIndicator(vp);
         TextView tv = ((TextView) adapter.findViewById(R.id.tv_pager1));
         tv.setOnClickListener(new View.OnClickListener() {

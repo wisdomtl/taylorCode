@@ -8,10 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.work.WorkManager;
+import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity;
 import test.taylor.com.taylorcode.data_persistence.RoomActivity;
+import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity;
+import test.taylor.com.taylorcode.ui.DialogActivity;
+import test.taylor.com.taylorcode.ui.DrawerLayoutActivity;
 import test.taylor.com.taylorcode.ui.SelectorActivity;
+import test.taylor.com.taylorcode.ui.TableLayoutActivity;
+import test.taylor.com.taylorcode.ui.anim.AnimActivity;
 import test.taylor.com.taylorcode.ui.custom_view.SelectorDemoActivity;
+import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity;
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity;
+import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity;
 import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1;
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
@@ -62,6 +71,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_window).setOnClickListener(this);
         findViewById(R.id.btn_touch_event).setOnClickListener(this);
         findViewById(R.id.btn_selector).setOnClickListener(this);
+        findViewById(R.id.btn_workmanager).setOnClickListener(this);
+        findViewById(R.id.btn_anim).setOnClickListener(this);
+        findViewById(R.id.btn_view_pager).setOnClickListener(this);
+        findViewById(R.id.btn_navigation).setOnClickListener(this);
+        findViewById(R.id.btn_navigation).setOnClickListener(this);
+        findViewById(R.id.btn_drawer_layout).setOnClickListener(this);
+        findViewById(R.id.btn_constraint_layout).setOnClickListener(this);
+        findViewById(R.id.btn_tab_layout).setOnClickListener(this);
+        findViewById(R.id.btn_dialog).setOnClickListener(this);
+        findViewById(R.id.btn_coordinate_layout).setOnClickListener(this);
 
     }
 
@@ -89,16 +108,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_room:
                 startActivity(RoomActivity.class);
                 break;
+            case R.id.btn_coordinate_layout:
+                startActivity(CoordinateActivity.class);
+                break;
             case R.id.btn_livedata:
                 startActivity(Activity1.class);
+                break;
+            case R.id.btn_dialog:
+                startActivity(DialogActivity.class);
                 break;
             case R.id.btn_window:
                 startActivity(WindowActivity.class);
                 break;
+            case R.id.btn_tab_layout:
+                startActivity(TableLayoutActivity.class);
+                break;
+            case R.id.btn_drawer_layout:
+                startActivity(DrawerLayoutActivity.class);
+                break;
             case R.id.btn_selector:
                 startActivity(SelectorDemoActivity.class);
                 break;
-
+            case R.id.btn_navigation:
+                startActivity(NavigationActivity.class);
+                break;
+            case R.id.btn_workmanager:
+                startActivity(WorkManagerActivity.class);
+                break;
+            case R.id.btn_constraint_layout:
+                startActivity(ConstraintLayoutActivity.class);
+                break;
+            case R.id.btn_view_pager:
+                startActivity(ViewPagerActivity.class);
+                break;
+            case R.id.btn_anim:
+                startActivity(AnimActivity.class);
+                break;
             case R.id.btn_touch_event:
                 startActivity(TouchEventActivity.class);
                 break;
