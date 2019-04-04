@@ -35,7 +35,7 @@ import test.taylor.com.taylorcode.util.Timer;
 
 public class WindowActivity extends Activity implements View.OnClickListener, CustomPopupWindow.OnItemClickListener {
     public static final int VALUE_ANIM_DURATION = 800;
-    private final float FULL_TIME_MILLISECOND = 3 * 1000;
+    private final float FULL_TIME_MILLISECOND = 6 * 1000;
     private static final int BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100;
 
     public static final String TAG_WINDOW_A = "A";
@@ -46,6 +46,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private int d1 = 400;
     private int d2 = 400;
     private View floatWindowPartnerView ;
+    private AnimationDrawable animationDrawable ;
+    private ProgressRing progressRing ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -303,8 +305,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 //        tv.setText("window view");
 //        tv.setTextSize(40);
 //        return tv;
-        final ProgressRing progressRing = new ProgressRing(this);
-        final AnimationDrawable animationDrawable = createAnimationDrawable(this);
+progressRing = new ProgressRing(this);
+       animationDrawable = createAnimationDrawable(this);
         progressRing.setImageDrawable(animationDrawable);
         timer = new Timer(new Timer.TimerListener() {
             @Override
@@ -316,15 +318,16 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
                 progressRing.setProgress(progress);
                 if (mod == 0) {
                     doFrameAnimation(animationDrawable);
-                    doValueAnimator(10, 42, progressRing, VALUE_ANIM_DURATION);
+                    doValueAnimator(10, 62, progressRing, VALUE_ANIM_DURATION);
                 }
             }
         });
-        timer.start(0, 250);
+        timer.start(0, 100);
         return progressRing;
     }
 
     private void doFrameAnimation(AnimationDrawable animationDrawable) {
+        progressRing.setImageDrawable(animationDrawable);
         if (animationDrawable.isRunning()) {
             animationDrawable.stop();
         }
@@ -370,9 +373,10 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
             public void onAnimationUpdate(ValueAnimator animation) {
                 int alpha = (Integer) animation.getAnimatedValue();
                 ring.setTextAlpha(alpha);
+                ring.setImageResource(R.drawable.watch_reward_1);
             }
         });
-        ring.setText("+1");
+        ring.setText("+8");
         set.start();
     }
 
@@ -401,7 +405,6 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_20, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_21, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_22, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
-        drawable.addFrame(new BitmapDrawable(decodeSampledBitmapFromResource(context.getResources(), R.drawable.watch_reward_1, DimensionUtil.dp2px(54), DimensionUtil.dp2px(54))), frameDuration);
         drawable.setOneShot(true);
         return drawable;
     }

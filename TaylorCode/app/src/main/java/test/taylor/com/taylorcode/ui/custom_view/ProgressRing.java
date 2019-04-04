@@ -21,7 +21,7 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
 
     private static final float ANGLE_SPAN = 360;
     private static final int DEFAULT_OUT_RING_WIDTH = 7;
-    private static final int DEFAULT_PROGRESS_WIDTH = 6;
+    private static final int DEFAULT_PROGRESS_WIDTH = 10;
 
     private float outRingWidth;
     private float progressRingWidth;
@@ -169,13 +169,13 @@ public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
         //key point:the third param "radius" is inner radius + half of paint stroke width
         canvas.drawCircle(ringCenterX, ringCenterX, outRingRadius, getOutRingPaint());
 
-        //draw inner ring
-        float innerRingRadius = getMeasuredWidth() / 2 - outRingWidth;
-        canvas.drawCircle(ringCenterX, ringCenterX, innerRingRadius, getInnerRingPaint());
+//        //draw inner ring
+//        float innerRingRadius = getMeasuredWidth() / 2 - outRingWidth;
+//        canvas.drawCircle(ringCenterX, ringCenterX, innerRingRadius, getInnerRingPaint());
 
         //draw progress bar
-        float progressRingLeft = ringCenterX - outRingRadius + progressRingWidth;
-        float progressRingRight = ringCenterX + outRingRadius - progressRingWidth;
+        float progressRingLeft = ringCenterX - outRingRadius;
+        float progressRingRight = ringCenterX + outRingRadius;
         if (progressRingRect == null) {
             progressRingRect = new RectF(progressRingLeft, progressRingLeft, progressRingRight, progressRingRight);
         }
