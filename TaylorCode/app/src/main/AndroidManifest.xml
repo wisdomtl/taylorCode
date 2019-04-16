@@ -62,6 +62,7 @@
 
         <activity android:name=".annotations.AnnotationActivity">
         </activity>
+        <activity android:name=".rxjava.LoginActivity"/>
 
         <activity android:name=".optional.OptionalActivity">
         </activity>

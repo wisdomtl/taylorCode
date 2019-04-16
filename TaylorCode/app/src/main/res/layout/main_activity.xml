@@ -78,6 +78,12 @@
         android:text="Dialog"
         android:textAllCaps="false" />
     <Button
+        android:id="@+id/btn_rx_binding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RxBinding"
+        android:textAllCaps="false" />
+    <Button
         android:id="@+id/btn_coordinate_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

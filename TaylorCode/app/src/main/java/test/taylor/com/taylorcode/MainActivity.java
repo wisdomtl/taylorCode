@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.work.WorkManager;
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity;
 import test.taylor.com.taylorcode.data_persistence.RoomActivity;
+import test.taylor.com.taylorcode.rxjava.LoginActivity;
 import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity;
 import test.taylor.com.taylorcode.ui.DialogActivity;
 import test.taylor.com.taylorcode.ui.DrawerLayoutActivity;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_tab_layout).setOnClickListener(this);
         findViewById(R.id.btn_dialog).setOnClickListener(this);
         findViewById(R.id.btn_coordinate_layout).setOnClickListener(this);
-
+        findViewById(R.id.btn_rx_binding).setOnClickListener(this);
     }
 
     @Override
@@ -146,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_touch_event:
                 startActivity(TouchEventActivity.class);
+                break;
+            case R.id.btn_rx_binding:
+                startActivity(LoginActivity.class);
                 break;
         }
 
