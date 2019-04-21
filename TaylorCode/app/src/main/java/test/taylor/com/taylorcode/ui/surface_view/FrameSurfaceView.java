@@ -9,7 +9,9 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import test.taylor.com.taylorcode.R;
+import java.util.ArrayList;
+import java.util.List;
+
 import test.taylor.com.taylorcode.util.BitmapUtil;
 import test.taylor.com.taylorcode.util.DimensionUtil;
 
@@ -18,31 +20,19 @@ import test.taylor.com.taylorcode.util.DimensionUtil;
  */
 public class FrameSurfaceView extends BaseSurfaceView {
 
-    private final int[] bitmaps = new int[]{R.drawable.watch_reward_1,
-            R.drawable.watch_reward_2,
-            R.drawable.watch_reward_3,
-            R.drawable.watch_reward_4,
-            R.drawable.watch_reward_5,
-            R.drawable.watch_reward_6,
-            R.drawable.watch_reward_7,
-            R.drawable.watch_reward_8,
-            R.drawable.watch_reward_9,
-            R.drawable.watch_reward_10,
-            R.drawable.watch_reward_11,
-            R.drawable.watch_reward_12,
-            R.drawable.watch_reward_13,
-            R.drawable.watch_reward_14,
-            R.drawable.watch_reward_15,
-            R.drawable.watch_reward_16,
-            R.drawable.watch_reward_17,
-            R.drawable.watch_reward_18,
-            R.drawable.watch_reward_19,
-            R.drawable.watch_reward_20,
-            R.drawable.watch_reward_21,
-            R.drawable.watch_reward_22};
+    private List<Integer> bitmaps = new ArrayList<>();
 
-    private int bitmapIndex = 0;
+    private int bitmapIndex = bitmaps.size();
     private Paint paint = new Paint();
+
+    public void setDuration(int duration) {
+        int frameDuration = duration / bitmaps.size();
+        setFrameDuration(frameDuration);
+    }
+
+    public void setBitmaps(List<Integer> bitmaps) {
+        this.bitmaps = bitmaps;
+    }
 
     public FrameSurfaceView(Context context) {
         super(context);
@@ -63,17 +53,31 @@ public class FrameSurfaceView extends BaseSurfaceView {
     @Override
     protected void onSurfaceDraw(Canvas canvas) {
         clearCanvas(canvas);
-        if (bitmapIndex >= bitmaps.length) {
+        if (isDrawFinish()) {
             return;
         }
         Log.v("ttaylor", "ProgressRingSurfaceView.onSurfaceDraw()" + "  bitmapIndex=" + bitmapIndex);
-        Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromResource(getContext().getResources(), bitmaps[bitmapIndex], DimensionUtil.dp2px(54), DimensionUtil.dp2px(54));
+        Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromResource(getContext().getResources(), bitmaps.get(bitmapIndex), DimensionUtil.dp2px(54), DimensionUtil.dp2px(54));
         canvas.drawBitmap(bitmap, 0, 0, paint);
         bitmapIndex++;
     }
 
+    private boolean isDrawFinish() {
+        if (bitmapIndex >= bitmaps.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void start() {
+        bitmapIndex = 0;
+    }
+
+
     /**
      * clear out the drawing on canvas,preparing for the next frame
+     *
      * @param canvas
      */
     private void clearCanvas(Canvas canvas) {
