@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 public class BitmapUtil {
     /**
      * combine two bitmap into one
+     *
      * @param background
      * @param foreground
      * @return
@@ -39,6 +40,12 @@ public class BitmapUtil {
         options.inJustDecodeBounds = false;
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static Bitmap decodeOriginBitmap(Resources res, int resId, BitmapFactory.Options options) {
+        options.inScaled = false;
+        Bitmap bitmap = BitmapFactory.decodeResource(res, resId, options);
+        return bitmap;
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

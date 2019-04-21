@@ -37,6 +37,7 @@ public class SurfaceViewActivity extends AppCompatActivity implements View.OnCli
             R.drawable.watch_reward_21,
             R.drawable.watch_reward_22);
 
+//    private List<Integer> bitmaps = Arrays.asList(R.drawable.stop);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

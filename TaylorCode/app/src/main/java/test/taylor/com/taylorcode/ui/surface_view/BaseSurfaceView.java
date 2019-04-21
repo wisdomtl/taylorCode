@@ -2,11 +2,13 @@ package test.taylor.com.taylorcode.ui.surface_view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -44,13 +46,18 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
 
     private void init() {
         getHolder().addCallback(this);
+//        setBackgroundTransparent();
+    }
+
+    private void setBackgroundTransparent() {
+        getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        setZOrderOnTop(true);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         startDrawThread();
     }
-
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -71,8 +78,36 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
         handlerThread = new HandlerThread("SurfaceViewThread");
         handlerThread.start();
         handler = new SurfaceViewHandler(handlerThread.getLooper());
-        handler.post(new DrawRunnable()) ;
+        handler.post(new DrawRunnable());
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int originWidth = getMeasuredWidth();
+        int originHeight = getMeasuredHeight();
+        int width = widthMode == MeasureSpec.AT_MOST ? getDefaultWidth() : originWidth;
+        int height = heightMode == MeasureSpec.AT_MOST ? getDefaultHeight() : originHeight;
+        setMeasuredDimension(width, height);
+        Log.v("ttaylor", "BaseSurfaceView.onMeasure()" + "  default Width=" + getDefaultWidth() + " default height=" + getDefaultHeight());
+    }
+
+    /**
+     * the width is used when wrap_content is set to layout_width
+     * the child knows how big it should be
+     * @return
+     */
+    protected abstract int getDefaultWidth();
+
+    /**
+     * the height is used when wrap_content is set to layout_height
+     * the child knows how big it should be
+     * @return
+     */
+    protected abstract int getDefaultHeight();
+
 
     private class SurfaceViewHandler extends Handler {
 
@@ -105,6 +140,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
 
     /**
      * draw things to surface by the canvas
+     *
      * @param canvas
      */
     protected abstract void onSurfaceDraw(Canvas canvas);
