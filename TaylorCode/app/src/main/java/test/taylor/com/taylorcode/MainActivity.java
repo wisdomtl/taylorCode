@@ -23,6 +23,7 @@ import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity;
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity;
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity;
 import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1;
+import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity;
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity;
 import test.taylor.com.taylorcode.ui.window.WindowActivity;
 
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_dialog).setOnClickListener(this);
         findViewById(R.id.btn_coordinate_layout).setOnClickListener(this);
         findViewById(R.id.btn_rx_binding).setOnClickListener(this);
+        findViewById(R.id.btn_surface_view).setOnClickListener(this);
     }
 
     @Override
@@ -150,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_rx_binding:
                 startActivity(LoginActivity.class);
+                break;
+            case R.id.btn_surface_view:
+                startActivity(SurfaceViewActivity.class);
                 break;
         }
 
