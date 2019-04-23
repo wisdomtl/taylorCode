@@ -127,11 +127,12 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
         public void run() {
             try {
                 canvas = getHolder().lockCanvas();
-                onSurfaceDraw(canvas);
+                onFrameDraw(canvas);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 getHolder().unlockCanvasAndPost(canvas);
+                onFrameDrawFinish();
             }
 
             handler.postDelayed(this, frameDuration);
@@ -139,9 +140,14 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
     }
 
     /**
-     * draw things to surface by the canvas
+     * it is will be invoked after one frame is drawn
+     */
+    protected abstract void onFrameDrawFinish();
+
+    /**
+     * draw one frame to the surface by canvas
      *
      * @param canvas
      */
-    protected abstract void onSurfaceDraw(Canvas canvas);
+    protected abstract void onFrameDraw(Canvas canvas);
 }

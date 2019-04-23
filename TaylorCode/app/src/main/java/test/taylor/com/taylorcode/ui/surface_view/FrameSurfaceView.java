@@ -20,10 +20,11 @@ import test.taylor.com.taylorcode.util.BitmapUtil;
  * a SurfaceView which draws bitmaps one after another like frame animation
  */
 public class FrameSurfaceView extends BaseSurfaceView {
+    public static final int INVALID_BITMAP_INDEX = -1;
 
     private List<Integer> bitmaps = new ArrayList<>();
-
-    private int bitmapIndex = bitmaps.size();
+    private Bitmap frameBitmap;
+    private int bitmapIndex = INVALID_BITMAP_INDEX;
     private Paint paint = new Paint();
     private BitmapFactory.Options options = new BitmapFactory.Options();
     private int defaultWidth;
@@ -81,23 +82,39 @@ public class FrameSurfaceView extends BaseSurfaceView {
     }
 
     @Override
-    protected void onSurfaceDraw(Canvas canvas) {
-        clearCanvas(canvas);
-        if (isDrawFinish()) {
-            return;
-        }
-        Log.v("ttaylor", "ProgressRingSurfaceView.onSurfaceDraw()" + "  bitmapIndex=" + bitmapIndex + " measureWidth=" + getMeasuredWidth());
-        Bitmap bitmap = BitmapUtil.decodeOriginBitmap(getResources(), bitmaps.get(bitmapIndex), options);
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-        bitmapIndex++;
+    protected void onFrameDrawFinish() {
+        recycleOneFrame();
     }
 
-    private boolean isDrawFinish() {
-        if (bitmapIndex >= bitmaps.size()) {
-            return true;
-        } else {
+    private void recycleOneFrame() {
+        if (frameBitmap != null) {
+            frameBitmap.recycle();
+            frameBitmap = null;
+        }
+    }
+
+    @Override
+    protected void onFrameDraw(Canvas canvas) {
+        clearCanvas(canvas);
+        drawOneFrame(canvas);
+    }
+
+    private void drawOneFrame(Canvas canvas) {
+        if (allowDraw()) {
+            Log.v("ttaylor", "ProgressRingSurfaceView.onFrameDraw()" + "  bitmapIndex=" + bitmapIndex + " measureWidth=" + getMeasuredWidth());
+            frameBitmap = BitmapUtil.decodeOriginBitmap(getResources(), bitmaps.get(bitmapIndex), options);
+            canvas.drawBitmap(frameBitmap, 0, 0, paint);
+            bitmapIndex++;
+        }
+    }
+
+    private boolean allowDraw() {
+        //frame animation has not started
+        if (bitmapIndex == INVALID_BITMAP_INDEX) {
             return false;
         }
+        //frame animation is doing
+        return bitmapIndex < bitmaps.size();
     }
 
     public void start() {
