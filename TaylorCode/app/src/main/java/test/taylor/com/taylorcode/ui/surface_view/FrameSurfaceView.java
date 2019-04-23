@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -27,6 +28,8 @@ public class FrameSurfaceView extends BaseSurfaceView {
     private int bitmapIndex = INVALID_BITMAP_INDEX;
     private Paint paint = new Paint();
     private BitmapFactory.Options options = new BitmapFactory.Options();
+    private Rect srcRect;
+    private Rect dstRect = new Rect();
     private int defaultWidth;
     private int defaultHeight;
 
@@ -50,9 +53,11 @@ public class FrameSurfaceView extends BaseSurfaceView {
         BitmapFactory.decodeResource(this.getResources(), integer, options);
         defaultWidth = options.outWidth;
         defaultHeight = options.outHeight;
+        srcRect = new Rect(0, 0, defaultWidth, defaultHeight);
         Log.v("ttaylor", "FrameSurfaceView.getBitmapDimension()" + "  defaultWidth=" + defaultWidth + " defaultHeight=" + defaultHeight);
         //we have to re-measure to make defaultWidth in use in onMeasure()
         requestLayout();
+
     }
 
     public FrameSurfaceView(Context context) {
@@ -69,6 +74,12 @@ public class FrameSurfaceView extends BaseSurfaceView {
 
     public FrameSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        dstRect.set(0, 0, getWidth(), getHeight());
     }
 
     @Override
@@ -103,7 +114,7 @@ public class FrameSurfaceView extends BaseSurfaceView {
         if (allowDraw()) {
             Log.v("ttaylor", "ProgressRingSurfaceView.onFrameDraw()" + "  bitmapIndex=" + bitmapIndex + " measureWidth=" + getMeasuredWidth());
             frameBitmap = BitmapUtil.decodeOriginBitmap(getResources(), bitmaps.get(bitmapIndex), options);
-            canvas.drawBitmap(frameBitmap, 0, 0, paint);
+            canvas.drawBitmap(frameBitmap, srcRect, dstRect, paint);
             bitmapIndex++;
         }
     }
