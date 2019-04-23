@@ -19,6 +19,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
     private SurfaceViewHandler handler;
     private int frameDuration = DEFAULT_FRAME_DURATION_MILLISECOND;
     private Canvas canvas;
+    private boolean isAlive;
 
     public BaseSurfaceView(Context context) {
         super(context);
@@ -56,6 +57,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        isAlive = true;
         startDrawThread();
     }
 
@@ -67,6 +69,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         stopDrawThread();
+        isAlive = false;
     }
 
     private void stopDrawThread() {
@@ -97,6 +100,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
     /**
      * the width is used when wrap_content is set to layout_width
      * the child knows how big it should be
+     *
      * @return
      */
     protected abstract int getDefaultWidth();
@@ -104,6 +108,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
     /**
      * the height is used when wrap_content is set to layout_height
      * the child knows how big it should be
+     *
      * @return
      */
     protected abstract int getDefaultHeight();
@@ -125,6 +130,9 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
 
         @Override
         public void run() {
+            if (!isAlive) {
+                return;
+            }
             try {
                 canvas = getHolder().lockCanvas();
                 onFrameDraw(canvas);
