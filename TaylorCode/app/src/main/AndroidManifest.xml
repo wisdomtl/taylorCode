@@ -67,6 +67,7 @@
 
         <activity android:name=".optional.OptionalActivity">
         </activity>
+        <activity android:name=".ui.KotlinActivity"></activity>
 
         <activity android:name=".ui.custom_view.CustomViewActivity">
         </activity>
