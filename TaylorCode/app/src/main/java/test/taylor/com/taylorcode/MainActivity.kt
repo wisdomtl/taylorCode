@@ -95,7 +95,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startActivity(cls: Class<*>) {
-        val intent = Intent(this, cls)
-        startActivity(intent)
+        //kotlin case:start activity by intent
+        Intent(this,cls).apply {
+            putExtra("data1","spring")
+            putExtra("data2","spring2")
+        }.also {
+            startActivity(it)
+        }
     }
 }
