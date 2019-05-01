@@ -28,8 +28,8 @@ public class TouchEventView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         Log.e("ttaylor", "TouchEventView.onTouchEvent()" + " event=" + event.getAction());
 //        boolean b = super.onTouchEvent(event);
-        boolean b = true;
-        Log.v("ttaylor", "TouchEventView.onTouchEvent()" + "  return " + b);
+        boolean b = super.onTouchEvent(event);
+//        Log.v("ttaylor", "TouchEventView.onTouchEvent()" + "  return " + b);
         return b;
     }
 
@@ -37,7 +37,7 @@ public class TouchEventView extends View {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.e("ttaylor", "TouchEventView.dispatchTouchEvent()" + " event=" + ev.getAction());
         boolean b = super.dispatchTouchEvent(ev);
-        Log.v("ttaylor", "TouchEventView.dispatchTouchEvent()" + "  return " + b);
+//        Log.v("ttaylor", "TouchEventView.dispatchTouchEvent()" + "  return " + b);
         return b;
     }
 

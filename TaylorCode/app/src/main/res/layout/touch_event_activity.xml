@@ -9,6 +9,7 @@
         android:layout_height="900dp">
 
         <test.taylor.com.taylorcode.ui.touch_event.TouchEventView
+            android:id="@+id/v_te"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="#ff00ff" />
