@@ -6,35 +6,36 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.renderscript.Sampler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
-import android.view.animation.AnimationSet
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import kotlinx.android.synthetic.main.anim_activity.*
 
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.extension.extraAnimClickListener
 import test.taylor.com.taylorcode.util.BitmapUtil
 import test.taylor.com.taylorcode.util.DimensionUtil
 
 
 class AnimActivity : Activity(), View.OnClickListener {
+
+    companion object {
+        private val BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100
+        private val VALUE_ANIM_DURATION_IN_MILLISECOND = 500
+        private val REWARD_NUMBER_STAY_TIME_IN_MILLISECOND = 1500
+        private val REWARD_NUMBER_FADE_TIME_IN_MILLISECOND = 500
+    }
 
     private var ivFrameAnim: ImageView? = null
     private var animationDrawable: AnimationDrawable? = null
@@ -66,11 +67,23 @@ class AnimActivity : Activity(), View.OnClickListener {
         ivArrow!!.setOnClickListener(this)
         tvTranslateAnimation!!.setOnClickListener(this)
 
+
+        //spring anim in kotlin way
+        btnSpringAnim.extraAnimClickListener(ValueAnimator.ofFloat(1.0f, 1.15f).apply {
+            interpolator = AccelerateInterpolator()
+            duration = 100
+            addUpdateListener {
+                btnSpringAnim.scaleX = it.animatedValue as Float
+                btnSpringAnim.scaleY = it.animatedValue as Float
+            }
+        }) { Toast.makeText(this, "spring anim", Toast.LENGTH_LONG).show() }
+
         // scale anim case1: create scale anim
         //        tvScaleAnim = createTextView(this);
         //        ((LinearLayout) findViewById(R.id.ll_animi_activity_root)).addView(tvScaleAnim);
         //        tvScaleAnim.startAnimation(createScaleAnimation());
     }
+
 
     /**
      * frame anim case 1:create frame anim with compressed bitmap
@@ -262,12 +275,5 @@ class AnimActivity : Activity(), View.OnClickListener {
             duration = 300
             start()
         }
-    }
-
-    companion object {
-        private val BOMB_ANIM_DURATION_IN_MILLISECOND = 6 * 100
-        private val VALUE_ANIM_DURATION_IN_MILLISECOND = 500
-        private val REWARD_NUMBER_STAY_TIME_IN_MILLISECOND = 1500
-        private val REWARD_NUMBER_FADE_TIME_IN_MILLISECOND = 500
     }
 }

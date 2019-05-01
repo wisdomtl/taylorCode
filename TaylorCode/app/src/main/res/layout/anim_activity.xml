@@ -35,7 +35,7 @@
         android:src="@drawable/arrow" />
 
     <Button
-        android:id="@+id/btn_spring_anim"
+        android:id="@+id/btnSpringAnim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="spring anim"
