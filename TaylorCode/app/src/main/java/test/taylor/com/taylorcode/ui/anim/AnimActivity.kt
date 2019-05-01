@@ -148,67 +148,68 @@ class AnimActivity : Activity(), View.OnClickListener {
      */
     private fun doAnimatorSet(start: Int, end: Int) {
         tvValueAnimator!!.alpha = 1f
-        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
-        animator.interpolator = AccelerateInterpolator()
-        animator.duration = VALUE_ANIM_DURATION_IN_MILLISECOND.toLong()
+        AnimatorSet().apply {
+            playSequentially(
+                    ValueAnimator.ofFloat(start.toFloat(), end.toFloat()).apply {
+                        interpolator = AccelerateInterpolator()
+                        duration = VALUE_ANIM_DURATION_IN_MILLISECOND.toLong()
+                        addUpdateListener { animation ->
+                            val size = animation.animatedValue as Float
+                            tvValueAnimator!!.textSize = size
+                        }
+                        addListener(object : Animator.AnimatorListener {
+                            override fun onAnimationStart(animation: Animator) {
+                                tvValueAnimator!!.text = "+" + 1
+                            }
 
-        val animator1 = ValueAnimator.ofFloat(end.toFloat(), end.toFloat())
-        animator1.duration = REWARD_NUMBER_STAY_TIME_IN_MILLISECOND.toLong()
+                            override fun onAnimationEnd(animation: Animator) {
 
-        val animator2 = ValueAnimator.ofInt(1, 0)
-        animator2.duration = REWARD_NUMBER_FADE_TIME_IN_MILLISECOND.toLong()
+                            }
 
-        val set = AnimatorSet()
-        set.playSequentially(animator, animator1, animator2)
-        set.startDelay = BOMB_ANIM_DURATION_IN_MILLISECOND.toLong()
+                            override fun onAnimationCancel(animation: Animator) {
 
-        animator.addUpdateListener { animation ->
-            val size = animation.animatedValue as Float
-            tvValueAnimator!!.textSize = size
+                            }
+
+                            override fun onAnimationRepeat(animation: Animator) {
+
+                            }
+                        })
+                    },
+                    ValueAnimator.ofFloat(end.toFloat(), end.toFloat()).apply {
+                        duration = REWARD_NUMBER_STAY_TIME_IN_MILLISECOND.toLong()
+                        addUpdateListener { animation ->
+                            val size = animation.animatedValue as Float
+                            tvValueAnimator!!.textSize = size
+                        }
+                    },
+                    ValueAnimator.ofInt(1, 0).apply {
+                        duration = REWARD_NUMBER_FADE_TIME_IN_MILLISECOND.toLong()
+                        addUpdateListener { animation ->
+                            val alpha = animation.animatedValue as Int
+                            tvValueAnimator!!.alpha = alpha.toFloat()
+                        }
+                        addListener(object : Animator.AnimatorListener {
+                            override fun onAnimationStart(animation: Animator) {
+
+                            }
+
+                            override fun onAnimationEnd(animation: Animator) {
+                                tvValueAnimator!!.text = ""
+                            }
+
+                            override fun onAnimationCancel(animation: Animator) {
+
+                            }
+
+                            override fun onAnimationRepeat(animation: Animator) {
+
+                            }
+                        })
+                    }
+            )
+            startDelay = BOMB_ANIM_DURATION_IN_MILLISECOND.toLong()
+            start()
         }
-        animator1.addUpdateListener { animation ->
-            val size = animation.animatedValue as Float
-            tvValueAnimator!!.textSize = size
-        }
-        animator2.addUpdateListener { animation ->
-            val alpha = animation.animatedValue as Int
-            tvValueAnimator!!.alpha = alpha.toFloat()
-        }
-        animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-                tvValueAnimator!!.text = "+" + 1
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-
-            }
-
-            override fun onAnimationCancel(animation: Animator) {
-
-            }
-
-            override fun onAnimationRepeat(animation: Animator) {
-
-            }
-        })
-        animator2.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                tvValueAnimator!!.text = ""
-            }
-
-            override fun onAnimationCancel(animation: Animator) {
-
-            }
-
-            override fun onAnimationRepeat(animation: Animator) {
-
-            }
-        })
-        set.start()
     }
 
 
@@ -233,8 +234,8 @@ class AnimActivity : Activity(), View.OnClickListener {
 
     private fun doVerticalTranslateAnimation() {
         val objectAnimator = ObjectAnimator.ofFloat(ivArrow, "translationY", 0f, DimensionUtil.dp2px(10.0).toFloat(), 0f, DimensionUtil.dp2px(10.0).toFloat())
-        objectAnimator.setInterpolator(AccelerateDecelerateInterpolator())
-        objectAnimator.setDuration(600)
+        objectAnimator.interpolator = AccelerateDecelerateInterpolator()
+        objectAnimator.duration = 600
         objectAnimator.start()
     }
 
@@ -256,10 +257,11 @@ class AnimActivity : Activity(), View.OnClickListener {
      */
     private fun doReverseTranslateAnimationByValueAnimator() {
         val originLeft = tvTranslateAnimation!!.left
-        val objectAnimator = ObjectAnimator.ofFloat(tvTranslateAnimation, "translationX", originLeft.toFloat(), (originLeft + 100).toFloat(), 0f)
-        objectAnimator.setInterpolator(AccelerateDecelerateInterpolator())
-        objectAnimator.setDuration(300)
-        objectAnimator.start()
+        ObjectAnimator.ofFloat(tvTranslateAnimation, "translationX", originLeft.toFloat(), (originLeft + 100).toFloat(), 0f).apply {
+            interpolator = AccelerateDecelerateInterpolator()
+            duration = 300
+            start()
+        }
     }
 
     companion object {
