@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_animi_activity_root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/frame_anim"
@@ -15,21 +14,32 @@
         android:id="@+id/tv_value_animator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textColor="#FFDD00"/>
+        android:textColor="#FFDD00"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_anim_translation"
-        android:layout_marginLeft="30dp"
         android:layout_width="wrap_content"
-        android:textSize="18sp"
         android:layout_height="wrap_content"
-        android:text="translation animation"/>
+        android:layout_marginLeft="30dp"
+        android:text="translation animation"
+        android:textSize="18sp" />
+
     <ImageView
         android:id="@+id/iv_notify_down"
         android:layout_width="10dp"
         android:layout_height="42dp"
-        android:layout_marginTop="20dp" android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:paddingBottom="26dp"
-         android:src="@drawable/arrow"/>
+        android:src="@drawable/arrow" />
+
+    <Button
+        android:id="@+id/btn_spring_anim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="spring anim"
+        android:layout_gravity="right"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
 </LinearLayout>
