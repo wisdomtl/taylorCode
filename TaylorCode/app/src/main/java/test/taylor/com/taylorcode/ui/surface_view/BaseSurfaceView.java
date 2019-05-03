@@ -47,7 +47,7 @@ public abstract class BaseSurfaceView extends SurfaceView implements SurfaceHold
 
     protected void init() {
         getHolder().addCallback(this);
-//        setBackgroundTransparent();
+        setBackgroundTransparent();
     }
 
     private void setBackgroundTransparent() {

@@ -117,10 +117,10 @@ public class FrameSurfaceView extends BaseSurfaceView {
 
     @Override
     protected void onFrameDraw(Canvas canvas) {
+        clearCanvas(canvas);
         if (!isStart()) {
             return;
         }
-        clearCanvas(canvas);
         if (!isFinish()) {
             drawOneFrame(canvas);
         } else {
