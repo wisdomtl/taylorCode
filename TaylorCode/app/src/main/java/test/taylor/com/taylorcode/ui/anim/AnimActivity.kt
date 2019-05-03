@@ -56,10 +56,15 @@ class AnimActivity : Activity(), View.OnClickListener {
 
 
     private fun initView() {
-        ivFrameAnim = findViewById<View>(R.id.frame_anim) as ImageView
-        animationDrawable = createAnimationDrawable(this)
-        ivFrameAnim!!.setImageDrawable(animationDrawable)
-        ivFrameAnim!!.setOnClickListener(this)
+        frame_anim.setOnClickListener {
+            animationDrawable = createAnimationDrawable(this)
+            frame_anim.setImageDrawable(animationDrawable)
+            //stop first is must or start wont work when clicking twice
+            if (animationDrawable!!.isRunning) {
+                animationDrawable!!.stop()
+            }
+            animationDrawable!!.start()
+        }
 
         tvValueAnimator = findViewById<View>(R.id.tv_value_animator) as TextView
         tvTranslateAnimation = findViewById<View>(R.id.tv_anim_translation) as TextView
@@ -94,6 +99,28 @@ class AnimActivity : Activity(), View.OnClickListener {
     private fun createAnimationDrawable(context: Context): AnimationDrawable {
         val drawable = AnimationDrawable()
         val frameDuration = BOMB_ANIM_DURATION_IN_MILLISECOND / 21
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_1, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_2, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_3, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_4, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_5, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_6, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_7, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_8, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_9, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_10, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_11, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_12, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_13, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_14, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_15, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_16, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_17, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_18, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_19, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_20, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_21, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
+        drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_22, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
         drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_1, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
         drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_2, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
         drawable.addFrame(BitmapDrawable(BitmapUtil.decodeSampledBitmapFromResource(context.resources, R.drawable.watch_reward_3, DimensionUtil.dp2px(54.0), DimensionUtil.dp2px(54.0))), frameDuration)
@@ -227,21 +254,11 @@ class AnimActivity : Activity(), View.OnClickListener {
 
 
     override fun onClick(v: View) {
-        val id = v.id
-        when (id) {
-            R.id.frame_anim -> {
-                //stop first is must or start wont work when clicking twice
-                if (animationDrawable!!.isRunning) {
-                    animationDrawable!!.stop()
-                }
-                animationDrawable!!.start()
-            }
+        when (v.id) {
             R.id.tv_anim_translation ->
                 //                doTranslateAnimation();
                 doReverseTranslateAnimationByValueAnimator()
             R.id.iv_notify_down -> doVerticalTranslateAnimation()
-            else -> {
-            }
         }
     }
 

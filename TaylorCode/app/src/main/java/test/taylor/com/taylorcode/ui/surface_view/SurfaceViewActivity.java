@@ -35,9 +35,31 @@ public class SurfaceViewActivity extends AppCompatActivity implements View.OnCli
             R.drawable.watch_reward_19,
             R.drawable.watch_reward_20,
             R.drawable.watch_reward_21,
+            R.drawable.watch_reward_22,
+            R.drawable.watch_reward_1,
+            R.drawable.watch_reward_2,
+            R.drawable.watch_reward_3,
+            R.drawable.watch_reward_4,
+            R.drawable.watch_reward_5,
+            R.drawable.watch_reward_6,
+            R.drawable.watch_reward_7,
+            R.drawable.watch_reward_8,
+            R.drawable.watch_reward_9,
+            R.drawable.watch_reward_10,
+            R.drawable.watch_reward_11,
+            R.drawable.watch_reward_12,
+            R.drawable.watch_reward_13,
+            R.drawable.watch_reward_14,
+            R.drawable.watch_reward_15,
+            R.drawable.watch_reward_16,
+            R.drawable.watch_reward_17,
+            R.drawable.watch_reward_18,
+            R.drawable.watch_reward_19,
+            R.drawable.watch_reward_20,
+            R.drawable.watch_reward_21,
             R.drawable.watch_reward_22);
 
-//    private List<Integer> bitmaps = Arrays.asList(R.drawable.stop);
+    //    private List<Integer> bitmaps = Arrays.asList(R.drawable.stop);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
