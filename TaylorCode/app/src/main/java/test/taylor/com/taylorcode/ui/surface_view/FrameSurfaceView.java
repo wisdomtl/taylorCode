@@ -21,13 +21,13 @@ import test.taylor.com.taylorcode.util.BitmapUtil;
  * a SurfaceView which draws bitmaps one after another like frame animation
  */
 public class FrameSurfaceView extends BaseSurfaceView {
-    public static final int INVALID_BITMAP_INDEX = -1;
+    public static final int INVALID_BITMAP_INDEX = Integer.MAX_VALUE;
 
     private List<Integer> bitmaps = new ArrayList<>();
     private Bitmap frameBitmap;
     private int bitmapIndex = INVALID_BITMAP_INDEX;
     private Paint paint = new Paint();
-    private BitmapFactory.Options options = new BitmapFactory.Options();
+    private BitmapFactory.Options options;
     private Rect srcRect;
     private Rect dstRect = new Rect();
     private int defaultWidth;
@@ -77,6 +77,13 @@ public class FrameSurfaceView extends BaseSurfaceView {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        options = new BitmapFactory.Options();
+        options.inMutable = true;
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         dstRect.set(0, 0, getWidth(), getHeight());
@@ -94,10 +101,14 @@ public class FrameSurfaceView extends BaseSurfaceView {
 
     @Override
     protected void onFrameDrawFinish() {
-        recycleOneFrame();
+//        recycle();
     }
 
-    private void recycleOneFrame() {
+    /**
+     * recycle the bitmap used by frame animation.
+     * Usually it should be invoked when the ui of frame animation is no longer visible
+     */
+    public void recycle() {
         if (frameBitmap != null) {
             frameBitmap.recycle();
             frameBitmap = null;
@@ -106,28 +117,65 @@ public class FrameSurfaceView extends BaseSurfaceView {
 
     @Override
     protected void onFrameDraw(Canvas canvas) {
+        if (!isStart()) {
+            return;
+        }
         clearCanvas(canvas);
-        drawOneFrame(canvas);
+        if (!isFinish()) {
+            drawOneFrame(canvas);
+        } else {
+            onFrameAnimationEnd();
+        }
     }
 
+    /**
+     * draw a single frame which is a bitmap
+     *
+     * @param canvas
+     */
     private void drawOneFrame(Canvas canvas) {
-        if (allowDraw()) {
-            Log.v("ttaylor", "ProgressRingSurfaceView.onFrameDraw()" + "  bitmapIndex=" + bitmapIndex + " measureWidth=" + getMeasuredWidth());
-            frameBitmap = BitmapUtil.decodeOriginBitmap(getResources(), bitmaps.get(bitmapIndex), options);
-            canvas.drawBitmap(frameBitmap, srcRect, dstRect, paint);
-            bitmapIndex++;
-        }
+        Log.v("ttaylor", "ProgressRingSurfaceView.onFrameDraw()" + "  bitmapIndex=" + bitmapIndex + " measureWidth=" + getMeasuredWidth());
+        frameBitmap = BitmapUtil.decodeOriginBitmap(getResources(), bitmaps.get(bitmapIndex), options);
+        options.inBitmap = frameBitmap;
+        canvas.drawBitmap(frameBitmap, srcRect, dstRect, paint);
+        bitmapIndex++;
     }
 
-    private boolean allowDraw() {
-        //frame animation has not started
-        if (bitmapIndex == INVALID_BITMAP_INDEX) {
-            return false;
-        }
-        //frame animation is doing
-        return bitmapIndex < bitmaps.size();
+    /**
+     * invoked when frame animation is done
+     */
+    private void onFrameAnimationEnd() {
+        reset();
     }
 
+    /**
+     * reset the index of bitmap, preparing for the next frame animation
+     */
+    private void reset() {
+        bitmapIndex = INVALID_BITMAP_INDEX;
+    }
+
+    /**
+     * whether frame animation is finished
+     *
+     * @return true: animation is finished, false: animation is doing
+     */
+    private boolean isFinish() {
+        return bitmapIndex >= bitmaps.size();
+    }
+
+    /**
+     * whether frame animation is started
+     *
+     * @return true: animation is started, false: animation is not started
+     */
+    private boolean isStart() {
+        return bitmapIndex != INVALID_BITMAP_INDEX;
+    }
+
+    /**
+     * start frame animation which means draw list of bitmaps from 0 index
+     */
     public void start() {
         bitmapIndex = 0;
     }
@@ -135,8 +183,7 @@ public class FrameSurfaceView extends BaseSurfaceView {
 
     /**
      * clear out the drawing on canvas,preparing for the next frame
-     *
-     * @param canvas
+     * * @param canvas
      */
     private void clearCanvas(Canvas canvas) {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
