@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.main_activity.*
 
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
+import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
 import test.taylor.com.taylorcode.ui.DialogActivity
@@ -77,13 +78,30 @@ class MainActivity : AppCompatActivity() {
         btn_rx_binding.setOnClickListener{startActivity(LoginActivity::class.java)}
         btn_surface_view.setOnClickListener{startActivity(SurfaceViewActivity::class.java)}
         btn_kotlin_activity.setOnClickListener{startActivity(KotlinActivity::class.java)}
+        btn_kotlin_example.setOnClickListener { startActivity(KotlinExample::class.java) }
+
+
+        //SAM case:
+        val onClickListener = View.OnClickListener{Log.v("ttaylor","tag=SAM, view id=${it.id}")}
+
+        btn_room.setOnClickListener(onClickListener)
+        btn_livedata.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                Log.v("ttaylor","tag=SAM object, view id=${v?.id}")
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.v("ttaylor", "MainActivity.onSaveInstanceState()" + "  ")
     }
+    object clickListener : View.OnClickListener{
+        override fun onClick(v: View?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
+    }
     override fun onRestart() {
         super.onRestart()
         Log.v("ttaylor", "MainActivity.onRestart()" + "  ")

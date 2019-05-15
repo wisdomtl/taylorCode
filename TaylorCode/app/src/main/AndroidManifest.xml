@@ -61,6 +61,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity android:name=".kotlin.KotlinExample"></activity>
+
         <activity android:name=".annotations.AnnotationActivity">
         </activity>
         <activity android:name=".rxjava.LoginActivity"/>
