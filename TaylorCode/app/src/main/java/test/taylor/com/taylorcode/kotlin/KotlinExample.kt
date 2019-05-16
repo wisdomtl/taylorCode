@@ -3,7 +3,6 @@ package test.taylor.com.taylorcode.kotlin
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import kotlin.Comparator
 
 class KotlinExample : Activity() {
 
@@ -24,14 +23,18 @@ class KotlinExample : Activity() {
         Log.v("ttaylor", "filter.()$youngStudents")
 
         //kotlin collection case2:
-        val friends = students.flatMap { it.courses }.toSet().filter {
-            Log.v("ttaylor", "tag=filter log, name=${it.name}")
-            it.period < 70 && !it.isMust
-        }.map {
-            it.apply {
-                name = name.replace(name.first(), name.first().toUpperCase())
-            }
-        }.sortedWith(compareBy({ it.period }, { it.name }))
+        val friends = students
+                .flatMap { it.courses }
+                .toSet()
+                .filter {
+                    it.period < 70 && !it.isMust
+                }
+                .map {
+                    it.apply {
+                        name = name.replace(name.first(), name.first().toUpperCase())
+                    }
+                }
+                .sortedWith(compareBy({ it.period }, { it.name }))
 
         Log.v("ttaylor", "flatMap.()$friends")
     }
