@@ -42,4 +42,11 @@
         android:layout_height="wrap_content"
         android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="match_parent"
+        android:text="finish"
+        android:textSize="20sp"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

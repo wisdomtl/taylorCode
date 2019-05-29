@@ -203,6 +203,7 @@
         </activity>
         <activity android:name=".photo.TakePhotoActivity">
         </activity>
+        <activity android:name=".SetResultActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->

@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_drawer_activator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Acb"
-        android:textSize="30dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="openDrawer"
+        android:textSize="30dp" />
 
+    <Button
+        android:id="@+id/btnSetResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start without for result"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_drawer_activator" />
+
+    <Button
+        android:id="@+id/btnForResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start for result"
+        android:textSize="20sp"
+
+        app:layout_constraintTop_toBottomOf="@id/btnSetResult" />
 </android.support.constraint.ConstraintLayout>
