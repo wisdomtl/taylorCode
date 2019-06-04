@@ -18,6 +18,13 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/glOutofBottom"
+        app:layout_constraintGuide_percent="1.05"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
     <Button
         android:id="@+id/btn4"
@@ -152,6 +159,18 @@
         android:text="tv4"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/gl_tv4" />
+
+
+    <!--ConstraintLayout case7:GuideLine out of screen-->
+    <TextView
+        android:id="@+id/tvBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bottom"
+        app:layout_constraintBottom_toTopOf="@id/glOutofBottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="56sp"/>
 
 
 </android.support.constraint.ConstraintLayout>

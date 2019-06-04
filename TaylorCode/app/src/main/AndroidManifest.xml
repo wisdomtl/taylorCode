@@ -204,6 +204,7 @@
         <activity android:name=".photo.TakePhotoActivity">
         </activity>
         <activity android:name=".SetResultActivity" />
+        <activity android:name=".ui.viewstub.ViewStubActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
