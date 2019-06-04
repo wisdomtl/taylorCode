@@ -5,11 +5,11 @@
     android:layout_height="match_parent">
 
     <!--<android.support.constraint.Guideline-->
-        <!--android:id="@+id/glOutofBottom"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--app:layout_constraintGuide_percent="1.05" />-->
+    <!--android:id="@+id/glOutofBottom"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal"-->
+    <!--app:layout_constraintGuide_percent="1.05" />-->
 
     <TextView
         android:id="@+id/tvTop"
@@ -36,19 +36,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout="@layout/viewstub_layout"
-        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tvooo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="dkfjsdklfjsdkj"
+        android:textSize="60sp"
+        android:background="#0000ff"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/tvooo"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="dkfjsdklfjsdkj"-->
-        <!--android:textSize="60sp"-->
-        <!--app:layout_constraintBottom_toTopOf="@id/glOutofBottom"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent" />-->
 
 
 </android.support.constraint.ConstraintLayout>
