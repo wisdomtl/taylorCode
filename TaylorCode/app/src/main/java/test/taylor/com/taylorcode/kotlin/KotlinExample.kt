@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 
 class KotlinExample : Activity() {
+    private var trolley: MutableMap<Int, String> = mutableMapOf(Pair(1, "q"), Pair(2, "r"), Pair(3, "e"), Pair(4, "w") )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +38,17 @@ class KotlinExample : Activity() {
                 .sortedWith(compareBy({ it.period }, { it.name }))
 
         Log.v("ttaylor", "flatMap.()$friends")
+
+        //kotlin map case:remove key and value when iterate map
+//        trolley.forEach {
+//            if (it.key == 1) trolley.remove(it.key)
+//        }
+        val iterator = trolley.iterator()
+        while (iterator.hasNext()){
+            val next = iterator.next()
+            if (next.key ==1) iterator.remove()
+            Log.v("ttaylor","tag=next, next="+iterator.next())
+        }
+        Log.v("ttaylor","tag=map, trolley=${trolley}")
     }
 }
