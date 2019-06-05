@@ -39,7 +39,7 @@ public class ViewStubActivity extends AppCompatActivity {
         View vsRoot = vs.inflate();
         vsRoot.setVisibility(View.VISIBLE);
         doBottomInAnim(vsRoot);
-        hideBottomView(findViewById(R.id.tvooo));
+        hideBottomView(findViewById(R.id.tvooo), findViewById(R.id.tviii));
     }
 
     private void doBottomInAnim(View view) {
@@ -66,13 +66,13 @@ public class ViewStubActivity extends AppCompatActivity {
             });
             animatorSet.playTogether(animator, animator2);
             animatorSet.start();
-        },0);
+        }, 0);
     }
 
-    private void hideBottomView(View view){
+    private void hideBottomView(View view, View subView) {
         view.postDelayed(() -> {
             int height = view.getHeight();
-            Log.v("ttaylor", "ViewStubActivity.hideBottomView()" + "  height="+height);
+            Log.v("ttaylor", "ViewStubActivity.hideBottomView()" + "  height=" + height);
             AnimatorSet animatorSet = new AnimatorSet();
             ValueAnimator animator = ValueAnimator.ofFloat(1.0f, 0);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -80,6 +80,7 @@ public class ViewStubActivity extends AppCompatActivity {
             animator.addUpdateListener(animation -> {
                 float size = (Float) animation.getAnimatedValue();
                 view.setAlpha(size);
+                subView.setAlpha(size);
             });
 
 
@@ -89,10 +90,11 @@ public class ViewStubActivity extends AppCompatActivity {
             animator2.addUpdateListener(animation -> {
                 float size = (Float) animation.getAnimatedValue();
                 view.setTranslationY(size);
+                subView.setTranslationY(size);
             });
             animatorSet.playTogether(animator, animator2);
             animatorSet.start();
-        },0);
+        }, 0);
 
     }
 

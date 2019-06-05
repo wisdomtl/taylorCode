@@ -44,12 +44,30 @@
         android:id="@+id/tvooo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#0000ff"
         android:text="dkfjsdklfjsdkj"
         android:textSize="60sp"
-        android:background="#0000ff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tviii"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#456783"
+        android:text="iiiiiiiiiiiiiiiiii"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#ffff00"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@id/tvooo" />
+
+    <android.support.constraint.Group
+        android:id="@+id/gBottom"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="tviii,tvooo"
+        android:layout_height="wrap_content" />
 
 
 </android.support.constraint.ConstraintLayout>
