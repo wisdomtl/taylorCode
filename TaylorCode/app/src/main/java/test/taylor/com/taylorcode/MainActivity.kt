@@ -24,6 +24,7 @@ import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
+import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         btn_kotlin_activity.setOnClickListener { startActivity(KotlinActivity::class.java) }
         btn_kotlin_example.setOnClickListener { startActivity(KotlinExample::class.java) }
         btn_vs.setOnClickListener { startActivity(ViewStubActivity::class.java) }
+        btn_transparent_fragment.setOnClickListener { startActivity(TransparentFragmentActivity::class.java) }
 
 
         //SAM case:

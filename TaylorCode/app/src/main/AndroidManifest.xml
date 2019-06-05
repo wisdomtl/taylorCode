@@ -205,6 +205,7 @@
         </activity>
         <activity android:name=".SetResultActivity" />
         <activity android:name=".ui.viewstub.ViewStubActivity" />
+        <activity android:name=".ui.transparent_fragment.TransparentFragmentActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
