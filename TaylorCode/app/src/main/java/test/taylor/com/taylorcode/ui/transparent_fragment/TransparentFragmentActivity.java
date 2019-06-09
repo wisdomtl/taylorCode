@@ -22,7 +22,6 @@ public class TransparentFragmentActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.add(R.id.transparent_root,new TransparentFragment());
                 ft.commit() ;
-
             }
         });
     }
