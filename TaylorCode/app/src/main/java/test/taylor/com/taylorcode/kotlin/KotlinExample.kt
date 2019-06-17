@@ -6,7 +6,7 @@ import android.util.Log
 
 class KotlinExample : Activity() {
     companion object {
-        val SEX = 2
+        val SEX = 0
     }
 
     private var trolley: MutableMap<Int, String> = mutableMapOf(Pair(1, "q"), Pair(2, "r"), Pair(3, "e"), Pair(4, "w"))
@@ -18,7 +18,9 @@ class KotlinExample : Activity() {
                 Student("taylor", 33, isMale = false, courses = listOf(Course("physics", 50), Course("chemistry", 78)), sex = 1),
                 Student("milo", 20, isMale = false, courses = listOf(Course("computer", 50, true)), sex = 2),
                 Student("lili", 40, isMale = true, courses = listOf(Course("chemistry", 78), Course("science", 50)), sex = 1),
-                Student("meto", 10, isMale = false, courses = listOf(Course("mathematics", 48), Course("computer", 50, true)), sex = 2)
+                Student("meto", 10, isMale = false, courses = listOf(Course("mathematics", 48), Course("computer", 50, true)), sex = 2),
+                Student("ddd", 80, isMale = false, courses = listOf(Course("mathematics", 48)), sex = 0),
+                Student("ddd", 70, isMale = false, courses = listOf(Course("mathematics", 48)), sex = 0)
         )
         Log.d("ttaylor", students.find { it.age > 30 }.toString())
 
@@ -91,6 +93,26 @@ class KotlinExample : Activity() {
         goods.forEach { Log.w("ttaylor", "tag=sortWith(), KotlinExample.onCreate()  sex=${it.sex}") }
 
         val longger = Course("a", 10) > Course("b", 9)
-        Log.v("ttaylor","tag=operator >, KotlinExample.onCreate()  longger="+longger)
+        Log.v("ttaylor", "tag=operator >, KotlinExample.onCreate()  longger=" + longger)
+
+        /**
+         * kotlin sort case4: sort with different condition
+         */
+        val com2 = Comparator { o1: Student, o2: Student ->
+            if (o1.sex == o2.sex) {
+                o2.age - o1.age
+            } else if (o1.sex == KotlinExample.SEX) {
+                -1
+            } else if (o1.sex != 2) {
+                1
+            } else {
+                if (o2.sex == KotlinExample.SEX) {
+                    1
+                } else {
+                    -1
+                }
+            }
+        }
+        students.sortedWith(com2).forEach { Log.v("ttaylor", "tag=sotr multiple, KotlinExample.onCreate()  age=${it.age} ,sex=${it.sex}") }
     }
 }
