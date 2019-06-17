@@ -28,7 +28,7 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/btn_livedata"
+            android:id="@+id/btn_llive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LiveData"

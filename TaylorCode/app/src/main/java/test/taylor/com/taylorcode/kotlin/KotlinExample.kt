@@ -5,20 +5,26 @@ import android.os.Bundle
 import android.util.Log
 
 class KotlinExample : Activity() {
-    private var trolley: MutableMap<Int, String> = mutableMapOf(Pair(1, "q"), Pair(2, "r"), Pair(3, "e"), Pair(4, "w") )
+    companion object {
+        val SEX = 2
+    }
+
+    private var trolley: MutableMap<Int, String> = mutableMapOf(Pair(1, "q"), Pair(2, "r"), Pair(3, "e"), Pair(4, "w"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val students = listOf(
-                Student("taylor", 33, isMale = false, courses = listOf(Course("physics", 50), Course("chemistry", 78))),
-                Student("milo", 20, isMale = false, courses = listOf(Course("computer", 50, true))),
-                Student("lili", 40, isMale = true, courses = listOf(Course("chemistry", 78), Course("science", 50))),
-                Student("meto", 10, isMale = false, courses = listOf(Course("mathematics", 48), Course("computer", 50, true)))
+                Student("taylor", 33, isMale = false, courses = listOf(Course("physics", 50), Course("chemistry", 78)), sex = 1),
+                Student("milo", 20, isMale = false, courses = listOf(Course("computer", 50, true)), sex = 2),
+                Student("lili", 40, isMale = true, courses = listOf(Course("chemistry", 78), Course("science", 50)), sex = 1),
+                Student("meto", 10, isMale = false, courses = listOf(Course("mathematics", 48), Course("computer", 50, true)), sex = 2)
         )
         Log.d("ttaylor", students.find { it.age > 30 }.toString())
 
-        //kotlin collection case1:filter and modify the first element in list
+        /**
+         *kotlin collection case1:filter and modify the first element in list
+         */
         val youngStudents = students.filter { !it.isMale && it.age < 30 }
         youngStudents.first().apply { this.name = this.name.toUpperCase() }
         Log.v("ttaylor", "filter.()$youngStudents")
@@ -39,16 +45,52 @@ class KotlinExample : Activity() {
 
         Log.v("ttaylor", "flatMap.()$friends")
 
-        //kotlin map case:remove key and value when iterate map
-//        trolley.forEach {
-//            if (it.key == 1) trolley.remove(it.key)
-//        }
+        /**
+         *kotlin map case:remove key and value when iterate map
+         */
         val iterator = trolley.iterator()
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             val next = iterator.next()
-            if (next.key ==1) iterator.remove()
-            Log.v("ttaylor","tag=next, next="+iterator.next())
+            if (next.key == 1) iterator.remove()
+            Log.v("ttaylor", "tag=next, next=" + iterator.next())
         }
-        Log.v("ttaylor","tag=map, trolley=${trolley}")
+        Log.v("ttaylor", "tag=map, trolley=${trolley}")
+
+
+        /**
+         *kotlin sort case1:sorted()
+         */
+        students.sorted().forEach { Log.v("ttaylor", "tag=sorted, KotlinExample.onCreate()  student=${it.sex}") }
+        students.forEach { Log.v("ttaylor", "tag=sorted, KotlinExample.onCreate()  student=${it.sex}") }
+
+        /**
+         * kotlin sort case2:List.sortedWith()
+         */
+        val goods = mutableListOf(GoodsDetail(sex = 1), GoodsDetail(sex = 2), GoodsDetail(sex = 1), GoodsDetail(sex = 2), GoodsDetail(sex = 1))
+        val com = Comparator { o1: GoodsDetail, o2: GoodsDetail ->
+            if (o1.sex == 2) {
+                1
+            }
+            //male is in the front of female
+            //sort wont work if a method is invoked
+            if (KotlinExample.SEX == 1) {
+                o2.sex - o1.sex
+            }
+            //female is in the front of male
+            else {
+                o1.sex - o2.sex
+            }
+        }
+        goods.sortedWith(com).forEach { Log.w("ttaylor", "tag=sort, KotlinExample.onCreate()  sex=${it.sex}") }
+        goods.forEach { Log.e("ttaylor", "tag=sort, KotlinExample.onCreate()  sex=${it.sex}") }
+
+        /**
+         * kotlin sort case3:MutableList.sortWith()
+         */
+        goods.sortWith(com)
+        goods.forEach { Log.w("ttaylor", "tag=sortWith(), KotlinExample.onCreate()  sex=${it.sex}") }
+
+        val longger = Course("a", 10) > Course("b", 9)
+        Log.v("ttaylor","tag=operator >, KotlinExample.onCreate()  longger="+longger)
     }
 }

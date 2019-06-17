@@ -63,6 +63,7 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
         StringLiveData.getInstance().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+                Log.v("ttaylor", "StringLiveData.onChanged()" + "  s="+s);
                 tv1.setText(s);
             }
         });

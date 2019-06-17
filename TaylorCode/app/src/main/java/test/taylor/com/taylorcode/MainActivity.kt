@@ -64,7 +64,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         btn_room.setOnClickListener { startActivity(RoomActivity::class.java) }
-        btn_livedata.setOnClickListener { startActivity(Activity1::class.java) }
+        btn_llive.setOnClickListener {
+            Log.v("ttaylor","tag=, MainActivity.initView()  ")
+            startActivity(Activity1::class.java) }
         btn_window.setOnClickListener { startActivity(WindowActivity::class.java) }
         btn_touch_event.setOnClickListener { startActivity(TouchEventActivity::class.java) }
         btn_selector.setOnClickListener { startActivity(SelectorDemoActivity::class.java) }
@@ -89,11 +91,6 @@ class MainActivity : AppCompatActivity() {
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
 
         btn_room.setOnClickListener(onClickListener)
-        btn_livedata.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                Log.v("ttaylor", "tag=SAM object, view id=${v?.id}")
-            }
-        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
