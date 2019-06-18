@@ -24,6 +24,7 @@ class KotlinExample : Activity() {
         )
         Log.d("ttaylor", students.find { it.age > 30 }.toString())
 
+
         /**
          *kotlin collection case1:filter and modify the first element in list
          */
@@ -114,5 +115,10 @@ class KotlinExample : Activity() {
             }
         }
         students.sortedWith(com2).forEach { Log.v("ttaylor", "tag=sotr multiple, KotlinExample.onCreate()  age=${it.age} ,sex=${it.sex}") }
+
+        Log.v("ttaylor","tag=buy, KotlinExample.onCreate()  num=${60000.formatNums()}")
+        Log.v("ttaylor","tag=div, KotlinExample.onCreate()  num=${1000.rem(1000)}")
     }
+
 }
+
