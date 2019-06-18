@@ -1,12 +1,17 @@
 package test.taylor.com.taylorcode.ui.viewstub;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.graphics.drawable.AnimationUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -21,17 +26,61 @@ import test.taylor.com.taylorcode.util.DimensionUtil;
 
 public class ViewStubActivity extends AppCompatActivity {
     private int duration = 400;
+    private boolean show = false;
+    private ConstraintLayout root;
+    private View tvooo;
+    private ConstraintSet set;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewstub_activity);
+        root = findViewById(R.id.croot);
+        tvooo = findViewById(R.id.tvooo);
         findViewById(R.id.btnShowVs).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showViewStub();
             }
         });
+        findViewById(R.id.btnHide).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (show) {
+                    hideView();
+                    show = !show;
+                } else {
+                    showView();
+                    show = !show;
+                }
+            }
+        });
+
+    }
+
+    private void showView() {
+        AutoTransition autoTransition = new AutoTransition();
+        autoTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+        autoTransition.setDuration(280);
+        set = new ConstraintSet();
+        set.clone(root);
+        TransitionManager.beginDelayedTransition(root, autoTransition);
+        set.clear(R.id.tvooo,ConstraintSet.TOP);
+        set.connect(R.id.tvooo, ConstraintSet.BOTTOM, R.id.vDivider, ConstraintSet.BOTTOM);
+        set.applyTo(root);
+    }
+
+    private void hideView() {
+        AutoTransition autoTransition = new AutoTransition();
+        autoTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+        autoTransition.setDuration(280);
+        set = new ConstraintSet();
+        set.clone(root);
+        TransitionManager.beginDelayedTransition(root, autoTransition);
+        set.clear(R.id.tvooo,ConstraintSet.BOTTOM);
+        set.connect(R.id.tvooo, ConstraintSet.TOP, R.id.vDivider, ConstraintSet.BOTTOM);
+        set.applyTo(root);
+
     }
 
     private void showViewStub() {
@@ -39,7 +88,7 @@ public class ViewStubActivity extends AppCompatActivity {
         View vsRoot = vs.inflate();
         vsRoot.setVisibility(View.VISIBLE);
         doBottomInAnim(vsRoot);
-        hideBottomView(findViewById(R.id.tvooo), findViewById(R.id.tviii));
+        hideBottomView(findViewById(R.id.tvooo), null);
     }
 
     private void doBottomInAnim(View view) {
@@ -80,7 +129,9 @@ public class ViewStubActivity extends AppCompatActivity {
             animator.addUpdateListener(animation -> {
                 float size = (Float) animation.getAnimatedValue();
                 view.setAlpha(size);
-                subView.setAlpha(size);
+                if (subView != null) {
+                    subView.setAlpha(size);
+                }
             });
 
 
@@ -90,7 +141,9 @@ public class ViewStubActivity extends AppCompatActivity {
             animator2.addUpdateListener(animation -> {
                 float size = (Float) animation.getAnimatedValue();
                 view.setTranslationY(size);
-                subView.setTranslationY(size);
+                if (subView != null) {
+                    subView.setTranslationY(size);
+                }
             });
             animatorSet.playTogether(animator, animator2);
             animatorSet.start();
