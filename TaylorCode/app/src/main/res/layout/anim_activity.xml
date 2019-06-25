@@ -38,8 +38,15 @@
         android:id="@+id/btnSpringAnim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="spring anim"
         android:layout_gravity="right"
+        android:text="spring anim"
         android:textAllCaps="false"
         android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/btnAnimatorSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AnimatorSet"
+        android:textAllCaps="false" />
 </LinearLayout>

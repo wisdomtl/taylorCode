@@ -100,6 +100,8 @@ class KotlinExample : Activity() {
          * kotlin sort case4: sort with different condition
          */
         val com2 = Comparator { o1: Student, o2: Student ->
+            //lambda is able to access class member
+            Log.e("ttaylor","tag=lambda, KotlinExample.onCreate()  trolley=${trolley}")
             if (o1.sex == o2.sex) {
                 o2.age - o1.age
             } else if (o1.sex == KotlinExample.SEX) {

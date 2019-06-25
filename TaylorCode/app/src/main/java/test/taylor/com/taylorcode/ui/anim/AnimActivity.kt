@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.anim_activity.*
 
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.extension.extraAnimClickListener
+import test.taylor.com.taylorcode.kotlin.addListener
 import test.taylor.com.taylorcode.util.BitmapUtil
 import test.taylor.com.taylorcode.util.DimensionUtil
 
@@ -51,7 +52,8 @@ class AnimActivity : Activity(), View.OnClickListener {
         initView()
 
         createValueAnimator()
-        doAnimatorSet(20, 50)
+        btnAnimatorSet.setOnClickListener { doAnimatorSet(20, 50) }
+
     }
 
 
@@ -248,6 +250,15 @@ class AnimActivity : Activity(), View.OnClickListener {
                     }
             )
             startDelay = BOMB_ANIM_DURATION_IN_MILLISECOND.toLong()
+            //kotlin DSL case1:implement interface method as you desire
+            addListener {
+                onEnd {
+                    Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  end")
+                }
+                onStart {
+                    Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  start")
+                }
+            }
             start()
         }
     }
