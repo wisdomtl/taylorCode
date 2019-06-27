@@ -3,6 +3,9 @@ package test.taylor.com.taylorcode.kotlin
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import kotlinx.android.synthetic.main.kotlin_activity.*
+import test.taylor.com.taylorcode.R
 
 class KotlinExample : Activity() {
     companion object {
@@ -13,6 +16,15 @@ class KotlinExample : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.kotlin_activity)
+        /**
+         * kotlin DSL case1:onclick listener wrapper
+         */
+        btnOnClick.setOnDataClickListener {
+            onClick {
+                Toast.makeText(this@KotlinExample, "btn is click", Toast.LENGTH_LONG).show()
+            }
+        }
 
         val students = listOf(
                 Student("taylor", 33, isMale = false, courses = listOf(Course("physics", 50), Course("chemistry", 78)), sex = 1),
@@ -101,7 +113,7 @@ class KotlinExample : Activity() {
          */
         val com2 = Comparator { o1: Student, o2: Student ->
             //lambda is able to access class member
-            Log.e("ttaylor","tag=lambda, KotlinExample.onCreate()  trolley=${trolley}")
+            Log.e("ttaylor", "tag=lambda, KotlinExample.onCreate()  trolley=${trolley}")
             if (o1.sex == o2.sex) {
                 o2.age - o1.age
             } else if (o1.sex == KotlinExample.SEX) {
@@ -118,8 +130,9 @@ class KotlinExample : Activity() {
         }
         students.sortedWith(com2).forEach { Log.v("ttaylor", "tag=sotr multiple, KotlinExample.onCreate()  age=${it.age} ,sex=${it.sex}") }
 
-        Log.v("ttaylor","tag=buy, KotlinExample.onCreate()  num=${60000.formatNums()}")
-        Log.v("ttaylor","tag=div, KotlinExample.onCreate()  num=${1000.rem(1000)}")
+        Log.v("ttaylor", "tag=buy, KotlinExample.onCreate()  num=${60000.formatNums()}")
+        Log.v("ttaylor", "tag=div, KotlinExample.onCreate()  num=${1000.rem(1000)}")
+
     }
 
 }

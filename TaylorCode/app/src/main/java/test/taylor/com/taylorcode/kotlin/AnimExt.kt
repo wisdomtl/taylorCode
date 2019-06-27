@@ -6,27 +6,28 @@ import android.util.Log
 
 
 fun AnimatorSet.addListener(action: AnimatorListenerBuilder.() -> Unit) {
-    val listenerBuilder = AnimatorListenerBuilder().apply{action}
-    addListener(object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {
-            animation?.let { listenerBuilder.repeatAction?.invoke(animation) }
-        }
+    AnimatorListenerBuilder().apply { action }.let { builder ->
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+                animation?.let { builder.repeatAction?.invoke(animation) }
+            }
 
-        override fun onAnimationEnd(animation: Animator?) {
-            Log.v("ttaylor","tag=anim-callback, .onAnimationEnd()  ")
-            animation?.let { listenerBuilder.endAction?.invoke(animation) }
-        }
+            override fun onAnimationEnd(animation: Animator?) {
+                Log.v("ttaylor", "tag=anim-callback, .onAnimationEnd()  ")
+                animation?.let { builder.endAction?.invoke(animation) }
+            }
 
-        override fun onAnimationCancel(animation: Animator?) {
-            animation?.let { listenerBuilder.cancelAction?.invoke(animation) }
-        }
+            override fun onAnimationCancel(animation: Animator?) {
+                animation?.let { builder.cancelAction?.invoke(animation) }
+            }
 
-        override fun onAnimationStart(animation: Animator?) {
-            Log.v("ttaylor","tag=anim-callback, .onAnimationStart()  ")
-            animation?.let { listenerBuilder.startActon?.invoke(animation) }
-        }
+            override fun onAnimationStart(animation: Animator?) {
+                Log.v("ttaylor", "tag=anim-callback, .onAnimationStart()  ")
+                animation?.let { builder.startActon?.invoke(animation) }
+            }
 
-    })
+        })
+    }
 }
 
 class AnimatorListenerBuilder {
