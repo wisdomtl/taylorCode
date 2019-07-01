@@ -252,10 +252,10 @@ class AnimActivity : Activity(), View.OnClickListener {
             startDelay = BOMB_ANIM_DURATION_IN_MILLISECOND.toLong()
             //kotlin DSL case1:implement interface method as you desire
             addListener {
-                onEnd {
+                onEnd = {
                     Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  end")
                 }
-                onStart {
+                onStart = {
                     Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  start")
                 }
             }

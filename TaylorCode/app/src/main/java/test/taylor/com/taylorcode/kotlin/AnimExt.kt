@@ -9,21 +9,21 @@ fun AnimatorSet.addListener(action: AnimatorListenerBuilder.() -> Unit) {
     AnimatorListenerBuilder().apply { action }.let { builder ->
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
-                animation?.let { builder.repeatAction?.invoke(animation) }
+                animation?.let { builder.onRepeat?.invoke(animation) }
             }
 
             override fun onAnimationEnd(animation: Animator?) {
                 Log.v("ttaylor", "tag=anim-callback, .onAnimationEnd()  ")
-                animation?.let { builder.endAction?.invoke(animation) }
+                animation?.let { builder.onEnd?.invoke(animation) }
             }
 
             override fun onAnimationCancel(animation: Animator?) {
-                animation?.let { builder.cancelAction?.invoke(animation) }
+                animation?.let { builder.onCancel?.invoke(animation) }
             }
 
             override fun onAnimationStart(animation: Animator?) {
                 Log.v("ttaylor", "tag=anim-callback, .onAnimationStart()  ")
-                animation?.let { builder.startActon?.invoke(animation) }
+                animation?.let { builder.onStart?.invoke(animation) }
             }
 
         })
@@ -31,25 +31,9 @@ fun AnimatorSet.addListener(action: AnimatorListenerBuilder.() -> Unit) {
 }
 
 class AnimatorListenerBuilder {
-    var repeatAction: ((Animator) -> Unit)? = null
-    var endAction: ((Animator) -> Unit)? = null
-    var cancelAction: ((Animator) -> Unit)? = null
-    var startActon: ((Animator) -> Unit)? = null
-
-    fun onRepeat(action: (Animator) -> Unit) {
-        repeatAction = action
-    }
-
-    fun onEnd(action: (Animator) -> Unit) {
-        endAction = action
-    }
-
-    fun onCancel(action: (Animator) -> Unit) {
-        cancelAction = cancelAction
-    }
-
-    fun onStart(action: (Animator) -> Unit) {
-        startActon = action
-    }
+    var onRepeat: ((Animator) -> Unit)? = null
+    var onEnd: ((Animator) -> Unit)? = null
+    var onCancel: ((Animator) -> Unit)? = null
+    var onStart: ((Animator) -> Unit)? = null
 }
 
