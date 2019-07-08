@@ -38,6 +38,7 @@ public class CustomViewActivity extends Activity implements View.OnClickListener
         addProgressRing();
 //        initSelector();
         initCustomSelector();
+
     }
 
     /**

@@ -58,6 +58,12 @@ class AnimActivity : Activity(), View.OnClickListener {
 
 
     private fun initView() {
+        frame_anim.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
         frame_anim.setOnClickListener {
             animationDrawable = createAnimationDrawable(this)
             frame_anim.setImageDrawable(animationDrawable)
