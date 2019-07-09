@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
+import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         btn_vs.setOnClickListener { startActivity(ViewStubActivity::class.java) }
         btn_transparent_fragment.setOnClickListener { startActivity(TransparentFragmentActivity::class.java) }
         btnOverrideProperty.setOnClickListener { startActivity(OverridePropertyActivity::class.java) }
-
+        btnKotlinCollection.setOnClickListener{startActivity(KotlinCollectionActivity::class.java)}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

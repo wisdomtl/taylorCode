@@ -207,6 +207,7 @@
         <activity android:name=".ui.viewstub.ViewStubActivity" />
         <activity android:name=".ui.transparent_fragment.TransparentFragmentActivity" />
         <activity android:name=".kotlin.override_property.OverridePropertyActivity" />
+        <activity android:name=".kotlin.collection.KotlinCollectionActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
