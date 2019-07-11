@@ -208,6 +208,7 @@
         <activity android:name=".ui.transparent_fragment.TransparentFragmentActivity" />
         <activity android:name=".kotlin.override_property.OverridePropertyActivity" />
         <activity android:name=".kotlin.collection.KotlinCollectionActivity" />
+        <activity android:name=".kotlin.invoke.InvokeActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
