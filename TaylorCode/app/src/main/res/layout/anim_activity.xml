@@ -49,4 +49,33 @@
         android:layout_height="wrap_content"
         android:text="AnimatorSet"
         android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnReverseAnimator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reverse value animator" />
+
+    <TextView
+        android:id="@+id/tvValueAnim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="value anim dsl"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnValueAnim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="do value anim"
+        android:textSize="30sp" />
+
+
+    <Button
+        android:id="@+id/btnReverseAnimatorWithoutDSL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="do reverse animatorSet without dsl" />
 </LinearLayout>

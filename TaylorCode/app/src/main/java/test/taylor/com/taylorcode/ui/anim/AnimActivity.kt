@@ -1,9 +1,6 @@
 package test.taylor.com.taylorcode.ui.anim
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -24,7 +21,9 @@ import kotlinx.android.synthetic.main.anim_activity.*
 
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.extension.extraAnimClickListener
+import test.taylor.com.taylorcode.kotlin.AnimSet
 import test.taylor.com.taylorcode.kotlin.addListener
+import test.taylor.com.taylorcode.kotlin.animSet
 import test.taylor.com.taylorcode.util.BitmapUtil
 import test.taylor.com.taylorcode.util.DimensionUtil
 
@@ -45,6 +44,27 @@ class AnimActivity : Activity(), View.OnClickListener {
     private var tvValueAnimator: TextView? = null
     private var ivArrow: ImageView? = null
     private var tvTranslateAnimation: TextView? = null
+    private lateinit var animator: ValueAnimator
+    private var clickedDsl: Boolean = false
+    private var clickedWithoutDSL: Boolean = false
+    private val animatorSet: AnimSet by lazy {
+        animSet {
+            anim {
+                action = { value -> tvValueAnim.translationX = (value as Float) }
+                values = floatArrayOf(0f, 200.0f)
+            }
+            anim {
+                action = { value -> tvValueAnim.alpha = (value as Float) }
+                values = floatArrayOf(1.0f, 0.3f)
+            }
+            anim {
+                action = { value -> tvValueAnim.scaleX = (value as Float) }
+                values = floatArrayOf(1.0f, 1.3f)
+            }
+            interpolator = AccelerateDecelerateInterpolator()
+            duration = 100L
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,14 +73,88 @@ class AnimActivity : Activity(), View.OnClickListener {
 
         createValueAnimator()
         btnAnimatorSet.setOnClickListener { doAnimatorSet(20, 50) }
-
+        btnReverseAnimator.setOnClickListener { animator.reverse() }
+        btnValueAnim.setOnClickListener {
+            if (clickedDsl) {
+                animatorSet.reverse()
+                clickedDsl = false
+            } else {
+                animatorSet.start()
+                clickedDsl = true
+            }
+        }
+        btnReverseAnimatorWithoutDSL.setOnClickListener {
+            if (clickedWithoutDSL) {
+                doReverseRawValueAnimatorWithoutDSL()
+                clickedWithoutDSL = false
+            } else {
+                doRawValueAnimatorWithoutDSL()
+                clickedWithoutDSL = true
+            }
+        }
     }
 
+    private fun doRawValueAnimatorWithoutDSL() {
+        val animSpan = 500L
+        AnimatorSet().apply {
+            playTogether(
+                    ValueAnimator.ofFloat(0f, 200.0f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.translationX = it.animatedValue as Float
+                        }
+                    },
+                    ValueAnimator.ofFloat(1.0f, 0.3f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.alpha = it.animatedValue as Float
+                        }
+                    },
+                    ValueAnimator.ofFloat(1.0f, 1.3f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.scaleX = it.animatedValue as Float
+                        }
+                    })
+            start()
+        }
+    }
+
+    private fun doReverseRawValueAnimatorWithoutDSL() {
+        val animSpan = 500L
+        AnimatorSet().apply {
+            playTogether(
+                    ValueAnimator.ofFloat(200f, 0f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.translationX = it.animatedValue as Float
+                        }
+                    },
+                    ValueAnimator.ofFloat(0.3f, 1.0f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.alpha = it.animatedValue as Float
+                        }
+                    },
+                    ValueAnimator.ofFloat(1.3f, 1.0f).apply {
+                        interpolator = AccelerateDecelerateInterpolator()
+                        duration = animSpan
+                        addUpdateListener {
+                            tvValueAnim?.scaleX = it.animatedValue as Float
+                        }
+                    })
+            start()
+        }
+    }
 
     private fun initView() {
-        frame_anim.setOnClickListener(object : View.OnClickListener{
+        frame_anim.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
         })
@@ -185,18 +279,22 @@ class AnimActivity : Activity(), View.OnClickListener {
      * animator case1:create value animator
      */
     private fun createValueAnimator() {
-        val animator = ValueAnimator.ofFloat(15f, 25f)
+        animator = ValueAnimator.ofFloat(15f, 25f)
         animator.interpolator = AccelerateInterpolator()
-        animator.addUpdateListener { animation -> Log.v("ttaylor", "AnimActivity.onAnimationUpdate()" + "  value=" + animation.animatedValue) }
+        animator.addUpdateListener { animation -> Log.v("ttaylor", "tag=reverse AnimActivity.onAnimationUpdate()" + "  value=" + animation.animatedValue) }
         animator.start()
+
+//        animator.setFloatValues(25f,15f)
+//        animator.start()
     }
+
 
     /**
      * animator case3:create several value animator and put them together in AnimatorSet
      */
     private fun doAnimatorSet(start: Int, end: Int) {
         tvValueAnimator!!.alpha = 1f
-        AnimatorSet().apply {
+        val anim = AnimatorSet().apply {
             playSequentially(
                     ValueAnimator.ofFloat(start.toFloat(), end.toFloat()).apply {
                         interpolator = AccelerateInterpolator()

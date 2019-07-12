@@ -20,10 +20,10 @@
 
     <android.support.constraint.Guideline
         android:id="@+id/glOutofBottom"
-        app:layout_constraintGuide_percent="1.05"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.05" />
 
 
     <Button
@@ -123,11 +123,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="center"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textSize="16sp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--ConstraintLayout case6:margin top with percentage-->
     <android.support.constraint.Guideline
@@ -154,9 +154,9 @@
 
     <TextView
         android:id="@+id/tv4"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tv4"
+        android:text="tvdkfslkfjdksljflsdjfkljdslkfjlkdsjflkjsdlfjdslkjflksjflksdjf4"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/gl_tv4" />
 
@@ -167,10 +167,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="bottom"
+        android:textSize="56sp"
         app:layout_constraintBottom_toTopOf="@id/glOutofBottom"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textSize="56sp"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <android.support.constraint.Barrier
+        android:id="@+id/b1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="tv4"
+        app:layout_constraintGuide_percent=".5" />
 
 </android.support.constraint.ConstraintLayout>
