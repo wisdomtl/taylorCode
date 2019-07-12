@@ -43,7 +43,7 @@ class AnimatorListenerBuilder {
  */
 class AnimSet {
     private val animatorSet = AnimatorSet()
-    private val animators by lazy { mutableListOf<ValueAnim>() }
+    private val animators by lazy { mutableListOf<Anim>() }
     var interpolator
         get() = LinearInterpolator() as Interpolator
         set(value) {
@@ -65,6 +65,13 @@ class AnimSet {
      */
     fun anim(action: ValueAnim.() -> Unit) {
         ValueAnim().apply(action).let { animators.add(it) }
+    }
+
+    /**
+     * build an Animator with a much shorter code by DSL
+     */
+    fun animObject(action: ObjectAnim.() -> Unit) {
+        ObjectAnim().apply(action).also { it.setPropertyValueHolder() }.let { animators.add(it) }
     }
 
     fun reverse() {
@@ -101,71 +108,112 @@ class AnimSet {
     }
 }
 
-abstract class Anim{
-    abstract var anim:Animator
-    abstract fun reverseValues()
-}
-
-//class ObjectAnim : ValueAnim() {
-//    var anim: ValueAnimator = ObjectAnimator()
-//    var animTarget: Any? = null
-//        set(value) {
-//            field = value
-//            anim.target = value
-//        }
-//    var propertyValueHolder: Any? = null
-//        set(value) {
-//            field = value
-//            anim.setValues(value as PropertyValuesHolder)
-//        }
-//}
-
-/**
- * a container for a single Animator
- */
-open class ValueAnim {
-    private var anim: ValueAnimator = ValueAnimator()
+abstract class Anim {
+    abstract var animation: ValueAnimator
     var duration
         get() = 300L
         set(value) {
-            anim.duration = value
+            animation.duration = value
         }
     var interpolator
         get() = LinearInterpolator() as Interpolator
         set(value) {
-            anim.interpolator = value
+            animation.interpolator = value
         }
+
+    abstract fun reverseValues()
+    fun getAnim() = animation
+}
+
+class ObjectAnim : Anim() {
+    override var animation: ValueAnimator = ObjectAnimator()
+
+    var translationX: FloatArray? = null
+    var translationY: FloatArray? = null
+    var scaleX: FloatArray? = null
+    var scaleY: FloatArray? = null
+    var alpha: FloatArray? = null
+    var target: Any? = null
+        set(value) {
+            field = value
+            (animation as ObjectAnimator).target = value
+        }
+    private val valuesHolder = mutableListOf<PropertyValuesHolder>()
+
+    override fun reverseValues() {
+        valuesHolder.forEach { valuesHolder ->
+            when (valuesHolder.propertyName) {
+                "translationX" -> translationX?.let {
+                    it.reverse()
+                    valuesHolder.setFloatValues(*it)
+                }
+                "translationY" -> translationY?.let {
+                    it.reverse()
+                    valuesHolder.setFloatValues(*it)
+                }
+                "scaleX" -> scaleX?.let {
+                    it.reverse()
+                    valuesHolder.setFloatValues(*it)
+                }
+                "scaleY" -> scaleY?.let {
+                    it.reverse()
+                    valuesHolder.setFloatValues(*it)
+                }
+                "alpha" -> alpha?.let {
+                    it.reverse()
+                    valuesHolder.setFloatValues(*it)
+                }
+            }
+        }
+    }
+
+    fun setPropertyValueHolder() {
+        translationX?.let { PropertyValuesHolder.ofFloat("translationX", *it) }?.let { valuesHolder.add(it) }
+        translationY?.let { PropertyValuesHolder.ofFloat("translationY", *it) }?.let { valuesHolder.add(it) }
+        scaleX?.let { PropertyValuesHolder.ofFloat("scaleX", *it) }?.let { valuesHolder.add(it) }
+        scaleY?.let { PropertyValuesHolder.ofFloat("scaleY", *it) }?.let { valuesHolder.add(it) }
+        alpha?.let { PropertyValuesHolder.ofFloat("alpha", *it) }?.let { valuesHolder.add(it) }
+        animation.setValues(*valuesHolder.toTypedArray())
+    }
+
+}
+
+/**
+ * a container for a single Animator
+ */
+class ValueAnim : Anim() {
+    override var animation: ValueAnimator = ValueAnimator()
+
     var values: Any? = null
         set(value) {
             field = value
             value?.let {
                 when (it) {
-                    is FloatArray -> anim.setFloatValues(*it)
-                    is IntArray -> anim.setIntValues(*it)
+                    is FloatArray -> animation.setFloatValues(*it)
+                    is IntArray -> animation.setIntValues(*it)
                     else -> throw IllegalArgumentException("unsupported type of value")
                 }
             }
         }
+
     var action: ((Any) -> Unit)? = null
         set(value) {
             field = value
-            anim.addUpdateListener { valueAnimator ->
+            animation.addUpdateListener { valueAnimator ->
                 valueAnimator.animatedValue.let { value?.invoke(it) }
             }
         }
 
-    fun getAnim() = anim
-
-    fun reverseValues() {
+    override fun reverseValues() {
         values?.let {
             when (it) {
                 is FloatArray -> {
                     it.reverse()
-                    anim.setFloatValues(*it)
+                    animation.setFloatValues(*it)
                 }
                 is IntArray -> {
                     it.reverse()
-                    anim.setIntValues(*it)
+                    animation.setIntValues(*it)
                 }
                 else -> throw IllegalArgumentException("unsupported type of value")
             }

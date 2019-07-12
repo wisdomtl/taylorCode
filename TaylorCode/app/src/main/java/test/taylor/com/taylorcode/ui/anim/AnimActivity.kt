@@ -48,21 +48,31 @@ class AnimActivity : Activity(), View.OnClickListener {
     private var clickedDsl: Boolean = false
     private var clickedWithoutDSL: Boolean = false
     private val animatorSet: AnimSet by lazy {
+        //        animSet {
+//            anim {
+//                action = { value -> tvValueAnim.translationX = (value as Float) }
+//                values = floatArrayOf(0f, 200.0f)
+//            }
+//            anim {
+//                action = { value -> tvValueAnim.alpha = (value as Float) }
+//                values = floatArrayOf(1.0f, 0.3f)
+//            }
+//            anim {
+//                action = { value -> tvValueAnim.scaleX = (value as Float) }
+//                values = floatArrayOf(1.0f, 1.3f)
+//            }
+//            interpolator = AccelerateDecelerateInterpolator()
+//            duration = 100L
+//        }
         animSet {
-            anim {
-                action = { value -> tvValueAnim.translationX = (value as Float) }
-                values = floatArrayOf(0f, 200.0f)
+            animObject {
+                target = tvValueAnim
+                translationX = floatArrayOf(0f, 200f)
+                alpha = floatArrayOf(1.0f, 0.3f)
+                scaleX = floatArrayOf(1.0f, 1.3f)
             }
-            anim {
-                action = { value -> tvValueAnim.alpha = (value as Float) }
-                values = floatArrayOf(1.0f, 0.3f)
-            }
-            anim {
-                action = { value -> tvValueAnim.scaleX = (value as Float) }
-                values = floatArrayOf(1.0f, 1.3f)
-            }
-            interpolator = AccelerateDecelerateInterpolator()
             duration = 100L
+            interpolator = AccelerateDecelerateInterpolator()
         }
     }
 
