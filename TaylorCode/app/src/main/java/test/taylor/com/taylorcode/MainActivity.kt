@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.main_activity.*
 
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
+import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
@@ -92,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         btnOverrideProperty.setOnClickListener { startActivity(OverridePropertyActivity::class.java) }
         btnKotlinCollection.setOnClickListener{startActivity(KotlinCollectionActivity::class.java)}
         btnInvoke.setOnClickListener{startActivity(InvokeActivity::class.java)}
+        btn_anonymous_fun.setOnClickListener { startActivity(AnoymousFunActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

@@ -209,6 +209,7 @@
         <activity android:name=".kotlin.override_property.OverridePropertyActivity" />
         <activity android:name=".kotlin.collection.KotlinCollectionActivity" />
         <activity android:name=".kotlin.invoke.InvokeActivity" />
+        <activity android:name=".kotlin.AnoymousFunActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->

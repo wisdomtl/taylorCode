@@ -7,30 +7,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/btn_anonymous_fun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin anonymous fun"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btnInvoke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="invoke activity"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnKotlinCollection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="kotlin collection"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnOverrideProperty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Override property"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_transparent_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="transparent fragment"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_vs"
             android:layout_width="match_parent"
