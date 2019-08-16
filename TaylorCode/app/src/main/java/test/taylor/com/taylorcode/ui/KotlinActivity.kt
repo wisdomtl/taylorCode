@@ -17,7 +17,12 @@ class KotlinActivity : AppCompatActivity() {
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
         listEquals()
+        split();
+    }
 
+    private fun split() {
+        val str = "asb;ddd;"
+        Log.v("ttaylor","tag=split, KotlinActivity.split()  split=${str.split(";")}")
     }
 
     private fun listEquals() {
