@@ -210,6 +210,8 @@
         <activity android:name=".kotlin.collection.KotlinCollectionActivity" />
         <activity android:name=".kotlin.invoke.InvokeActivity" />
         <activity android:name=".kotlin.AnoymousFunActivity" />
+        <activity android:name=".ui.anim.TransitionManagerActivity" />
+        <activity android:name="com.lpirro.constraintlayoutanimations.ConstraintSetActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->

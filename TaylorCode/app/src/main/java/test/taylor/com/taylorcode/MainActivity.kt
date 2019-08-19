@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import com.lpirro.constraintlayoutanimations.ConstraintSetActivity
 import kotlinx.android.synthetic.main.main_activity.*
 
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
@@ -21,6 +22,7 @@ import test.taylor.com.taylorcode.ui.DrawerLayoutActivity
 import test.taylor.com.taylorcode.ui.KotlinActivity
 import test.taylor.com.taylorcode.ui.TableLayoutActivity
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
+import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -94,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         btnKotlinCollection.setOnClickListener{startActivity(KotlinCollectionActivity::class.java)}
         btnInvoke.setOnClickListener{startActivity(InvokeActivity::class.java)}
         btn_anonymous_fun.setOnClickListener { startActivity(AnoymousFunActivity::class.java) }
+        btn_constraint_set_layout.setOnClickListener { startActivity(TransitionManagerActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
