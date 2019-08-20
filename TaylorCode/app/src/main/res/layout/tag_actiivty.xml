@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lineFeed"
+    android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+</test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout>

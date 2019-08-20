@@ -16,14 +16,11 @@ import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
-import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
-import test.taylor.com.taylorcode.ui.DialogActivity
-import test.taylor.com.taylorcode.ui.DrawerLayoutActivity
-import test.taylor.com.taylorcode.ui.KotlinActivity
-import test.taylor.com.taylorcode.ui.TableLayoutActivity
+import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.SelectorDemoActivity
+import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
@@ -97,6 +94,8 @@ class MainActivity : AppCompatActivity() {
         btnInvoke.setOnClickListener{startActivity(InvokeActivity::class.java)}
         btn_anonymous_fun.setOnClickListener { startActivity(AnoymousFunActivity::class.java) }
         btn_constraint_set_layout.setOnClickListener { startActivity(TransitionManagerActivity::class.java) }
+        btn_tag_activity.setOnClickListener { startActivity(TagActivity::class.java) }
+        btn_tag_view_activity.setOnClickListener { startActivity(TagViewActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
