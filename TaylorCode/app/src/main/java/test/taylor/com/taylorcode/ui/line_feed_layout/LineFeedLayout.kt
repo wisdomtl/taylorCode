@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui.line_feed_layout
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -24,20 +25,17 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
         if (heightMode == MeasureSpec.EXACTLY) {
             height = MeasureSpec.getSize(heightMeasureSpec)
         } else {
-            var line = if (childCount == 0) 0 else 1
             var remainWidth = width
             (0 until childCount).map { getChildAt(it) }.forEach { child ->
+                val lp = child.layoutParams as LinearLayout.LayoutParams
                 if (child.measuredWidth < remainWidth) {
                     remainWidth -= child.measuredWidth
                 } else {
-                    line++
                     remainWidth = width - child.measuredWidth
+                    height += (lp.topMargin + lp.bottomMargin + child.measuredHeight)
                 }
-                remainWidth -= (child.layoutParams as? LinearLayout.LayoutParams)?.let { it.leftMargin - it.rightMargin }
-                        ?: 0
+                remainWidth -= (lp.leftMargin + lp.rightMargin)
             }
-            val childHeight = if (childCount != 0) getChildAt(0).measuredHeight else 0
-            height = childHeight * line
         }
 
         setMeasuredDimension(width, height)
@@ -47,6 +45,7 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
         var left = 0
         var top = 0
         var lastBottom = 0
+        var count = 0
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
             val lp = child.layoutParams as LinearLayout.LayoutParams
             if (isNewLine(left, lp, child, r)) {
@@ -57,8 +56,9 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
             val childLeft = left + lp.leftMargin
             val childTop = top + lp.topMargin
             child.layout(childLeft, childTop, childLeft + child.measuredWidth, childTop + child.measuredHeight)
-            if (lastBottom == 0) lastBottom = child.bottom + lp.topMargin
+            if (lastBottom == 0) lastBottom = child.bottom
             left += child.measuredWidth + lp.leftMargin + lp.rightMargin
+            count++
         }
     }
 

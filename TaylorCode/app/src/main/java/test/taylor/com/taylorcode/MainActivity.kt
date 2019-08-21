@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity() {
         btn_constraint_set_layout.setOnClickListener { startActivity(TransitionManagerActivity::class.java) }
         btn_tag_activity.setOnClickListener { startActivity(TagActivity::class.java) }
         btn_tag_view_activity.setOnClickListener { startActivity(TagViewActivity::class.java) }
+        btn_constraint_add.setOnClickListener { startActivity(ConstraintLayoutActivity2::class.java) }
+
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

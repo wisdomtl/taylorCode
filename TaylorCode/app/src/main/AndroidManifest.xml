@@ -213,6 +213,7 @@
         <activity android:name=".ui.anim.TransitionManagerActivity" />
         <activity android:name="com.lpirro.constraintlayoutanimations.ConstraintSetActivity" />
         <activity android:name=".ui.line_feed_layout.TagActivity" />
+        <activity android:name=".ui.ConstraintLayoutActivity2" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->
