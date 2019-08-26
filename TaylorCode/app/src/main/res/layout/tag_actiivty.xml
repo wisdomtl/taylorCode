@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lineFeed"
-    android:layout_width="match_parent"
-    android:layout_height="300dp">
 
-</test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lfRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="310dp"
+        android:layout_height="0dp"
+        android:background="#00ff00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
+        android:id="@+id/lineFeed"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:background="#998876"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/background" />
+
+</android.support.constraint.ConstraintLayout>

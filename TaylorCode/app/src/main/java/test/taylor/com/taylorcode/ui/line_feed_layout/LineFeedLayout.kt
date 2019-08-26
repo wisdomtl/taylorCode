@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 
 /**
- * a special [ViewGroup] act like [LinearLayout],
+ * a special [ViewGroup] acts like [LinearLayout],
  * it spreads the children from left to right until there is not enough horizontal space for them,
  * then the next child will be placed at a new line
  */
@@ -30,6 +30,7 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
                 val lp = child.layoutParams as LinearLayout.LayoutParams
                 if (child.measuredWidth < remainWidth) {
                     remainWidth -= child.measuredWidth
+                    if (height == 0) height = (lp.topMargin + lp.bottomMargin + child.measuredHeight)
                 } else {
                     remainWidth = width - child.measuredWidth
                     height += (lp.topMargin + lp.bottomMargin + child.measuredHeight)
@@ -48,7 +49,7 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
         var count = 0
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
             val lp = child.layoutParams as LinearLayout.LayoutParams
-            if (isNewLine(left, lp, child, r)) {
+            if (isNewLine(left, lp, child, r - l)) {
                 left = -lp.leftMargin
                 top = lastBottom
                 lastBottom = 0
@@ -68,8 +69,8 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
      * @param left the current cursor position relative to [LineFeedLayout]
      * @param lp LayoutParams of [child]
      * @param child child view of [LineFeedLayout]
-     * @param right the right end of [LineFeedLayout]
+     * @param parentWidth the width of [LineFeedLayout]
      */
-    private fun isNewLine(left: Int, lp: LinearLayout.LayoutParams, child: View, right: Int) = left + lp.leftMargin + child.measuredWidth + lp.rightMargin > right
+    private fun isNewLine(left: Int, lp: LinearLayout.LayoutParams, child: View, parentWidth: Int) = left + lp.leftMargin + child.measuredWidth + lp.rightMargin > parentWidth
 
 }
