@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
+import java.util.*
 
 class KotlinActivity : AppCompatActivity() {
     val list1 = listOf<String>("abd", "add", "fff")
@@ -17,7 +18,8 @@ class KotlinActivity : AppCompatActivity() {
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
         listEquals()
-        split();
+        split()
+        Log.v("ttaylor","tag=sss, KotlinActivity.onCreate() isInToday=${isInToday(1567057536000)} [savedInstanceState]")
     }
 
     private fun split() {
@@ -27,5 +29,27 @@ class KotlinActivity : AppCompatActivity() {
 
     private fun listEquals() {
         Log.v("ttaylor", "tag=equals, KotlinActivity.listEquals() isEquals=${list1 == list2}")
+    }
+
+    fun isInToday(timestamp: Long): Boolean {
+
+        val beginningOfToday = Calendar.getInstance().let {
+            it.set(Calendar.HOUR_OF_DAY, 0)
+            it.set(Calendar.MINUTE, 0)
+            it.set(Calendar.SECOND, 0)
+            it.set(Calendar.MILLISECOND, 0)
+            it.timeInMillis
+        }
+
+        val endingOfToday = Calendar.getInstance().let {
+            it.set(Calendar.HOUR_OF_DAY, 23)
+            it.set(Calendar.MINUTE, 59)
+            it.set(Calendar.SECOND, 59)
+            it.set(Calendar.MILLISECOND, 999)
+            it.timeInMillis
+        }
+
+        return timestamp in beginningOfToday .. endingOfToday
+
     }
 }
