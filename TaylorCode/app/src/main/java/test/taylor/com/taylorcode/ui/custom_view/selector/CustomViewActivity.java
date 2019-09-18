@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.ui.custom_view;
+package test.taylor.com.taylorcode.ui.custom_view.selector;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

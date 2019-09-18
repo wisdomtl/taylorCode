@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<test.taylor.com.taylorcode.ui.custom_view.ProgressRing-->
+    <!--<test.taylor.com.taylorcode.ui.custom_view.selector.ProgressRing-->
     <!--android:id="@+id/progress_ring"-->
     <!--android:layout_width="54dp"-->
     <!--android:layout_height="54dp"/>-->
@@ -16,7 +16,7 @@
         android:layout_height="50dp"
         android:src="@drawable/iv_selector" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.Selector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.Selector
         android:id="@+id/select"
         android:layout_width="200dp"
         android:layout_height="200dp" />

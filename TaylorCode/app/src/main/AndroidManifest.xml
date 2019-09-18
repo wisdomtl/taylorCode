@@ -71,7 +71,7 @@
         </activity>
         <activity android:name=".ui.KotlinActivity"></activity>
 
-        <activity android:name=".ui.custom_view.CustomViewActivity">
+        <activity android:name=".ui.custom_view.selector.CustomViewActivity">
         </activity>
         <activity android:name=".list.ListActivity"></activity>
         <activity android:name=".aysnc.workmanager.WorkManagerActivity">
@@ -118,7 +118,7 @@
         </activity>
         <activity android:name=".ui.RadioButtonActivity">
         </activity>
-        <activity android:name=".ui.custom_view.SelectorDemoActivity"/>
+        <activity android:name=".ui.custom_view.selector.SelectorDemoActivity"/>
         <activity android:name=".contact.ContactActivity">
         </activity>
         <activity android:name=".ui.DialogActivity">
@@ -214,6 +214,7 @@
         <activity android:name="com.lpirro.constraintlayoutanimations.ConstraintSetActivity" />
         <activity android:name=".ui.line_feed_layout.TagActivity" />
         <activity android:name=".ui.ConstraintLayoutActivity2" />
+        <activity android:name=".ui.custom_view.tag_view.TagTextViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <!--a service in another process-->

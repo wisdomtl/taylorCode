@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_tag_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="tag text view"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_constraint_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

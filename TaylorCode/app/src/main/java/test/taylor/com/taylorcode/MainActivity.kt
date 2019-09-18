@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import com.lpirro.constraintlayoutanimations.ConstraintSetActivity
 import kotlinx.android.synthetic.main.main_activity.*
 
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
@@ -19,7 +18,8 @@ import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
-import test.taylor.com.taylorcode.ui.custom_view.SelectorDemoActivity
+import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
+import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         btn_tag_activity.setOnClickListener { startActivity(TagActivity::class.java) }
         btn_tag_view_activity.setOnClickListener { startActivity(TagViewActivity::class.java) }
         btn_constraint_add.setOnClickListener { startActivity(ConstraintLayoutActivity2::class.java) }
-
+        btn_tag_textview.setOnClickListener { startActivity(TagTextViewActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

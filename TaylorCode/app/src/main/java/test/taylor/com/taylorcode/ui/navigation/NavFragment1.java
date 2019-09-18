@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.navigation.Navigation;
 import test.taylor.com.taylorcode.R;
-import test.taylor.com.taylorcode.ui.custom_view.Selector;
-import test.taylor.com.taylorcode.ui.custom_view.SelectorGroup;
+import test.taylor.com.taylorcode.ui.custom_view.selector.Selector;
+import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorGroup;
 
 public class NavFragment1 extends StateFragment implements Selector.OnSelectorStateListener {
     private Selector selector;

@@ -30,7 +30,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".35" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.GenderSelector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.GenderSelector
         android:id="@+id/selector_male"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -47,7 +47,7 @@
         app:text_color="#FF222222"
         app:text_size="16" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.GenderSelector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.GenderSelector
         android:id="@+id/selector_female"
         android:layout_width="0dp"
         android:layout_height="0dp"

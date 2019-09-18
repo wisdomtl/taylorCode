@@ -24,7 +24,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.AgeSelector
         android:id="@+id/selector_10"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -40,7 +40,7 @@
         app:text_color="#FF222222"
         app:text_size="16" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.AgeSelector
         android:id="@+id/selector_20"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -57,7 +57,7 @@
         app:text_color="#FF222222"
         app:text_size="16" />
 
-    <test.taylor.com.taylorcode.ui.custom_view.AgeSelector
+    <test.taylor.com.taylorcode.ui.custom_view.selector.AgeSelector
         android:id="@+id/selector_30"
         android:layout_width="0dp"
         android:layout_height="0dp"

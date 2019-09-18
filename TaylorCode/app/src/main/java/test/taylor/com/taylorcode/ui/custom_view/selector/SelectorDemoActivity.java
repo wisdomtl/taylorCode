@@ -1,8 +1,7 @@
-package test.taylor.com.taylorcode.ui.custom_view;
+package test.taylor.com.taylorcode.ui.custom_view.selector;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;

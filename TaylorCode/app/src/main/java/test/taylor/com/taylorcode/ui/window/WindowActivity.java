@@ -29,7 +29,7 @@ import android.widget.Toast;
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.launch_mode.ActivityB;
 import test.taylor.com.taylorcode.rxjava.TimeoutActivity;
-import test.taylor.com.taylorcode.ui.custom_view.ProgressRing;
+import test.taylor.com.taylorcode.ui.custom_view.selector.ProgressRing;
 import test.taylor.com.taylorcode.util.DimensionUtil;
 import test.taylor.com.taylorcode.util.Timer;
 
