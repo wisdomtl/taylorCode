@@ -10,7 +10,7 @@ import android.widget.TextView
 
 class TagTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : TextView(context, attrs, defStyleAttr) {
 
-    var tagBgColor: Int = Color.parseColor("#ff0000")
+    var tagBgColor: Int = Color.parseColor("#FFFF5183")
         set(value) {
             field = value
             bgPaint.color = value
@@ -69,13 +69,3 @@ class TagTextView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 }
 
 
-/**
- * Get [DisplayMetrics] from [Resources]
- */
-val Context.displayMetrics: DisplayMetrics get() = resources.displayMetrics
-
-/**
- * Calculate dimensions in pixel of dip
- */
-fun Context.dip(value: Float): Float =
-        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, displayMetrics)

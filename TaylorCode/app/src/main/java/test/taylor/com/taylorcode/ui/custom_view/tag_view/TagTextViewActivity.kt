@@ -1,8 +1,12 @@
 package test.taylor.com.taylorcode.ui.custom_view.tag_view
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import kotlinx.android.synthetic.main.tag_textview_activity.*
 import test.taylor.com.taylorcode.R
 
@@ -22,3 +26,15 @@ class TagTextViewActivity:AppCompatActivity() {
 //        ttv_1.tagTextPaddingBottom = dip(1f)
     }
 }
+
+
+/**
+ * Get [DisplayMetrics] from [Resources]
+ */
+val Context.displayMetrics: DisplayMetrics get() = resources.displayMetrics
+
+/**
+ * Calculate dimensions in pixel of dip
+ */
+fun Context.dip(value: Float): Float =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, displayMetrics)
