@@ -5,15 +5,33 @@
     android:layout_height="match_parent">
 
     <test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextView
-        android:layout_width="wrap_content"
         android:id="@+id/ttv_1"
-        android:text="天天向上"
-        android:padding="8dp"
-        android:background="@android:color/holo_blue_dark"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:padding="8dp"
+        android:text="天天向上"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnLarger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="larger"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSmaller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="smaller"
+        app:layout_constraintBottom_toTopOf="@id/btnSmaller"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
