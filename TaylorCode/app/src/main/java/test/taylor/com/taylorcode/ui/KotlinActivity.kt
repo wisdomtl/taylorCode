@@ -19,12 +19,34 @@ class KotlinActivity : AppCompatActivity() {
 
         listEquals()
         split()
-        Log.v("ttaylor","tag=sss, KotlinActivity.onCreate() isInToday=${isInToday(1567057536000)} [savedInstanceState]")
+        Log.v("ttaylor", "tag=sss, KotlinActivity.onCreate() isInToday=${isInToday(1567057536000)} [savedInstanceState]")
+        val interface1 = object : Iinterface {
+            override fun dod() {
+
+            }
+        }
+        val interface2 = object : Iinterface {
+            override fun dod() {
+            }
+        }
+        val map = mutableMapOf(
+                "1" to mutableListOf(interface1, interface2)
+        )
+
+        map.forEach { entry ->
+            val iterator = entry.value.iterator()
+            while (iterator.hasNext()) {
+                val ite = iterator.next()
+                if (ite == interface1) {
+                    iterator.remove()
+                }
+            }
+        }
     }
 
     private fun split() {
         val str = "asb;ddd;"
-        Log.v("ttaylor","tag=split, KotlinActivity.split()  split=${str.split(";")}")
+        Log.v("ttaylor", "tag=split, KotlinActivity.split()  split=${str.split(";")}")
     }
 
     private fun listEquals() {
@@ -49,7 +71,11 @@ class KotlinActivity : AppCompatActivity() {
             it.timeInMillis
         }
 
-        return timestamp in beginningOfToday .. endingOfToday
+        return timestamp in beginningOfToday..endingOfToday
 
+    }
+
+    interface Iinterface {
+        fun dod()
     }
 }
