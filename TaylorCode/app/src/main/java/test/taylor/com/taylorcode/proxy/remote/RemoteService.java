@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import test.taylor.com.taylorcode.IRemoteService;
+import test.taylor.com.taylorcode.IRemoteSingleton;
 
 
 /**
@@ -26,37 +27,39 @@ public class RemoteService extends Service {
     /**
      * [story IPC]2.server implement aidl interface
      */
-    private IRemoteService.Stub binder = new IRemoteService.Stub() {
-        @Override
-        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
-            //do nothing
-        }
+//    private IRemoteService.Stub binder = new IRemoteService.Stub() {
+//        @Override
+//        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+//            //do nothing
+//        }
+//
+//        @Override
+//        public void sail() throws RemoteException {
+//            Log.v("taylor servicePid", "RemoteService.sail() " + " pid=" + android.os.Process.myPid());
+//        }
+//
+//        @Override
+//        public boolean isEngineOk() throws RemoteException {
+//            boolean isEngineOk = false;
+//            Log.v("taylor tamperService", "RemoteService.isEngineOk() " + " isEngineOk = " + isEngineOk);
+//            return isEngineOk;
+//        }
+//
+//        /**
+//         * case3:tamper value in remote service(another process) by reflection---failed,we could not reflect value in another process
+//         * @return
+//         * @throws RemoteException
+//         */
+//        @Override
+//        public String getMapValue() throws RemoteException {
+//            if (map != null) {
+//                return map.get(KEY);
+//            }
+//            return "map is null";
+//        }
+//    };
 
-        @Override
-        public void sail() throws RemoteException {
-            Log.v("taylor servicePid", "RemoteService.sail() " + " pid=" + android.os.Process.myPid());
-        }
-
-        @Override
-        public boolean isEngineOk() throws RemoteException {
-            boolean isEngineOk = false;
-            Log.v("taylor tamperService", "RemoteService.isEngineOk() " + " isEngineOk = " + isEngineOk);
-            return isEngineOk;
-        }
-
-        /**
-         * case3:tamper value in remote service(another process) by reflection---failed,we could not reflect value in another process
-         * @return
-         * @throws RemoteException
-         */
-        @Override
-        public String getMapValue() throws RemoteException {
-            if (map != null) {
-                return map.get(KEY);
-            }
-            return "map is null";
-        }
-    };
+    private IRemoteSingleton.Stub binder = RemoteServiceSingleton.INSTANCE ;
 
     /**
      * [story IPC]3.server wrap implemented aidl interface with IBinder and return it to client
@@ -75,6 +78,14 @@ public class RemoteService extends Service {
         super.onCreate();
         Log.v("taylor servicePid", "RemoteService.onCreate() " + " pid=" + android.os.Process.myPid());
 
+        changeSingletonValue();
+
         map.put(KEY, "origin value");
+    }
+
+    private void changeSingletonValue() {
+        RemoteServiceSingleton.INSTANCE.add("d");
+        RemoteServiceSingleton.INSTANCE.setCount(10);
+        RemoteServiceSingleton.INSTANCE.setText2("changed by Remote service");
     }
 }

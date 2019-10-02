@@ -14,6 +14,7 @@ import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
+import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
@@ -98,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         btn_tag_view_activity.setOnClickListener { startActivity(TagViewActivity::class.java) }
         btn_constraint_add.setOnClickListener { startActivity(ConstraintLayoutActivity2::class.java) }
         btn_tag_textview.setOnClickListener { startActivity(TagTextViewActivity::class.java) }
+        btn_ipc.setOnClickListener { startActivity(RemoteDynamicProxyActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

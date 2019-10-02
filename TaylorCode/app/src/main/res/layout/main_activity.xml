@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_ipc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ipc"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_tag_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,6 +28,7 @@
             android:layout_height="wrap_content"
             android:text="constraint add "
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_tag_view_activity"
             android:layout_width="match_parent"
@@ -34,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="tag activity"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_constraint_set_layout"
             android:layout_width="match_parent"
@@ -47,6 +56,7 @@
             android:layout_height="wrap_content"
             android:text="kotlin anonymous fun"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnInvoke"
             android:layout_width="match_parent"

@@ -16,9 +16,7 @@
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-         />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <!--system permissions which used for system apps-->
@@ -47,15 +45,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity android:name=".MainActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".data_persistence.RoomActivity"/>
-        <activity android:name=".ui.surface_view.SurfaceViewActivity"/>
+        <activity android:name=".data_persistence.RoomActivity" />
+        <activity android:name=".ui.surface_view.SurfaceViewActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -63,85 +62,50 @@
 
         <activity android:name=".kotlin.KotlinExample"></activity>
 
-        <activity android:name=".annotations.AnnotationActivity">
-        </activity>
-        <activity android:name=".rxjava.LoginActivity"/>
+        <activity android:name=".annotations.AnnotationActivity"></activity>
+        <activity android:name=".rxjava.LoginActivity" />
 
-        <activity android:name=".optional.OptionalActivity">
-        </activity>
+        <activity android:name=".optional.OptionalActivity"></activity>
         <activity android:name=".ui.KotlinActivity"></activity>
 
-        <activity android:name=".ui.custom_view.selector.CustomViewActivity">
-        </activity>
+        <activity android:name=".ui.custom_view.selector.CustomViewActivity"></activity>
         <activity android:name=".list.ListActivity"></activity>
-        <activity android:name=".aysnc.workmanager.WorkManagerActivity">
-        </activity>
-        <activity android:name=".ui.Factory2Activity">
-        </activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity1">
-        </activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity2">
-        </activity>
-        <activity android:name=".ui.anim.AnimActivity">
-        </activity>
-        <activity android:name=".innerclass.InnerClassActivity">
-        </activity>
-        <activity android:name=".rxjava.takeUntilActivity">
-        </activity>
-        <activity android:name=".ui.CheckableActivity">
-        </activity>
-        <activity android:name=".broadcast.BroadcastActivity">
-        </activity>
-        <activity android:name=".date.DateActivity">
-        </activity>
-        <activity android:name=".ui.RatingBarActivity">
-        </activity>
-        <activity android:name=".ui.pagers.ViewPagerActivity">
-        </activity>
-        <activity android:name=".ui.TagViewActivity">
-        </activity>
-        <activity android:name=".ui.navigation.NavigationActivity">
-        </activity>
-        <activity android:name=".ui.DrawerLayoutActivity">
-        </activity>
-        <activity android:name=".alarm.AlarmActivity">
-        </activity>
-        <activity android:name=".HookSystemServiceActivity">
-        </activity>
-        <activity android:name=".rxjava.create_observable.CreateObservableActivity">
-        </activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.ConstraintLayoutActivity">
-        </activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.TableLayoutActivity">
-        </activity>
-        <activity android:name=".big_data.BigStringActivity">
-        </activity>
-        <activity android:name=".ui.RadioButtonActivity">
-        </activity>
-        <activity android:name=".ui.custom_view.selector.SelectorDemoActivity"/>
-        <activity android:name=".contact.ContactActivity">
-        </activity>
-        <activity android:name=".ui.DialogActivity">
-        </activity>
-        <activity android:name=".ui.touch_event.TouchEventActivity">
-        </activity>
+        <activity android:name=".aysnc.workmanager.WorkManagerActivity"></activity>
+        <activity android:name=".ui.Factory2Activity"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity1"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity2"></activity>
+        <activity android:name=".ui.anim.AnimActivity"></activity>
+        <activity android:name=".innerclass.InnerClassActivity"></activity>
+        <activity android:name=".rxjava.takeUntilActivity"></activity>
+        <activity android:name=".ui.CheckableActivity"></activity>
+        <activity android:name=".broadcast.BroadcastActivity"></activity>
+        <activity android:name=".date.DateActivity"></activity>
+        <activity android:name=".ui.RatingBarActivity"></activity>
+        <activity android:name=".ui.pagers.ViewPagerActivity"></activity>
+        <activity android:name=".ui.TagViewActivity"></activity>
+        <activity android:name=".ui.navigation.NavigationActivity"></activity>
+        <activity android:name=".ui.DrawerLayoutActivity"></activity>
+        <activity android:name=".alarm.AlarmActivity"></activity>
+        <activity android:name=".HookSystemServiceActivity"></activity>
+        <activity android:name=".rxjava.create_observable.CreateObservableActivity"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.ConstraintLayoutActivity"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.TableLayoutActivity"></activity>
+        <activity android:name=".big_data.BigStringActivity"></activity>
+        <activity android:name=".ui.RadioButtonActivity"></activity>
+        <activity android:name=".ui.custom_view.selector.SelectorDemoActivity" />
+        <activity android:name=".contact.ContactActivity"></activity>
+        <activity android:name=".ui.DialogActivity"></activity>
+        <activity android:name=".ui.touch_event.TouchEventActivity"></activity>
         <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateActivity">
 
         </activity>
-        <activity android:name=".ui.window.WindowActivity">
-        </activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.SpannableActivity">
-        </activity>
-        <activity android:name=".ui.ScrollViewActivity">
-        </activity>
-        <activity android:name=".ui.SelectorActivity">
-        </activity>
-        <activity android:name=".audio.SoundPoolActivity">
-        </activity>
-        <activity android:name=".rxjava.TimeoutActivity">
-        </activity>
-        <activity android:name=".rxjava.MultipleTaskEndingActivity">
-        </activity>
+        <activity android:name=".ui.window.WindowActivity"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.SpannableActivity"></activity>
+        <activity android:name=".ui.ScrollViewActivity"></activity>
+        <activity android:name=".ui.SelectorActivity"></activity>
+        <activity android:name=".audio.SoundPoolActivity"></activity>
+        <activity android:name=".rxjava.TimeoutActivity"></activity>
+        <activity android:name=".rxjava.MultipleTaskEndingActivity"></activity>
         <!--case1:Holo theme is a must for showing action bar in activity-->
         <activity
             android:name=".ui.ActionBarActivity"
@@ -152,28 +116,17 @@
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".rxjava.DropoutActivity">
-        </activity>
-        <activity android:name=".ui.ViewZorderActivity">
-        </activity>
-        <activity android:name=".aidl.ClientActivity">
-        </activity>
-        <activity android:name=".proxy.local.LocalDynamicProxyActivity">
-        </activity>
-        <activity android:name=".proxy.remote.RemoteDynamicProxyActivity">
-        </activity>
-        <activity android:name=".handler.HandlerActivity">
-        </activity>
-        <activity android:name=".try_catch_finally.ExceptionActivity">
-        </activity>
-        <activity android:name=".ui.notification.NotificationActivity">
-        </activity>
-        <activity android:name=".ui.BitmapStackActivity">
-        </activity>
-        <activity android:name=".system.AppStatusActivity">
-        </activity>
-        <activity android:name=".launch_mode.LaunchModeActivity">
-        </activity>
+        <activity android:name=".rxjava.DropoutActivity"></activity>
+        <activity android:name=".ui.ViewZorderActivity"></activity>
+        <activity android:name=".aidl.ClientActivity"></activity>
+        <activity android:name=".proxy.local.LocalDynamicProxyActivity"></activity>
+        <activity android:name=".proxy.remote.RemoteDynamicProxyActivity"></activity>
+        <activity android:name=".handler.HandlerActivity"></activity>
+        <activity android:name=".try_catch_finally.ExceptionActivity"></activity>
+        <activity android:name=".ui.notification.NotificationActivity"></activity>
+        <activity android:name=".ui.BitmapStackActivity"></activity>
+        <activity android:name=".system.AppStatusActivity"></activity>
+        <activity android:name=".launch_mode.LaunchModeActivity"></activity>
         <activity
             android:name=".launch_mode.ActivityB"
             android:taskAffinity="test.taylor.com.taylorcode" />
@@ -195,14 +148,10 @@
             android:taskAffinity="com.taylor.activity" />
         <activity
             android:name=".lockscreen.LockScreenActivity"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name=".lockscreen.InitActivity">
-        </activity>
-        <activity android:name=".service.ServiceActivity">
-        </activity>
-        <activity android:name=".photo.TakePhotoActivity">
-        </activity>
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".lockscreen.InitActivity"></activity>
+        <activity android:name=".service.ServiceActivity"></activity>
+        <activity android:name=".photo.TakePhotoActivity"></activity>
         <activity android:name=".SetResultActivity" />
         <activity android:name=".ui.viewstub.ViewStubActivity" />
         <activity android:name=".ui.transparent_fragment.TransparentFragmentActivity" />
@@ -215,10 +164,13 @@
         <activity android:name=".ui.line_feed_layout.TagActivity" />
         <activity android:name=".ui.ConstraintLayoutActivity2" />
         <activity android:name=".ui.custom_view.tag_view.TagTextViewActivity" />
+        <activity
+            android:name=".proxy.remote.RemoteActivity"
+            android:process=":alienProcess" />
 
         <service android:name=".aidl.LocalServer" />
-        <!--a service in another process-->
         <service android:name=".broadcast.MyIntentService" />
+        <!--a service in another process-->
         <service
             android:name=".proxy.remote.RemoteService"
             android:process=":alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
