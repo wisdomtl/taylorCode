@@ -10,4 +10,15 @@
         android:layout_height="wrap_content"
         android:text="print" />
 
+    <Button
+        android:id="@+id/btn_print_local"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="print local" />
+
+    <Button
+        android:id="@+id/btn_set_local"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="set local" />
 </LinearLayout>

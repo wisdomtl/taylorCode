@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
+import test.taylor.com.taylorcode.aidl.ClientActivity
 
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
@@ -100,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         btn_constraint_add.setOnClickListener { startActivity(ConstraintLayoutActivity2::class.java) }
         btn_tag_textview.setOnClickListener { startActivity(TagTextViewActivity::class.java) }
         btn_ipc.setOnClickListener { startActivity(RemoteDynamicProxyActivity::class.java) }
+        btn_client_activity.setOnClickListener { startActivity(ClientActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

@@ -176,6 +176,7 @@
             android:process=":alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
         <service android:name=".lockscreen.LockScreenService" />
         <service android:name=".service.ServiceA" />
+        <service android:name=".aidl.LocalSingletonService" />
 
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />

@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
 import test.taylor.com.taylorcode.IMessage;
+import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.proxy.remote.RemoteActivity;
 
 /**
  * Created on 17/4/30.
@@ -36,6 +40,28 @@ public class ClientActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.client_activity);
+        findViewById(R.id.btn_start_remote_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClientActivity.this, RemoteActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.btn_print_local).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("ttaylor", "ClientActivity.onClick()" +" pid="+ Process.myPid() + "  string="+LocalSingleton.INSTANCE.getString());
+            }
+        });
+
+        findViewById(R.id.btn_set_local).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               LocalSingleton.INSTANCE.setString("set by main thread");
+            }
+        });
         //case1
         getMessageType(2, iMessageResponse);
 //        getMessageType(3, iMessageResponse);
