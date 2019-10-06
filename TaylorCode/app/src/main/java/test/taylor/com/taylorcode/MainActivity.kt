@@ -2,13 +2,12 @@ package test.taylor.com.taylorcode
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aidl.ClientActivity
 
-import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
@@ -76,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         btn_window.setOnClickListener { startActivity(WindowActivity::class.java) }
         btn_touch_event.setOnClickListener { startActivity(TouchEventActivity::class.java) }
         btn_selector.setOnClickListener { startActivity(SelectorDemoActivity::class.java) }
-        btn_workmanager.setOnClickListener { startActivity(WorkManagerActivity::class.java) }
         btn_anim.setOnClickListener { startActivity(AnimActivity::class.java) }
         btn_view_pager.setOnClickListener { startActivity(ViewPagerActivity::class.java) }
         btn_navigation.setOnClickListener { startActivity(NavigationActivity::class.java) }

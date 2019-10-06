@@ -2,20 +2,15 @@ package test.taylor.com.taylorcode.rxjava;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
-import rx.functions.Func0;
-import rx.observables.SyncOnSubscribe;
-import test.taylor.com.taylorcode.R;
 
 /**
  * Created by taylor on 2017/11/2.

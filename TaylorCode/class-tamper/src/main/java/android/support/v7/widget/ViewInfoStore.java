@@ -1,20 +1,20 @@
 
-package android.support.v7.widget;
+package androidx.appcompat.widget;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pools.Pool;
-import android.support.v4.util.Pools.SimplePool;
+import androidx.core.util.Pools.Pool;
+import androidx.core.util.Pools.SimplePool;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 
 class ViewInfoStore {
     private static final boolean DEBUG = false;
     @VisibleForTesting
-    final ArrayMap<ViewHolder, ViewInfoStore.InfoRecord> mLayoutHolderMap = new ArrayMap();
+    final ArrayMap<ViewHolder, InfoRecord> mLayoutHolderMap = new ArrayMap();
     @VisibleForTesting
     final LongSparseArray<ViewHolder> mOldChangedHolders = new LongSparseArray();
 

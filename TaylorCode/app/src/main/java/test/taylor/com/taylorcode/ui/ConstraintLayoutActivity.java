@@ -3,8 +3,9 @@ package test.taylor.com.taylorcode.ui;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.Group;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
+
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;

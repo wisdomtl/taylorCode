@@ -1,12 +1,11 @@
 package pl.droidsonroids.gif;
 
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.RawRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;

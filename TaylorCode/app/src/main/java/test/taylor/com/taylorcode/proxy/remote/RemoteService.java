@@ -3,14 +3,13 @@ package test.taylor.com.taylorcode.proxy.remote;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.RemoteException;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import test.taylor.com.taylorcode.IRemoteService;
 import test.taylor.com.taylorcode.IRemoteSingleton;
 
 

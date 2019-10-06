@@ -5,15 +5,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -35,14 +35,13 @@ configurations {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     testImplementation 'junit:junit:4.12'
     implementation 'org.jetbrains:annotations-java5:15.0'
-    implementation 'com.android.support:design:26.1.0'
     //ReactiveX
     implementation 'io.reactivex:rxjava:1.3.0'
     implementation 'io.reactivex:rxandroid:1.2.1'
@@ -54,24 +53,24 @@ dependencies {
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     //ViewModel and LiveData
     def lifecycle_version = "1.1.1"
-    implementation "android.arch.lifecycle:runtime:$lifecycle_version"
-    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     //app-monitor
-    implementation project(':app-monitor')
+//    implementation project(':app-monitor')
     //ConstraintLayout
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+//    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     //Stetho:app debug tool
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
     //WorkManager
-    implementation 'android.arch.work:work-runtime:1.0.0-alpha01'
+    implementation 'androidx.work:work-runtime:2.0.1'
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha01'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha01'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
+    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
     //Room
-    implementation "android.arch.persistence.room:runtime:1.1.0"
-    annotationProcessor  'android.arch.persistence.room:compiler:1.1.0'
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
     //for debug database on browse
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
     //UCrop

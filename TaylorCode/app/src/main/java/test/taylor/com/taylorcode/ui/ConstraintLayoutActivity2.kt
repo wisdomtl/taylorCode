@@ -3,12 +3,12 @@ package test.taylor.com.taylorcode.ui
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.constraintlayou_activity2.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import kotlinx.android.synthetic.main.constraintlayou_activity2.croot
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 import test.taylor.com.taylorcode.util.DimensionUtil

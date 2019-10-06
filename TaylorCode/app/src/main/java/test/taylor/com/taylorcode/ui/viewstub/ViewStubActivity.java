@@ -1,28 +1,22 @@
 package test.taylor.com.taylorcode.ui.viewstub;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.graphics.drawable.AnimationUtilsCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 
 import test.taylor.com.taylorcode.R;
-import test.taylor.com.taylorcode.util.DimensionUtil;
 
 public class ViewStubActivity extends AppCompatActivity {
     private int duration = 400;

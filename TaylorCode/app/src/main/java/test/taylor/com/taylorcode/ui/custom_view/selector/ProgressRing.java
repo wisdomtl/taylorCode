@@ -2,13 +2,12 @@ package test.taylor.com.taylorcode.ui.custom_view.selector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,7 +16,7 @@ import android.util.Log;
 /**
  * a special ImageView which has customized circular background and progress ring
  */
-public class ProgressRing extends android.support.v7.widget.AppCompatImageView {
+public class ProgressRing extends androidx.appcompat.widget.AppCompatImageView {
 
     private static final float ANGLE_SPAN = 360;
     private static final int DEFAULT_OUT_RING_WIDTH = 7;

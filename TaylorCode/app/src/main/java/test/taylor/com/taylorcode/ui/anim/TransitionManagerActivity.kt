@@ -1,11 +1,11 @@
 package test.taylor.com.taylorcode.ui.anim
 
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.animation.AnticipateOvershootInterpolator
+import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.transition_activity.*
 import test.taylor.com.taylorcode.R
 

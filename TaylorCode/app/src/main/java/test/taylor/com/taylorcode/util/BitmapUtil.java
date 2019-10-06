@@ -25,7 +25,7 @@ public class BitmapUtil {
         Canvas canvas = new Canvas(newmap);
         canvas.drawBitmap(background, 0, 0, null);
         canvas.drawBitmap(foreground, (bgWidth - fgWidth) / 2, (bgHeight - fgHeight) / 2, null);
-        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.save();
         canvas.restore();
         return newmap;
     }

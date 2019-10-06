@@ -2,7 +2,7 @@ package test.taylor.com.taylorcode.proxy.system;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import test.taylor.com.taylorcode.R;
 

@@ -2,9 +2,7 @@ package test.taylor.com.taylorcode.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.RatingBar;
 
 import test.taylor.com.taylorcode.R;
 

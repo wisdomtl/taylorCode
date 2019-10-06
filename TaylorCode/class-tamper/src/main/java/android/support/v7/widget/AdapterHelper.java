@@ -1,8 +1,8 @@
-package android.support.v7.widget;
+package androidx.appcompat.widget;
 
-import android.support.v4.util.Pools;
-import android.support.v4.util.Pools.Pool;
-import android.support.v4.util.Pools.SimplePool;
+import androidx.core.util.Pools;
+import androidx.core.util.Pools.Pool;
+import androidx.core.util.Pools.SimplePool;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Collections;

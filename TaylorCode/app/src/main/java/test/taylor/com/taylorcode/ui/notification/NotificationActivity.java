@@ -7,19 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import test.taylor.com.taylorcode.Constant;
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.ui.SelectorActivity;
-import test.taylor.com.taylorcode.util.BitmapUtil;
 
 /**
  * Created by taylor on 2017/10/30.

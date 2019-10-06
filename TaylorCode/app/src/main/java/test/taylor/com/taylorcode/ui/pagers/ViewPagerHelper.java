@@ -1,6 +1,6 @@
 package test.taylor.com.taylorcode.ui.pagers;
 
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by taylor on 2017/11/15.

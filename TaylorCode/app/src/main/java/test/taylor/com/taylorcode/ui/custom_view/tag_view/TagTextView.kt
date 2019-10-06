@@ -2,7 +2,7 @@ package test.taylor.com.taylorcode.ui.custom_view.tag_view
 
 import android.content.Context
 import android.graphics.*
-import android.support.v7.widget.AppCompatTextView
+import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
 
 open class TagTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatTextView(context, attrs, defStyleAttr) {

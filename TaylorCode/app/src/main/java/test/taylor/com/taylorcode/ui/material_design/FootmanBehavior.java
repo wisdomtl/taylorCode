@@ -1,7 +1,9 @@
 package test.taylor.com.taylorcode.ui.material_design;
 
 import android.content.Context;
-import android.support.design.widget.CoordinatorLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;

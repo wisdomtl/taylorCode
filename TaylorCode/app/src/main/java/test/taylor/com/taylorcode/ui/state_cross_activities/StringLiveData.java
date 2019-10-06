@@ -1,7 +1,7 @@
 package test.taylor.com.taylorcode.ui.state_cross_activities;
 
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class StringLiveData extends MutableLiveData<String> {
 

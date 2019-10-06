@@ -1,6 +1,6 @@
 package test.taylor.com.taylorcode.data_persistence;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

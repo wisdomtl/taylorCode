@@ -1,4 +1,4 @@
-package android.support.v7.widget;
+package androidx.appcompat.widget;
 
 import android.view.View;
 import java.lang.annotation.Retention;

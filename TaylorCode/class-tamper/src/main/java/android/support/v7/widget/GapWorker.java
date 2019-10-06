@@ -1,7 +1,7 @@
-package android.support.v7.widget;
+package androidx.appcompat.widget;
 
-import android.support.annotation.Nullable;
-import android.support.v4.os.TraceCompat;
+import androidx.annotation.Nullable;
+import androidx.core.os.TraceCompat;
 import android.view.View;
 
 import java.util.ArrayList;
