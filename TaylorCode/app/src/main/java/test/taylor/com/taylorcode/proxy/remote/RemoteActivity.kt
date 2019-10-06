@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Button
 import test.taylor.com.taylorcode.ILocalServiceBoundByRemote
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.aidl.LocalSingleton
 import test.taylor.com.taylorcode.aidl.LocalSingletonService
 
 /**
@@ -38,6 +39,7 @@ class RemoteActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_set_local).setOnClickListener {
             iLocalServiceBoundByRemote?.string = "changed by remote activity"
         }
+
 
         bindLocalSingletonService()
     }
