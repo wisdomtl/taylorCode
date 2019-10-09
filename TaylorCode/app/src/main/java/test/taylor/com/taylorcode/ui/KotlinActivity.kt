@@ -42,6 +42,10 @@ class KotlinActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val str = "kfsklfjdklj$"
+        str.substring(0,str.length-1)
+        Log.v("ttaylor","tag=string, KotlinActivity.onCreate() str=${str.substring(0,str.length-1)} ")
     }
 
     private fun split() {
