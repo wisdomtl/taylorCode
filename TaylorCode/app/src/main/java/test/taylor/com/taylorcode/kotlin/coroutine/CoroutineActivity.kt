@@ -18,8 +18,10 @@ class CoroutineActivity : AppCompatActivity() {
 //        Log.e("ttaylor", "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]")
         waitDeferred()
         Log.e("ttaylor", "tag=, CoroutineActivity.onCreate() after [waitDeferred]")
-        oneRequest()
-        twoRequest()
+        window.decorView.postDelayed({
+            oneRequest()
+            twoRequest()
+        }, 4000)
     }
 
     /**
