@@ -32,6 +32,7 @@ import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
+import test.taylor.com.taylorcode.util.PhoneUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,7 +40,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         initView()
+        readPhoneInfo()
         Log.v("ttaylor", "MainActivity.onCreate()" + "  ")
+    }
+
+    private fun readPhoneInfo() {
+        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}")
+        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
+        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
     }
 
     override fun onStart() {
