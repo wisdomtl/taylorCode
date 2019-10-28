@@ -10,18 +10,33 @@ class CoroutineActivity : AppCompatActivity() {
     private var user2: Deferred<String>? = null
     private var oneDeferred: Deferred<String>? = null
     private var twoDeferred: Deferred<String>? = null
+    private var completableDeferred1: CompletableDeferred<String> = CompletableDeferred()
+    private var completableDeferred2: CompletableDeferred<String> = CompletableDeferred()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        runParallel()
 //        Log.e("ttaylor", "tag=parallel, CoroutineActivity.onCreate()  after [runParallel]")
 //        runParallelByLaunch()
 //        Log.e("ttaylor", "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]")
-        waitDeferred()
+//        waitDeferred()
         Log.e("ttaylor", "tag=, CoroutineActivity.onCreate() after [waitDeferred]")
+        waitCompletableDeferred()
+        Log.v("ttaylor", "tag=, CoroutineActivity.onCreate()  after [waitCompletableDeferred]")
+        //this is not work for observing two task ending
+//        window.decorView.postDelayed({
+//            oneRequest()
+//            twoRequest()
+//        }, 4000)
+
+
+        //this works for observing two task ending
         window.decorView.postDelayed({
-            oneRequest()
-            twoRequest()
-        }, 4000)
+            completeDeferred2()
+        }, 1000)
+
+        window.decorView.postDelayed({
+            completeDeferred1()
+        }, 3000)
     }
 
     /**
@@ -54,17 +69,35 @@ class CoroutineActivity : AppCompatActivity() {
         Log.e("ttaylor", "tag=parallel, CoroutineActivity.runParallelByLaunch() after [Deferred.await]")
     }
 
+
+    /**
+     * mock one server return
+     */
     private fun oneRequest() = GlobalScope.launch {
         val ret = "abc"
+        //wrap server return in a [Deferred]
         oneDeferred = async {
             delay(1000)
             Log.v("ttaylor", "tag=, CoroutineActivity.oneRequest()  one request is done")
             ret
         }
+
     }
 
+    private fun completeDeferred1() {
+        val ret = "abc"
+        //wrap server return in CompletableDeferred
+        val result = completableDeferred1.complete(ret)
+        Log.v("ttaylor", "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}")
+
+    }
+
+    /**
+     * mock one server return
+     */
     private fun twoRequest() = GlobalScope.launch {
         val ret = "efg"
+        //wrap server return in a [Deferred]
         twoDeferred = async {
             delay(3000)
             Log.v("ttaylor", "tag=, CoroutineActivity.twoRequest()  two request is done")
@@ -72,9 +105,23 @@ class CoroutineActivity : AppCompatActivity() {
         }
     }
 
+    private fun completeDeferred2() {
+        val ret = "efg"
+        //wrap server return in CompletableDeferred
+        val result = completableDeferred2.complete(ret)
+        Log.v("ttaylor", "tag=completableDeferred2, CoroutineActivity.completeDeferred2()  result=${result}")
+    }
+
     private fun waitDeferred() = GlobalScope.launch(Dispatchers.Main) {
-        //        Log.e("ttaylor", "tag=multiple ending, CoroutineActivity.waitDeferred()  user1=${user1?.await()},user2=${user2?.await()}")
-        Log.e("ttaylor", "tag=fake async, CoroutineActivity.waitDeferred() oneDeferred=${oneDeferred?.await()} ,twoDeferrd=${twoDeferred?.await()}")
+        Log.e("ttaylor", "tag=multiple ending, CoroutineActivity.waitDeferred()  user1=${user1?.await()},user2=${user2?.await()}")
+//        Log.e("ttaylor", "tag=fake async, CoroutineActivity.waitDeferred() oneDeferred=${oneDeferred?.await()} ,twoDeferrd=${twoDeferred?.await()}")
+    }
+
+    private fun waitCompletableDeferred() = GlobalScope.launch(Dispatchers.Main) {
+
+        completableDeferred1.await()
+        completableDeferred2.await()
+        Log.v("ttaylor", "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}")
     }
 
 
