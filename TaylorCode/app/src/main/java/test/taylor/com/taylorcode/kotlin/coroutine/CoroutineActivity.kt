@@ -109,6 +109,9 @@ class CoroutineActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * launch a coroutine with timeout and return null when time is up
+     */
     fun timeoutByNull() = GlobalScope.launch {
         val ret = withTimeoutOrNull(2000) {
             repeat(100) { i ->
@@ -120,6 +123,9 @@ class CoroutineActivity : AppCompatActivity() {
         Log.v("ttaylor", "tag=timeout, CoroutineActivity.timeoutByNull()  ret=${ret}")
     }
 
+    /**
+     * launch a coroutine with timeout and exception
+     */
     fun timeoutByException() = GlobalScope.launch {
         val ret = withTimeout(2000) {
             try {
