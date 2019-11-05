@@ -63,7 +63,7 @@ class CoroutineActivity : AppCompatActivity() {
 
     fun createJob() {
         job = GlobalScope.launch {
-            delay(1000)
+            delay(1100)
             Log.v("ttaylor", "tag=join, CoroutineActivity.join()  job is done")
         }
         Log.v("ttaylor", "tag=join, CoroutineActivity.join()  after launch")
@@ -80,6 +80,9 @@ class CoroutineActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * case: cancel a job
+     */
     fun cancelCoroutine() = GlobalScope.launch {
         try {
             repeat(100) { i ->
@@ -92,9 +95,16 @@ class CoroutineActivity : AppCompatActivity() {
                 }
             }
         } finally {
+//            delay(9900)//this suspend function wont work due to CancellationException throw, and the coroutine is canceled
             Log.e("ttaylor","tag=cancel2, CoroutineActivity.cancelCoroutine() be canceled")
+            //we could use this way to
+            withContext(NonCancellable){
+                delay(5000)
+                Log.e("ttaylor","tag=cancel2, CoroutineActivity.cancelCoroutine()  OY")
+            }
         }
     }
+
 
 
     /**
