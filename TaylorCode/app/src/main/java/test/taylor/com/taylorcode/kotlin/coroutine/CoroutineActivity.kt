@@ -43,6 +43,22 @@ class CoroutineActivity : AppCompatActivity() {
         //another way to observing two task end
         joinJob()
         createJob()
+
+
+        //cancel a coroutine  in a wrong way
+        val job = cancelCoroutineInWrongWay()
+        Log.e("ttaylor", "tag=cancelable, CoroutineActivity.onCreate()  before cancel")
+        job.cancel()
+        Log.e("ttaylor", "tag=cancelable, CoroutineActivity.onCreate() after cancel")
+
+
+        //cancel a coroutine in right way
+        val job2 = cancelCoroutine()
+        Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate()  before cancel")
+        window.decorView.postDelayed({
+            job2.cancel()
+            Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate() after cancel")
+        }, 500)
     }
 
     fun createJob() {
@@ -55,7 +71,24 @@ class CoroutineActivity : AppCompatActivity() {
 
     fun joinJob() = GlobalScope.launch {
         job?.join()
-        Log.v("ttaylor","tag=join, CoroutineActivity.joinJob()  after join")
+        Log.v("ttaylor", "tag=join, CoroutineActivity.joinJob()  after join")
+    }
+
+    fun cancelCoroutineInWrongWay() = GlobalScope.launch {
+        repeat(100) { i ->
+            Log.v("ttaylor", "tag=cancelable, CoroutineActivity.cancelCoroutineInWrongWay()  count times=${i}")
+        }
+    }
+
+    fun cancelCoroutine() = GlobalScope.launch {
+        repeat(100) { i ->
+            delay(100)
+            if (isActive) {
+                Log.v("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}")
+            } else {
+                Log.d("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time=${i}")
+            }
+        }
     }
 
 
