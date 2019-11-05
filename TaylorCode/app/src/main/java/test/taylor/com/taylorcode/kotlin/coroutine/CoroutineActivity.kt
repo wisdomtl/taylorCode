@@ -12,6 +12,7 @@ class CoroutineActivity : AppCompatActivity() {
     private var twoDeferred: Deferred<String>? = null
     private var completableDeferred1: CompletableDeferred<String> = CompletableDeferred()
     private var completableDeferred2: CompletableDeferred<String> = CompletableDeferred()
+    private var job: Job? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        runParallel()
@@ -37,7 +38,26 @@ class CoroutineActivity : AppCompatActivity() {
         window.decorView.postDelayed({
             completeDeferred1()
         }, 3000)
+
+
+        //another way to observing two task end
+        joinJob()
+        createJob()
     }
+
+    fun createJob() {
+        job = GlobalScope.launch {
+            delay(1000)
+            Log.v("ttaylor", "tag=join, CoroutineActivity.join()  job is done")
+        }
+        Log.v("ttaylor", "tag=join, CoroutineActivity.join()  after launch")
+    }
+
+    fun joinJob() = GlobalScope.launch {
+        job?.join()
+        Log.v("ttaylor","tag=join, CoroutineActivity.joinJob()  after join")
+    }
+
 
     /**
      * case1:
@@ -83,6 +103,7 @@ class CoroutineActivity : AppCompatActivity() {
         }
 
     }
+
 
     private fun completeDeferred1() {
         val ret = "abc"
