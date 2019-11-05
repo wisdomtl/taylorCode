@@ -81,13 +81,18 @@ class CoroutineActivity : AppCompatActivity() {
     }
 
     fun cancelCoroutine() = GlobalScope.launch {
-        repeat(100) { i ->
-            delay(100)
-            if (isActive) {
-                Log.v("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}")
-            } else {
-                Log.d("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time=${i}")
+        try {
+            repeat(100) { i ->
+                delay(100)
+                //isActive is the key point for canceling a job
+                if (isActive) {
+                    Log.v("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}")
+                } else {
+                    Log.d("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time=${i}")
+                }
             }
+        } finally {
+            Log.e("ttaylor","tag=cancel2, CoroutineActivity.cancelCoroutine() be canceled")
         }
     }
 
