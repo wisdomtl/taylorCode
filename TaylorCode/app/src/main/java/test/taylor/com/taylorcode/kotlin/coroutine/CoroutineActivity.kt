@@ -59,6 +59,10 @@ class CoroutineActivity : AppCompatActivity() {
             job2.cancel()
             Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate() after cancel")
         }, 500)
+
+        //timeoutByNull and cancel
+//        timeoutByNull()
+        timeoutByException()
     }
 
     fun createJob() {
@@ -96,17 +100,40 @@ class CoroutineActivity : AppCompatActivity() {
             }
         } finally {
 //            delay(9900)//this suspend function wont work due to CancellationException throw, and the coroutine is canceled
-            Log.e("ttaylor","tag=cancel2, CoroutineActivity.cancelCoroutine() be canceled")
+            Log.e("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine() be canceled")
             //we could use this way to
-            withContext(NonCancellable){
+            withContext(NonCancellable) {
                 delay(5000)
-                Log.e("ttaylor","tag=cancel2, CoroutineActivity.cancelCoroutine()  OY")
+                Log.e("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  OY")
             }
         }
     }
 
+    fun timeoutByNull() = GlobalScope.launch {
+        val ret = withTimeoutOrNull(2000) {
+            repeat(100) { i ->
+                delay(200)
+                Log.v("ttaylor", "tag=timeout, CoroutineActivity.timeoutByNull()  i = ${i}")
+            }
+            "done"
+        }
+        Log.v("ttaylor", "tag=timeout, CoroutineActivity.timeoutByNull()  ret=${ret}")
+    }
 
-
+    fun timeoutByException() = GlobalScope.launch {
+        val ret = withTimeout(2000) {
+            try {
+                repeat(100) { i ->
+                    delay(200)
+                    Log.v("ttaylor", "tag=timeout2, CoroutineActivity.timeoutByNull()  i = ${i}")
+                }
+                "done"
+            } finally {
+                Log.e("ttaylor","tag=timeout2, CoroutineActivity.timeoutByException()  ")
+            }
+        }
+        Log.v("ttaylor", "tag=timeout2, CoroutineActivity.timeoutByNull()  ret=${ret}")
+    }
     /**
      * case1:
      * runBlocking will block the current thread
