@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -31,6 +32,7 @@ public class DrawerLayoutActivity extends Activity {
         dl = ((DrawerLayout) findViewById(R.id.dl));
         lv.setAdapter(adapter);
         View drawerActivator = findViewById(R.id.tv_drawer_activator);
+        dl.setScrimColor(Color.TRANSPARENT);
         drawerActivator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

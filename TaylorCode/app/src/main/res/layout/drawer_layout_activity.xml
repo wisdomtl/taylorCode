@@ -7,10 +7,16 @@
 
     <include layout="@layout/main_content"/>
 
-    <include
+<!--    <include-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        layout="@layout/drawer_content"-->
+<!--          />-->
+
+    <ListView
+        android:id="@+id/lv_drawer_content"
         android:layout_width="200dp"
-        android:layout_height="match_parent"
-        layout="@layout/drawer_content"
-        android:layout_gravity="start"  />
+        android:layout_gravity="start"
+        android:layout_height="match_parent"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
