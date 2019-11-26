@@ -65,16 +65,16 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 //        findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
-        FloatWindow.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
-        FloatWindow.getInstance().setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.getInstance().setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
+        FloatWindow.Companion.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
+        FloatWindow.Companion.getInstance().setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.Companion.getInstance().setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.Companion.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
             @Override
             public void onWindowViewClick() {
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
-        FloatWindow.getInstance().init(this).show(this, TAG_WINDOW_A);
+        FloatWindow.Companion.getInstance().init(this).show(this, TAG_WINDOW_A);
 
     }
 
@@ -468,7 +468,7 @@ progressRing = new ProgressRing(this);
     @Override
     protected void onPause() {
         super.onPause();
-        FloatWindow.getInstance().dismiss();
+        FloatWindow.Companion.getInstance().dismiss();
     }
 
     /**
@@ -502,11 +502,11 @@ progressRing = new ProgressRing(this);
             floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
         }
         Pair<Integer, Integer> screenDimension = prepareScreenDimension(this);
-        WindowManager.LayoutParams layoutParams = FloatWindow.getInstance().getLayoutParam();
+        WindowManager.LayoutParams layoutParams = FloatWindow.Companion.getInstance().getLayoutParam();
         final WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second, layoutParams, floatWindowPartnerView);
         if (floatWindowPartnerView!=null && floatWindowPartnerView.getParent() == null) {
             windowManager.addView(floatWindowPartnerView, params);
-            FloatWindow.getInstance().setOnWindowStatusChangeListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
+            FloatWindow.Companion.getInstance().setOnWindowStatusChangeListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
         }
     }
 
