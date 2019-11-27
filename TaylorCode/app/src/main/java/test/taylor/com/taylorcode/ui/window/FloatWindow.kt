@@ -33,8 +33,8 @@ class FloatWindow private constructor() : View.OnTouchListener {
     private var screenHeight: Int = 0
     private var context: Context? = null
     private var gestureDetector: GestureDetector? = null
-    private var clickListener: OnWindowViewClickListener? = null
-    private var onWindowStatusChangeListener: OnWindowStatusChangeListener? = null
+    private var clickListener: WindowClickListener? = null
+    private var windowStateListener: WindowStateListener? = null
     /**
      * this list records the activities which shows this window
      */
@@ -84,7 +84,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
 
-    fun setOnClickListener(listener: OnWindowViewClickListener) {
+    fun setOnClickListener(listener: WindowClickListener) {
         clickListener = listener
     }
 
@@ -108,8 +108,8 @@ class FloatWindow private constructor() : View.OnTouchListener {
         windowContent.enable = enable
     }
 
-    fun setOnWindowStatusChangeListener(onWindowStatusChangeListener: OnWindowStatusChangeListener) {
-        this.onWindowStatusChangeListener = onWindowStatusChangeListener
+    fun setWindowStateListener(windowStateListener: WindowStateListener) {
+        this.windowStateListener = windowStateListener
     }
 
     fun show(context: Context, tag: String) {
@@ -130,7 +130,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         if (!windowContent?.hasParent().value()) {
             val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.addView(windowContent?.windowView, windowContent?.layoutParams)
-            onWindowStatusChangeListener?.onShow()
+            windowStateListener?.onWindowShow()
         }
     }
 
@@ -160,7 +160,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         //in case of "IllegalStateException :not attached to window manager."
         if (windowContent?.hasParent().value()) {
             windowManager?.removeViewImmediate(windowContent?.windowView)
-            onWindowStatusChangeListener?.onDismiss()
+            windowStateListener?.onWindowDismiss()
         }
     }
 
@@ -243,7 +243,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         val topMost = 0
         val bottomMost = screenHeight - windowContent?.layoutParams!!.height - getNavigationBarHeight(context)
         var partnerParam: WindowManager.LayoutParams? = null
-        partnerParam = onWindowStatusChangeListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowContent?.layoutParams)
+        partnerParam = windowStateListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowContent?.layoutParams)
         //adjust move area according to partner window
         if (partnerParam != null) {
             if (partnerParam.x < windowContent?.layoutParams!!.x) {
@@ -298,14 +298,17 @@ class FloatWindow private constructor() : View.OnTouchListener {
         fun updateWindowView(windowView: View?)
     }
 
-    interface OnWindowViewClickListener {
-        fun onWindowViewClick()
+    /**
+     * let ui decide what to do after window clicked
+     */
+    interface WindowClickListener {
+        fun onWindowClick()
     }
 
-    interface OnWindowStatusChangeListener {
-        fun onShow()
+    interface WindowStateListener {
+        fun onWindowShow()
 
-        fun onDismiss()
+        fun onWindowDismiss()
 
         fun onWindowMove(dx: Float, dy: Float, screenWidth: Int, screenHeight: Int, layoutParams: WindowManager.LayoutParams?): WindowManager.LayoutParams
     }
@@ -321,7 +324,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             if (clickListener != null) {
-                clickListener!!.onWindowViewClick()
+                clickListener!!.onWindowClick()
             }
             return false
         }

@@ -68,9 +68,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
         FloatWindow.Companion.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
         FloatWindow.Companion.getInstance().setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
         FloatWindow.Companion.getInstance().setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.Companion.getInstance().setOnClickListener(new FloatWindow.OnWindowViewClickListener() {
+        FloatWindow.Companion.getInstance().setOnClickListener(new FloatWindow.WindowClickListener() {
             @Override
-            public void onWindowViewClick() {
+            public void onWindowClick() {
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
@@ -506,11 +506,11 @@ progressRing = new ProgressRing(this);
         final WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second, layoutParams, floatWindowPartnerView);
         if (floatWindowPartnerView!=null && floatWindowPartnerView.getParent() == null) {
             windowManager.addView(floatWindowPartnerView, params);
-            FloatWindow.Companion.getInstance().setOnWindowStatusChangeListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
+            FloatWindow.Companion.getInstance().setWindowStateListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
         }
     }
 
-    private class OnWindowStatusListener implements FloatWindow.OnWindowStatusChangeListener {
+    private class OnWindowStatusListener implements FloatWindow.WindowStateListener {
         private View partnerView;
         private WindowManager windowManager;
         private WindowManager.LayoutParams layoutParams;
@@ -523,12 +523,12 @@ progressRing = new ProgressRing(this);
         }
 
         @Override
-        public void onShow() {
+        public void onWindowShow() {
 
         }
 
         @Override
-        public void onDismiss() {
+        public void onWindowDismiss() {
 
         }
 
