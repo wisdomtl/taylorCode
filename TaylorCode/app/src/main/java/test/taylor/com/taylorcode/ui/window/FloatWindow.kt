@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Display
 import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
@@ -23,7 +22,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     /**
      * several window content stored by String tag ;
      */
-    private var windowContentMap: HashMap<String, WindowContent>? = null
+    private var windowContentMap: HashMap<String, WindowContent> = HashMap()
     private var windowContent: WindowContent? = null
     private var lastTouchX: Int = 0
     private var lastTouchY: Int = 0
@@ -49,24 +48,10 @@ class FloatWindow private constructor() : View.OnTouchListener {
     private var weltAnimator: ValueAnimator? = null
 
     val layoutParam: WindowManager.LayoutParams?
-        get() = if (windowContent != null) {
-            windowContent!!.layoutParams
-        } else null
+        get() = windowContent?.layoutParams
 
     val isShowing: Boolean
-        get() {
-            if (windowContent == null) {
-                return false
-            }
-            if (windowContent!!.windowView == null) {
-                return false
-            }
-            return if (windowContent!!.windowView!!.parent == null) {
-                false
-            } else {
-                true
-            }
-        }
+        get() = windowContent?.windowView?.parent != null
 
     fun init(context: Context): FloatWindow {
         whiteList = ArrayList<Class<Any>>()
@@ -77,23 +62,22 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
 
-    private fun getNavigationBarHeight(context: Context): Int {
-        val result = 0
-        var resourceId = 0
-        val rid = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
-        if (rid != 0) {
-            resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-            return context.resources.getDimensionPixelSize(resourceId)
+    private fun getNavigationBarHeight(context: Context?): Int {
+        val rid = context?.resources?.getIdentifier("config_showNavigationBar", "bool", "android")
+        return if (rid != 0) {
+            context?.resources?.getIdentifier("navigation_bar_height", "dimen", "android")?.let {
+                context.resources?.getDimensionPixelSize(it)
+            } ?: 0
         } else {
-            return 0
+            0
         }
     }
 
     fun updateWindowView(updater: IWindowUpdater?) {
-        updater?.updateWindowView(windowContent!!.windowView)
-        val windowManager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowManager != null && windowContent != null && windowContent!!.windowView != null && windowContent!!.windowView!!.parent != null) {
-            windowManager.updateViewLayout(windowContent!!.windowView, windowContent!!.layoutParams)
+        updater?.updateWindowView(windowContent?.windowView)
+        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        if (windowContent?.hasView().value() && windowContent?.windowView!!.parent != null) {
+            windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
         }
     }
 
@@ -103,30 +87,21 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun setWidth(width: Int, tag: String) {
-        if (windowContentMap == null) {
-            return
-        }
-        val windowContent = windowContentMap!![tag]
+        val windowContent = windowContentMap[tag]
         if (windowContent != null) {
             windowContent.width = width
         }
     }
 
     fun setHeight(height: Int, tag: String) {
-        if (windowContentMap == null) {
-            return
-        }
-        val windowContent = windowContentMap!![tag]
+        val windowContent = windowContentMap[tag]
         if (windowContent != null) {
             windowContent.height = height
         }
     }
 
     fun setEnable(enable: Boolean, tag: String) {
-        if (windowContentMap == null) {
-            return
-        }
-        val windowContent = windowContentMap!![tag]
+        val windowContent = windowContentMap[tag]
                 ?: throw RuntimeException("no such window view,please invoke setView() first")
         windowContent.enable = enable
     }
@@ -136,29 +111,24 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun show(context: Context, tag: String) {
-        if (windowContentMap == null) {
-            return
-        }
-        windowContent = windowContentMap!![tag]
+        windowContent = windowContentMap[tag]
         if (windowContent == null) {
             Log.v("ttaylor", "there is no view to show,please invoke setView() first")
             return
         }
-        if (!windowContent!!.enable) {
+        if (windowContent?.enable != true) {
             return
         }
-        if (windowContent!!.windowView == null) {
+        if (windowContent?.windowView == null) {
             return
         }
         this.context = context
-        windowContent!!.layoutParams = generateLayoutParam(screenWidth, screenHeight)
+        windowContent?.layoutParams = generateLayoutParam(screenWidth, screenHeight)
         //in case of "IllegalStateException :has already been added to the window manager."
-        if (windowContent!!.windowView!!.parent == null) {
-            val windowManager = this.context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            windowManager.addView(windowContent!!.windowView, windowContent!!.layoutParams)
-            if (onWindowStatusChangeListener != null) {
-                onWindowStatusChangeListener!!.onShow()
-            }
+        if (windowContent?.windowView!!.parent == null) {
+            val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            windowManager.addView(windowContent?.windowView, windowContent?.layoutParams)
+            onWindowStatusChangeListener?.onShow()
         }
     }
 
@@ -172,25 +142,23 @@ class FloatWindow private constructor() : View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         layoutParams.gravity = Gravity.LEFT or Gravity.TOP
-        layoutParams.width = if (windowContent!!.width == 0) DEFAULT_WIDTH else windowContent!!.width
-        layoutParams.height = if (windowContent!!.height == 0) DEFAULT_HEIGHT else windowContent!!.height
+        layoutParams.width = if (windowContent?.width == 0) DEFAULT_WIDTH else windowContent?.width
+                ?: 0
+        layoutParams.height = if (windowContent?.height == 0) DEFAULT_HEIGHT else windowContent?.height
+                ?: 0
         val defaultX = screenWidth - layoutParams.width
         val defaultY = 2 * screenHeight / 3
-        layoutParams.x = if (windowContent!!.layoutParams == null) defaultX else windowContent!!.layoutParams!!.x
-        layoutParams.y = if (windowContent!!.layoutParams == null) defaultY else windowContent!!.layoutParams!!.y
+        layoutParams.x = if (windowContent?.layoutParams == null) defaultX else windowContent?.layoutParams!!.x
+        layoutParams.y = if (windowContent?.layoutParams == null) defaultY else windowContent?.layoutParams!!.y
         return layoutParams
     }
 
     fun dismiss() {
-        val windowManager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowManager != null) {
-            //in case of "IllegalStateException :not attached to window manager."
-            if (windowContent != null && windowContent!!.windowView != null && windowContent!!.windowView!!.parent != null) {
-                windowManager.removeViewImmediate(windowContent!!.windowView)
-                if (onWindowStatusChangeListener != null) {
-                    onWindowStatusChangeListener!!.onDismiss()
-                }
-            }
+        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        //in case of "IllegalStateException :not attached to window manager."
+        if (windowContent != null && windowContent?.windowView != null && windowContent?.windowView?.parent != null) {
+            windowManager?.removeViewImmediate(windowContent?.windowView)
+            onWindowStatusChangeListener?.onDismiss()
         }
     }
 
@@ -207,13 +175,9 @@ class FloatWindow private constructor() : View.OnTouchListener {
      * @return
      */
     fun setView(view: View, tag: String): FloatWindow {
-        if (windowContentMap == null) {
-            windowContentMap = HashMap()
-        }
-        val windowContent = WindowContent()
-        windowContent.windowView = view
-        windowContentMap!![tag] = windowContent
-        windowContent.windowView!!.setOnTouchListener(this)
+        val windowContent = WindowContent(view)
+        windowContentMap[tag] = windowContent
+        windowContent.windowView?.setOnTouchListener(this)
         return this
     }
 
@@ -224,7 +188,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         //there is no ACTION_UP event in GestureDetector
         val action = event.action
         when (action) {
-            MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowContent!!.width)
+            MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowContent?.width ?: 0)
             else -> {
             }
         }
@@ -232,34 +196,34 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     private fun onActionUp(event: MotionEvent, screenWidth: Int, width: Int) {
-        if (windowContentMap == null || windowContent!!.windowView == null || windowContent!!.layoutParams == null) {
+        if (windowContent?.windowView == null || windowContent?.layoutParams == null) {
             return
         }
         val upX = event.rawX.toInt()
-        val endX: Int
-        if (upX > screenWidth / 2) {
-            endX = screenWidth - width
+        val endX = if (upX > screenWidth / 2) {
+            screenWidth - width
         } else {
-            endX = 0
+            0
         }
 
         if (weltAnimator == null) {
-            weltAnimator = ValueAnimator.ofInt(windowContent!!.layoutParams!!.x, endX)
-            weltAnimator!!.interpolator = LinearInterpolator()
-            weltAnimator!!.duration = WELT_ANIMATION_DURATION
-            weltAnimator!!.addUpdateListener { animation ->
-                val x = animation.animatedValue as Int
-                if (windowContent!!.layoutParams != null) {
-                    windowContent!!.layoutParams!!.x = x
-                }
-                val windowManager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                if (windowManager != null && windowContent!!.windowView!!.parent != null) {
-                    windowManager.updateViewLayout(windowContent!!.windowView, windowContent!!.layoutParams)
+            weltAnimator = ValueAnimator.ofInt(windowContent?.layoutParams!!.x, endX).apply {
+                interpolator = LinearInterpolator()
+                duration = WELT_ANIMATION_DURATION
+                addUpdateListener { animation ->
+                    val x = animation.animatedValue as Int
+                    if (windowContent?.layoutParams != null) {
+                        windowContent?.layoutParams!!.x = x
+                    }
+                    val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                    if (windowContent?.windowView?.parent != null) {
+                        windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
+                    }
                 }
             }
         }
-        weltAnimator!!.setIntValues(windowContent!!.layoutParams!!.x, endX)
-        weltAnimator!!.start()
+        weltAnimator?.setIntValues(windowContent?.layoutParams!!.x, endX)
+        weltAnimator?.start()
     }
 
 
@@ -269,42 +233,38 @@ class FloatWindow private constructor() : View.OnTouchListener {
         val dx = currentX - lastTouchX
         val dy = currentY - lastTouchY
 
-        windowContent!!.layoutParams!!.x += dx
-        windowContent!!.layoutParams!!.y += dy
-        val windowManager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowManager != null) {
-            var rightMost = screenWidth - windowContent!!.layoutParams!!.width
-            var leftMost = 0
-            val topMost = 0
-            val bottomMost = screenHeight - windowContent!!.layoutParams!!.height - getNavigationBarHeight(context!!)
-            var partnerParam: WindowManager.LayoutParams? = null
-            if (onWindowStatusChangeListener != null) {
-                partnerParam = onWindowStatusChangeListener!!.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowContent!!.layoutParams)
+        windowContent?.layoutParams!!.x += dx
+        windowContent?.layoutParams!!.y += dy
+        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        var rightMost = screenWidth - windowContent?.layoutParams!!.width
+        var leftMost = 0
+        val topMost = 0
+        val bottomMost = screenHeight - windowContent?.layoutParams!!.height - getNavigationBarHeight(context)
+        var partnerParam: WindowManager.LayoutParams? = null
+        partnerParam = onWindowStatusChangeListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowContent?.layoutParams)
+        //adjust move area according to partner window
+        if (partnerParam != null) {
+            if (partnerParam.x < windowContent?.layoutParams!!.x) {
+                leftMost = partnerParam.width - windowContent?.layoutParams!!.width / 2
+            } else if (partnerParam.x > windowContent?.layoutParams!!.x) {
+                rightMost = screenWidth - (windowContent?.layoutParams!!.width / 2 + partnerParam.width)
             }
-            //adjust move area according to partner window
-            if (partnerParam != null) {
-                if (partnerParam.x < windowContent!!.layoutParams!!.x) {
-                    leftMost = partnerParam.width - windowContent!!.layoutParams!!.width / 2
-                } else if (partnerParam.x > windowContent!!.layoutParams!!.x) {
-                    rightMost = screenWidth - (windowContent!!.layoutParams!!.width / 2 + partnerParam.width)
-                }
-            }
-
-            //make window float inside screen
-            if (windowContent!!.layoutParams!!.x < leftMost) {
-                windowContent!!.layoutParams!!.x = leftMost
-            }
-            if (windowContent!!.layoutParams!!.x > rightMost) {
-                windowContent!!.layoutParams!!.x = rightMost
-            }
-            if (windowContent!!.layoutParams!!.y < topMost) {
-                windowContent!!.layoutParams!!.y = topMost
-            }
-            if (windowContent!!.layoutParams!!.y > bottomMost) {
-                windowContent!!.layoutParams!!.y = bottomMost
-            }
-            windowManager.updateViewLayout(windowContent!!.windowView, windowContent!!.layoutParams)
         }
+
+        //make window float inside screen
+        if (windowContent?.layoutParams!!.x < leftMost) {
+            windowContent?.layoutParams!!.x = leftMost
+        }
+        if (windowContent?.layoutParams!!.x > rightMost) {
+            windowContent?.layoutParams!!.x = rightMost
+        }
+        if (windowContent?.layoutParams!!.y < topMost) {
+            windowContent?.layoutParams!!.y = topMost
+        }
+        if (windowContent?.layoutParams!!.y > bottomMost) {
+            windowContent?.layoutParams!!.y = bottomMost
+        }
+        windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
         lastTouchX = currentX
         lastTouchY = currentY
     }
@@ -379,16 +339,11 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun onDestroy() {
-        if (windowContentMap != null) {
-            windowContentMap!!.clear()
-        }
+        windowContentMap.clear()
+        context = null
     }
 
-    private inner class WindowContent {
-        /**
-         * the content view of window
-         */
-        var windowView: View? = null
+    private inner class WindowContent(var windowView: View?) {
         /**
          * the layout param of window content view
          */
@@ -400,11 +355,15 @@ class FloatWindow private constructor() : View.OnTouchListener {
         /**
          * the width of window content
          */
-         var width: Int = 0
+        var width: Int = 0
         /**
          * the height of window content
          */
-         var height: Int = 0
+        var height: Int = 0
+
+        fun hasView() = windowView != null && layoutParams != null
+
+        fun hasParent() = hasView() && windowView?.parent != null
 
     }
 
@@ -430,4 +389,6 @@ class FloatWindow private constructor() : View.OnTouchListener {
                 return INSTANCE
             }
     }
+
+    fun Boolean?.value() = this ?: false
 }
