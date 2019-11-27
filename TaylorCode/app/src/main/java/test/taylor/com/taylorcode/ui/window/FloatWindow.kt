@@ -24,7 +24,7 @@ object FloatWindow : View.OnTouchListener {
     /**
      * several window content stored by String tag ;
      */
-    private var windowInfoMap: HashMap<String, WindowInfo> = HashMap()
+    private var windowInfoMap: HashMap<String, WindowInfo?> = HashMap()
     private var windowInfo: WindowInfo? = null
     private var lastTouchX: Int = 0
     private var lastTouchY: Int = 0
@@ -53,7 +53,7 @@ object FloatWindow : View.OnTouchListener {
         get() = windowInfo?.layoutParams
 
     val isShowing: Boolean
-        get() = windowInfo?.windowView?.parent != null
+        get() = windowInfo?.view?.parent != null
 
     fun init(context: Context): FloatWindow {
         whiteList = ArrayList<Class<Any>>()
@@ -75,30 +75,15 @@ object FloatWindow : View.OnTouchListener {
     }
 
     fun updateWindowView(updater: IWindowUpdater?) {
-        updater?.updateWindowView(windowInfo?.windowView)
+        updater?.updateWindowView(windowInfo?.view)
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         if (windowInfo?.hasParent().value()) {
-            windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
+            windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
         }
     }
 
-
-    fun setOnClickListener(listener: WindowClickListener) {
+    fun setClickListener(listener: WindowClickListener) {
         clickListener = listener
-    }
-
-    fun setWidth(width: Int, tag: String) {
-        val windowInfo = windowInfoMap[tag]
-        if (windowInfo != null) {
-            windowInfo.width = width
-        }
-    }
-
-    fun setHeight(height: Int, tag: String) {
-        val windowInfo = windowInfoMap[tag]
-        if (windowInfo != null) {
-            windowInfo.height = height
-        }
     }
 
     fun setEnable(enable: Boolean, tag: String) {
@@ -111,54 +96,63 @@ object FloatWindow : View.OnTouchListener {
         this.windowStateListener = windowStateListener
     }
 
-    fun show(context: Context, tag: String) {
-        windowInfo = windowInfoMap[tag]
+    /**
+     * show float window, every window has a tag
+     * @param windowInfo the necessary information for showing float window
+     * @param x the horizontal position of float window according to the left top of screen
+     * @param y the vertical position of float window according to the left top of screen
+     */
+    fun show(context: Context,
+             tag: String,
+             windowInfo: WindowInfo? = windowInfoMap[tag],
+             x: Int = windowInfo?.layoutParams?.x.value(),
+             y: Int = windowInfo?.layoutParams?.y.value()) {
+//        windowInfo = windowInfoMap[tag]
         if (windowInfo == null) {
-            Log.v("ttaylor", "there is no view to show,please invoke setView() first")
+            Log.v("ttaylor", "there is no view to show,please creating the right WindowInfo object")
             return
         }
         if (windowInfo?.enable != true) {
             return
         }
-        if (windowInfo?.windowView == null) {
+        if (windowInfo?.view == null) {
             return
         }
+        this.windowInfo = windowInfo
+        windowInfoMap[tag] = windowInfo
+        windowInfo.view?.setOnTouchListener(this)
         this.context = context
-        windowInfo?.layoutParams = generateLayoutParam(screenWidth, screenHeight)
+        windowInfo.layoutParams = createLayoutParam(x, y)
         //in case of "IllegalStateException :has already been added to the window manager."
         if (!windowInfo?.hasParent().value()) {
             val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            windowManager.addView(windowInfo?.windowView, windowInfo?.layoutParams)
+            windowManager.addView(windowInfo?.view, windowInfo?.layoutParams)
             windowStateListener?.onWindowShow()
         }
     }
 
-    private fun generateLayoutParam(screenWidth: Int, screenHeight: Int): WindowManager.LayoutParams {
+    private fun createLayoutParam(x: Int, y: Int): WindowManager.LayoutParams {
         if (context == null) {
             return WindowManager.LayoutParams()
         }
 
-        val layoutParams = WindowManager.LayoutParams()
-        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION
-        layoutParams.format = PixelFormat.TRANSLUCENT
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        layoutParams.gravity = Gravity.LEFT or Gravity.TOP
-        layoutParams.width = if (windowInfo?.width == 0) DEFAULT_WIDTH else windowInfo?.width
-                ?: 0
-        layoutParams.height = if (windowInfo?.height == 0) DEFAULT_HEIGHT else windowInfo?.height
-                ?: 0
-        val defaultX = screenWidth - layoutParams.width
-        val defaultY = 2 * screenHeight / 3
-        layoutParams.x = if (windowInfo?.layoutParams == null) defaultX else windowInfo?.layoutParams!!.x
-        layoutParams.y = if (windowInfo?.layoutParams == null) defaultY else windowInfo?.layoutParams!!.y
-        return layoutParams
+        return WindowManager.LayoutParams().apply {
+            type = WindowManager.LayoutParams.TYPE_APPLICATION
+            format = PixelFormat.TRANSLUCENT
+            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            gravity = Gravity.START or Gravity.TOP
+            width = windowInfo?.width.value()
+            height = windowInfo?.height.value()
+            this.x = x
+            this.y = y
+        }
     }
 
     fun dismiss() {
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         //in case of "IllegalStateException :not attached to window manager."
         if (windowInfo?.hasParent().value()) {
-            windowManager?.removeViewImmediate(windowInfo?.windowView)
+            windowManager?.removeViewImmediate(windowInfo?.view)
             windowStateListener?.onWindowDismiss()
         }
     }
@@ -166,20 +160,6 @@ object FloatWindow : View.OnTouchListener {
     fun setWhiteList(whiteList: List<Class<Any>>) {
         enableWhileList = true
         this.whiteList = whiteList
-    }
-
-    /**
-     * invoking this method is a must ,or window has no content to show
-     *
-     * @param view the content view of window
-     * @param tag
-     * @return
-     */
-    fun setView(view: View, tag: String): FloatWindow {
-        val windowInfo = WindowInfo(view)
-        windowInfoMap[tag] = windowInfo
-        windowInfo.windowView?.setOnTouchListener(this)
-        return this
     }
 
 
@@ -218,7 +198,7 @@ object FloatWindow : View.OnTouchListener {
                     }
                     val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
                     if (windowInfo?.hasParent().value()) {
-                        windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
+                        windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
                     }
                 }
             }
@@ -265,7 +245,7 @@ object FloatWindow : View.OnTouchListener {
         if (windowInfo?.layoutParams!!.y > bottomMost) {
             windowInfo?.layoutParams!!.y = bottomMost
         }
-        windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
+        windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
         lastTouchX = currentX
         lastTouchY = currentY
     }
@@ -346,7 +326,7 @@ object FloatWindow : View.OnTouchListener {
         context = null
     }
 
-    private class WindowInfo(var windowView: View?) {
+    class WindowInfo(var view: View?) {
         /**
          * the layout param of window content view
          */
@@ -364,16 +344,14 @@ object FloatWindow : View.OnTouchListener {
          */
         var height: Int = 0
 
-        fun hasView() = windowView != null && layoutParams != null
+        fun hasView() = view != null && layoutParams != null
 
-        fun hasParent() = hasView() && windowView?.parent != null
+        fun hasParent() = hasView() && view?.parent != null
 
     }
 
-
-    private val DEFAULT_WIDTH = 100
-    private val DEFAULT_HEIGHT = 100
     private val WELT_ANIMATION_DURATION: Long = 150
 
     fun Boolean?.value() = this ?: false
+    fun Int?.value() = this ?: 0
 }

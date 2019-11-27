@@ -50,6 +50,7 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private View floatWindowPartnerView;
     private AnimationDrawable animationDrawable;
     private ProgressRing progressRing;
+    private FloatWindow.WindowInfo windowInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,10 +68,10 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 //        findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
-        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
-        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.INSTANCE.setOnClickListener(new FloatWindow.WindowClickListener() {
+//        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
+//        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+//        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.INSTANCE.setClickListener(new FloatWindow.WindowClickListener() {
             @Override
             public void onWindowClick() {
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
@@ -83,7 +84,13 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     @Override
     protected void onResume() {
         super.onResume();
-        FloatWindow.INSTANCE.init(this).show(this, TAG_WINDOW_A);
+
+        if (windowInfo == null) {
+            windowInfo = new FloatWindow.WindowInfo(generateWindowView());
+            windowInfo.setWidth(DimensionUtil.dp2px(54));
+            windowInfo.setHeight(DimensionUtil.dp2px(54));
+        }
+        FloatWindow.INSTANCE.init(this).show(this, TAG_WINDOW_A, windowInfo, 0, 0);
     }
 
     private View getWindowView(Context context, int layoutId) {
