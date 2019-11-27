@@ -16,7 +16,9 @@ import java.util.ArrayList
 import java.util.HashMap
 
 /**
- * suspending window in app,it shows throughout the whole app
+ * a window shows above an activity.
+ * it can be dragged by finger and if your finger leave the screen, it will stick to the nearest border of the screen
+ * it can be clicked
  */
 class FloatWindow private constructor() : View.OnTouchListener {
     /**
@@ -273,7 +275,6 @@ class FloatWindow private constructor() : View.OnTouchListener {
         lastTouchX = event.rawX.toInt()
         lastTouchY = event.rawY.toInt()
     }
-
 
     private fun prepareScreenDimension(windowManager: WindowManager?) {
         if (screenWidth != 0 && screenHeight != 0) {
