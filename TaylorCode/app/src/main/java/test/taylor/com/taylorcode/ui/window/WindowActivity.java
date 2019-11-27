@@ -12,7 +12,9 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -45,9 +47,9 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
     private Timer timer;
     private int d1 = 400;
     private int d2 = 400;
-    private View floatWindowPartnerView ;
-    private AnimationDrawable animationDrawable ;
-    private ProgressRing progressRing ;
+    private View floatWindowPartnerView;
+    private AnimationDrawable animationDrawable;
+    private ProgressRing progressRing;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,17 +67,23 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 //        findViewById(R.id.start_window_partner).setOnClickListener(this);
 
 
-        FloatWindow.Companion.getInstance().setView(generateWindowView(), TAG_WINDOW_A);
-        FloatWindow.Companion.getInstance().setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.Companion.getInstance().setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        FloatWindow.Companion.getInstance().setOnClickListener(new FloatWindow.WindowClickListener() {
+        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
+        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        FloatWindow.INSTANCE.setOnClickListener(new FloatWindow.WindowClickListener() {
             @Override
             public void onWindowClick() {
                 Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ");
             }
         });
-        FloatWindow.Companion.getInstance().init(this).show(this, TAG_WINDOW_A);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FloatWindow.INSTANCE.init(this).show(this, TAG_WINDOW_A);
     }
 
     private View getWindowView(Context context, int layoutId) {
@@ -305,8 +313,8 @@ public class WindowActivity extends Activity implements View.OnClickListener, Cu
 //        tv.setText("window view");
 //        tv.setTextSize(40);
 //        return tv;
-progressRing = new ProgressRing(this);
-       animationDrawable = createAnimationDrawable(this);
+        progressRing = new ProgressRing(this);
+        animationDrawable = createAnimationDrawable(this);
         progressRing.setImageDrawable(animationDrawable);
         timer = new Timer(new Timer.TimerListener() {
             @Override
@@ -468,7 +476,7 @@ progressRing = new ProgressRing(this);
     @Override
     protected void onPause() {
         super.onPause();
-        FloatWindow.Companion.getInstance().dismiss();
+        FloatWindow.INSTANCE.dismiss();
     }
 
     /**
@@ -502,11 +510,11 @@ progressRing = new ProgressRing(this);
             floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null);
         }
         Pair<Integer, Integer> screenDimension = prepareScreenDimension(this);
-        WindowManager.LayoutParams layoutParams = FloatWindow.Companion.getInstance().getLayoutParam();
+        WindowManager.LayoutParams layoutParams = FloatWindow.INSTANCE.getLayoutParam();
         final WindowManager.LayoutParams params = createFloatWindowPartnerLayoutParam(screenDimension.first, screenDimension.second, layoutParams, floatWindowPartnerView);
-        if (floatWindowPartnerView!=null && floatWindowPartnerView.getParent() == null) {
+        if (floatWindowPartnerView != null && floatWindowPartnerView.getParent() == null) {
             windowManager.addView(floatWindowPartnerView, params);
-            FloatWindow.Companion.getInstance().setWindowStateListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
+            FloatWindow.INSTANCE.setWindowStateListener(new OnWindowStatusListener(windowManager, floatWindowPartnerView, params));
         }
     }
 

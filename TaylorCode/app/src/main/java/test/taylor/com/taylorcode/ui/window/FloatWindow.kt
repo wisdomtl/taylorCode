@@ -20,19 +20,19 @@ import java.util.HashMap
  * it can be dragged by finger and if your finger leave the screen, it will stick to the nearest border of the screen
  * it can be clicked
  */
-class FloatWindow private constructor() : View.OnTouchListener {
+object FloatWindow : View.OnTouchListener {
     /**
      * several window content stored by String tag ;
      */
-    private var windowContentMap: HashMap<String, WindowContent> = HashMap()
-    private var windowContent: WindowContent? = null
+    private var windowInfoMap: HashMap<String, WindowInfo> = HashMap()
+    private var windowInfo: WindowInfo? = null
     private var lastTouchX: Int = 0
     private var lastTouchY: Int = 0
     private val lastWeltX: Int = 0
     private var screenWidth: Int = 0
     private var screenHeight: Int = 0
     private var context: Context? = null
-    private var gestureDetector: GestureDetector? = null
+    private var gestureDetector: GestureDetector = GestureDetector(context, GestureListener())
     private var clickListener: WindowClickListener? = null
     private var windowStateListener: WindowStateListener? = null
     /**
@@ -50,16 +50,15 @@ class FloatWindow private constructor() : View.OnTouchListener {
     private var weltAnimator: ValueAnimator? = null
 
     val layoutParam: WindowManager.LayoutParams?
-        get() = windowContent?.layoutParams
+        get() = windowInfo?.layoutParams
 
     val isShowing: Boolean
-        get() = windowContent?.windowView?.parent != null
+        get() = windowInfo?.windowView?.parent != null
 
     fun init(context: Context): FloatWindow {
         whiteList = ArrayList<Class<Any>>()
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         prepareScreenDimension(windowManager)
-        gestureDetector = GestureDetector(context, GestureListener())
         return this
     }
 
@@ -76,10 +75,10 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun updateWindowView(updater: IWindowUpdater?) {
-        updater?.updateWindowView(windowContent?.windowView)
+        updater?.updateWindowView(windowInfo?.windowView)
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowContent?.hasParent().value()) {
-            windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
+        if (windowInfo?.hasParent().value()) {
+            windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
         }
     }
 
@@ -89,23 +88,23 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun setWidth(width: Int, tag: String) {
-        val windowContent = windowContentMap[tag]
-        if (windowContent != null) {
-            windowContent.width = width
+        val windowInfo = windowInfoMap[tag]
+        if (windowInfo != null) {
+            windowInfo.width = width
         }
     }
 
     fun setHeight(height: Int, tag: String) {
-        val windowContent = windowContentMap[tag]
-        if (windowContent != null) {
-            windowContent.height = height
+        val windowInfo = windowInfoMap[tag]
+        if (windowInfo != null) {
+            windowInfo.height = height
         }
     }
 
     fun setEnable(enable: Boolean, tag: String) {
-        val windowContent = windowContentMap[tag]
+        val windowInfo = windowInfoMap[tag]
                 ?: throw RuntimeException("no such window view,please invoke setView() first")
-        windowContent.enable = enable
+        windowInfo.enable = enable
     }
 
     fun setWindowStateListener(windowStateListener: WindowStateListener) {
@@ -113,23 +112,23 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun show(context: Context, tag: String) {
-        windowContent = windowContentMap[tag]
-        if (windowContent == null) {
+        windowInfo = windowInfoMap[tag]
+        if (windowInfo == null) {
             Log.v("ttaylor", "there is no view to show,please invoke setView() first")
             return
         }
-        if (windowContent?.enable != true) {
+        if (windowInfo?.enable != true) {
             return
         }
-        if (windowContent?.windowView == null) {
+        if (windowInfo?.windowView == null) {
             return
         }
         this.context = context
-        windowContent?.layoutParams = generateLayoutParam(screenWidth, screenHeight)
+        windowInfo?.layoutParams = generateLayoutParam(screenWidth, screenHeight)
         //in case of "IllegalStateException :has already been added to the window manager."
-        if (!windowContent?.hasParent().value()) {
+        if (!windowInfo?.hasParent().value()) {
             val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            windowManager.addView(windowContent?.windowView, windowContent?.layoutParams)
+            windowManager.addView(windowInfo?.windowView, windowInfo?.layoutParams)
             windowStateListener?.onWindowShow()
         }
     }
@@ -144,22 +143,22 @@ class FloatWindow private constructor() : View.OnTouchListener {
         layoutParams.format = PixelFormat.TRANSLUCENT
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         layoutParams.gravity = Gravity.LEFT or Gravity.TOP
-        layoutParams.width = if (windowContent?.width == 0) DEFAULT_WIDTH else windowContent?.width
+        layoutParams.width = if (windowInfo?.width == 0) DEFAULT_WIDTH else windowInfo?.width
                 ?: 0
-        layoutParams.height = if (windowContent?.height == 0) DEFAULT_HEIGHT else windowContent?.height
+        layoutParams.height = if (windowInfo?.height == 0) DEFAULT_HEIGHT else windowInfo?.height
                 ?: 0
         val defaultX = screenWidth - layoutParams.width
         val defaultY = 2 * screenHeight / 3
-        layoutParams.x = if (windowContent?.layoutParams == null) defaultX else windowContent?.layoutParams!!.x
-        layoutParams.y = if (windowContent?.layoutParams == null) defaultY else windowContent?.layoutParams!!.y
+        layoutParams.x = if (windowInfo?.layoutParams == null) defaultX else windowInfo?.layoutParams!!.x
+        layoutParams.y = if (windowInfo?.layoutParams == null) defaultY else windowInfo?.layoutParams!!.y
         return layoutParams
     }
 
     fun dismiss() {
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         //in case of "IllegalStateException :not attached to window manager."
-        if (windowContent?.hasParent().value()) {
-            windowManager?.removeViewImmediate(windowContent?.windowView)
+        if (windowInfo?.hasParent().value()) {
+            windowManager?.removeViewImmediate(windowInfo?.windowView)
             windowStateListener?.onWindowDismiss()
         }
     }
@@ -177,20 +176,20 @@ class FloatWindow private constructor() : View.OnTouchListener {
      * @return
      */
     fun setView(view: View, tag: String): FloatWindow {
-        val windowContent = WindowContent(view)
-        windowContentMap[tag] = windowContent
-        windowContent.windowView?.setOnTouchListener(this)
+        val windowInfo = WindowInfo(view)
+        windowInfoMap[tag] = windowInfo
+        windowInfo.windowView?.setOnTouchListener(this)
         return this
     }
 
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         //let GestureDetector take care of touch event,in order to parsing touch event into different gesture
-        gestureDetector!!.onTouchEvent(event)
+        gestureDetector.onTouchEvent(event)
         //there is no ACTION_UP event in GestureDetector
         val action = event.action
         when (action) {
-            MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowContent?.width ?: 0)
+            MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowInfo?.width ?: 0)
             else -> {
             }
         }
@@ -198,7 +197,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     private fun onActionUp(event: MotionEvent, screenWidth: Int, width: Int) {
-        if (!windowContent?.hasView().value()) {
+        if (!windowInfo?.hasView().value()) {
             return
         }
         val upX = event.rawX.toInt()
@@ -209,22 +208,22 @@ class FloatWindow private constructor() : View.OnTouchListener {
         }
 
         if (weltAnimator == null) {
-            weltAnimator = ValueAnimator.ofInt(windowContent?.layoutParams!!.x, endX).apply {
+            weltAnimator = ValueAnimator.ofInt(windowInfo?.layoutParams!!.x, endX).apply {
                 interpolator = LinearInterpolator()
                 duration = WELT_ANIMATION_DURATION
                 addUpdateListener { animation ->
                     val x = animation.animatedValue as Int
-                    if (windowContent?.layoutParams != null) {
-                        windowContent?.layoutParams!!.x = x
+                    if (windowInfo?.layoutParams != null) {
+                        windowInfo?.layoutParams!!.x = x
                     }
                     val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                    if (windowContent?.hasParent().value()) {
-                        windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
+                    if (windowInfo?.hasParent().value()) {
+                        windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
                     }
                 }
             }
         }
-        weltAnimator?.setIntValues(windowContent?.layoutParams!!.x, endX)
+        weltAnimator?.setIntValues(windowInfo?.layoutParams!!.x, endX)
         weltAnimator?.start()
     }
 
@@ -235,38 +234,38 @@ class FloatWindow private constructor() : View.OnTouchListener {
         val dx = currentX - lastTouchX
         val dy = currentY - lastTouchY
 
-        windowContent?.layoutParams!!.x += dx
-        windowContent?.layoutParams!!.y += dy
+        windowInfo?.layoutParams!!.x += dx
+        windowInfo?.layoutParams!!.y += dy
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        var rightMost = screenWidth - windowContent?.layoutParams!!.width
+        var rightMost = screenWidth - windowInfo?.layoutParams!!.width
         var leftMost = 0
         val topMost = 0
-        val bottomMost = screenHeight - windowContent?.layoutParams!!.height - getNavigationBarHeight(context)
+        val bottomMost = screenHeight - windowInfo?.layoutParams!!.height - getNavigationBarHeight(context)
         var partnerParam: WindowManager.LayoutParams? = null
-        partnerParam = windowStateListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowContent?.layoutParams)
+        partnerParam = windowStateListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowInfo?.layoutParams)
         //adjust move area according to partner window
         if (partnerParam != null) {
-            if (partnerParam.x < windowContent?.layoutParams!!.x) {
-                leftMost = partnerParam.width - windowContent?.layoutParams!!.width / 2
-            } else if (partnerParam.x > windowContent?.layoutParams!!.x) {
-                rightMost = screenWidth - (windowContent?.layoutParams!!.width / 2 + partnerParam.width)
+            if (partnerParam.x < windowInfo?.layoutParams!!.x) {
+                leftMost = partnerParam.width - windowInfo?.layoutParams!!.width / 2
+            } else if (partnerParam.x > windowInfo?.layoutParams!!.x) {
+                rightMost = screenWidth - (windowInfo?.layoutParams!!.width / 2 + partnerParam.width)
             }
         }
 
         //make window float inside screen
-        if (windowContent?.layoutParams!!.x < leftMost) {
-            windowContent?.layoutParams!!.x = leftMost
+        if (windowInfo?.layoutParams!!.x < leftMost) {
+            windowInfo?.layoutParams!!.x = leftMost
         }
-        if (windowContent?.layoutParams!!.x > rightMost) {
-            windowContent?.layoutParams!!.x = rightMost
+        if (windowInfo?.layoutParams!!.x > rightMost) {
+            windowInfo?.layoutParams!!.x = rightMost
         }
-        if (windowContent?.layoutParams!!.y < topMost) {
-            windowContent?.layoutParams!!.y = topMost
+        if (windowInfo?.layoutParams!!.y < topMost) {
+            windowInfo?.layoutParams!!.y = topMost
         }
-        if (windowContent?.layoutParams!!.y > bottomMost) {
-            windowContent?.layoutParams!!.y = bottomMost
+        if (windowInfo?.layoutParams!!.y > bottomMost) {
+            windowInfo?.layoutParams!!.y = bottomMost
         }
-        windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
+        windowManager?.updateViewLayout(windowInfo?.windowView, windowInfo?.layoutParams)
         lastTouchX = currentX
         lastTouchY = currentY
     }
@@ -313,7 +312,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         fun onWindowMove(dx: Float, dy: Float, screenWidth: Int, screenHeight: Int, layoutParams: WindowManager.LayoutParams?): WindowManager.LayoutParams
     }
 
-    private inner class GestureListener : GestureDetector.OnGestureListener {
+    private class GestureListener : GestureDetector.OnGestureListener {
 
         override fun onDown(e: MotionEvent): Boolean {
             onActionDown(e)
@@ -343,11 +342,11 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     fun onDestroy() {
-        windowContentMap.clear()
+        windowInfoMap.clear()
         context = null
     }
 
-    private inner class WindowContent(var windowView: View?) {
+    private class WindowInfo(var windowView: View?) {
         /**
          * the layout param of window content view
          */
@@ -371,28 +370,10 @@ class FloatWindow private constructor() : View.OnTouchListener {
 
     }
 
-    companion object {
 
-        private val DEFAULT_WIDTH = 100
-        private val DEFAULT_HEIGHT = 100
-        private val WELT_ANIMATION_DURATION: Long = 150
-
-        @Volatile
-        private var INSTANCE: FloatWindow? = null
-
-        //in case of memory leak for singleton
-        val instance: FloatWindow?
-            get() {
-                if (INSTANCE == null) {
-                    synchronized(FloatWindow::class.java) {
-                        if (INSTANCE == null) {
-                            INSTANCE = FloatWindow()
-                        }
-                    }
-                }
-                return INSTANCE
-            }
-    }
+    private val DEFAULT_WIDTH = 100
+    private val DEFAULT_HEIGHT = 100
+    private val WELT_ANIMATION_DURATION: Long = 150
 
     fun Boolean?.value() = this ?: false
 }

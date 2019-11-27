@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import test.taylor.com.taylorcode.Constant;
 import test.taylor.com.taylorcode.R;
+import test.taylor.com.taylorcode.ui.window.FloatWindow;
 
 /**
  * Created on 2018/2/27.

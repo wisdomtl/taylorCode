@@ -94,7 +94,7 @@ public class ActivityB extends ActivityBase {
      * window case4:update window content
      */
     private void updateWindowView(){
-        FloatWindow.Companion.getInstance().updateWindowView(new FloatWindow.IWindowUpdater() {
+        FloatWindow.INSTANCE.updateWindowView(new FloatWindow.IWindowUpdater() {
             @Override
             public void updateWindowView(View windowView) {
                 Log.v("ttaylor", "ActivityB.updateWindowView()" + "  ");
