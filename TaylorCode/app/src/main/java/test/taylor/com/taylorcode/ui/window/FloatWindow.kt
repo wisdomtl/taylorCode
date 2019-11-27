@@ -76,7 +76,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     fun updateWindowView(updater: IWindowUpdater?) {
         updater?.updateWindowView(windowContent?.windowView)
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowContent?.hasView().value() && windowContent?.windowView!!.parent != null) {
+        if (windowContent?.hasParent().value()) {
             windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
         }
     }
@@ -125,7 +125,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
         this.context = context
         windowContent?.layoutParams = generateLayoutParam(screenWidth, screenHeight)
         //in case of "IllegalStateException :has already been added to the window manager."
-        if (windowContent?.windowView!!.parent == null) {
+        if (!windowContent?.hasParent().value()) {
             val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.addView(windowContent?.windowView, windowContent?.layoutParams)
             onWindowStatusChangeListener?.onShow()
@@ -156,7 +156,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     fun dismiss() {
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         //in case of "IllegalStateException :not attached to window manager."
-        if (windowContent != null && windowContent?.windowView != null && windowContent?.windowView?.parent != null) {
+        if (windowContent?.hasParent().value()) {
             windowManager?.removeViewImmediate(windowContent?.windowView)
             onWindowStatusChangeListener?.onDismiss()
         }
@@ -196,7 +196,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
     }
 
     private fun onActionUp(event: MotionEvent, screenWidth: Int, width: Int) {
-        if (windowContent?.windowView == null || windowContent?.layoutParams == null) {
+        if (!windowContent?.hasView().value()) {
             return
         }
         val upX = event.rawX.toInt()
@@ -216,7 +216,7 @@ class FloatWindow private constructor() : View.OnTouchListener {
                         windowContent?.layoutParams!!.x = x
                     }
                     val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                    if (windowContent?.windowView?.parent != null) {
+                    if (windowContent?.hasParent().value()) {
                         windowManager?.updateViewLayout(windowContent?.windowView, windowContent?.layoutParams)
                     }
                 }
