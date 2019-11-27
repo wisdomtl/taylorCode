@@ -98,7 +98,8 @@ object FloatWindow : View.OnTouchListener {
 
     /**
      * show float window, every window has a tag
-     * @param windowInfo the necessary information for showing float window
+     * @param tag a unique tag for a window, if showing the previous window without providing [windowInfo], we will looking for it in [windowInfoMap]
+     * @param windowInfo the necessary information for showing float window, it will be kept in [windowInfoMap] with the key [tag]
      * @param x the horizontal position of float window according to the left top of screen
      * @param y the vertical position of float window according to the left top of screen
      */
