@@ -26,7 +26,6 @@ import test.taylor.com.taylorcode.ui.window.FloatWindow.WindowClickListener
 import test.taylor.com.taylorcode.ui.window.FloatWindow.WindowInfo
 import test.taylor.com.taylorcode.ui.window.FloatWindow.dismiss
 import test.taylor.com.taylorcode.ui.window.FloatWindow.layoutParam
-import test.taylor.com.taylorcode.ui.window.FloatWindow.setClickListener
 import test.taylor.com.taylorcode.ui.window.FloatWindow.setWindowStateListener
 import test.taylor.com.taylorcode.util.DimensionUtil
 import test.taylor.com.taylorcode.util.Timer
@@ -59,9 +58,9 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
 //        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        setClickListener(object : WindowClickListener {
-            override fun onWindowClick() {
-                Log.v("ttaylor", "WindowActivity.onWindowViewClick()" + "  ")
+        FloatWindow.setClickListener(object : WindowClickListener {
+            override fun onWindowClick(windowInfo: WindowInfo?): Boolean {
+                return false
             }
         })
     }
@@ -72,9 +71,9 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             windowInfo = WindowInfo(generateWindowView())
             windowInfo!!.width = DimensionUtil.dp2px(54.0)
             windowInfo!!.height = DimensionUtil.dp2px(54.0)
-            FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0)
+            FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0,true)
         }
-        FloatWindow.show(this, TAG_WINDOW_A)
+        FloatWindow.show(this, TAG_WINDOW_A,dragEnable = true)
     }
 
     private fun getWindowView(context: Context, layoutId: Int): View {

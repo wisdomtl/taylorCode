@@ -12,7 +12,6 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 
-import java.util.ArrayList
 import java.util.HashMap
 
 /**
@@ -35,6 +34,7 @@ object FloatWindow : View.OnTouchListener {
     private var gestureDetector: GestureDetector = GestureDetector(context, GestureListener())
     private var clickListener: WindowClickListener? = null
     private var windowStateListener: WindowStateListener? = null
+    private var dragEnable: Boolean = false
     /**
      * this list records the activities which shows this window
      */
@@ -54,6 +54,7 @@ object FloatWindow : View.OnTouchListener {
 
     val isShowing: Boolean
         get() = windowInfo?.view?.parent != null
+
 
     private fun getNavigationBarHeight(context: Context?): Int {
         val rid = context?.resources?.getIdentifier("config_showNavigationBar", "bool", "android")
@@ -99,8 +100,8 @@ object FloatWindow : View.OnTouchListener {
              tag: String,
              windowInfo: WindowInfo? = windowInfoMap[tag],
              x: Int = windowInfo?.layoutParams?.x.value(),
-             y: Int = windowInfo?.layoutParams?.y.value()) {
-//        windowInfo = windowInfoMap[tag]
+             y: Int = windowInfo?.layoutParams?.y.value(),
+             dragEnable: Boolean) {
         if (windowInfo == null) {
             Log.v("ttaylor", "there is no view to show,please creating the right WindowInfo object")
             return
@@ -112,6 +113,7 @@ object FloatWindow : View.OnTouchListener {
             return
         }
         this.windowInfo = windowInfo
+        this.dragEnable = dragEnable
         windowInfoMap[tag] = windowInfo
         windowInfo.view?.setOnTouchListener(this)
         this.context = context
@@ -159,12 +161,13 @@ object FloatWindow : View.OnTouchListener {
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         //let GestureDetector take care of touch event,in order to parsing touch event into different gesture
-        gestureDetector.onTouchEvent(event)
-        //there is no ACTION_UP event in GestureDetector
-        val action = event.action
-        when (action) {
-            MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowInfo?.width ?: 0)
-            else -> {
+        gestureDetector.onTouchEvent(event).takeIf { !it }?.also {
+            //there is no ACTION_UP event in GestureDetector
+            val action = event.action
+            when (action) {
+                MotionEvent.ACTION_UP -> onActionUp(event, screenWidth, windowInfo?.width ?: 0)
+                else -> {
+                }
             }
         }
         return true
@@ -275,7 +278,7 @@ object FloatWindow : View.OnTouchListener {
      * let ui decide what to do after window clicked
      */
     interface WindowClickListener {
-        fun onWindowClick()
+        fun onWindowClick(windowInfo: WindowInfo?): Boolean
     }
 
     interface WindowStateListener {
@@ -296,15 +299,15 @@ object FloatWindow : View.OnTouchListener {
         override fun onShowPress(e: MotionEvent) {}
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            if (clickListener != null) {
-                clickListener!!.onWindowClick()
-            }
-            return false
+            return clickListener?.onWindowClick(windowInfo) ?: false
         }
 
         override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
-            onActionMove(e2)
-            return true
+            if (dragEnable) {
+                onActionMove(e2)
+                return true
+            }
+            return false
         }
 
         override fun onLongPress(e: MotionEvent) {}
