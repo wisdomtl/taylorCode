@@ -38,7 +38,7 @@ object FloatWindow : View.OnTouchListener {
     /**
      * this list records the activities which shows this window
      */
-    private var whiteList: List<Class<Any>>? = null
+    private var whiteList: List<Class<Any>>? = mutableListOf()
     /**
      * if true,whiteList will be used to depend which activity could show window
      * if false,all activities in app is allow to show window
@@ -54,14 +54,6 @@ object FloatWindow : View.OnTouchListener {
 
     val isShowing: Boolean
         get() = windowInfo?.view?.parent != null
-
-    fun init(context: Context): FloatWindow {
-        whiteList = ArrayList<Class<Any>>()
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        prepareScreenDimension(windowManager)
-        return this
-    }
-
 
     private fun getNavigationBarHeight(context: Context?): Int {
         val rid = context?.resources?.getIdentifier("config_showNavigationBar", "bool", "android")
@@ -127,6 +119,7 @@ object FloatWindow : View.OnTouchListener {
         //in case of "IllegalStateException :has already been added to the window manager."
         if (!windowInfo?.hasParent().value()) {
             val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            prepareScreenDimension(windowManager)
             windowManager.addView(windowInfo?.view, windowInfo?.layoutParams)
             windowStateListener?.onWindowShow()
         }

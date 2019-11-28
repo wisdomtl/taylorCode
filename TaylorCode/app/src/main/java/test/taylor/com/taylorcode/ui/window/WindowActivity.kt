@@ -72,7 +72,7 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             windowInfo = WindowInfo(generateWindowView())
             windowInfo!!.width = DimensionUtil.dp2px(54.0)
             windowInfo!!.height = DimensionUtil.dp2px(54.0)
-            FloatWindow.init(this).show(this, TAG_WINDOW_A, windowInfo, 0, 0)
+            FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0)
         }
         FloatWindow.show(this, TAG_WINDOW_A)
     }
