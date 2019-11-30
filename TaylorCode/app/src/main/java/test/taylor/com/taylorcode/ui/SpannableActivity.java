@@ -13,11 +13,16 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import test.taylor.com.taylorcode.R;
 
@@ -26,6 +31,7 @@ public class SpannableActivity extends Activity {
     private TextView tvDifferentTypeface;
     private TextView tvDifferentStyle;
     private TextView tv3;
+    private TextView tv4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +59,6 @@ public class SpannableActivity extends Activity {
         textSpan2.setSpan(new ForegroundColorSpan(Color.RED),atIndex,atIndex+3,Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         tvDifferentStyle.setText(textSpan2);
 
-
         //spannable case3: different typeface without api limitation
         tv3 = findViewById(R.id.tv_3);
         SpannableStringBuilder ssb = new SpannableStringBuilder();
@@ -64,5 +69,28 @@ public class SpannableActivity extends Activity {
             }
         },3,8, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         tv3.setText(ssb);
+
+
+        //spannable case3: clickable spannable
+        tv4 = findViewById(R.id.tv_4);
+        SpannableStringBuilder ssb2 = new SpannableStringBuilder();
+        ssb2.append("ttt 999 dddd").setSpan(new ClickableSpan(){
+            @Override
+            public void onClick(@NonNull View widget) {
+                Toast.makeText(SpannableActivity.this,"click span clicked",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint textPaint) {
+                textPaint.setTypeface(ResourcesCompat.getFont(SpannableActivity.this,R.font.gilroy_bold_4));
+                textPaint.setTextSize(90);
+            }
+        },0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        tv4.setMovementMethod(LinkMovementMethod.getInstance());
+        tv4.setHighlightColor(Color.TRANSPARENT);
+        tv4.setText(ssb2);
+
+
+
     }
 }
