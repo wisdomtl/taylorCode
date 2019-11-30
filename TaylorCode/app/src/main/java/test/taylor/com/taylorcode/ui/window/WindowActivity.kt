@@ -58,6 +58,9 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
 //        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
+        findViewById<View>(R.id.ivArrow).setOnClickListener { v->
+            v.isSelected = !v.isSelected
+        }
         FloatWindow.setClickListener(object : WindowClickListener {
             override fun onWindowClick(windowInfo: WindowInfo?): Boolean {
                 return false

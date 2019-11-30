@@ -27,6 +27,12 @@
         android:id="@+id/btn_outside"
         android:text="button outside of popupwindow"
         android:textSize="20dp"/>
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:src="@drawable/arrow_selector"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
     <!--<Button-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
