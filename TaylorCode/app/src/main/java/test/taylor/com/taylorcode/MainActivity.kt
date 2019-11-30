@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         btn_tag_textview.setOnClickListener { startActivity(TagTextViewActivity::class.java) }
         btn_ipc.setOnClickListener { startActivity(RemoteDynamicProxyActivity::class.java) }
         btn_coroutine.setOnClickListener { startActivity(CoroutineActivity::class.java) }
+        btn_spannable.setOnClickListener { startActivity(SpannableActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
