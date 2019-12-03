@@ -5,14 +5,9 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.GestureDetector
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.LinearInterpolator
-
-import java.util.HashMap
+import java.util.*
 
 /**
  * a window shows above an activity.
@@ -71,7 +66,7 @@ object FloatWindow : View.OnTouchListener {
         updater?.updateWindowView(windowInfo?.view)
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         if (windowInfo?.hasParent().value()) {
-            windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
+            windowManager.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
         }
     }
 
@@ -81,7 +76,7 @@ object FloatWindow : View.OnTouchListener {
 
     fun setEnable(enable: Boolean, tag: String) {
         val windowInfo = windowInfoMap[tag]
-                ?: throw RuntimeException("no such window view,please invoke setView() first")
+            ?: throw RuntimeException("no such window view,please invoke setView() first")
         windowInfo.enable = enable
     }
 
@@ -96,20 +91,22 @@ object FloatWindow : View.OnTouchListener {
      * @param x the horizontal position of float window according to the left top of screen
      * @param y the vertical position of float window according to the left top of screen
      */
-    fun show(context: Context,
-             tag: String,
-             windowInfo: WindowInfo? = windowInfoMap[tag],
-             x: Int = windowInfo?.layoutParams?.x.value(),
-             y: Int = windowInfo?.layoutParams?.y.value(),
-             dragEnable: Boolean) {
+    fun show(
+        context: Context,
+        tag: String,
+        windowInfo: WindowInfo? = windowInfoMap[tag],
+        x: Int = windowInfo?.layoutParams?.x.value(),
+        y: Int = windowInfo?.layoutParams?.y.value(),
+        dragEnable: Boolean
+    ) {
         if (windowInfo == null) {
             Log.v("ttaylor", "there is no view to show,please creating the right WindowInfo object")
             return
         }
-        if (windowInfo?.enable != true) {
+        if (windowInfo.enable != true) {
             return
         }
-        if (windowInfo?.view == null) {
+        if (windowInfo.view == null) {
             return
         }
         this.windowInfo = windowInfo
@@ -119,10 +116,11 @@ object FloatWindow : View.OnTouchListener {
         this.context = context
         windowInfo.layoutParams = createLayoutParam(x, y)
         //in case of "IllegalStateException :has already been added to the window manager."
-        if (!windowInfo?.hasParent().value()) {
-            val windowManager = this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        if (!windowInfo.hasParent().value()) {
+            val windowManager =
+                this.context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             prepareScreenDimension(windowManager)
-            windowManager.addView(windowInfo?.view, windowInfo?.layoutParams)
+            windowManager.addView(windowInfo.view, windowInfo.layoutParams)
             windowStateListener?.onWindowShow()
         }
     }
@@ -135,7 +133,8 @@ object FloatWindow : View.OnTouchListener {
         return WindowManager.LayoutParams().apply {
             type = WindowManager.LayoutParams.TYPE_APPLICATION
             format = PixelFormat.TRANSLUCENT
-            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            flags =
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             gravity = Gravity.START or Gravity.TOP
             width = windowInfo?.width.value()
             height = windowInfo?.height.value()
@@ -148,7 +147,7 @@ object FloatWindow : View.OnTouchListener {
         val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         //in case of "IllegalStateException :not attached to window manager."
         if (windowInfo?.hasParent().value()) {
-            windowManager?.removeViewImmediate(windowInfo?.view)
+            windowManager.removeViewImmediate(windowInfo?.view)
             windowStateListener?.onWindowDismiss()
         }
     }
@@ -193,9 +192,10 @@ object FloatWindow : View.OnTouchListener {
                     if (windowInfo?.layoutParams != null) {
                         windowInfo?.layoutParams!!.x = x
                     }
-                    val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                    val windowManager =
+                        context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
                     if (windowInfo?.hasParent().value()) {
-                        windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
+                        windowManager.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
                     }
                 }
             }
@@ -217,15 +217,23 @@ object FloatWindow : View.OnTouchListener {
         var rightMost = screenWidth - windowInfo?.layoutParams!!.width
         var leftMost = 0
         val topMost = 0
-        val bottomMost = screenHeight - windowInfo?.layoutParams!!.height - getNavigationBarHeight(context)
+        val bottomMost =
+            screenHeight - windowInfo?.layoutParams!!.height - getNavigationBarHeight(context)
         var partnerParam: WindowManager.LayoutParams? = null
-        partnerParam = windowStateListener?.onWindowMove(dx.toFloat(), dy.toFloat(), screenWidth, screenHeight, windowInfo?.layoutParams)
+        partnerParam = windowStateListener?.onWindowMove(
+            dx.toFloat(),
+            dy.toFloat(),
+            screenWidth,
+            screenHeight,
+            windowInfo?.layoutParams
+        )
         //adjust move area according to partner window
         if (partnerParam != null) {
             if (partnerParam.x < windowInfo?.layoutParams!!.x) {
                 leftMost = partnerParam.width - windowInfo?.layoutParams!!.width / 2
             } else if (partnerParam.x > windowInfo?.layoutParams!!.x) {
-                rightMost = screenWidth - (windowInfo?.layoutParams!!.width / 2 + partnerParam.width)
+                rightMost =
+                    screenWidth - (windowInfo?.layoutParams!!.width / 2 + partnerParam.width)
             }
         }
 
@@ -242,7 +250,7 @@ object FloatWindow : View.OnTouchListener {
         if (windowInfo?.layoutParams!!.y > bottomMost) {
             windowInfo?.layoutParams!!.y = bottomMost
         }
-        windowManager?.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
+        windowManager.updateViewLayout(windowInfo?.view, windowInfo?.layoutParams)
         lastTouchX = currentX
         lastTouchY = currentY
     }
@@ -286,7 +294,13 @@ object FloatWindow : View.OnTouchListener {
 
         fun onWindowDismiss()
 
-        fun onWindowMove(dx: Float, dy: Float, screenWidth: Int, screenHeight: Int, layoutParams: WindowManager.LayoutParams?): WindowManager.LayoutParams
+        fun onWindowMove(
+            dx: Float,
+            dy: Float,
+            screenWidth: Int,
+            screenHeight: Int,
+            layoutParams: WindowManager.LayoutParams?
+        ): WindowManager.LayoutParams
     }
 
     private class GestureListener : GestureDetector.OnGestureListener {
@@ -302,7 +316,12 @@ object FloatWindow : View.OnTouchListener {
             return clickListener?.onWindowClick(windowInfo) ?: false
         }
 
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
             if (dragEnable) {
                 onActionMove(e2)
                 return true
@@ -312,7 +331,12 @@ object FloatWindow : View.OnTouchListener {
 
         override fun onLongPress(e: MotionEvent) {}
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             return false
         }
 
