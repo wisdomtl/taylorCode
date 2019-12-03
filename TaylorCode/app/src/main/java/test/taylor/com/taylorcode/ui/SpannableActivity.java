@@ -24,6 +24,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import test.taylor.com.taylorcode.R;
 
 public class SpannableActivity extends Activity {
@@ -71,7 +73,7 @@ public class SpannableActivity extends Activity {
         tv3.setText(ssb);
 
 
-        //spannable case3: clickable spannable
+        //spannable case4: clickable spannable
         tv4 = findViewById(R.id.tv_4);
         SpannableStringBuilder ssb2 = new SpannableStringBuilder();
         ssb2.append("ttt 999 dddd").setSpan(new ClickableSpan(){
@@ -90,6 +92,14 @@ public class SpannableActivity extends Activity {
         tv4.setHighlightColor(Color.TRANSPARENT);
         tv4.setText(ssb2);
 
+
+
+        //case: measure text width in TextView
+        tv4.post(() -> {
+            TextPaint tp = tv4.getPaint();
+            float width2 = tp.measureText(tv4.getText(),0,tv4.getText().length());
+            Log.v("ttaylor", "SpannableActivity.initView()" + "  text width2 = "+width2+" view width="+tv4.getWidth());
+        });
 
 
     }
