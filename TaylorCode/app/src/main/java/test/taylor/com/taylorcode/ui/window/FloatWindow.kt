@@ -50,6 +50,11 @@ object FloatWindow : View.OnTouchListener {
     val isShowing: Boolean
         get() = windowInfo?.view?.parent != null
 
+    /**
+     * listener invoked when touch outside of [FloatWindow]
+     */
+    private var onTouchOutside: (() -> Unit)? = null
+
 
     private fun getNavigationBarHeight(context: Context?): Int {
         val rid = context?.resources?.getIdentifier("config_showNavigationBar", "bool", "android")
@@ -103,7 +108,7 @@ object FloatWindow : View.OnTouchListener {
             Log.v("ttaylor", "there is no view to show,please creating the right WindowInfo object")
             return
         }
-        if (windowInfo.enable != true) {
+        if (!windowInfo.enable) {
             return
         }
         if (windowInfo.view == null) {
@@ -159,6 +164,15 @@ object FloatWindow : View.OnTouchListener {
 
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
+        //handle outside touch event
+        val x = event.x.toInt()
+        val y = event.y.toInt()
+
+        if (event.action == MotionEvent.ACTION_DOWN && isTouchOutside(x, y)) {
+            onTouchOutside?.invoke()
+            return true
+        }
+
         //let GestureDetector take care of touch event,in order to parsing touch event into different gesture
         gestureDetector.onTouchEvent(event).takeIf { !it }?.also {
             //there is no ACTION_UP event in GestureDetector
@@ -170,6 +184,20 @@ object FloatWindow : View.OnTouchListener {
             }
         }
         return true
+    }
+
+    private fun isTouchOutside(x: Int, y: Int) =
+        x < 0 || x >= windowInfo?.view?.width ?: Int.MAX_VALUE || y < 0 || y >= windowInfo?.view?.height ?: Int.MAX_VALUE
+
+    /**
+     * set whether outside touch event could be detected
+     */
+    fun setOutsideTouchable(enable: Boolean, onTouchOutside: (() -> Unit)? = null) {
+        if (enable) windowInfo?.layoutParams?.let { layoutParams ->
+            layoutParams.flags =
+                layoutParams.flags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+            this.onTouchOutside = onTouchOutside
+        }
     }
 
     private fun onActionUp(event: MotionEvent, screenWidth: Int, width: Int) {

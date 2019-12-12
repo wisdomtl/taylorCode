@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import test.taylor.com.taylorcode.util.DateUtil;
+
 
 /**
  * Created on 17/7/26.
@@ -70,6 +72,10 @@ public class TaylorApplication extends Application {
         int j = ((int) Math.round(4.1d));
         int k = (int) (10/2.3) ;
         Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j+" ,k="+k);
+
+        //case: format milliseconds to string date
+        String date = DateUtil.INSTANCE.formatDate(System.currentTimeMillis(),"yyyy-MM-dd");
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  date="+date);
 
     }
 

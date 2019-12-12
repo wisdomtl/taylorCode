@@ -77,6 +77,7 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0,true)
         }
         FloatWindow.show(this, TAG_WINDOW_A,dragEnable = true)
+        FloatWindow.setOutsideTouchable(true)
     }
 
     private fun getWindowView(context: Context, layoutId: Int): View {
