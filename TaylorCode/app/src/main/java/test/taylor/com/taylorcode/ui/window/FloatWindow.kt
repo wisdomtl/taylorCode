@@ -168,7 +168,7 @@ object FloatWindow : View.OnTouchListener {
         val x = event.x.toInt()
         val y = event.y.toInt()
 
-        if (event.action == MotionEvent.ACTION_DOWN && isTouchOutside(x, y)) {
+        if (event.action == MotionEvent.ACTION_OUTSIDE) {
             onTouchOutside?.invoke()
             return true
         }

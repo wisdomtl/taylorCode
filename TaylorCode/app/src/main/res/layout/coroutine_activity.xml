@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:text="cancel coroutine"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnTwoAsyncEnd"
+        android:layout_width="match_parent"
+        android:text="the end of two async task"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnTimeout"
+        android:layout_width="match_parent"
+        android:text="timeout"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/btnRunTaskParallel"
+        android:layout_width="match_parent"
+        android:text="run task parallel"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnRunParallelByLaunch"
+        android:layout_width="match_parent"
+        android:text="run task parallel by launch"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnLongRunTask"
+        android:layout_width="match_parent"
+        android:text="long run task"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnJoin"
+        android:layout_width="match_parent"
+        android:text="join"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
