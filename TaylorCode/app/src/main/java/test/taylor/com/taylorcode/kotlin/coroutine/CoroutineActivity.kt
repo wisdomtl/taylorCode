@@ -6,6 +6,8 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.util.Timer
+import kotlin.coroutines.resume
 
 class CoroutineActivity : AppCompatActivity() {
     private var user1: Deferred<String>? = null
@@ -94,6 +96,33 @@ class CoroutineActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnLongRunTask).setOnClickListener {
             longRunTaskAfterActivityFinished()
         }
+
+        /**
+         * case8: suspend coroutine's memory leak
+         */
+        findViewById<Button>(R.id.btnSuspendCoroutine).setOnClickListener {
+            suspendCoroutine()
+        }
+    }
+
+    fun suspendCoroutine() = GlobalScope.launch {
+        Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine() 0 ,thread id=${Thread.currentThread().id}")
+        kotlin.coroutines.suspendCoroutine<String> { continuation ->
+            Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  1,thread id=${Thread.currentThread().id}")
+            Timer(Timer.TimerListener { pastMillisecond ->
+                //visiting the outer class's fun cause memory leak
+                Log.w("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  ${inttt()}  ${pastMillisecond} past")
+                if (pastMillisecond == 100000L) continuation.resume("done")
+
+            }).apply { start(0, 1000) }
+            Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  2,thread id=${Thread.currentThread().id}")
+        }
+        Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  3,thread id=${Thread.currentThread().id}")
+
+    }
+
+    fun inttt() {
+
     }
 
     fun longRunTaskAfterActivityFinished() = GlobalScope.launch(Dispatchers.IO) {

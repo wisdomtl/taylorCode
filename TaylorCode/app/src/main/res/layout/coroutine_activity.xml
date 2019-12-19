@@ -60,4 +60,12 @@
         android:textSize="15sp"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:id="@+id/btnSuspendCoroutine"
+        android:layout_width="match_parent"
+        android:text="suspend coroutine"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
