@@ -34,6 +34,8 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
 
     private MutableLiveData<String> lateLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<String> threadLiveData = new MutableLiveData<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,9 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
             tvMediator.setText(sb.toString());
         });
 
+        /**
+         *  LiveData case: LiveData is sticky
+         */
         lateLiveData.postValue("fast post later observer");
         findViewById(R.id.btn_start_activity2).postDelayed(new Runnable() {
             @Override
@@ -107,6 +112,31 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
                 });
             }
         },5000);
+
+        /**
+         *  LiveData case: LiveData's observe will invoked in main thread
+         */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.v("ttaylor", "LiveDataActivity1.run()" + "  thread id="+Thread.currentThread().getId());
+                threadLiveData.postValue("done");
+            }
+        },"livedata").start();
+
+        Log.v("ttaylor", "LiveDataActivity1.onCreate()" + "  thread id="+Thread.currentThread().getId());
+        threadLiveData.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.v("ttaylor", "LiveDataActivity1.onChanged()" + "  thread id="+Thread.currentThread().getId());
+            }
+        });
+
 
     }
 
