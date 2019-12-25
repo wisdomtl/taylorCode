@@ -71,7 +71,7 @@
         <activity android:name=".ui.custom_view.selector.CustomViewActivity"></activity>
         <activity android:name=".list.ListActivity"></activity>
         <activity android:name=".ui.Factory2Activity"></activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity1"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1"></activity>
         <activity android:name="test.taylor.com.taylorcode.ui.state_cross_activities.Activity2"></activity>
         <activity android:name=".ui.anim.AnimActivity"></activity>
         <activity android:name=".innerclass.InnerClassActivity"></activity>

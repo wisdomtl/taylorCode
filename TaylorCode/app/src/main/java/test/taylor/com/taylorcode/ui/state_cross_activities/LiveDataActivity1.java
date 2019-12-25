@@ -17,7 +17,7 @@ import java.util.List;
 
 import test.taylor.com.taylorcode.R;
 
-public class Activity1 extends AppCompatActivity implements View.OnClickListener {
+public class LiveDataActivity1 extends AppCompatActivity implements View.OnClickListener {
     private TextView tv1;
     private TextView tvMediator;
     private MutableLiveData<Integer> liveData1 = new MutableLiveData<>();
@@ -31,6 +31,8 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
      * LiveData case1:observer wont be notified until it's lifecycle component is at STARTED or RESUMED status
      */
     private MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
+
+    private MutableLiveData<String> lateLiveData = new MutableLiveData<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +94,20 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
             }
             tvMediator.setText(sb.toString());
         });
+
+        lateLiveData.postValue("fast post later observer");
+        findViewById(R.id.btn_start_activity2).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lateLiveData.observe(LiveDataActivity1.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        Log.v("ttaylor", "LiveDataActivity1.onChanged()" + "  later observer");
+                    }
+                });
+            }
+        },5000);
+
     }
 
     @Override

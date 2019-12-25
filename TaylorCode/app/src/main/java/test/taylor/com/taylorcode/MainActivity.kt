@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
-import test.taylor.com.taylorcode.aidl.ClientActivity
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
@@ -26,7 +25,7 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
-import test.taylor.com.taylorcode.ui.state_cross_activities.Activity1
+import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         btn_room.setOnClickListener { startActivity(RoomActivity::class.java) }
         btn_llive.setOnClickListener {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
-            startActivity(Activity1::class.java)
+            startActivity(LiveDataActivity1::class.java)
         }
         btn_window.setOnClickListener { startActivity(WindowActivity::class.java) }
         btn_touch_event.setOnClickListener { startActivity(TouchEventActivity::class.java) }
