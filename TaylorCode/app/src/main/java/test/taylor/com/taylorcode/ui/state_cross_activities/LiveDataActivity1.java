@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import test.taylor.com.taylorcode.R;
@@ -35,7 +36,7 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
     private MutableLiveData<String> lateLiveData = new MutableLiveData<>();
 
     private MutableLiveData<String> threadLiveData = new MutableLiveData<>();
-
+    private MutableLiveData<String> threadLiveData2 = new MutableLiveData<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,7 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
         },5000);
 
         /**
-         *  LiveData case: LiveData's observe will invoked in main thread
+         *  LiveData case: LiveData's observe will invoked in main thread when using postValue
          */
         new Thread(new Runnable() {
             @Override
@@ -137,9 +138,33 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
             }
         });
 
+        /**
+         * LiveData case:  crash when invoke setValue() in background thread
+         */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.v("ttaylor", "LiveDataActivity1.setValue().run()" + "  thread id="+Thread.currentThread().getId());
+                threadLiveData2.setValue("done");
+            }
+        },"livedata").start();
+
+        Log.v("ttaylor", "LiveDataActivity1.setValue().onCreate()" + "  thread id="+Thread.currentThread().getId());
+        threadLiveData2.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.v("ttaylor", "LiveDataActivity1.setValue().onChanged()" + "  thread id="+Thread.currentThread().getId());
+            }
+        });
+
 
         /**
-         * concurrentmodification:
+         * ConcurrentModificationException case: will crash
          */
 //        ArrayList<String> list = new ArrayList<>();
 //        list.add("1");
@@ -150,6 +175,18 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
 //                list.add("3");
 //            }
 //        }
+
+        /**
+         * ConcurrentModificationException case: wont crash
+         */
+        HashMap<String,String> map = new HashMap<>();
+        map.put("s","1");
+        map.put("b","2");
+        map.put("c","3") ;
+        if(map.containsKey("b")){
+            map.clear();
+        }
+
     }
 
     @Override
