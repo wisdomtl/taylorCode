@@ -141,15 +141,15 @@ public class LiveDataActivity1 extends AppCompatActivity implements View.OnClick
         /**
          * concurrentmodification:
          */
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        for (String element :
-                list) {
-            if(element.equals("1")){
-                list.add("3");
-            }
-        };
+//        ArrayList<String> list = new ArrayList<>();
+//        list.add("1");
+//        list.add("2");
+//        for (String element :
+//                list) {
+//            if(element.equals("1")){
+//                list.add("3");
+//            }
+//        }
     }
 
     @Override
