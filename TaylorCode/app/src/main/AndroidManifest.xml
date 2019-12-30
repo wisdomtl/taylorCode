@@ -167,6 +167,7 @@
             android:name=".proxy.remote.RemoteActivity"
             android:process=":alienProcess" />
         <activity android:name=".kotlin.coroutine.CoroutineActivity" />
+        <activity android:name=".concurrent.ConcurrentActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

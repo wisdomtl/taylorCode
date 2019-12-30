@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
+import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
@@ -109,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         btn_ipc.setOnClickListener { startActivity(RemoteDynamicProxyActivity::class.java) }
         btn_coroutine.setOnClickListener { startActivity(CoroutineActivity::class.java) }
         btn_spannable.setOnClickListener { startActivity(SpannableActivity::class.java) }
+        btn_concurrent.setOnClickListener { startActivity(ConcurrentActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
