@@ -168,6 +168,7 @@
             android:process=":alienProcess" />
         <activity android:name=".kotlin.coroutine.CoroutineActivity" />
         <activity android:name=".concurrent.ConcurrentActivity" />
+        <activity android:name=".webview.WebViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

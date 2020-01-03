@@ -33,6 +33,7 @@ import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentAct
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.util.PhoneUtil
+import test.taylor.com.taylorcode.webview.WebViewActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -111,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         btn_coroutine.setOnClickListener { startActivity(CoroutineActivity::class.java) }
         btn_spannable.setOnClickListener { startActivity(SpannableActivity::class.java) }
         btn_concurrent.setOnClickListener { startActivity(ConcurrentActivity::class.java) }
+        btn_webview.setOnClickListener { startActivity(WebViewActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
