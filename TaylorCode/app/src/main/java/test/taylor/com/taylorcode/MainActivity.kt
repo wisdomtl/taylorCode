@@ -15,6 +15,7 @@ import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
+import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.ui.*
@@ -113,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         btn_spannable.setOnClickListener { startActivity(SpannableActivity::class.java) }
         btn_concurrent.setOnClickListener { startActivity(ConcurrentActivity::class.java) }
         btn_webview.setOnClickListener { startActivity(WebViewActivity::class.java) }
+        btn_list.setOnClickListener { startActivity(ListActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
