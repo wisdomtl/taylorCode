@@ -46,6 +46,9 @@ public class FileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Object object = FileUtil.readObject(file2);
+                if(object instanceof List){
+
+                }
                 List<Bean> bean1 = ((List<Bean>) object);
                 for (Bean bean :
                         bean1) {
