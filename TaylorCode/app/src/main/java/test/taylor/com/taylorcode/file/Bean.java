@@ -10,6 +10,12 @@ public class Bean implements Serializable {
 
     private String msgType;
 
+    public Bean(String name, int count, String msgType) {
+        this.name = name;
+        this.count = count;
+        this.msgType = msgType;
+    }
+
     public String getName() {
         return name;
     }

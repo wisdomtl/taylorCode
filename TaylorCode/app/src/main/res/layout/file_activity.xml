@@ -8,14 +8,26 @@
         android:id="@+id/btnWriteFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="write file"
+        android:text="write object"
         android:textSize="30sp"/>
 
     <Button
         android:id="@+id/btnReadFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="read file"
+        android:text="read object"
+        android:textSize="30sp"/>
+    <Button
+        android:id="@+id/btnWriteObjects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="write objects"
+        android:textSize="30sp"/>
+    <Button
+        android:id="@+id/btnReadObjects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="read objects"
         android:textSize="30sp"/>
     <TextView
         android:layout_width="wrap_content"
