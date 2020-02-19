@@ -10,6 +10,7 @@ import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
+import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         btn_webview.setOnClickListener { startActivity(WebViewActivity::class.java) }
         btn_list.setOnClickListener { startActivity(ListActivity::class.java) }
         btn_threadpool.setOnClickListener{startActivity(ThreadPoolActivity::class.java)}
+        btn_output_stream.setOnClickListener{startActivity(FileActivity::class.java)}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
