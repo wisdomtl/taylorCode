@@ -17,9 +17,9 @@ fun printCallStack(tag: String, deep: Int) {
 fun <T> Collection<T>.print(tag: String, map: (T) -> String) {
     if (!BuildConfig.DEBUG) return
     this.let { c ->
-        StringBuilder("$tag: [").apply {
+        StringBuilder("\n[").apply {
             c.forEach { element -> append("\n\t${map.invoke(element)},") }
-            append("]")
-        }.also { Log.d("", it.toString()) }
+            append("\n]")
+        }.also { Log.d(tag, it.toString()) }
     }
 }
