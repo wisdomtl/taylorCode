@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created on 2017/12/25.
  */
 
 public class LockScreenActivity extends Activity {
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +32,9 @@ public class LockScreenActivity extends Activity {
         setContentView(btn);
 
 //        popupWindow();
+
     }
+
 
     private void popupWindow() {
         Button bb = new Button(getApplicationContext());

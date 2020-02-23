@@ -2,13 +2,12 @@ package test.taylor.com.taylorcode
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
-
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
@@ -45,13 +44,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         initView()
         readPhoneInfo()
+        testValueDiliver();
         Log.v("ttaylor", "MainActivity.onCreate()" + "  ")
     }
 
+    private fun testValueDiliver() {
+    }
+
     private fun readPhoneInfo() {
-        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}")
-        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
-        Log.v("ttaylor","tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
+        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}")
+        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
+        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
     }
 
     override fun onStart() {
@@ -103,8 +106,8 @@ class MainActivity : AppCompatActivity() {
         btn_vs.setOnClickListener { startActivity(ViewStubActivity::class.java) }
         btn_transparent_fragment.setOnClickListener { startActivity(TransparentFragmentActivity::class.java) }
         btnOverrideProperty.setOnClickListener { startActivity(OverridePropertyActivity::class.java) }
-        btnKotlinCollection.setOnClickListener{startActivity(KotlinCollectionActivity::class.java)}
-        btnInvoke.setOnClickListener{startActivity(InvokeActivity::class.java)}
+        btnKotlinCollection.setOnClickListener { startActivity(KotlinCollectionActivity::class.java) }
+        btnInvoke.setOnClickListener { startActivity(InvokeActivity::class.java) }
         btn_anonymous_fun.setOnClickListener { startActivity(AnoymousFunActivity::class.java) }
         btn_constraint_set_layout.setOnClickListener { startActivity(TransitionManagerActivity::class.java) }
         btn_tag_activity.setOnClickListener { startActivity(TagActivity::class.java) }
@@ -117,8 +120,8 @@ class MainActivity : AppCompatActivity() {
         btn_concurrent.setOnClickListener { startActivity(ConcurrentActivity::class.java) }
         btn_webview.setOnClickListener { startActivity(WebViewActivity::class.java) }
         btn_list.setOnClickListener { startActivity(ListActivity::class.java) }
-        btn_threadpool.setOnClickListener{startActivity(ThreadPoolActivity::class.java)}
-        btn_output_stream.setOnClickListener{startActivity(FileActivity::class.java)}
+        btn_threadpool.setOnClickListener { startActivity(ThreadPoolActivity::class.java) }
+        btn_output_stream.setOnClickListener { startActivity(FileActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
