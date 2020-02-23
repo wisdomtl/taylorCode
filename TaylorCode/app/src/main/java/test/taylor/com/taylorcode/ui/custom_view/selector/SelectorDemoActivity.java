@@ -23,6 +23,7 @@ public class SelectorDemoActivity extends Activity implements Selector.OnSelecto
         testValueDeliver(a1);
         Log.v("ttaylor", "LockScreenActivity.onCreate()" + "  a = " + a1);
 
+        //the value will be changed
         aArray[0] = true ;
         testValueDeliver(aArray);
         Log.v("ttaylor", "SelectorDemoActivity.onCreate()" + "  a array="+aArray[0]);
