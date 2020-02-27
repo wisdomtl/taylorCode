@@ -24,6 +24,7 @@ import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
+import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -122,6 +123,9 @@ class MainActivity : AppCompatActivity() {
         btn_list.setOnClickListener { startActivity(ListActivity::class.java) }
         btn_threadpool.setOnClickListener { startActivity(ThreadPoolActivity::class.java) }
         btn_output_stream.setOnClickListener { startActivity(FileActivity::class.java) }
+        btn_threadpool.setOnClickListener{startActivity(ThreadPoolActivity::class.java)}
+        btn_output_stream.setOnClickListener{startActivity(FileActivity::class.java)}
+        btn_treasure.setOnClickListener { startActivity(TreasureActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

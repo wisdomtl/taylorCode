@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,29 +14,40 @@
             android:layout_height="wrap_content"
             android:text="Output Stream"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_threadpool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="thread pool"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="list operation"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_webview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="webview"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_concurrent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="concurrent"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_treasure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="treasure box layout"
             android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_spannable"
@@ -43,18 +55,21 @@
             android:layout_height="wrap_content"
             android:text="spannable"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_coroutine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="coroutine"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_client_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="aidl"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_ipc"
             android:layout_width="match_parent"

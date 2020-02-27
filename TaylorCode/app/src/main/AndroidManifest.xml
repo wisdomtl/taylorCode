@@ -167,6 +167,7 @@
             android:name=".proxy.remote.RemoteActivity"
             android:process=":alienProcess" />
         <activity android:name=".kotlin.coroutine.CoroutineActivity" />
+        <activity android:name=".ui.custom_view.treasure_box.TreasureActivity" />
         <activity android:name=".concurrent.ConcurrentActivity" />
         <activity android:name=".webview.WebViewActivity" />
         <activity android:name=".concurrent.ThreadPoolActivity" />

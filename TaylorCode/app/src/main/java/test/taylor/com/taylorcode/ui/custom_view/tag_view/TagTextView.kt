@@ -72,8 +72,7 @@ open class TagTextView @JvmOverloads constructor(context: Context, attrs: Attrib
                     val centerY = radius
                     canvas?.drawCircle(centerX, centerY, radius, bgPaint)
 
-                    val textHeight = it.bottom - it.top
-                    val baseline = radius + (textHeight / 2 - it.bottom)
+                    val baseline = radius + (it.bottom - it.top) / 2 - it.bottom
                     canvas?.drawText(text, width - radius, baseline, textPaint)
                 }
             }

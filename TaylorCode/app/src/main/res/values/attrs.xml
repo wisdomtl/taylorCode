@@ -8,4 +8,11 @@
         <attr name="text_color" format="color" />
         <attr name="tag" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="Treasure">
+        <attr name="reference_ids" format="string" />
+        <attr name="reference_radius" format="string" />
+        <attr name="reference_offsetX" format="string" />
+        <attr name="reference_offsetY" format="string" />
+    </declare-styleable>
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureBox xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTreasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="aaaa"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvTreasure2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="bbbbb" />
+
+    <test.taylor.com.taylorcode.ui.custom_view.treasure_box.Treasure
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:reference_ids="tvTreasure,tvTreasure2"
+        app:reference_offsetX="10,0"
+        app:reference_offsetY="0"
+        app:reference_radius="10,30" />
+
+
+</test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureBox>
