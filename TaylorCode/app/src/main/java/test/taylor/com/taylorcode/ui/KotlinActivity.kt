@@ -1,9 +1,9 @@
 package test.taylor.com.taylorcode.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
 import java.util.*
@@ -30,7 +30,7 @@ class KotlinActivity : AppCompatActivity() {
             }
         }
         val map = mutableMapOf(
-                "1" to mutableListOf(interface1, interface2)
+            "1" to mutableListOf(interface1, interface2)
         )
 
         map.forEach { entry ->
@@ -44,8 +44,93 @@ class KotlinActivity : AppCompatActivity() {
         }
 
         val str = "kfsklfjdklj$"
-        str.substring(0,str.length-1)
-        Log.v("ttaylor","tag=string, KotlinActivity.onCreate() str=${str.substring(0,str.length-1)} ")
+        str.substring(0, str.length - 1)
+        Log.v("ttaylor", "tag=string, KotlinActivity.onCreate() str=${str.substring(0, str.length - 1)} ")
+
+
+        /**
+         * sequence case: early exit, better performance
+         */
+        sequenceOf("a", "b", "c")
+            .map {
+                print(it)
+                it.toUpperCase()
+            }
+            .any {
+                print(it)
+                it.startsWith("B")
+            }
+
+        /**
+         * sequence case: always put data-reducing operations befor data-transforming operations
+         */
+        //poor performance
+        sequenceOf("a", "b", "c", "d")
+            .map {
+                println("map: $it")
+                it.toUpperCase()
+            }
+            .filter {
+                println("filter: $it")
+                it.startsWith("a", ignoreCase = true)
+            }
+            .forEach {
+                println("forEach: $it")
+            }
+
+        //better performance
+        sequenceOf("a", "b", "c", "d")
+            .filter {
+                println("filter: $it")
+                it.startsWith("a", ignoreCase = true)
+            }
+            .map {
+                println("map: $it")
+                it.toUpperCase()
+            }
+            .forEach {
+                println("forEach: $it")
+            }
+
+        /**
+         * sequence case: flapMap
+         */
+        val result = sequenceOf(listOf(1, 2, 3), listOf(4, 5, 6))
+            .flatMap {
+                it.asSequence().filter { it % 2 == 1 }
+            }
+            .toList()
+
+        print(result)   // [1, 3, 5]
+
+        /**
+         * sequence case: withIndex()
+         */
+        val result2 = sequenceOf("a", "b", "c", "d")
+            .withIndex()
+            .filter { it.index % 2 == 0 }
+            .map { it.value }
+            .toList()
+
+        print(result2)   // [a, c]
+
+        /**
+         * sequence case: joinToString()
+         */
+        data class Person(var name:String,var age:Int)
+        val persons = listOf(
+            Person("Peter", 16),
+            Person("Anna", 28),
+            Person("Anna", 23),
+            Person("Sonya", 39)
+        )
+        val result3 = persons
+            .asSequence()
+            .map { it.name }
+            .distinct()
+            .joinToString();
+
+        print(result3)   // "Peter, Anna, Sonya"
     }
 
     private fun split() {
