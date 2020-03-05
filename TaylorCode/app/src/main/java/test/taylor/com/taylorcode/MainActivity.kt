@@ -11,6 +11,7 @@ import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.file.FileActivity
+import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
@@ -128,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         btn_output_stream.setOnClickListener{startActivity(FileActivity::class.java)}
         btn_treasure.setOnClickListener { startActivity(TreasureActivity::class.java) }
         btn_workmanager.setOnClickListener{startActivity(WorkManagerActivity::class.java)}
+        btn_gson.setOnClickListener{startActivity(GsonActivity::class.java)}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
