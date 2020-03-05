@@ -48,7 +48,7 @@ class WorkManagerActivity : AppCompatActivity() {
         WorkManager.getInstance(this).apply {
             enqueue(workRequest)
             getWorkInfoByIdLiveData(workRequest.id).observe(this@WorkManagerActivity, Observer { workInfo ->
-                val sum = workInfo.outputData.getInt("sum",0);
+                val sum = workInfo.outputData.getInt("sum",0)
                 Log.v("ttaylor", "tag=sum, WorkManagerActivity.returnValueFromWorkManager() sum=$sum ")
             })
         }
@@ -85,7 +85,7 @@ class WorkManagerActivity : AppCompatActivity() {
     private fun doPeriodWork() {
         //the interval cannot be less than 15 minutes
         val workRequest1 = PeriodicWorkRequest.Builder(Counting::class.java, 10, TimeUnit.SECONDS).build()
-        WorkManager.getInstance().enqueue(workRequest1)
+        WorkManager.getInstance(this).enqueue(workRequest1)
     }
 
     /**
