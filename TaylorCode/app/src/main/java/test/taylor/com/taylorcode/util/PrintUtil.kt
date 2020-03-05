@@ -1,25 +1,23 @@
 package test.taylor.com.taylorcode.util
 
-import android.util.Log
 import test.taylor.com.taylorcode.BuildConfig
 
 /**
  * print method call stack by [deep]
  */
-fun printCallStack(tag: String, deep: Int) {
-    if (!BuildConfig.DEBUG) return
-    Throwable().stackTrace?.take(deep)?.print(tag) { it -> "${it.className}.${it.methodName} (line ${it.lineNumber})" }
+fun printCallStack(deep: Int): String {
+    if (!BuildConfig.DEBUG) return ""
+    return Throwable().stackTrace?.take(deep)?.print { it -> "${it.className}.${it.methodName} (line ${it.lineNumber})" } ?: ""
 }
 
 /**
- * print collection
+ * print collection bean in which you interested defined by [map]
  */
-fun <T> Collection<T>.print(tag: String, map: (T) -> String) {
-    if (!BuildConfig.DEBUG) return
-    this.let { c ->
+fun <T> Collection<T>.print(map: (T) -> String): String {
+    return this.let { c ->
         StringBuilder("\n[").apply {
             c.forEach { element -> append("\n\t${map.invoke(element)},") }
             append("\n]")
-        }.also { Log.d(tag, it.toString()) }
+        }.toString()
     }
 }

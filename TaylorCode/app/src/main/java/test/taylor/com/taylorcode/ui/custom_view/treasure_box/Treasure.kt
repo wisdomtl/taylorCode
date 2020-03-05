@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import test.taylor.com.taylorcode.R
@@ -76,7 +77,6 @@ class Treasure @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         idString?.split(",")?.forEach { id ->
             ids.add(resources.getIdentifier(id.trim(), "id", context.packageName))
         }
-        ids.toCollection(mutableListOf()).print("ids") { it.toString() }
     }
 
     private fun Float.dp2px(): Float {
