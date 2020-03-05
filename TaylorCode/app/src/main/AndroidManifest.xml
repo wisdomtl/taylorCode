@@ -172,6 +172,7 @@
         <activity android:name=".webview.WebViewActivity" />
         <activity android:name=".concurrent.ThreadPoolActivity" />
         <activity android:name=".file.FileActivity" />
+        <activity android:name=".aysnc.workmanager.WorkManagerActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

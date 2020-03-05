@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
 import java.util.*
+import kotlin.properties.Delegates
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 class KotlinActivity : AppCompatActivity() {
     val list1 = listOf<String>("abd", "add", "fff")
@@ -117,7 +120,8 @@ class KotlinActivity : AppCompatActivity() {
         /**
          * sequence case: joinToString()
          */
-        data class Person(var name:String,var age:Int)
+        data class Person(var name: String, var age: Int)
+
         val persons = listOf(
             Person("Peter", 16),
             Person("Anna", 28),
@@ -131,6 +135,59 @@ class KotlinActivity : AppCompatActivity() {
             .joinToString();
 
         print(result3)   // "Peter, Anna, Sonya"
+
+        /**
+         * lazy case:
+         */
+        val lazyValue: String by lazy {
+            //this block will be invoked only once
+            println("computed!")
+            "Hello"
+        }
+
+        fun main() {
+            println(lazyValue)
+            println(lazyValue)
+        }
+
+        /**
+         * Delegates.observable() case
+         */
+        var name: String by Delegates.observable("init") { property, old, new ->
+            Log.v("ttaylor", "tag=observable, KotlinActivity.onCreate()  ${property.name} has been changed from $old to $new")
+        }
+        name = "taylor"
+
+        /**
+         * Delegates.vetoable() case
+         */
+        var time: String by Delegates.vetoable("13:34") { property, old, new ->
+            !new.startsWith("2")
+        }
+
+        time = "11:22"
+        Log.v("ttaylor", "tag=vetoable, KotlinActivity.onCreate()  time=$time")
+        time = "22:22"
+        Log.v("ttaylor","tag=vetoable, KotlinActivity.onCreate()  time=$time")
+
+
+        /**
+         * create delegate
+         */
+        class Delegate {
+            operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
+                return "$thisRef, thank you for delegating '${property.name}' to me!"
+            }
+
+            operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
+                println("$value has been assigned to '${property.name}' in $thisRef.")
+            }
+        }
+
+        class Example {
+            var p: String by Delegate()
+        }
+
     }
 
     private fun split() {
