@@ -1,8 +1,10 @@
 package test.taylor.com.taylorcode.aysnc.workmanager
 
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +16,8 @@ class WorkManagerActivity : AppCompatActivity() {
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        doBasicWork();
-        doPeriodWork();
+//        doPeriodWork();
+        returnValueFromWorkManager()
 //
 //        doWorkByParam();
 //        cancelWorkByTag();
@@ -28,7 +31,7 @@ class WorkManagerActivity : AppCompatActivity() {
      */
     private fun doBasicWork() {
         val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).build()
-        WorkManager.getInstance().enqueue(workRequest)
+        WorkManager.getInstance(this).enqueue(workRequest)
     }
 
     /**
@@ -37,7 +40,18 @@ class WorkManagerActivity : AppCompatActivity() {
     private fun doWorkByParam() {
         val inputData = Data.Builder().putInt(Counting.KEY_INIT, 20).build()
         val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).setInputData(inputData).build()
-        WorkManager.getInstance().enqueue(workRequest)
+        WorkManager.getInstance(this).enqueue(workRequest)
+    }
+
+    private fun returnValueFromWorkManager() {
+        val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).build()
+        WorkManager.getInstance(this).apply {
+            enqueue(workRequest)
+            getWorkInfoByIdLiveData(workRequest.id).observe(this@WorkManagerActivity, Observer { workInfo ->
+                val sum = workInfo.outputData.getInt("sum",0);
+                Log.v("ttaylor", "tag=sum, WorkManagerActivity.returnValueFromWorkManager() sum=$sum ")
+            })
+        }
     }
 
 
