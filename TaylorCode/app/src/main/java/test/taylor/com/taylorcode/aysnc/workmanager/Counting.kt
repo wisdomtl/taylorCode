@@ -23,6 +23,7 @@ class Counting @JvmOverloads constructor(@NonNull context: Context, @NonNull wor
             Log.v("ttaylor", "tag=couting work, Counting.doWork()  count=$i")
             sum += i
         }
+        Log.v("ttaylor","tag=, Counting.doWork()  sum=${sum}")
         return Result.success(Data.Builder().putInt("sum", sum).build())
     }
 }

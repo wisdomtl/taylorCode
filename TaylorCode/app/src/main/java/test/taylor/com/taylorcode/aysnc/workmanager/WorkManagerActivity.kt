@@ -17,7 +17,8 @@ class WorkManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        doBasicWork();
 //        doPeriodWork();
-        returnValueFromWorkManager()
+//        returnValueFromWorkManager()
+        returnValueFromPeriodWork()
 //
 //        doWorkByParam();
 //        cancelWorkByTag();
@@ -50,6 +51,23 @@ class WorkManagerActivity : AppCompatActivity() {
             getWorkInfoByIdLiveData(workRequest.id).observe(this@WorkManagerActivity, Observer { workInfo ->
                 val sum = workInfo.outputData.getInt("sum",0)
                 Log.v("ttaylor", "tag=sum, WorkManagerActivity.returnValueFromWorkManager() sum=$sum ")
+            })
+        }
+    }
+
+    /**
+     * PeriodicWorkRequest's output data is always null due to it wont finished,it will be reuse
+     */
+    private fun returnValueFromPeriodWork(){
+        val workRequest1 = PeriodicWorkRequest.Builder(Counting::class.java, 15, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(this).apply {
+            enqueue(workRequest1)
+            getWorkInfoByIdLiveData(workRequest1.id).observe(this@WorkManagerActivity, Observer { workInfo ->
+                val state = workInfo.state
+                Log.v("ttaylor","tag=, WorkManagerActivity.returnValueFromPeriodWork()  state=$state")
+                Log.v("ttaylor","tag=, WorkManagerActivity.returnValueFromPeriodWork()  outputdata=${workInfo.outputData}")
+                val sum = workInfo.outputData.getInt("sum",0)
+                Log.v("ttaylor", "tag=sum, WorkManagerActivity.returnValueFromPeriodWork() sum=$sum ")
             })
         }
     }
