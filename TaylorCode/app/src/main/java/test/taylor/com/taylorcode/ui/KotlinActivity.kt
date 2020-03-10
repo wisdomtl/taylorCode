@@ -172,7 +172,7 @@ class KotlinActivity : AppCompatActivity() {
 
 
         /**
-         * create delegate
+         * create delegate as member function
          */
         class Delegate {
             operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
@@ -180,7 +180,7 @@ class KotlinActivity : AppCompatActivity() {
             }
 
             operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-                println("$value has been assigned to '${property.name}' in $thisRef.")
+                Log.v("ttaylor","tag=, Delegate.setValue()  $value has been assigned to '${property.name}' in $thisRef.")
             }
         }
 
@@ -188,6 +188,45 @@ class KotlinActivity : AppCompatActivity() {
             var p: String by Delegate()
         }
 
+        Example().p = "ddd"
+
+
+        /**
+         * create delegate as extension
+         */
+        class Delegate2: ReadWriteProperty<Any?,String>{
+            override fun getValue(thisRef: Any?, property: KProperty<*>): String {
+                return "aaa"
+            }
+
+            override fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
+                Log.v("ttaylor","tag=, Delegate2.setValue() $value has been assigned to ${property.name} ")
+            }
+        }
+
+        var p:String by Delegate2()
+
+        p = "bbb"
+        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  ${p}")
+
+
+        /**
+         * create delegate as extension function
+         */
+        class Delegate3{}
+
+        operator fun Delegate3.getValue(thisRef: Any?, property: KProperty<*>):String{
+            return "eee"
+        }
+
+        operator fun Delegate3.setValue(thisRef: Any?, property: KProperty<*>, value: String){
+            Log.v("ttaylor","tag=, KotlinActivity.setValue()  ${value} has assigned to ${property.name}")
+        }
+
+        var p2:String by Delegate3()
+
+        p2 = "qqq"
+        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  p2=${p2}")
     }
 
     private fun split() {
