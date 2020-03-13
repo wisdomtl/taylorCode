@@ -175,6 +175,7 @@
         <activity android:name=".aysnc.workmanager.WorkManagerActivity" />
         <activity android:name=".gson.GsonActivity" />
         <activity android:name=".sp.SharedPreferenceActivity" />
+        <activity android:name=".broadcast.NewBroadcastActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

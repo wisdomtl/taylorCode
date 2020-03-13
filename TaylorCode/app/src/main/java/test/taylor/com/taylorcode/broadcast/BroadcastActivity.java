@@ -10,13 +10,15 @@ import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import test.taylor.com.taylorcode.Constant;
+import test.taylor.com.taylorcode.R;
 
 /**
  * Created by taylor on 2017/11/5.
@@ -24,23 +26,38 @@ import test.taylor.com.taylorcode.Constant;
 
 public class BroadcastActivity extends Activity implements View.OnClickListener {
 
-    private Button btn;
+    private Button btn ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        btn = new Button(this);
+        setContentView(R.layout.broadcast_activity);
+        btn  = (Button)findViewById(R.id.sendBroadcast);
         btn.setOnClickListener(this);
-        setContentView(btn);
+        findViewById(R.id.btnNewActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BroadcastActivity.this, NewBroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.BtnsendBroadcast).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("lazy-register");
+                Log.v("ttaylor", "BroadcastActivity.onClick()" + "  send broadcast");
+                LocalBroadcastManager.getInstance(BroadcastActivity.this).sendBroadcast(intent);
+            }
+        });
         IntentFilter intentFilter = new IntentFilter(Constant.ACTION_INTENT_SERVICE_END);
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 //        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
         /**
-           broadcast case1:listener to network change
-          LocalBroadcastManager wont receive NETWORK_CHANGE broadcast
+         broadcast case1:listener to network change
+         LocalBroadcastManager wont receive NETWORK_CHANGE broadcast
          *
          */
-        registerReceiver(receiver,intentFilter);
+        registerReceiver(receiver, intentFilter);
 
 
         /**
@@ -53,11 +70,11 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
         Log.v("taylor ", "BroadcastActivity.onCreate() " + " broadcast action_interactive_ad_show sent");
     }
 
-    private class NetWorkCallBack extends ConnectivityManager.NetworkCallback{
+    private class NetWorkCallBack extends ConnectivityManager.NetworkCallback {
         @Override
         public void onAvailable(Network network) {
             super.onAvailable(network);
-            Log.v("ttaylor", "NetWorkCallBack.onAvailable()" );
+            Log.v("ttaylor", "NetWorkCallBack.onAvailable()");
         }
 
         @Override
@@ -96,7 +113,7 @@ public class BroadcastActivity extends Activity implements View.OnClickListener 
             if (netInfo != null && netInfo.isAvailable()) {
                 Log.v("ttaylor", "BroadcastActivity.onReceive()" + "  network available");
 //                requestReward();
-            }else {
+            } else {
                 Log.v("ttaylor", "BroadcastActivity.onReceive()" + "  network unavailable");
             }
         }
