@@ -176,6 +176,7 @@
         <activity android:name=".gson.GsonActivity" />
         <activity android:name=".sp.SharedPreferenceActivity" />
         <activity android:name=".broadcast.NewBroadcastActivity" />
+        <activity android:name=".kotlin.delegate.DelegateActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
