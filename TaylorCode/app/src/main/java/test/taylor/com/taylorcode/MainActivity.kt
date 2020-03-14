@@ -19,6 +19,7 @@ import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
+import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
@@ -135,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         btn_gson.setOnClickListener { startActivity(GsonActivity::class.java) }
         btn_sp.setOnClickListener { startActivity(SharedPreferenceActivity::class.java) }
         btn_broadcat.setOnClickListener { startActivity(BroadcastActivity::class.java) }
-        btn_delegate.setOnClickListener { startActivity(DelegateActivity::class.java) }
+        btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
