@@ -1,12 +1,13 @@
 package test.taylor.com.taylorcode.kotlin.delegate
 
 import android.content.SharedPreferences
+import android.util.Log
 
 /**
  * SharedPreference delegation for shorter code when putting and getting value
  */
 class Preference(private val sp: SharedPreferences) : SharedPreferences by sp {
-    operator fun <T> set(key: String, value: T) {
+    operator fun <T> set(key: String, isCommit: Boolean , value: T) {
         with(sp.edit()) {
             when (value) {
                 is Long -> putLong(key, value)
@@ -17,7 +18,11 @@ class Preference(private val sp: SharedPreferences) : SharedPreferences by sp {
                 is Set<*> -> (value as? Set<String>)?.let { putStringSet(key, it) }
                 else -> throw IllegalArgumentException("unsupported type of value")
             }
-            apply()
+            if (isCommit) {
+                commit()
+            } else {
+                apply()
+            }
         }
     }
 
