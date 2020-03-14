@@ -7,7 +7,7 @@ import android.util.Log
  * SharedPreference delegation for shorter code when putting and getting value
  */
 class Preference(private val sp: SharedPreferences) : SharedPreferences by sp {
-    operator fun <T> set(key: String, isCommit: Boolean , value: T) {
+    operator fun <T> set(key: String, isCommit: Boolean = false , value: T) {
         with(sp.edit()) {
             when (value) {
                 is Long -> putLong(key, value)
