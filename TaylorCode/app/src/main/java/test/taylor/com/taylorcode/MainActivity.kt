@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.hook_system_service_activity.*
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         btn_gson.setOnClickListener { startActivity(GsonActivity::class.java) }
         btn_sp.setOnClickListener { startActivity(SharedPreferenceActivity::class.java) }
         btn_broadcat.setOnClickListener { startActivity(BroadcastActivity::class.java) }
+        btn_delegate.setOnClickListener { startActivity(DelegateActivity::class.java) }
         btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
 
         //SAM case:
