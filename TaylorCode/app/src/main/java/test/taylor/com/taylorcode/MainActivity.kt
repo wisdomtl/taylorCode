@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         initView()
         readPhoneInfo()
         testValueDiliver();
-        Log.v("ttaylor", "MainActivity.onCreate()" + "  ")
+        Log.v("ttaylor", "MainActivity.onCreate()" + " current timestamp= "+System.currentTimeMillis() +" ms "+" current timestamp= "+(System.currentTimeMillis()/1000))
     }
 
     private fun testValueDiliver() {

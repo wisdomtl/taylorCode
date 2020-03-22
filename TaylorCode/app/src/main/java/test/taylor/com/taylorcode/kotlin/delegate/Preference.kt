@@ -37,16 +37,4 @@ class Preference(private val sp: SharedPreferences) : SharedPreferences by sp {
             else -> throw IllegalArgumentException("unsupported type of value")
         } as T
     }
-
-    override fun getAll(): MutableMap<String, *> = sp.all
-
-    override fun contains(key: String?): Boolean = sp.contains(key)
-
-    override fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        sp.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    override fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        sp.unregisterOnSharedPreferenceChangeListener(listener)
-    }
 }
