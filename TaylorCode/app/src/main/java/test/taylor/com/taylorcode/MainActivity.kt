@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity() {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
-        btn_window.setOnClickListener { startActivity(WindowActivity::class.java) }
-        btn_touch_event.setOnClickListener { startActivity(TouchEventActivity::class.java) }
+        btn_window.setOnClickListener { startActivity<WindowActivity>() }
+        btn_touch_event.setOnClickListener { startActivity<TouchEventActivity>() }
         btn_selector.setOnClickListener { startActivity(SelectorDemoActivity::class.java) }
         btn_anim.setOnClickListener { startActivity(AnimActivity::class.java) }
         btn_view_pager.setOnClickListener { startActivity(ViewPagerActivity::class.java) }
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         btn_coordinate_layout.setOnClickListener { startActivity(CoordinateActivity::class.java) }
         btn_rx_binding.setOnClickListener { startActivity(LoginActivity::class.java) }
         btn_surface_view.setOnClickListener { startActivity(SurfaceViewActivity::class.java) }
-        btn_kotlin_activity.setOnClickListener { startActivity(KotlinActivity::class.java) }
+        btn_kotlin_activity.setOnClickListener { startActivity<KotlinActivity>() }
         btn_kotlin_example.setOnClickListener { startActivity(KotlinExample::class.java) }
         btn_vs.setOnClickListener { startActivity(ViewStubActivity::class.java) }
         btn_transparent_fragment.setOnClickListener { startActivity(TransparentFragmentActivity::class.java) }
@@ -179,5 +180,12 @@ class MainActivity : AppCompatActivity() {
         }.also {
             startActivity(it)
         }
+    }
+
+    /**
+     * reified case: type wont be erased
+     */
+    inline fun <reified T> Context.startActivity(){
+        Intent(this,T::class.java).also { startActivity(it) }
     }
 }
