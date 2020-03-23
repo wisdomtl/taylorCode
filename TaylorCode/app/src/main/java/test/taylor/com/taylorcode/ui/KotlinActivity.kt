@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.util.print
 import java.util.*
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
@@ -227,6 +228,10 @@ class KotlinActivity : AppCompatActivity() {
 
         p2 = "qqq"
         Log.v("ttaylor","tag=, KotlinActivity.onCreate()  p2=${p2}")
+
+
+        val objects = listOf("11",1,"22")
+        objects.filterIsInstance<String>().print { it }.also { Log.v("ttaylor","tag=filterIsInstance, instance=${it} ") }
     }
 
     private fun split() {
