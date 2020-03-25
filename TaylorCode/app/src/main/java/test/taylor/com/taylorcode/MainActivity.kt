@@ -36,6 +36,7 @@ import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
+import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
@@ -140,6 +141,7 @@ class MainActivity : AppCompatActivity() {
         btn_broadcat.setOnClickListener { startActivity(BroadcastActivity::class.java) }
         btn_delegate.setOnClickListener { startActivity(DelegateActivity::class.java) }
         btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
+        btn_vp2.setOnClickListener {startActivity<ViewPager2Activity>()}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
