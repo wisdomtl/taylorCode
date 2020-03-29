@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.hook_system_service_activity.*
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -33,7 +32,7 @@ import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
-import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
+import test.taylor.com.taylorcode.ui.custom_view.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
