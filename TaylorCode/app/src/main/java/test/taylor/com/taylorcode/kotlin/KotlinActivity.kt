@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.ui
+package test.taylor.com.taylorcode.kotlin
 
 import android.os.Bundle
 import android.util.Log

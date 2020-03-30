@@ -15,6 +15,7 @@ import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
+import test.taylor.com.taylorcode.kotlin.KotlinActivity
 import test.taylor.com.taylorcode.kotlin.KotlinExample
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
@@ -32,7 +33,7 @@ import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
-import test.taylor.com.taylorcode.ui.custom_view.line_feed_layout.TagActivity
+import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
