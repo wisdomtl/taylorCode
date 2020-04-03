@@ -232,6 +232,17 @@ class KotlinActivity : AppCompatActivity() {
 
         val objects = listOf("11",1,"22")
         objects.filterIsInstance<String>().print { it }.also { Log.v("ttaylor","tag=filterIsInstance, instance=${it} ") }
+
+
+        /**
+         * print map
+         */
+        val map2 = mutableMapOf(
+            "12" to "dafdf",
+            "23" to "eeee"
+        )
+
+        map2.print { it.toString() }.let { Log.v("ttaylor","tag=print map, KotlinActivity.onCreate()  ${it}") }
     }
 
     private fun split() {

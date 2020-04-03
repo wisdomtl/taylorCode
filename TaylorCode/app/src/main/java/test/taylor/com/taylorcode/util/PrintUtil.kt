@@ -21,3 +21,12 @@ fun <T> Collection<T>.print(map: (T) -> String): String {
         }.toString()
     }
 }
+
+fun <K, V> Map<K, V>.print(map: (V) -> String): String = this.let { m ->
+    StringBuilder("\n{").apply {
+        m.iterator().forEach { entry ->
+            append("\n\t[${entry.key}]=${map.invoke(entry.value)}")
+        }
+        append("\n}")
+    }.toString()
+}
