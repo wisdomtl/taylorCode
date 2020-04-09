@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.util.ofMap
 import test.taylor.com.taylorcode.util.print
 import java.util.*
 import kotlin.properties.Delegates
@@ -243,6 +244,13 @@ class KotlinActivity : AppCompatActivity() {
         )
 
         map2.print { it.toString() }.let { Log.v("ttaylor","tag=print map, KotlinActivity.onCreate()  ${it}") }
+
+
+        /**
+         * turn data class into map
+         */
+        val course = Course("computer", 50, true)
+        course.ofMap()?.print { it.toString() }.let { Log.v("ttaylor","tag=data map, KotlinActivity.onCreate()  ${it}") }
     }
 
     private fun split() {
