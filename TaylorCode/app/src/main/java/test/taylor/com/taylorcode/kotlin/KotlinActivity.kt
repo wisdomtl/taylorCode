@@ -251,6 +251,11 @@ class KotlinActivity : AppCompatActivity() {
          */
         val course = Course("computer", 50, true)
         course.ofMap()?.print { it.toString() }.let { Log.v("ttaylor","tag=data map, KotlinActivity.onCreate()  ${it}") }
+
+        /**
+         * invoke 约定
+         */
+        Invoke()
     }
 
     private fun split() {
