@@ -13,20 +13,18 @@ fun printCallStack(deep: Int): String {
 /**
  * print collection bean in which you interested defined by [map]
  */
-fun <T> Collection<T>.print(map: (T) -> String): String {
-    return this.let { c ->
-        StringBuilder("\n[").apply {
-            c.forEach { element -> append("\n\t${map.invoke(element)},") }
-            append("\n]")
-        }.toString()
-    }
-}
-
-fun <K, V> Map<K, V>.print(map: (V) -> String): String = this.let { m ->
-    StringBuilder("\n{").apply {
-        m.iterator().forEach { entry ->
-            append("\n\t[${entry.key}]=${map.invoke(entry.value)}")
-        }
-        append("\n}")
+fun <T> Collection<T>.print(map: (T) -> String) =
+    StringBuilder("\n[").also { sb ->
+        this.forEach { e -> sb.append("\n\t${map(e)},") }
+        sb.append("\n]")
     }.toString()
-}
+
+
+fun <K, V> Map<K, V>.print(map: (V) -> String): String =
+    StringBuilder("\n{").also { sb ->
+        this.iterator().forEach { entry ->
+            sb.append("\n\t[${entry.key}]=${map(entry.value)}")
+        }
+        sb.append("\n}")
+    }.toString()
+
