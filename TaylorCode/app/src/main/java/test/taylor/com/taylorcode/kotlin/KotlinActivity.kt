@@ -256,6 +256,7 @@ class KotlinActivity : AppCompatActivity() {
          * invoke 约定
          */
         Invoke()
+        Invoke2()
     }
 
     private fun split() {
