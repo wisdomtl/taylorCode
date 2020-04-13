@@ -122,7 +122,11 @@ class KotlinActivity : AppCompatActivity() {
         /**
          * sequence case: joinToString()
          */
-        data class Person(var name: String, var age: Int)
+        data class Location(var x:Int,var y:Int)
+        data class Person(var name: String, var age: Int,var locaton:Location?=null)
+
+
+        Person("Peter", 16,Location(20,30)).ofMap()?.print { it.toString() }.let { Log.v("ttaylor","tag=343434, KotlinActivity.onCreate()  $it") }
 
         val persons = listOf(
             Person("Peter", 16),
@@ -130,6 +134,7 @@ class KotlinActivity : AppCompatActivity() {
             Person("Anna", 23),
             Person("Sonya", 39)
         )
+        persons.print { it.ofMap()?.print { it.toString() }?:"" }.let { Log.v("ttaylor","tag=kfdksfjdlk, KotlinActivity.onCreate()  $it") }
         val result3 = persons
             .asSequence()
             .map { it.name }

@@ -4,7 +4,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -120,6 +124,23 @@ public class LoginActivity extends AppCompatActivity {
         etCode = findViewById(R.id.et_verify_code);
         btnSend = findViewById(R.id.btn_send_code);
         btnLogin = findViewById(R.id.btn_login);
+
+        etNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.v("ttaylor", "LoginActivity.onTextChanged()" + "  s="+s+" count="+count+" start="+start+" before="+before);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private Observable<Boolean> getLengthObservable(EditText et, int length) {

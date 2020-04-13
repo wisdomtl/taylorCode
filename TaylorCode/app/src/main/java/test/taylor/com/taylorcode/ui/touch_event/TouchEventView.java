@@ -1,11 +1,12 @@
 package test.taylor.com.taylorcode.ui.touch_event;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 public class TouchEventView extends View {
     public TouchEventView(Context context) {
@@ -26,19 +27,14 @@ public class TouchEventView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("ttaylor", "TouchEventView.onTouchEvent()" + " event=" + event.getAction());
-//        boolean b = super.onTouchEvent(event);
-        boolean b = super.onTouchEvent(event);
-//        Log.v("ttaylor", "TouchEventView.onTouchEvent()" + "  return " + b);
-        return b;
+        Log.e("ttaylor", "TouchEventView.onTouchEvent()" + "  event = " + event.getAction() );
+        return super.onTouchEvent(event);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        Log.e("ttaylor", "TouchEventView.dispatchTouchEvent()" + " event=" + ev.getAction());
-        boolean b = super.dispatchTouchEvent(ev);
-//        Log.v("ttaylor", "TouchEventView.dispatchTouchEvent()" + "  return " + b);
-        return b;
+        Log.e("ttaylor", "TouchEventView.dispatchTouchEvent()" + " event = " + ev.getAction() );
+        return super.dispatchTouchEvent(ev);
     }
 
 }
