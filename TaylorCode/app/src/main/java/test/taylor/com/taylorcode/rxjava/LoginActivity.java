@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.v("ttaylor", "LoginActivity.onTextChanged()" + "  s="+s+" count="+count+" start="+start+" before="+before);
+                Log.v("ttaylor", "LoginActivity.onTextChanged()" + "  s="+s+" length="+s.length());
             }
 
             @Override
