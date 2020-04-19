@@ -20,11 +20,20 @@ fun <T> Collection<T>.print(map: (T) -> String) =
     }.toString()
 
 
-fun <K, V> Map<K, V?>.print(map: (V?) -> String): String =
-    StringBuilder("\n{").also { sb ->
-        this.iterator().forEach { entry ->
-            sb.append("\n\t[${entry.key}] = ${map(entry.value)}")
-        }
-        sb.append("\n}")
+/**
+ * @param space
+ */
+fun <K, V> Map<K, V?>.print(space: Int = 0): String {
+    val indent = StringBuilder().apply {
+        repeat(space) { append(" ") }
     }.toString()
-
+    return StringBuilder("\n${indent}{").also { sb ->
+        this.iterator().forEach { entry ->
+            val value = entry.value.let { v ->
+                (v as? Map<*, *>)?.print("${indent}${entry.key} = ".length) ?: v.toString()
+            }
+            sb.append("\n\t${indent}[${entry.key}] = $value,")
+        }
+        sb.append("\n${indent}}")
+    }.toString()
+}

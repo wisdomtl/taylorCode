@@ -122,11 +122,13 @@ class KotlinActivity : AppCompatActivity() {
         /**
          * sequence case: joinToString()
          */
-        data class Location(var x:Int,var y:Int)
-        data class Person(var name: String, var age: Int,var locaton:Location?=null)
+        data class Coordinate(var x: Int, var y: Int)
+        data class Location(var country: String, var city: String, var coordinate: Coordinate)
+        data class Person(var name: String, var age: Int, var locaton: Location? = null)
 
 
-        Person("Peter", 16,Location(20,30)).ofMap()?.print { it.toString() }.let { Log.v("ttaylor","tag=343434, KotlinActivity.onCreate()  $it") }
+        Person("Peter", 16, Location("china", "shanghai", Coordinate(10, 20))).ofMap()?.print()
+            .let { Log.v("ttaylor", "tag=343434, KotlinActivity.onCreate()  $it") }
 
         val persons = listOf(
             Person("Peter", 16),
@@ -134,7 +136,7 @@ class KotlinActivity : AppCompatActivity() {
             Person("Anna", 23),
             Person("Sonya", 39)
         )
-        persons.print { it.ofMap()?.print { it.toString() }?:"" }.let { Log.v("ttaylor","tag=kfdksfjdlk, KotlinActivity.onCreate()  $it") }
+        persons.print { it.ofMap()?.print() ?: "" }.let { Log.v("ttaylor", "tag=kfdksfjdlk, KotlinActivity.onCreate()  $it") }
         val result3 = persons
             .asSequence()
             .map { it.name }
@@ -175,7 +177,7 @@ class KotlinActivity : AppCompatActivity() {
         time = "11:22"
         Log.v("ttaylor", "tag=vetoable, KotlinActivity.onCreate()  time=$time")
         time = "22:22"
-        Log.v("ttaylor","tag=vetoable, KotlinActivity.onCreate()  time=$time")
+        Log.v("ttaylor", "tag=vetoable, KotlinActivity.onCreate()  time=$time")
 
 
         /**
@@ -187,7 +189,7 @@ class KotlinActivity : AppCompatActivity() {
             }
 
             operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-                Log.v("ttaylor","tag=, Delegate.setValue()  $value has been assigned to '${property.name}' in $thisRef.")
+                Log.v("ttaylor", "tag=, Delegate.setValue()  $value has been assigned to '${property.name}' in $thisRef.")
             }
         }
 
@@ -201,43 +203,43 @@ class KotlinActivity : AppCompatActivity() {
         /**
          * create delegate as extension
          */
-        class Delegate2: ReadWriteProperty<Any?,String>{
+        class Delegate2 : ReadWriteProperty<Any?, String> {
             override fun getValue(thisRef: Any?, property: KProperty<*>): String {
                 return "aaa"
             }
 
             override fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-                Log.v("ttaylor","tag=, Delegate2.setValue() $value has been assigned to ${property.name} ")
+                Log.v("ttaylor", "tag=, Delegate2.setValue() $value has been assigned to ${property.name} ")
             }
         }
 
-        var p:String by Delegate2()
+        var p: String by Delegate2()
 
         p = "bbb"
-        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  ${p}")
+        Log.v("ttaylor", "tag=, KotlinActivity.onCreate()  ${p}")
 
 
         /**
          * create delegate as extension function
          */
-        class Delegate3{}
+        class Delegate3 {}
 
-        operator fun Delegate3.getValue(thisRef: Any?, property: KProperty<*>):String{
+        operator fun Delegate3.getValue(thisRef: Any?, property: KProperty<*>): String {
             return "eee"
         }
 
-        operator fun Delegate3.setValue(thisRef: Any?, property: KProperty<*>, value: String){
-            Log.v("ttaylor","tag=, KotlinActivity.setValue()  ${value} has assigned to ${property.name}")
+        operator fun Delegate3.setValue(thisRef: Any?, property: KProperty<*>, value: String) {
+            Log.v("ttaylor", "tag=, KotlinActivity.setValue()  ${value} has assigned to ${property.name}")
         }
 
-        var p2:String by Delegate3()
+        var p2: String by Delegate3()
 
         p2 = "qqq"
-        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  p2=${p2}")
+        Log.v("ttaylor", "tag=, KotlinActivity.onCreate()  p2=${p2}")
 
 
-        val objects = listOf("11",1,"22")
-        objects.filterIsInstance<String>().print { it }.also { Log.v("ttaylor","tag=filterIsInstance, instance=${it} ") }
+        val objects = listOf("11", 1, "22")
+        objects.filterIsInstance<String>().print { it }.also { Log.v("ttaylor", "tag=filterIsInstance, instance=${it} ") }
 
 
         /**
@@ -248,14 +250,14 @@ class KotlinActivity : AppCompatActivity() {
             "23" to "eeee"
         )
 
-        map2.print { it.toString() }.let { Log.v("ttaylor","tag=print map, KotlinActivity.onCreate()  ${it}") }
+        map2.print().let { Log.v("ttaylor", "tag=print map, KotlinActivity.onCreate()  ${it}") }
 
 
         /**
          * turn data class into map
          */
         val course = Course("computer", 50, true)
-        course.ofMap()?.print { it.toString() }.let { Log.v("ttaylor","tag=data map, KotlinActivity.onCreate()  ${it}") }
+        course.ofMap()?.print().let { Log.v("ttaylor", "tag=data map, KotlinActivity.onCreate()  ${it}") }
 
         /**
          * invoke 约定
