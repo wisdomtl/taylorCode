@@ -180,6 +180,7 @@
         <activity android:name=".kotlin.override_operator.OverrideOperatorActivity" />
         <activity android:name=".ui.pagers.ViewPager2Activity" />
         <activity android:name=".ui.flow.FlowActivity" />
+        <activity android:name=".ui.ConstraintLayoutActivity3" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

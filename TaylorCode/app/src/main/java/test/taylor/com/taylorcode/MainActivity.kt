@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity() {
         btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
         btn_vp2.setOnClickListener {startActivity<ViewPager2Activity>()}
         btn_flow.setOnClickListener {startActivity<FlowActivity>()}
+        btn_constraintlayou.setOnClickListener {startActivity<ConstraintLayoutActivity3>()}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

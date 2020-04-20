@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import kotlinx.android.synthetic.main.constraintlayou_activity2.croot
+import kotlinx.android.synthetic.main.constraintlayou_activity2.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 import test.taylor.com.taylorcode.util.DimensionUtil
@@ -39,7 +39,7 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                 topToTop = ConstraintSet.PARENT_ID
                 startToStart = ConstraintSet.PARENT_ID
             }
-        }.also { croot?.addView(it) }
+        }.also { croot2?.addView(it) }
 
         TextView(this).apply {
             id = id2
@@ -51,7 +51,7 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                 topToBottom = id1
                 startToStart = ConstraintSet.PARENT_ID
             }
-        }.also { croot?.addView(it) }
+        }.also { croot2?.addView(it) }
 
         LineFeedLayout(this).apply {
             layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
@@ -70,6 +70,8 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                     }
                 }.also { addView(it) }
             }
-        }.also { croot?.addView(it) }
+        }.also { croot2?.addView(it) }
+
+
     }
 }
