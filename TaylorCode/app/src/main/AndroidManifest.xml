@@ -179,6 +179,7 @@
         <activity android:name=".kotlin.delegate.DelegateActivity" />
         <activity android:name=".kotlin.override_operator.OverrideOperatorActivity" />
         <activity android:name=".ui.pagers.ViewPager2Activity" />
+        <activity android:name=".ui.flow.FlowActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

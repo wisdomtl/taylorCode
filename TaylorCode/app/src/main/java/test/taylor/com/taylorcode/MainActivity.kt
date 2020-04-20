@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -33,6 +34,7 @@ import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
+import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -142,6 +144,7 @@ class MainActivity : AppCompatActivity() {
         btn_delegate.setOnClickListener { startActivity(DelegateActivity::class.java) }
         btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
         btn_vp2.setOnClickListener {startActivity<ViewPager2Activity>()}
+        btn_flow.setOnClickListener {startActivity<FlowActivity>()}
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
