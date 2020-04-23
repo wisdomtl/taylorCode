@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -57,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         initView()
         readPhoneInfo()
         testValueDiliver();
-        Log.v("ttaylor", "MainActivity.onCreate()" + " current timestamp= "+System.currentTimeMillis() +" ms "+" current timestamp= "+(System.currentTimeMillis()/1000))
     }
 
     private fun testValueDiliver() {
@@ -143,9 +141,11 @@ class MainActivity : AppCompatActivity() {
         btn_broadcat.setOnClickListener { startActivity(BroadcastActivity::class.java) }
         btn_delegate.setOnClickListener { startActivity(DelegateActivity::class.java) }
         btn_operator.setOnClickListener { startActivity(OverrideOperatorActivity::class.java) }
-        btn_vp2.setOnClickListener {startActivity<ViewPager2Activity>()}
-        btn_flow.setOnClickListener {startActivity<FlowActivity>()}
-        btn_constraintlayou.setOnClickListener {startActivity<ConstraintLayoutActivity3>()}
+        btn_vp2.setOnClickListener { startActivity<ViewPager2Activity>() }
+        btn_flow.setOnClickListener { startActivity<FlowActivity>() }
+        btn_constraintlayou.setOnClickListener { startActivity<ConstraintLayoutActivity3>() }
+        btn_factory2.setOnClickListener { startActivity<Factory2Activity>() }
+        btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
@@ -187,11 +187,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(it)
         }
     }
+}
 
-    /**
-     * reified case: type wont be erased
-     */
-    inline fun <reified T> Context.startActivity(){
-        Intent(this,T::class.java).also { startActivity(it) }
-    }
+/**
+ * reified case: type wont be erased
+ */
+inline fun <reified T> Context.startActivity() {
+    Intent(this, T::class.java).also { startActivity(it) }
 }

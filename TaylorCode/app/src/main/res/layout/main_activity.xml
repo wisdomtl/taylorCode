@@ -9,6 +9,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btn_factory22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="factory22"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btn_factory2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="factory2"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_constraintlayou"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

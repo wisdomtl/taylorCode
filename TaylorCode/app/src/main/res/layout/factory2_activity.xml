@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/container"
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/tv1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -14,9 +17,11 @@
         android:textColor="#00ff00"/>
 
     <Button
+        app:layout_constraintTop_toBottomOf="@id/tv1"
+        app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/btn_start_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="start another activity"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
