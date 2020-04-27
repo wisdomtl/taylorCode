@@ -264,6 +264,11 @@ class KotlinActivity : AppCompatActivity() {
          */
         Invoke()
         Invoke2()
+
+        /**
+         * first day of week
+         */
+        Log.v("ttaylor", "tag=date, KotlinActivity.onCreate()  first day of week=${thisMondayInMillis()}, end day of week=${thisSundayInMillis()}")
     }
 
     private fun split() {
@@ -295,6 +300,28 @@ class KotlinActivity : AppCompatActivity() {
 
         return timestamp in beginningOfToday..endingOfToday
 
+    }
+
+    fun thisMondayInMillis() = Calendar.getInstance().let { c ->
+        if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) c.add(Calendar.DATE, -1)
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        c.set(Calendar.HOUR_OF_DAY, 0)
+        c.set(Calendar.MINUTE, 0)
+        c.set(Calendar.SECOND, 0)
+        c.set(Calendar.MILLISECOND, 0)
+        c.timeInMillis
+    }
+
+    fun thisSundayInMillis() = Calendar.getInstance().let { c ->
+        if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
+            c.add(Calendar.DATE, 1)
+        }
+        c.set(Calendar.HOUR_OF_DAY, 0)
+        c.set(Calendar.MINUTE, 0)
+        c.set(Calendar.SECOND, 0)
+        c.set(Calendar.MILLISECOND, 0)
+        c.timeInMillis
     }
 
     interface Iinterface {
