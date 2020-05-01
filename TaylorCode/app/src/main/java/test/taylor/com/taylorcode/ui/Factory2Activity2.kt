@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.LayoutInflaterCompat
 import androidx.core.widget.NestedScrollView
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.collection.*
 import test.taylor.com.taylorcode.util.dp
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -38,8 +39,24 @@ class Factory2Activity2 : AppCompatActivity() {
             }
         })
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.factory2_activity2)
-        setContentView(buildView())
+//        setContentView(R.layout.factory2_activity2)
+//        setContentView(buildView())
+        setContentView(buildViewByDsl())
+    }
+
+    private fun buildViewByDsl(): View {
+        return LinearLayout {
+            layout_width = 500
+            layout_height = 300
+            setBackgroundColor(Color.parseColor("#00ff00"))
+            orientation = LinearLayout.HORIZONTAL
+            TextView {
+                layout_width = 200
+                layout_height = 100
+                text = "djfkfjd"
+                textSize = 20f
+            }
+        }
     }
 
     private fun buildView(): View {

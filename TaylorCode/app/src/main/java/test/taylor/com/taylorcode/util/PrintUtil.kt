@@ -1,12 +1,10 @@
 package test.taylor.com.taylorcode.util
 
-import test.taylor.com.taylorcode.BuildConfig
 
 /**
  * print method call stack by [deep]
  */
 fun printCallStack(deep: Int): String {
-    if (!BuildConfig.DEBUG) return ""
     return Throwable().stackTrace?.take(deep)?.print { it -> "${it.className}.${it.methodName} (line ${it.lineNumber})" } ?: ""
 }
 

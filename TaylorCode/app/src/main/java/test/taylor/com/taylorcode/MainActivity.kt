@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ViewUtils
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -151,6 +153,27 @@ class MainActivity : AppCompatActivity() {
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
 
         btn_room.setOnClickListener(onClickListener)
+        1280.fmtCount().let { Log.v("ttaylor","tag=aaaadf, MainActivity.initView()  it=${it}") }
+    }
+
+
+    fun Int.fmtCount() : String = let {
+        return when {
+            it >= 1000 -> {
+                val integer = it / 1000
+                val digit = it % 1000
+                StringBuilder()
+                    .append(integer)
+                    .apply {
+                        if (digit != 0) {
+                            append(".${digit / 100}")
+                        }
+                    }
+                    .append("k")
+                    .toString()
+            }
+            else -> it.toString()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
