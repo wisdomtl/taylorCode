@@ -74,7 +74,6 @@ public class ViewStubActivity extends AppCompatActivity {
         set.clear(R.id.tvooo,ConstraintSet.BOTTOM);
         set.connect(R.id.tvooo, ConstraintSet.TOP, R.id.vDivider, ConstraintSet.BOTTOM);
         set.applyTo(root);
-
     }
 
     private void showViewStub() {

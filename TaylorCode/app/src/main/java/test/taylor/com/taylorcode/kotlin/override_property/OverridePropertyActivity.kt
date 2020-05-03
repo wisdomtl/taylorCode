@@ -1,13 +1,18 @@
 package test.taylor.com.taylorcode.kotlin.override_property
 
+import android.os.Bundle
+import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.my_activity.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.setOnItemClickListener
 
 class OverridePropertyActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProviders.of(this).get(MyViewModel::class.java) }
@@ -42,5 +47,9 @@ class OverridePropertyActivity : AppCompatActivity() {
 
     private fun initView() {
         myRv.layoutManager = LinearLayoutManager(this)
+        myRv.setOnItemClickListener { view, pos ->
+            Log.v("ttaylor", "tag=onRecyclerView click, OverridePropertyActivity.initView()  pos=${pos}")
+        }
     }
 }
+

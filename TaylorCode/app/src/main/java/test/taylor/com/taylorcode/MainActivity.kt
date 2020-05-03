@@ -154,6 +154,9 @@ class MainActivity : AppCompatActivity() {
 
         btn_room.setOnClickListener(onClickListener)
         1280.fmtCount().let { Log.v("ttaylor","tag=aaaadf, MainActivity.initView()  it=${it}") }
+
+        val str:String = (java.lang.String("0").bytes.sum() - 48).toString()
+        Log.v("ttaylor","tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
     }
 
 
