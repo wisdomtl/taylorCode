@@ -9,11 +9,14 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.helper.widget.Flow
+import androidx.constraintlayout.helper.widget.Layer
+import androidx.constraintlayout.widget.ConstraintHelper
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintProperties
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.view.MarginLayoutParamsCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
 //<editor-fold desc="widget creation function">
@@ -24,38 +27,32 @@ inline fun ViewGroup.TextView(init: TextView.() -> Unit) =
 inline fun ViewGroup.ImageView(init: ImageView.() -> Unit) =
     ImageView(context).apply(init).also { addView(it) }
 
-
 inline fun ViewGroup.Button(init: Button.() -> Unit) =
     Button(context).apply(init).also { addView(it) }
-
 
 inline fun ViewGroup.View(init: View.() -> Unit): View =
     View(context).apply(init).also { addView(it) }
 
-
 inline fun ViewGroup.RelativeLayout(init: RelativeLayout.() -> Unit) =
     RelativeLayout(context).apply(init).also { addView(it) }
-
 
 inline fun ViewGroup.LinearLayout(init: LinearLayout.() -> Unit) =
     LinearLayout(context).apply(init).also { addView(it) }
 
-
 inline fun ViewGroup.NestedScrollView(init: NestedScrollView.() -> Unit) =
     NestedScrollView(context).apply(init).also { addView(it) }
-
 
 inline fun ViewGroup.RecyclerView(init: RecyclerView.() -> Unit) =
     RecyclerView(context).apply(init).also { addView(it) }
 
-
 inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
     Guideline(context).apply(init).also { addView(it) }
-
 
 inline fun ConstraintLayout.Flow(init: Flow.() -> Unit) =
     Flow(context).apply(init).also { addView(it) }
 
+inline fun ConstraintLayout.Layer(init: Layer.() -> Unit) =
+    Layer(context).apply(init).also { addView(it) }
 
 inline fun Context.ConstraintLayout(init: ConstraintLayout.() -> Unit): ConstraintLayout =
     ConstraintLayout(this).apply(init)
@@ -80,6 +77,30 @@ inline fun Context.ImageView(init: ImageView.() -> Unit) =
 
 inline fun Context.View(init: View.() -> Unit) =
     View(this).apply(init)
+
+inline fun Fragment.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
+    ConstraintLayout(context).apply(init)
+
+inline fun Fragment.LinearLayout(init: LinearLayout.() -> Unit) =
+    LinearLayout(context).apply(init)
+
+inline fun Fragment.FrameLayout(init: FrameLayout.() -> Unit) =
+    context?.let { FrameLayout(it).apply(init) }
+
+inline fun Fragment.NestedScrollView(init: NestedScrollView.() -> Unit) =
+    context?.let { NestedScrollView(it).apply(init) }
+
+inline fun Fragment.TextView(init: TextView.() -> Unit) =
+    TextView(context).apply(init)
+
+inline fun Fragment.Button(init: Button.() -> Unit) =
+    Button(context).apply(init)
+
+inline fun Fragment.ImageView(init: ImageView.() -> Unit) =
+    ImageView(context).apply(init)
+
+inline fun Fragment.View(init: View.() -> Unit) =
+    context?.let { View(it).apply(init) }
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
@@ -450,12 +471,52 @@ inline var TextView.textColor: String
         setTextColor(Color.parseColor(value))
     }
 
+inline var TextView.gravity:Int
+    get() {
+        return 0
+    }
+    set(value) {
+        gravity = value
+    }
+
 inline var NestedScrollView.fadeScrollBar: Boolean
     get() {
         return false
     }
     set(value) {
         isScrollbarFadingEnabled = true
+    }
+
+inline var ConstraintHelper.referenceIds: String
+    get() {
+        return ""
+    }
+    set(value) {
+        referencedIds = value.split(",").map { it.toLayoutId() }.toIntArray()
+    }
+
+inline var Flow.flow_horizontalGap:Int
+    get() {
+        return 0
+    }
+    set(value) {
+        setHorizontalGap(value.dp())
+    }
+
+inline var Flow.flow_verticalGap:Int
+    get() {
+        return 0
+    }
+    set(value) {
+        setVerticalGap(value.dp())
+    }
+
+inline var Flow.flow_wrapMode:Int
+    get() {
+        return 0
+    }
+    set(value) {
+        setWrapMode(value)
     }
 
 var View.onClick: (View) -> Unit
@@ -518,6 +579,10 @@ val spread = ConstraintLayout.LayoutParams.CHAIN_SPREAD
 val packed = ConstraintLayout.LayoutParams.CHAIN_PACKED
 val spread_inside = ConstraintLayout.LayoutParams.CHAIN_SPREAD_INSIDE
 
+val wrap_none = Flow.WRAP_NONE
+val wrap_chain = Flow.WRAP_CHAIN
+val wrap_aligned = Flow.WRAP_ALIGNED
+
 val parent_id = "0"
 //</editor-fold>
 
@@ -541,7 +606,7 @@ fun ViewGroup.LayoutParams.append(set: ConstraintLayout.LayoutParams.() -> Unit)
     (this as? ConstraintLayout.LayoutParams)?.apply(set) ?: (this as? ViewGroup.MarginLayoutParams)?.toConstraintLayoutParam()?.apply(set)
 
 
-fun String.toLayoutId():Int{
+fun String.toLayoutId(): Int {
     var id = java.lang.String(this).bytes.sum()
     if (id == 48) id = 0
     return id

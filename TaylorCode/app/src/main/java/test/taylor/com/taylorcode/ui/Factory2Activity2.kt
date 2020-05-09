@@ -55,15 +55,15 @@ class Factory2Activity2 : AppCompatActivity() {
 //        setContentView(buildView())
 //        setContentView(buildViewByDsl())
         setContentView(buildViewByClDsl())
-//        initView()
+        initView()
     }
 
     private fun initView() {
-        rv.layoutManager = LinearLayoutManager(this)
-        rv.adapter = object : MyAdapter(listOf(MyBean("a"), MyBean("b"), MyBean("c"), MyBean("d"))) {
-            override val color: ColorBean?
-                get() = ColorBean("#ff00ff")
-        }
+//        rv.layoutManager = LinearLayoutManager(this)
+////        rv.adapter = object : MyAdapter(listOf(MyBean("a"), MyBean("b"), MyBean("c"), MyBean("d"))) {
+////            override val color: ColorBean?
+////                get() = ColorBean("#ff00ff")
+////        }
     }
 
     private fun buildViewByClDsl(): View =
@@ -85,11 +85,12 @@ class Factory2Activity2 : AppCompatActivity() {
             }
 
             TextView {
-                layout_width = wrap_content
-                layout_height = wrap_content
+                layout_width = 0
+                layout_height = 70
                 text = "commit"
                 textSize = 30f
                 textStyle = bold
+                gravity = gravity_center_horizontal + gravity_top
                 align_vertical_to = "ivBack"
                 center_horizontal = true
             }
@@ -112,10 +113,11 @@ class Factory2Activity2 : AppCompatActivity() {
                 top_toBottomOf = "ivBack"
             }
 
-            View {
-                layout_id = "bg"
-                layout_width = 0
-                layout_height = 0
+            Layer {
+                layout_id = "layer"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                referenceIds = "ivDiamond,tvTitle,tvContent,ivAvatar,tvTime,tvSub"
                 background_res = R.drawable.tag_checked_shape
                 start_toStartOf = "ivDiamond"
                 top_toTopOf = "ivDiamond"
@@ -232,14 +234,14 @@ class Factory2Activity2 : AppCompatActivity() {
                 start_toEndOf = "tvCancel"
             }
 
-           rv =  RecyclerView {
-                layout_id = "rvTest"
-                layout_width = match_parent
-                layout_height = 300
-                center_horizontal = true
-                top_toBottomOf = "bg"
-                onItemClick = { v, i -> onItemClickEvent(v, i) }
-            }
+//           rv =  RecyclerView {
+//                layout_id = "rvTest"
+//                layout_width = match_parent
+//                layout_height = 300
+//                center_horizontal = true
+//                top_toBottomOf = "bg"
+//                onItemClick = { v, i -> onItemClickEvent(v, i) }
+//            }
 
         }
 

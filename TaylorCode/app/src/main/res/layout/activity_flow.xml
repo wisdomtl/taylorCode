@@ -24,6 +24,7 @@
         android:text="take"
         android:padding="10dp"
         android:textSize="20sp"
+        android:gravity="center_horizontal|top"
         android:background="#0000ff"
         android:layout_height="wrap_content"/>
     <TextView
