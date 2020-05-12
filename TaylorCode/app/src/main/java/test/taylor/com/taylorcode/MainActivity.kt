@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ViewUtils
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.table_layout_activity.view.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
@@ -16,9 +17,7 @@ import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
-import test.taylor.com.taylorcode.kotlin.AnoymousFunActivity
-import test.taylor.com.taylorcode.kotlin.KotlinActivity
-import test.taylor.com.taylorcode.kotlin.KotlinExample
+import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
@@ -157,6 +156,23 @@ class MainActivity : AppCompatActivity() {
 
         val str:String = (java.lang.String("0").bytes.sum() - 48).toString()
         Log.v("ttaylor","tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
+
+
+        /**
+         * content view case : add view to content view
+         */
+        val tv = TextView {
+            layout_width = wrap_content
+            layout_height = wrap_content
+            text = "add from content view"
+            textSize = 20f
+            gravity = gravity_center
+        }
+
+        contentView()?.addView(tv,android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
+            this.topMargin = 100.dp()
+            this.marginStart = 50.dp()
+        })
     }
 
 
