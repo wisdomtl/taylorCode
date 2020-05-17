@@ -34,6 +34,7 @@ import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
+import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
@@ -147,6 +148,7 @@ class MainActivity : AppCompatActivity() {
         btn_constraintlayou.setOnClickListener { startActivity<ConstraintLayoutActivity3>() }
         btn_factory2.setOnClickListener { startActivity<Factory2Activity>() }
         btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
+        btn_data_binding.setOnClickListener { startActivity<DataBindingActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

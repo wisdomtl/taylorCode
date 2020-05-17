@@ -182,6 +182,7 @@
         <activity android:name=".ui.flow.FlowActivity" />
         <activity android:name=".ui.ConstraintLayoutActivity3" />
         <activity android:name=".ui.Factory2Activity2" />
+        <activity android:name=".ui.databinding.DataBindingActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
