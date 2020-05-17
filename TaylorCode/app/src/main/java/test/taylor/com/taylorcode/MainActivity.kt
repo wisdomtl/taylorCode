@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             gravity = gravity_center
         }
 
-        contentView()?.addView(tv,android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
+        contentView()?.addView(tv, android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
             this.topMargin = 100.dp()
             this.marginStart = 50.dp()
         })

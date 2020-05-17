@@ -59,11 +59,11 @@ class Factory2Activity2 : AppCompatActivity() {
     }
 
     private fun initView() {
-//        rv.layoutManager = LinearLayoutManager(this)
-////        rv.adapter = object : MyAdapter(listOf(MyBean("a"), MyBean("b"), MyBean("c"), MyBean("d"))) {
-////            override val color: ColorBean?
-////                get() = ColorBean("#ff00ff")
-////        }
+        rv.layoutManager = LinearLayoutManager(this)
+        rv.adapter = object : MyAdapter(listOf(MyBean("a"), MyBean("b"), MyBean("c"), MyBean("d"))) {
+            override val color: ColorBean?
+                get() = ColorBean("#ff00ff")
+        }
     }
 
     private fun buildViewByClDsl(): View =
@@ -234,14 +234,13 @@ class Factory2Activity2 : AppCompatActivity() {
                 start_toEndOf = "tvCancel"
             }
 
-//           rv =  RecyclerView {
-//                layout_id = "rvTest"
-//                layout_width = match_parent
-//                layout_height = 300
-//                center_horizontal = true
-//                top_toBottomOf = "bg"
-//                onItemClick = { v, i -> onItemClickEvent(v, i) }
-//            }
+           rv =  RecyclerView {
+                layout_id = "rvTest"
+                layout_width = match_parent
+                layout_height = wrap_content
+               top_toBottomOf = "tvTime"
+                onItemClick = { v, i -> onItemClickEvent(v, i) }
+            }
 
         }
 
