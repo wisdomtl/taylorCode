@@ -9,6 +9,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnTransformations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transformations"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_data_binding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

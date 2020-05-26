@@ -41,6 +41,7 @@ import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
+import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
@@ -149,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         btn_factory2.setOnClickListener { startActivity<Factory2Activity>() }
         btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
         btn_data_binding.setOnClickListener { startActivity<DataBindingActivity>() }
+        btnTransformations.setOnClickListener { startActivity<LiveDataActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

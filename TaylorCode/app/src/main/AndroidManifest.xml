@@ -183,6 +183,7 @@
         <activity android:name=".ui.ConstraintLayoutActivity3" />
         <activity android:name=".ui.Factory2Activity2" />
         <activity android:name=".ui.databinding.DataBindingActivity" />
+        <activity android:name=".ui.state_cross_activities.LiveDataActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
