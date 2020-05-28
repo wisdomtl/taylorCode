@@ -176,8 +176,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         contentView()?.addView(tv, android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
-            this.topMargin = 100.dp()
-            this.marginStart = 50.dp()
+            this.topMargin = 100.dp
+            this.marginStart = 50.dp
         })
     }
 

@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.kotlin
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.TypedValue
@@ -14,9 +15,13 @@ import androidx.constraintlayout.widget.ConstraintHelper
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintProperties
 import androidx.constraintlayout.widget.Guideline
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MarginLayoutParamsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 
 //<editor-fold desc="widget creation function">
@@ -44,6 +49,12 @@ inline fun ViewGroup.NestedScrollView(init: NestedScrollView.() -> Unit) =
 
 inline fun ViewGroup.RecyclerView(init: RecyclerView.() -> Unit) =
     RecyclerView(context).apply(init).also { addView(it) }
+
+inline fun ViewGroup.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
+    ConstraintLayout(context).apply(init).also { addView(it) }
+
+inline fun ViewGroup.FrameLayout(init: FrameLayout.() -> Unit) =
+    FrameLayout(context).apply(init).also { addView(it) }
 
 inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
     Guideline(context).apply(init).also { addView(it) }
@@ -116,7 +127,7 @@ inline var View.padding_top: Int
         return 0
     }
     set(value) {
-        setPadding(paddingLeft, value.dp(), paddingRight, paddingBottom)
+        setPadding(paddingLeft, value.dp, paddingRight, paddingBottom)
     }
 
 inline var View.padding_bottom: Int
@@ -124,7 +135,7 @@ inline var View.padding_bottom: Int
         return 0
     }
     set(value) {
-        setPadding(paddingLeft, paddingTop, paddingRight, value.dp())
+        setPadding(paddingLeft, paddingTop, paddingRight, value.dp)
     }
 
 inline var View.padding_start: Int
@@ -132,7 +143,7 @@ inline var View.padding_start: Int
         return 0
     }
     set(value) {
-        setPadding(value.dp(), paddingTop, paddingRight, paddingBottom)
+        setPadding(value.dp, paddingTop, paddingRight, paddingBottom)
     }
 
 inline var View.padding_end: Int
@@ -140,21 +151,21 @@ inline var View.padding_end: Int
         return 0
     }
     set(value) {
-        setPadding(paddingLeft, paddingTop, value.dp(), paddingBottom)
+        setPadding(paddingLeft, paddingTop, value.dp, paddingBottom)
     }
 inline var View.padding: Int
     get() {
         return 0
     }
     set(value) {
-        setPadding(value.dp(), value.dp(), value.dp(), value.dp())
+        setPadding(value.dp, value.dp, value.dp, value.dp)
     }
 inline var View.layout_width: Int
     get() {
         return 0
     }
     set(value) {
-        val w = if (value > 0) value.dp() else value
+        val w = if (value > 0) value.dp else value
         val h = layoutParams?.height ?: 0
         layoutParams = ViewGroup.MarginLayoutParams(w, h)
     }
@@ -166,7 +177,7 @@ inline var View.layout_height: Int
     set(value) {
 
         val w = layoutParams?.width ?: 0
-        val h = if (value > 0) value.dp() else value
+        val h = if (value > 0) value.dp else value
         layoutParams = ViewGroup.MarginLayoutParams(w, h)
     }
 
@@ -355,6 +366,25 @@ inline var View.vertical_chain_style: Int
         }
     }
 
+inline var View.horizontal_bias:Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            horizontalBias = value
+        }
+    }
+inline var View.vertital_bias:Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            verticalBias = value
+        }
+    }
+
 inline var View.center_horizontal: Boolean
     get() {
         return false
@@ -415,7 +445,7 @@ inline var View.margin_top: Int
     }
     set(value) {
         (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
-            topMargin = value.dp()
+            topMargin = value.dp
         }
     }
 
@@ -425,7 +455,7 @@ inline var View.margin_bottom: Int
     }
     set(value) {
         (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
-            bottomMargin = value.dp()
+            bottomMargin = value.dp
         }
     }
 
@@ -435,7 +465,7 @@ inline var View.margin_start: Int
     }
     set(value) {
         (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
-            MarginLayoutParamsCompat.setMarginStart(this, value.dp())
+            MarginLayoutParamsCompat.setMarginStart(this, value.dp)
         }
     }
 
@@ -445,9 +475,18 @@ inline var View.margin_end: Int
     }
     set(value) {
         (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
-            MarginLayoutParamsCompat.setMarginEnd(this, value.dp())
+            MarginLayoutParamsCompat.setMarginEnd(this, value.dp)
         }
     }
+
+inline var View.bindVisibility: LiveData<Int>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) { visibility = it }
+    }
+
 
 inline var ImageView.src: Int
     get() {
@@ -455,6 +494,31 @@ inline var ImageView.src: Int
     }
     set(value) {
         setImageResource(value)
+    }
+
+inline var ImageView.bindSrc: LiveData<Bitmap>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) { setImageBitmap(it) }
+    }
+
+inline var TextView.bindText: LiveData<CharSequence>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) { text = it }
+    }
+inline var TextView.bindTextColor: LiveData<String>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) {
+            textColor = it
+        }
     }
 
 inline var TextView.textStyle: Int
@@ -471,12 +535,12 @@ inline var TextView.textColor: String
         setTextColor(Color.parseColor(value))
     }
 
-inline var TextView.gravity:Int
+inline var TextView.fontFamily: Int
     get() {
         return 0
     }
     set(value) {
-        gravity = value
+        typeface = ResourcesCompat.getFont(context, value)
     }
 
 inline var NestedScrollView.fadeScrollBar: Boolean
@@ -495,23 +559,23 @@ inline var ConstraintHelper.referenceIds: String
         referencedIds = value.split(",").map { it.toLayoutId() }.toIntArray()
     }
 
-inline var Flow.flow_horizontalGap:Int
+inline var Flow.flow_horizontalGap: Int
     get() {
         return 0
     }
     set(value) {
-        setHorizontalGap(value.dp())
+        setHorizontalGap(value.dp)
     }
 
-inline var Flow.flow_verticalGap:Int
+inline var Flow.flow_verticalGap: Int
     get() {
         return 0
     }
     set(value) {
-        setVerticalGap(value.dp())
+        setVerticalGap(value.dp)
     }
 
-inline var Flow.flow_wrapMode:Int
+inline var Flow.flow_wrapMode: Int
     get() {
         return 0
     }
@@ -534,7 +598,6 @@ var RecyclerView.onItemClick: (View, Int) -> Unit
     set(value) {
         setOnItemClickListener(value)
     }
-
 //</editor-fold>
 
 
@@ -587,12 +650,14 @@ val parent_id = "0"
 //</editor-fold>
 
 //<editor-fold desc="layout helper function">
-fun Int.dp(): Int =
-    TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this.toFloat(),
-        Resources.getSystem().displayMetrics
-    ).toInt()
+val Int.dp: Int
+    get() {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        ).toInt()
+    }
 
 fun ViewGroup.MarginLayoutParams.toConstraintLayoutParam() =
     ConstraintLayout.LayoutParams(width, height).also { it ->
@@ -612,10 +677,15 @@ fun String.toLayoutId(): Int {
     return id
 }
 
-fun <T : View> View.find(id: String): T = findViewById<T>(id.toLayoutId())
+fun <T : View> View.find(id: String): T? = findViewById(id.toLayoutId())
 
-fun <T : View> AppCompatActivity.find(id: String): T = findViewById<T>(id.toLayoutId())
+fun <T : View> AppCompatActivity.find(id: String): T? = findViewById(id.toLayoutId())
 
+fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
+    (context as? LifecycleOwner)?.let { owner ->
+        liveData?.observe(owner, Observer { action(it) })
+    }
+}
 
 fun RecyclerView.setOnItemClickListener(listener: (View, Int) -> Unit) {
     addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {

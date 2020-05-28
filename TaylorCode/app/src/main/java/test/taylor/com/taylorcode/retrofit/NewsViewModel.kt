@@ -20,7 +20,7 @@ class NewsViewModel : ViewModel() {
 
     private val newsApi = retrofit.create(NewsApi::class.java)
 
-    val newsLiveData = MutableLiveData<NewsBean>()
+    var newsLiveData = MutableLiveData<List<News>>()
 
     fun fetchJoke() {
         newsApi.fetchNews(
@@ -36,7 +36,7 @@ class NewsViewModel : ViewModel() {
 
             override fun onResponse(call: Call<NewsBean>, response: Response<NewsBean>) {
                 Log.v("ttaylor", "tag=, NewsViewModel.onResponse()  news=${response.body()}")
-                newsLiveData.value = response.body()
+                response.body()?.result?.let { newsLiveData.value = it }
             }
         })
     }
