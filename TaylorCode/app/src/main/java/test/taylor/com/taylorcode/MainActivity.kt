@@ -26,6 +26,7 @@ import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActiv
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
+import test.taylor.com.taylorcode.retrofit.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.ui.*
@@ -151,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
         btn_data_binding.setOnClickListener { startActivity<DataBindingActivity>() }
         btnTransformations.setOnClickListener { startActivity<LiveDataActivity>() }
+        btnRetrofit.setOnClickListener { startActivity<RetrofitActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

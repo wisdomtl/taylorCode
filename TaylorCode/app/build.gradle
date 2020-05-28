@@ -96,4 +96,17 @@ dependencies {
     implementation "com.google.android.material:material:1.2.0-alpha03"
 
 
+    // 包含协程的 Activity lifecycle 扩展
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+
+    // 协程网络请求倒入的包
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
+    // json 转换(更好地支持data class)
+    implementation "com.squareup.retrofit2:converter-moshi:2.7.1"
+
+//    // kotlin协程
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
+//    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlin_version"
+
+
 }
