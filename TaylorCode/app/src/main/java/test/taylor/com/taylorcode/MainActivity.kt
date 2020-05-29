@@ -4,12 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.ViewUtils
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.table_layout_activity.view.*
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
@@ -26,7 +23,9 @@ import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActiv
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
-import test.taylor.com.taylorcode.retrofit.RetrofitActivity
+import test.taylor.com.taylorcode.retrofit.RetrofitActivity1
+import test.taylor.com.taylorcode.retrofit.GodActivity
+import test.taylor.com.taylorcode.retrofit.RetrofitActivity2
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.ui.*
@@ -152,7 +151,9 @@ class MainActivity : AppCompatActivity() {
         btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
         btn_data_binding.setOnClickListener { startActivity<DataBindingActivity>() }
         btnTransformations.setOnClickListener { startActivity<LiveDataActivity>() }
-        btnRetrofit.setOnClickListener { startActivity<RetrofitActivity>() }
+        btnRetrofit.setOnClickListener { startActivity<RetrofitActivity1>() }
+        godActivity.setOnClickListener { startActivity<GodActivity>() }
+        repository.setOnClickListener { startActivity<RetrofitActivity2>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

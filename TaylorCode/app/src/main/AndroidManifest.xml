@@ -186,7 +186,9 @@
         <activity android:name=".ui.Factory2Activity2" />
         <activity android:name=".ui.databinding.DataBindingActivity" />
         <activity android:name=".ui.state_cross_activities.LiveDataActivity" />
-        <activity android:name=".retrofit.RetrofitActivity" />
+        <activity android:name=".retrofit.RetrofitActivity1" />
+        <activity android:name=".retrofit.GodActivity" />
+        <activity android:name=".retrofit.RetrofitActivity2" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

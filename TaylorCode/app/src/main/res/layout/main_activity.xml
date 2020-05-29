@@ -9,6 +9,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/repository"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="repository"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/godActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="god activity"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btnRetrofit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
