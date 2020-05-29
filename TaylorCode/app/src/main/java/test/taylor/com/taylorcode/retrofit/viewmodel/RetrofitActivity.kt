@@ -1,26 +1,19 @@
-package test.taylor.com.taylorcode.retrofit
+package test.taylor.com.taylorcode.retrofit.viewmodel
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.retrofit.NewsAdapter
 
-/**
- * god activity
- */
-class GodActivity:AppCompatActivity() {
+class RetrofitActivity : AppCompatActivity() {
 
     private var rvNews: RecyclerView? = null
 
-    private var newsAdapter =  NewsAdapter()
+    private var newsAdapter = NewsAdapter()
 
     private val rootView by lazy {
         ConstraintLayout {
@@ -47,13 +40,7 @@ class GodActivity:AppCompatActivity() {
         }
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.apiopen.top")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .client(OkHttpClient.Builder().build())
-        .build()
-
-    private val newsApi = retrofit.create(NewsApi::class.java)
+    private val jokeViewModel by lazy { ViewModelProviders.of(this).get(NewsViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,30 +50,14 @@ class GodActivity:AppCompatActivity() {
     }
 
     private fun initData() {
-       fetchJoke()
+        jokeViewModel.newsLiveData.observe(this, Observer {
+            newsAdapter.news = it
+            rvNews?.adapter = newsAdapter
+        })
+        jokeViewModel.fetchNews()
     }
 
     private fun initView() {
         rvNews?.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun fetchJoke() {
-        newsApi.fetchNews(
-            mapOf(
-                "page" to "1",
-                "count" to "4"
-            )
-        ).enqueue(object : Callback<NewsBean> {
-            override fun onFailure(call: Call<NewsBean>, t: Throwable) {
-                Toast.makeText(this@GodActivity,"network error",Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<NewsBean>, response: Response<NewsBean>) {
-                response.body()?.result?.let {
-                    newsAdapter.news = it
-                    rvNews?.adapter = newsAdapter
-                }
-            }
-        })
     }
 }

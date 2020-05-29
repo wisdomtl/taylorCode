@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.retrofit
+package test.taylor.com.taylorcode.retrofit.repository
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.retrofit.NewsAdapter
 
-class RetrofitActivity2 : AppCompatActivity() {
+class RetrofitActivity : AppCompatActivity() {
 
     private var rvNews: RecyclerView? = null
 
-    private var newsAdapter =  NewsAdapter()
+    private var newsAdapter = NewsAdapter()
 
     private val rootView by lazy {
         ConstraintLayout {
@@ -39,7 +40,8 @@ class RetrofitActivity2 : AppCompatActivity() {
         }
     }
 
-    private val newsViewModel by lazy { ViewModelProvider(this,NewsFactory()).get(NewsViewModel2::class.java) }
+    private val newsViewModel by lazy { ViewModelProvider(this, NewsFactory()).get(
+        NewsViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

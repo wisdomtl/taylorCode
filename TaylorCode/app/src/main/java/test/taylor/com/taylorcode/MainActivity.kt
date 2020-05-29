@@ -23,9 +23,8 @@ import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActiv
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
-import test.taylor.com.taylorcode.retrofit.RetrofitActivity1
-import test.taylor.com.taylorcode.retrofit.GodActivity
-import test.taylor.com.taylorcode.retrofit.RetrofitActivity2
+import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
+import test.taylor.com.taylorcode.retrofit.repository.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.ui.*
@@ -151,9 +150,9 @@ class MainActivity : AppCompatActivity() {
         btn_factory22.setOnClickListener { startActivity<Factory2Activity2>() }
         btn_data_binding.setOnClickListener { startActivity<DataBindingActivity>() }
         btnTransformations.setOnClickListener { startActivity<LiveDataActivity>() }
-        btnRetrofit.setOnClickListener { startActivity<RetrofitActivity1>() }
+        btnRetrofit.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.viewmodel.RetrofitActivity>() }
         godActivity.setOnClickListener { startActivity<GodActivity>() }
-        repository.setOnClickListener { startActivity<RetrofitActivity2>() }
+        repository.setOnClickListener { startActivity<RetrofitActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

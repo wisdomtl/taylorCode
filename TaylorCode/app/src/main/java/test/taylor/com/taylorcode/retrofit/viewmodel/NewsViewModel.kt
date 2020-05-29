@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.retrofit
+package test.taylor.com.taylorcode.retrofit.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +8,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import test.taylor.com.taylorcode.retrofit.News
+import test.taylor.com.taylorcode.retrofit.NewsApi
+import test.taylor.com.taylorcode.retrofit.NewsBean
 
 /**
  * level 2: business is in ViewModel
