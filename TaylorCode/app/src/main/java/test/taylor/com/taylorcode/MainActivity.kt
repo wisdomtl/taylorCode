@@ -24,7 +24,7 @@ import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActiv
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
-import test.taylor.com.taylorcode.retrofit.repository.RetrofitActivity
+import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.ui.*
@@ -152,7 +152,8 @@ class MainActivity : AppCompatActivity() {
         btnTransformations.setOnClickListener { startActivity<LiveDataActivity>() }
         btnRetrofit.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.viewmodel.RetrofitActivity>() }
         godActivity.setOnClickListener { startActivity<GodActivity>() }
-        repository.setOnClickListener { startActivity<RetrofitActivity>() }
+        repository_single.setOnClickListener { startActivity<RetrofitActivity>() }
+        repository_livedata.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.repository_livedata.RetrofitActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

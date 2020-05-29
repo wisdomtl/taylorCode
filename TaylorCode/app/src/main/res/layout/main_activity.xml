@@ -9,10 +9,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
-            android:id="@+id/repository"
+            android:id="@+id/repository_livedata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="repository"
+            android:text="repository_livedata"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/repository_single"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="repository_single"
             android:textAllCaps="false" />
         <Button
             android:id="@+id/godActivity"

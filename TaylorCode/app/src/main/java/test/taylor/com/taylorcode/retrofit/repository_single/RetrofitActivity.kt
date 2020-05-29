@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.retrofit.repository
+package test.taylor.com.taylorcode.retrofit.repository_single
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +40,7 @@ class RetrofitActivity : AppCompatActivity() {
         }
     }
 
-    private val newsViewModel by lazy { ViewModelProvider(this, NewsFactory()).get(
+    private val newsViewModel by lazy { ViewModelProvider(this, NewsFactory(applicationContext)).get(
         NewsViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,7 @@ class RetrofitActivity : AppCompatActivity() {
             newsAdapter.news = it
             rvNews?.adapter = newsAdapter
         })
-        newsViewModel.fetchNews()
+        newsViewModel.fetchNewsSingle()
     }
 
     private fun initView() {

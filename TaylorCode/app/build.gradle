@@ -74,7 +74,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
     //Room
     implementation 'androidx.room:room-runtime:2.0.0'
-    annotationProcessor 'androidx.room:room-compiler:2.0.0'
+    kapt 'androidx.room:room-compiler:2.0.0'
     //for debug database on browse
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
     //UCrop
