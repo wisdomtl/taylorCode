@@ -154,6 +154,7 @@ class MainActivity : AppCompatActivity() {
         godActivity.setOnClickListener { startActivity<GodActivity>() }
         repository_single.setOnClickListener { startActivity<RetrofitActivity>() }
         repository_livedata.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.repository_livedata.RetrofitActivity>() }
+        presenter.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.presenter.RetrofitActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

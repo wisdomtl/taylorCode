@@ -16,7 +16,6 @@ import test.taylor.com.taylorcode.util.print
 import java.util.concurrent.Executors
 
 class NewsRepositoryImpl(context: Context) : NewsRepository {
-    private val TAG = "NewsRepositoryImpl"
     private val retrofit = Retrofit.Builder()
             .baseUrl("https://api.apiopen.top")
             .addConverterFactory(MoshiConverterFactory.create())
@@ -44,7 +43,6 @@ class NewsRepositoryImpl(context: Context) : NewsRepository {
                     is ApiSuccessResponse -> {
                         val news = response.body.result
                         news?.map { it.toNews() }?.let {
-                            Log.d(TAG, "fetchNewsLiveData: add new data into db")
                             executor.submit { newsDao.insertAll(it) }
                         }
                         news
@@ -54,7 +52,6 @@ class NewsRepositoryImpl(context: Context) : NewsRepository {
             }
         }
         newsLiveData.addSource(localNews) { news ->
-            Log.d(TAG, "fetchNewsLiveData: hit db news=${news?.print { it.toString() }}")
             newsLiveData.value = news?.map { News(it.path, it.image, it.title, it.passtime) }
         }
 

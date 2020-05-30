@@ -190,6 +190,7 @@
         <activity android:name=".retrofit.god_activity.GodActivity" />
         <activity android:name=".retrofit.repository_single.RetrofitActivity" />
         <activity android:name=".retrofit.repository_livedata.RetrofitActivity" />
+        <activity android:name=".retrofit.presenter.RetrofitActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

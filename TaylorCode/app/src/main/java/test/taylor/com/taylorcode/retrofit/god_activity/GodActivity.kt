@@ -15,15 +15,23 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.retrofit.NewsAdapter
 import test.taylor.com.taylorcode.retrofit.NewsApi
 import test.taylor.com.taylorcode.retrofit.NewsBean
+import test.taylor.com.taylorcode.retrofit.repository_livedata.room.NewsDatabase
+import java.util.concurrent.Executors
 
 /**
  * god activity
  */
-class GodActivity:AppCompatActivity() {
+class GodActivity : AppCompatActivity() {
 
     private var rvNews: RecyclerView? = null
-
     private var newsAdapter = NewsAdapter()
+
+    private val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.apiopen.top")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(OkHttpClient.Builder().build())
+            .build()
+    private val newsApi = retrofit.create(NewsApi::class.java)
 
     private val rootView by lazy {
         ConstraintLayout {
@@ -50,14 +58,6 @@ class GodActivity:AppCompatActivity() {
         }
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.apiopen.top")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .client(OkHttpClient.Builder().build())
-        .build()
-
-    private val newsApi = retrofit.create(NewsApi::class.java)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(rootView)
@@ -66,22 +66,22 @@ class GodActivity:AppCompatActivity() {
     }
 
     private fun initData() {
-       fetchJoke()
+        fetchNews()
     }
 
     private fun initView() {
         rvNews?.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun fetchJoke() {
+    private fun fetchNews() {
         newsApi.fetchNews(
-            mapOf(
-                "page" to "1",
-                "count" to "4"
-            )
+                mapOf(
+                        "page" to "1",
+                        "count" to "4"
+                )
         ).enqueue(object : Callback<NewsBean> {
             override fun onFailure(call: Call<NewsBean>, t: Throwable) {
-                Toast.makeText(this@GodActivity,"network error",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GodActivity, "network error", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<NewsBean>, response: Response<NewsBean>) {

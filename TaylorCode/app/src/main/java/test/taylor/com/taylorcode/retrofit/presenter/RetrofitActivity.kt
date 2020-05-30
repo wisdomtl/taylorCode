@@ -1,15 +1,17 @@
-package test.taylor.com.taylorcode.retrofit.viewmodel
+package test.taylor.com.taylorcode.retrofit.presenter
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.retrofit.News
 import test.taylor.com.taylorcode.retrofit.NewsAdapter
 
-class RetrofitActivity : AppCompatActivity() {
+class RetrofitActivity : AppCompatActivity(), NewsView {
+
+    private val newsBusiness = NewsPresenter(this)
 
     private var rvNews: RecyclerView? = null
 
@@ -40,24 +42,22 @@ class RetrofitActivity : AppCompatActivity() {
         }
     }
 
-    private val newsViewModel by lazy { ViewModelProviders.of(this).get(NewsViewModel::class.java) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(rootView)
         initView()
-        initData()
-    }
-
-    private fun initData() {
-        newsViewModel.newsLiveData.observe(this, Observer {
-            newsAdapter.news = it
-            rvNews?.adapter = newsAdapter
-        })
-        newsViewModel.fetchNews()
+        newsBusiness.fetchNews()
     }
 
     private fun initView() {
         rvNews?.layoutManager = LinearLayoutManager(this)
     }
+
+    override fun showNews(news: List<News>?) {
+        newsAdapter.news = news
+        rvNews?.adapter = newsAdapter
+    }
+
+    override val newsContext: Context
+        get() = this
 }
