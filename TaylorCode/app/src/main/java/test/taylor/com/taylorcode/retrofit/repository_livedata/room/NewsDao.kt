@@ -10,8 +10,8 @@ import androidx.room.Query
 interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(news:List<News>)
+    fun insertAll(news: List<News>)
 
     @Query("select * from news")
-    fun queryNews():LiveData<List<News>>
+    fun queryNews(): LiveData<List<News>?>
 }

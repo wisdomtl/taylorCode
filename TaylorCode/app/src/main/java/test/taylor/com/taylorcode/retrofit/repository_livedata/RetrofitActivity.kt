@@ -9,6 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.retrofit.NewsAdapter
 
+
+/**
+ * api return LiveData<ApiResponse<NewsBean>>
+ * repository return LiveData<List<News>>
+ * ViewModel return LiveData<List<News>>
+ * is this reasonable
+ */
 class RetrofitActivity : AppCompatActivity() {
 
     private var rvNews: RecyclerView? = null
