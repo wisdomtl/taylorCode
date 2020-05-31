@@ -58,10 +58,9 @@ class RetrofitActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        newsViewModel.newsLiveData().observe(this, Observer {
+        newsViewModel.newsLiveData.observe(this, Observer {
             newsAdapter.news = it
             rvNews?.adapter = newsAdapter
-
         })
     }
 
