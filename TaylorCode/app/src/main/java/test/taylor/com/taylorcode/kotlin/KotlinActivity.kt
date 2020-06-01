@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.util.ofMap
 import test.taylor.com.taylorcode.util.print
+import test.taylor.com.taylorcode.util.subDigit
 import java.util.*
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
@@ -269,6 +270,12 @@ class KotlinActivity : AppCompatActivity() {
          * first day of week
          */
         Log.v("ttaylor", "tag=date, KotlinActivity.onCreate()  first day of week=${thisMondayInMillis()}, end day of week=${thisSundayInMillis()}")
+
+       val charSequence =  "我是着呢么 30002 的开发施蒂利克"
+        Log.v("ttaylor","tag=subdigit, KotlinActivity.onCreate()  digit=${charSequence.subDigit}")
+//        charSequence.forEachIndexed { index, c ->
+//            Log.v("ttaylor","tag=, KotlinActivity.onCreate()  index=${index}, char=${c}")
+//        }
     }
 
     private fun split() {
