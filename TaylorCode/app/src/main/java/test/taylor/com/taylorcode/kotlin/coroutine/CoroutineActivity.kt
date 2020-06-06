@@ -3,13 +3,14 @@ package test.taylor.com.taylorcode.kotlin.coroutine
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.Timer
 import kotlin.coroutines.resume
 
-class CoroutineActivity : AppCompatActivity() {
+class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var user1: Deferred<String>? = null
     private var user2: Deferred<String>? = null
     private var completableDeferred1: CompletableDeferred<String> = CompletableDeferred()
@@ -19,11 +20,57 @@ class CoroutineActivity : AppCompatActivity() {
 
     private val TAG = "CoroutineActivity"
 
+    private lateinit var tvCountdown: TextView
+
+//    private val mainScope = MainScope()
+
     private val rootView by lazy {
         LinearLayout {
             layout_width = match_parent
             layout_height = match_parent
             orientation = vertical
+
+            tvCountdown = TextView {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "start long run coroutine by MainScope"
+                textAllCaps = false
+                onClick = startLongRunCoroutineByMainScope
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "start coroutine by MainScope"
+                textAllCaps = false
+                onClick = startCoroutineByMainScope
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "start coroutine in background"
+                textAllCaps = false
+                onClick = startCoroutineInBackground
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "start coroutine by default"
+                textAllCaps = false
+                onClick = startCoroutineByDefault
+            }
 
             Button {
                 layout_width = match_parent
@@ -33,6 +80,7 @@ class CoroutineActivity : AppCompatActivity() {
                 textAllCaps = false
                 onClick = startCoroutineInMainThread
             }
+
             Button {
                 layout_width = match_parent
                 layout_height = wrap_content
@@ -83,8 +131,8 @@ class CoroutineActivity : AppCompatActivity() {
                 layout_height = wrap_content
                 textSize = 15f
                 textAllCaps = false
-                text = "long run task"
-                onClick = longRunTask
+                text = "long run task(activity not destroy)"
+                onClick = startLongRunTask
             }
 
             Button {
@@ -108,7 +156,33 @@ class CoroutineActivity : AppCompatActivity() {
     }
 
     /**
-     * case: run coroutine code in main thread without block it. after the coroutine resume, the remain code is dispatched to another thread
+     * case: start coroutine by main scope
+     */
+    private val startLongRunCoroutineByMainScope = { _: View ->
+        Log.d(TAG, "main thread id =${Thread.currentThread().id} ")
+        launch {
+            longRunTask()
+        }
+        Log.d(TAG, "the code after coroutine ")
+        Unit
+    }
+
+    /**
+     * case: start coroutine by main scope
+     */
+    private val startCoroutineByMainScope = { _: View ->
+        Log.d(TAG, "main thread id =${Thread.currentThread().id} ")
+        launch {
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) start")
+            logDelay(3000)
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) end ")
+        }
+        Log.d(TAG, "the code after coroutine ")
+        Unit
+    }
+
+    /**
+     * case: run part coroutine code before suspend function in main thread without block it. after the coroutine resume, the remain code is dispatched to another thread
      */
     @ExperimentalCoroutinesApi
     private val startCoroutineInMainThread = { _: View ->
@@ -119,6 +193,39 @@ class CoroutineActivity : AppCompatActivity() {
             Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) end ")
         }
         Log.d(TAG, "the code after coroutine ")
+        Unit
+    }
+
+
+    /**
+     * case: run whole coroutine code in another thread
+     */
+    @ExperimentalCoroutinesApi
+    private val startCoroutineByDefault = { _: View ->
+        Log.d(TAG, "main thread id =${Thread.currentThread().id} ")
+        GlobalScope.launch(start = CoroutineStart.DEFAULT) {
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) start")
+            logDelay(3000)
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) end ")
+        }
+        Log.d(TAG, "the code after coroutine ")
+        Unit
+    }
+
+    /**
+     * case: run time-consuming code in background thread and update ui in main thread
+     */
+    @ExperimentalCoroutinesApi
+    private val startCoroutineInBackground = { _: View ->
+        Log.d(TAG, "main thread id =${Thread.currentThread().id} ")
+        Thread {
+            Log.d(TAG, "new thread id = ${Thread.currentThread().id} ")
+            GlobalScope.launch(context = Dispatchers.Main, start = CoroutineStart.UNDISPATCHED) {
+                Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) start")
+                logDelay(3000)
+                Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) end ")
+            }
+        }.start()
         Unit
     }
 
@@ -206,7 +313,7 @@ class CoroutineActivity : AppCompatActivity() {
     /**
      * case7: memory leak of coroutine
      */
-    private val longRunTask = { _: View ->
+    private val startLongRunTask = { _: View ->
         longRunTaskAfterActivityFinished()
         Unit
     }
@@ -299,9 +406,14 @@ class CoroutineActivity : AppCompatActivity() {
     }
 
     fun longRunTaskAfterActivityFinished() = GlobalScope.launch(Dispatchers.IO) {
+        longRunTask()
+    }
+
+    private suspend fun longRunTask() {
         repeat(10000) { times ->
-            logDelay(500)
-            Log.e("ttaylor", "tag=long run, CoroutineActivity.longRunTaskAfterActivityFinished() times=${times}")
+            delay(1000)
+            Log.d(TAG, "longRunTask: times = ${times}")
+            tvCountdown.text = times.toString()
         }
     }
 
@@ -456,5 +568,11 @@ class CoroutineActivity : AppCompatActivity() {
         delay(time)
         Log.e("ttaylor", "tag=parallel, CoroutineActivity.queryUser()  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
         return name
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //if comment this, long run task will be executing event after activity exits
+//        cancel(CancellationException("coroutine started by main scope is canceled"))
     }
 }
