@@ -311,10 +311,10 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     /**
-     * case7: memory leak of coroutine
+     * case7: memory leak of coroutine(activity wont be destroy)
      */
     private val startLongRunTask = { _: View ->
-        longRunTaskAfterActivityFinished()
+        startLongRunTask()
         Unit
     }
 
@@ -405,14 +405,16 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     }
 
-    fun longRunTaskAfterActivityFinished() = GlobalScope.launch(Dispatchers.IO) {
+    fun startLongRunTask() = launch {
         longRunTask()
     }
+    // without this function, activity will be hold by long run task(memory leak)
+//            .autoDispose(tvCountdown)
 
     private suspend fun longRunTask() {
         repeat(10000) { times ->
             delay(1000)
-            Log.d(TAG, "longRunTask: times = ${times}")
+            Log.d(TAG, "longRunTask: times = ${times}, thread id = ${Thread.currentThread().id}")
             tvCountdown.text = times.toString()
         }
     }
@@ -572,7 +574,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //if comment this, long run task will be executing event after activity exits
+        //if comment this, long run task will be executing event after activity exits and activity will be leaked
 //        cancel(CancellationException("coroutine started by main scope is canceled"))
     }
 }
