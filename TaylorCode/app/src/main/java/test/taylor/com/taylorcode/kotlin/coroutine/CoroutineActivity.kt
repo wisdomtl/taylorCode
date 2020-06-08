@@ -15,9 +15,67 @@ class CoroutineActivity : AppCompatActivity() {
     private var completableDeferred1: CompletableDeferred<String> = CompletableDeferred()
     private var completableDeferred2: CompletableDeferred<String> = CompletableDeferred()
     private var job: Job? = null
+    private val mainScope = MainScope()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.coroutine_activity)
+
+        Log.v("ttaylor","tag=asdf, CoroutineActivity.onCreate() main thread id=${Thread.currentThread().id} ")
+        /**
+         * case: coroutine body will be execute in main thread
+         */
+        mainScope.launch {
+            Log.v("ttaylor", "tag=asdf EmptyCoroutineContext,  before suspend fun thread id=${Thread.currentThread().id}")
+            queryUser("EmptyCoroutineContext")
+            Log.d("ttaylor", "tag=asdf EmptyCoroutineContext,  after suspend fun thread thread id=${Thread.currentThread().id}")
+        }
+
+        /**
+         * case: coroutine body will be execute in another thread
+         */
+        mainScope.launch(Dispatchers.IO) {
+            Log.v("ttaylor", "tag=asdf Dispatchers.IO, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
+            queryUser("Dispatchers.IO")
+            Log.d("ttaylor", "tag=asdf Dispatchers.IO, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
+        }
+
+        /**
+         * case: coroutine body will be execute in main thread
+         */
+        mainScope.launch(Dispatchers.Main) {
+            Log.v("ttaylor", "tag=asdf Dispatchers.Main, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
+            queryUser("Dispatchers.Main")
+            Log.d("ttaylor", "tag=asdf Dispatchers.Main, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
+        }
+
+        /**
+         * case: coroutine body will be execute in another thread
+         */
+        mainScope.launch(Dispatchers.Default) {
+            Log.v("ttaylor", "tag=asdf Dispatchers.Default, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
+            queryUser("Dispatchers.Default")
+            Log.d("ttaylor", "tag=asdf Dispatchers.Default, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
+        }
+
+        /**
+         * case: coroutine body will be execute in another thread
+         */
+        mainScope.launch(Dispatchers.Unconfined) {
+            Log.v("ttaylor", "tag=asdf Dispatchers.Unconfined, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
+            queryUser("Dispatchers.Unconfined")
+            Log.d("ttaylor", "tag=asdf Dispatchers.Unconfined, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
+        }
+
+        /**
+         * case: coroutine body will be execute in current thread(main thread)
+         */
+        mainScope.launch(context = Dispatchers.IO,start = CoroutineStart.UNDISPATCHED) {
+            Log.v("ttaylor", "tag=asdf CoroutineStart.UNDISPATCHED, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
+            queryUser("CoroutineStart.UNDISPATCHED")
+            Log.d("ttaylor", "tag=asdf CoroutineStart.UNDISPATCHED, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
+        }
+
         /**
          * case1: cancel a coroutine in right way
          */
@@ -278,9 +336,10 @@ class CoroutineActivity : AppCompatActivity() {
     /**
      * case3: suspend fun could only be invoked in coroutine
      */
-    private suspend fun queryUser(name: String, time: Long): String {
+    private suspend fun queryUser(name: String, time: Long = 500): String {
+        Log.w("ttaylor", "tag=parallel, CoroutineActivity.queryUser()  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
         delay(time)
-        Log.v("ttaylor", "tag=parallel, CoroutineActivity.queryUser()  name=${name}, time=${time}")
+        Log.e("ttaylor", "tag=parallel, CoroutineActivity.queryUser()  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
         return name
     }
 }
