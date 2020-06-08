@@ -366,7 +366,7 @@ inline var View.vertical_chain_style: Int
         }
     }
 
-inline var View.horizontal_bias:Float
+inline var View.horizontal_bias: Float
     get() {
         return -1f
     }
@@ -375,7 +375,7 @@ inline var View.horizontal_bias:Float
             horizontalBias = value
         }
     }
-inline var View.vertital_bias:Float
+inline var View.vertical_bias: Float
     get() {
         return -1f
     }
@@ -537,11 +537,20 @@ inline var TextView.textColor: String
 
 inline var TextView.fontFamily: Int
     get() {
-        return 0
+        return 1
     }
     set(value) {
         typeface = ResourcesCompat.getFont(context, value)
     }
+
+inline var Button.textAllCaps: Boolean
+    get() {
+        return false
+    }
+    set(value) {
+        isAllCaps = value
+    }
+
 
 inline var NestedScrollView.fadeScrollBar: Boolean
     get() {

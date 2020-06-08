@@ -2,10 +2,10 @@ package test.taylor.com.taylorcode.kotlin.coroutine
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
-import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.Timer
 import kotlin.coroutines.resume
 
@@ -17,11 +17,212 @@ class CoroutineActivity : AppCompatActivity() {
     private var job: Job? = null
     private val mainScope = MainScope()
 
+    private val TAG = "CoroutineActivity"
+
+    private val rootView by lazy {
+        LinearLayout {
+            layout_width = match_parent
+            layout_height = match_parent
+            orientation = vertical
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "start coroutine in main thread"
+                textAllCaps = false
+                onClick = startCoroutineInMainThread
+            }
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "cancel coroutine"
+                textAllCaps = false
+                onClick = doCancelCoroutine
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "the end of two async task"
+                onClick = twoTaskEnd
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "timeout"
+                onClick = onTimeout
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "run task parallel"
+                onClick = runTaskParallel
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "run task parallel by launch"
+                onClick = runTaskParallelByLaunch
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "long run task"
+                onClick = longRunTask
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "join"
+                onClick = join
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                textAllCaps = false
+                text = "suspend coroutine"
+                onClick = suspendCoroutine
+            }
+        }
+    }
+
+    /**
+     * case: run coroutine code in main thread without block it. after the coroutine resume, the remain code is dispatched to another thread
+     */
+    @ExperimentalCoroutinesApi
+    private val startCoroutineInMainThread = { _: View ->
+        Log.d(TAG, "main thread id =${Thread.currentThread().id} ")
+        GlobalScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) start")
+            logDelay(3000)
+            Log.d(TAG, "start coroutine in thread (${Thread.currentThread().id}) end ")
+        }
+        Log.d(TAG, "the code after coroutine ")
+        Unit
+    }
+
+    private suspend fun logDelay(duration: Long) {
+        Log.d(TAG, "delay: suspend fun thread id=${Thread.currentThread().id}")
+        delay(duration)
+    }
+
+
+    /**
+     * case1: cancel a coroutine in right way
+     */
+    private val doCancelCoroutine = { _: View ->
+        val job2 = cancelCoroutine()
+        Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate()  before cancel")
+        window.decorView.postDelayed({
+            job2.cancel()
+            Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate() after cancel")
+        }, 500)
+        Unit
+    }
+
+    /**
+     * case2: waitting for the ending of two async task by CompletableDeferred
+     */
+    private val twoTaskEnd = { _: View ->
+        waitCompletableDeferred()
+        Log.v("ttaylor", "tag=, CoroutineActivity.onCreate()  after [waitCompletableDeferred]")
+        //this works for observing two task ending
+        window.decorView.postDelayed({
+            completeDeferred2()
+        }, 1000)
+
+        window.decorView.postDelayed({
+            completeDeferred1()
+        }, 3000)
+        Unit
+    }
+
+    /**
+     * case3: timeout
+     */
+    private val onTimeout = { _: View ->
+        //        timeoutByNull()
+        timeoutByException()
+        Log.v(
+                "ttaylor",
+                "tag=timeout2, CoroutineActivity.onCreate()  after timeoutByException()"
+        )
+        Unit
+    }
+
+    /**
+     * case4:8
+     * runBlocking will block the current thread
+     * runBlocking will create a main coroutine
+     * async will create a sub coroutine
+     */
+    private val runTaskParallel = { _: View ->
+        runParallel()
+        Log.e("ttaylor", "tag=parallel, CoroutineActivity.onCreate()  after [runParallel]")
+        Unit
+    }
+
+
+    private val runTaskParallelByLaunch = { _: View ->
+        runParallelByLaunch()
+        Log.e(
+                "ttaylor",
+                "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]"
+        )
+        Unit
+    }
+
+    /**
+     * case6: join
+     */
+    private val join = { _: View ->
+        //another way to observing two task end
+        joinJob()
+        createJob()
+        Unit
+    }
+
+    /**
+     * case7: memory leak of coroutine
+     */
+    private val longRunTask = { _: View ->
+        longRunTaskAfterActivityFinished()
+        Unit
+    }
+
+    /**
+     * case8: suspend coroutine's memory leak
+     */
+    private val suspendCoroutine = { _: View ->
+        suspendCoroutine()
+        Unit
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.coroutine_activity)
+        setContentView(rootView)
 
-        Log.v("ttaylor","tag=asdf, CoroutineActivity.onCreate() main thread id=${Thread.currentThread().id} ")
         /**
          * case: coroutine body will be execute in main thread
          */
@@ -70,96 +271,10 @@ class CoroutineActivity : AppCompatActivity() {
         /**
          * case: coroutine body will be execute in current thread(main thread)
          */
-        mainScope.launch(context = Dispatchers.IO,start = CoroutineStart.UNDISPATCHED) {
+        mainScope.launch(context = Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
             Log.v("ttaylor", "tag=asdf CoroutineStart.UNDISPATCHED, CoroutineActivity.onCreate()  before suspend fun  thread id=${Thread.currentThread().id}")
             queryUser("CoroutineStart.UNDISPATCHED")
             Log.d("ttaylor", "tag=asdf CoroutineStart.UNDISPATCHED, CoroutineActivity.onCreate() after suspend fun thread id=${Thread.currentThread().id}")
-        }
-
-        /**
-         * case1: cancel a coroutine in right way
-         */
-        findViewById<Button>(R.id.btnCancel).setOnClickListener {
-
-            val job2 = cancelCoroutine()
-            Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate()  before cancel")
-            window.decorView.postDelayed({
-                job2.cancel()
-                Log.e("ttaylor", "tag=cancel2, CoroutineActivity.onCreate() after cancel")
-            }, 500)
-        }
-
-        /**
-         * case2: waitting for the ending of two async task by CompletableDeferred
-         */
-        findViewById<Button>(R.id.btnTwoAsyncEnd).setOnClickListener {
-            waitCompletableDeferred()
-            Log.v("ttaylor", "tag=, CoroutineActivity.onCreate()  after [waitCompletableDeferred]")
-            //this works for observing two task ending
-            window.decorView.postDelayed({
-                completeDeferred2()
-            }, 1000)
-
-            window.decorView.postDelayed({
-                completeDeferred1()
-            }, 3000)
-        }
-
-        /**
-         * case3: timeout
-         */
-        findViewById<Button>(R.id.btnTimeout).setOnClickListener {
-            //        timeoutByNull()
-            timeoutByException()
-            Log.v(
-                "ttaylor",
-                "tag=timeout2, CoroutineActivity.onCreate()  after timeoutByException()"
-            )
-        }
-
-        /**
-         * case4:8
-         * runBlocking will block the current thread
-         * runBlocking will create a main coroutine
-         * async will create a sub coroutine
-         */
-        findViewById<Button>(R.id.btnRunTaskParallel).setOnClickListener {
-            runParallel()
-            Log.e("ttaylor", "tag=parallel, CoroutineActivity.onCreate()  after [runParallel]")
-        }
-
-        /**
-         * case5: create coroutine by launch
-         */
-        findViewById<Button>(R.id.btnRunParallelByLaunch).setOnClickListener {
-            runParallelByLaunch()
-            Log.e(
-                "ttaylor",
-                "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]"
-            )
-        }
-
-        /**
-         * case6: join
-         */
-        findViewById<Button>(R.id.btnJoin).setOnClickListener {
-            //another way to observing two task end
-            joinJob()
-            createJob()
-        }
-
-        /**
-         * case7: memory leak of coroutine
-         */
-        findViewById<Button>(R.id.btnLongRunTask).setOnClickListener {
-            longRunTaskAfterActivityFinished()
-        }
-
-        /**
-         * case8: suspend coroutine's memory leak
-         */
-        findViewById<Button>(R.id.btnSuspendCoroutine).setOnClickListener {
-            suspendCoroutine()
         }
     }
 
@@ -185,14 +300,14 @@ class CoroutineActivity : AppCompatActivity() {
 
     fun longRunTaskAfterActivityFinished() = GlobalScope.launch(Dispatchers.IO) {
         repeat(10000) { times ->
-            delay(500)
+            logDelay(500)
             Log.e("ttaylor", "tag=long run, CoroutineActivity.longRunTaskAfterActivityFinished() times=${times}")
         }
     }
 
     fun createJob() {
         job = GlobalScope.launch {
-            delay(1100)
+            logDelay(1100)
             Log.v("ttaylor", "tag=join, CoroutineActivity.join()  job is done")
         }
         Log.v("ttaylor", "tag=join, CoroutineActivity.join()  after launch")
@@ -210,12 +325,12 @@ class CoroutineActivity : AppCompatActivity() {
     fun cancelCoroutine() = GlobalScope.launch {
         try {
             repeat(100) { i ->
-                delay(100)
+                logDelay(100)
                 //isActive is the key point for canceling a job
                 if (isActive) {
                     Log.v(
-                        "ttaylor",
-                        "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}"
+                            "ttaylor",
+                            "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}"
                     )
                 } else {
                     Log.d("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time=${i}")
@@ -226,7 +341,7 @@ class CoroutineActivity : AppCompatActivity() {
             Log.e("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine() be canceled")
             //we could use this way to
             withContext(NonCancellable) {
-                delay(5000)
+                logDelay(5000)
                 Log.e("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  OY")
             }
         }
@@ -238,7 +353,7 @@ class CoroutineActivity : AppCompatActivity() {
     fun timeoutByNull() = GlobalScope.launch {
         val ret = withTimeoutOrNull(2000) {
             repeat(100) { i ->
-                delay(200)
+                logDelay(200)
                 Log.v("ttaylor", "tag=timeout, CoroutineActivity.timeoutByNull()  i = ${i}")
             }
             "done"
@@ -253,7 +368,7 @@ class CoroutineActivity : AppCompatActivity() {
         val ret = withTimeout(2000) {
             try {
                 repeat(100) { i ->
-                    delay(200)
+                    logDelay(200)
                     Log.v("ttaylor", "tag=timeout2, CoroutineActivity.timeoutByNull()  i = ${i}")
                 }
                 "done"
@@ -274,8 +389,8 @@ class CoroutineActivity : AppCompatActivity() {
          * case2: Deferred.await will block the current coroutine
          */
         Log.v(
-            "ttaylor",
-            "tag=parallel, CoroutineActivity.runParallel()  user1=${user1.await()},user2=${user2.await()}"
+                "ttaylor",
+                "tag=parallel, CoroutineActivity.runParallel()  user1=${user1.await()},user2=${user2.await()}"
         )
         Log.e("ttaylor", "tag=parallel, CoroutineActivity.runParallel() after [Deferred.await]")
     }
@@ -289,12 +404,12 @@ class CoroutineActivity : AppCompatActivity() {
         user2 = async { queryUser("titi", 5000) }
 
         Log.v(
-            "ttaylor",
-            "tag=parallel, CoroutineActivity.runParallelByLaunch()  user1=${user1?.await()},user2=${user2?.await()}"
+                "ttaylor",
+                "tag=parallel, CoroutineActivity.runParallelByLaunch()  user1=${user1?.await()},user2=${user2?.await()}"
         )
         Log.e(
-            "ttaylor",
-            "tag=parallel, CoroutineActivity.runParallelByLaunch() after [Deferred.await]"
+                "ttaylor",
+                "tag=parallel, CoroutineActivity.runParallelByLaunch() after [Deferred.await]"
         )
     }
 
@@ -304,8 +419,8 @@ class CoroutineActivity : AppCompatActivity() {
         //wrap server return in CompletableDeferred
         val result = completableDeferred1.complete(ret)
         Log.v(
-            "ttaylor",
-            "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}"
+                "ttaylor",
+                "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}"
         )
 
     }
@@ -316,8 +431,8 @@ class CoroutineActivity : AppCompatActivity() {
         //wrap server return in CompletableDeferred
         val result = completableDeferred2.complete(ret)
         Log.v(
-            "ttaylor",
-            "tag=completableDeferred2, CoroutineActivity.completeDeferred2()  result=${result}"
+                "ttaylor",
+                "tag=completableDeferred2, CoroutineActivity.completeDeferred2()  result=${result}"
         )
     }
 
@@ -327,8 +442,8 @@ class CoroutineActivity : AppCompatActivity() {
         completableDeferred1.await()
         completableDeferred2.await()
         Log.v(
-            "ttaylor",
-            "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}"
+                "ttaylor",
+                "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}"
         )
     }
 
