@@ -31,7 +31,25 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             tvCountdown = TextView {
                 layout_width = match_parent
                 layout_height = wrap_content
+                gravity = gravity_center
+                textSize = 25f
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
                 textSize = 15f
+                text = "launch+async"
+                textAllCaps = false
+                onClick = launchAsync
+            }
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "coroutineScope"
+                textAllCaps = false
+                onClick = coroutineScope
             }
 
             Button {
@@ -171,17 +189,53 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    private val coroutineScope = { _: View ->
+        launch { showUser() }
+        Unit
+    }
+
+    private val launchAsync = { _: View ->
+        showUser2()
+        Unit
+    }
+
+    /**
+     * load data async by coroutineScope
+     */
+    private suspend fun showUser() = coroutineScope {
+        Log.v("ttaylor", "tag=coroutinScope, 1 thread id=${Thread.currentThread().id}  ")
+        val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
+        withContext(Dispatchers.Main) {
+            Log.v("ttaylor", "tag=coroutinScope,  2 thread id=${Thread.currentThread().id} ")
+            tvCountdown.text = user.await()
+            Log.v("ttaylor", "tag=coroutinScope,  3 thread id=${Thread.currentThread().id} ")
+        }
+        Log.v("ttaylor", "tag=coroutinScope, 4 thread id=${Thread.currentThread().id}  ")//this will be executed after all coroutine is finished
+        Unit
+    }
+
+    /**
+     * there is no different between this and showUser()
+     */
+    private fun showUser2() = launch {
+        Log.v("ttaylor", "tag=launch+async, 1  thread id=${Thread.currentThread().id}")
+        val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
+        Log.v("ttaylor", "tag=launch+async, 2  thread id=${Thread.currentThread().id}")
+        tvCountdown.text = user.await()
+        Log.v("ttaylor", "tag=launch+async, 3  thread id=${Thread.currentThread().id}")
+    }
+
     /**
      * case await and async
      */
     private val async = { _: View ->
-        Log.v("ttaylor","tag=async, main thread id=${Thread.currentThread().id}  ")
+        Log.v("ttaylor", "tag=async, main thread id=${Thread.currentThread().id}  ")
         mainScope.launch {
-            Log.i("ttaylor","tag=async, main scope before thread id=${Thread.currentThread().id} ")
+            Log.i("ttaylor", "tag=async, main scope before thread id=${Thread.currentThread().id} ")
             val user1 = async { queryUser("dddd", 5000) }//async wont block current thread
-            Log.e("ttaylor","tag=async, before await thread id=${Thread.currentThread().id} ")
+            Log.e("ttaylor", "tag=async, before await thread id=${Thread.currentThread().id} ")
             user1.await()//await will block current thread
-            Log.i("ttaylor","tag=async, main scope after thread id=${Thread.currentThread().id} ")
+            Log.i("ttaylor", "tag=async, main scope after thread id=${Thread.currentThread().id} ")
         }
         Unit
     }
@@ -575,7 +629,6 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         )
     }
 
-
     private fun completeDeferred1() {
         val ret = "abc"
         //wrap server return in CompletableDeferred
@@ -584,9 +637,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             "ttaylor",
             "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}"
         )
-
     }
-
 
     private fun completeDeferred2() {
         val ret = "efg"
@@ -598,7 +649,6 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         )
     }
 
-
     private fun waitCompletableDeferred() = GlobalScope.launch(Dispatchers.Main) {
 
         completableDeferred1.await()
@@ -608,7 +658,6 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}"
         )
     }
-
 
     /**
      * case3: suspend fun could only be invoked in coroutine
