@@ -39,10 +39,20 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 layout_width = match_parent
                 layout_height = wrap_content
                 textSize = 15f
+                text = "customContinuation"
+                textAllCaps = false
+                onClick = customContinuation
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
                 text = "launch+async"
                 textAllCaps = false
                 onClick = launchAsync
             }
+
             Button {
                 layout_width = match_parent
                 layout_height = wrap_content
@@ -196,6 +206,22 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private val launchAsync = { _: View ->
         showUser2()
+        Unit
+    }
+
+
+    /**
+     * case: custom continuation which print log when resume from suspend point
+     */
+    private val customContinuation = {_:View->
+        Log.v("ttaylor","tag=LogContinuation, 0  thread id=${Thread.currentThread().id}")
+        launch(context = LogContinuationInterceptor()) {
+            Log.v("ttaylor","tag=LogContinuation, 1  thread id=${Thread.currentThread().id}")
+            val user = async(Dispatchers.IO) { queryUser("LogContinuationInterceptor", 6000) }
+            Log.v("ttaylor","tag=LogContinuation, 2  thread id=${Thread.currentThread().id}")
+            tvCountdown.text = user.await()
+            Log.v("ttaylor","tag=LogContinuation, 3  thread id=${Thread.currentThread().id}")
+        }
         Unit
     }
 
