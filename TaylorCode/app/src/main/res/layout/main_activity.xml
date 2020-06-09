@@ -8,6 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_coroutine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="coroutine"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/presenter"
             android:layout_width="match_parent"
@@ -158,12 +165,6 @@
             android:text="spannable"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_coroutine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="coroutine"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_client_activity"
