@@ -38,10 +38,8 @@ class ViewPager2Activity : AppCompatActivity() {
 
     private fun bannerViewPager() {
         val showNext = object : Runnable {
-            val size = imgUrls.size
-            var curIndex = 0
             override fun run() {
-                vp2.currentItem = (++curIndex%size)
+                vp2.currentItem = (++vp2.currentItem)
                 handler.postDelayed(this, 1000)
             }
         }
