@@ -11,8 +11,8 @@ class ViewPager2Activity : AppCompatActivity() {
 
     private val imgUrls = mutableListOf(
         "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3030050658,3694586235&fm=26&gp=0.jpg"
-        , "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2571315283,182922750&fm=26&gp=0.jpg",
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591790054139&di=627d2e1d16d93f1f2fdcac074a623d39&imgtype=0&src=http%3A%2F%2Fpngimg.com%2Fuploads%2Fdonald_trump%2Fdonald_trump_PNG56.png"
+        , "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2571315283,182922750&fm=26&gp=0.jpg"
+        ,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591790054139&di=627d2e1d16d93f1f2fdcac074a623d39&imgtype=0&src=http%3A%2F%2Fpngimg.com%2Fuploads%2Fdonald_trump%2Fdonald_trump_PNG56.png"
     )
 
     private val handler = Handler(Looper.getMainLooper())
@@ -37,6 +37,7 @@ class ViewPager2Activity : AppCompatActivity() {
     }
 
     private fun bannerViewPager() {
+        if (imgUrls.size <= 1) return
         val showNext = object : Runnable {
             override fun run() {
                 vp2.currentItem = (++vp2.currentItem)
