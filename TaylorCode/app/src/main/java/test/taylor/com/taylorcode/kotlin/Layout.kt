@@ -56,6 +56,9 @@ inline fun ViewGroup.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
 inline fun ViewGroup.FrameLayout(init: FrameLayout.() -> Unit) =
     FrameLayout(context).apply(init).also { addView(it) }
 
+inline fun ViewGroup.ViewFlipper(init: ViewFlipper.() -> Unit) =
+    ViewFlipper(context).apply(init).also { addView(it) }
+
 inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
     Guideline(context).apply(init).also { addView(it) }
 
@@ -89,11 +92,14 @@ inline fun Context.ImageView(init: ImageView.() -> Unit) =
 inline fun Context.View(init: View.() -> Unit) =
     View(this).apply(init)
 
+inline fun Context.ViewFlipper(init: ViewFlipper.() -> Unit) =
+    ViewFlipper(this).apply(init)
+
 inline fun Fragment.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
-    ConstraintLayout(context).apply(init)
+    context?.let { ConstraintLayout(it).apply(init) }
 
 inline fun Fragment.LinearLayout(init: LinearLayout.() -> Unit) =
-    LinearLayout(context).apply(init)
+    context?.let { LinearLayout(it).apply(init) }
 
 inline fun Fragment.FrameLayout(init: FrameLayout.() -> Unit) =
     context?.let { FrameLayout(it).apply(init) }
@@ -102,16 +108,19 @@ inline fun Fragment.NestedScrollView(init: NestedScrollView.() -> Unit) =
     context?.let { NestedScrollView(it).apply(init) }
 
 inline fun Fragment.TextView(init: TextView.() -> Unit) =
-    TextView(context).apply(init)
+    context?.let { TextView(it).apply(init) }
 
 inline fun Fragment.Button(init: Button.() -> Unit) =
-    Button(context).apply(init)
+    context?.let { Button(it).apply(init) }
 
 inline fun Fragment.ImageView(init: ImageView.() -> Unit) =
-    ImageView(context).apply(init)
+    context?.let { ImageView(it).apply(init) }
 
 inline fun Fragment.View(init: View.() -> Unit) =
     context?.let { View(it).apply(init) }
+
+inline fun Fragment.ViewFlipper(init: ViewFlipper.() -> Unit) =
+    context?.let { ViewFlipper(it).apply(init) }
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
@@ -479,6 +488,14 @@ inline var View.margin_end: Int
         }
     }
 
+inline var View.layout_visibility: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        visibility = value
+    }
+
 inline var View.bindVisibility: LiveData<Int>?
     get() {
         return null
@@ -487,6 +504,25 @@ inline var View.bindVisibility: LiveData<Int>?
         observe(value) { visibility = it }
     }
 
+inline var View.bindBackgroundColor: LiveData<String>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) {
+            background_color = it
+        }
+    }
+
+inline var View.bindBackgroundRes: LiveData<Int>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) {
+            background_res = it
+        }
+    }
 
 inline var ImageView.src: Int
     get() {
@@ -502,6 +538,14 @@ inline var ImageView.bindSrc: LiveData<Bitmap>?
     }
     set(value) {
         observe(value) { setImageBitmap(it) }
+    }
+
+inline var ImageView.bindSrcRes: LiveData<Int>?
+    get() {
+        return null
+    }
+    set(value) {
+        observe(value) { setImageResource(it) }
     }
 
 inline var TextView.bindText: LiveData<CharSequence>?
@@ -521,6 +565,14 @@ inline var TextView.bindTextColor: LiveData<String>?
         }
     }
 
+inline var TextView.textRes: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setText(value)
+    }
+
 inline var TextView.textStyle: Int
     get() {
         return -1
@@ -537,7 +589,7 @@ inline var TextView.textColor: String
 
 inline var TextView.fontFamily: Int
     get() {
-        return 1
+        return 0
     }
     set(value) {
         typeface = ResourcesCompat.getFont(context, value)
@@ -614,6 +666,9 @@ var RecyclerView.onItemClick: (View, Int) -> Unit
 val match_parent = ViewGroup.LayoutParams.MATCH_PARENT
 val wrap_content = ViewGroup.LayoutParams.WRAP_CONTENT
 
+val visible = View.VISIBLE
+val gone = View.GONE
+val invisible = View.INVISIBLE
 
 val horizontal = LinearLayout.HORIZONTAL
 val vertical = LinearLayout.VERTICAL

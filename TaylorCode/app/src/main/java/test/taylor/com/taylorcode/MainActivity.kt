@@ -157,6 +157,7 @@ class MainActivity : AppCompatActivity() {
         repository_livedata.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.repository_livedata.RetrofitActivity>() }
         presenter.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.presenter.RetrofitActivity>() }
         btn_no_field.setOnClickListener { startActivity<NoFieldActivity>() }
+        btnViewFlipper.setOnClickListener { startActivity<ViewFlipperActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
