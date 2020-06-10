@@ -191,6 +191,8 @@
         <activity android:name=".retrofit.repository_single.RetrofitActivity" />
         <activity android:name=".retrofit.repository_livedata.RetrofitActivity" />
         <activity android:name=".retrofit.presenter.RetrofitActivity" />
+        <activity android:name=".no_field.H5Activity" />
+        <activity android:name=".no_field.NoFieldActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
