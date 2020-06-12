@@ -26,8 +26,8 @@ class NewsViewModel(var newsRepository: NewsRepository) : ViewModel() {
     }
 }
 
-class NewsFactory(context: Context) :ViewModelProvider.Factory{
-    private val newsRepository= NewsRepositoryImpl(context)
+class NewsFactory(context: Context) : ViewModelProvider.Factory {
+    private val newsRepository = NewsRepositoryImpl(context)
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return NewsViewModel(newsRepository) as T
     }

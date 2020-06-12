@@ -194,6 +194,7 @@
         <activity android:name=".no_field.H5Activity" />
         <activity android:name=".no_field.NoFieldActivity" />
         <activity android:name=".ui.ViewFlipperActivity" />
+        <activity android:name=".aysnc.HandlerThreadVsCoroutineActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
