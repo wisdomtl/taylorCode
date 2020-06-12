@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.Timer
+import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 
 class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
@@ -33,6 +34,15 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 layout_height = wrap_content
                 gravity = gravity_center
                 textSize = 25f
+            }
+
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "dispatch coroutin by customized thread"
+                textAllCaps = false
+                onClick = dispatchCoroutineByCustomThread
             }
 
             Button {
@@ -199,6 +209,16 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    /**
+     * dispatch coroutine to customized thread
+     */
+    private val dispatchCoroutineByCustomThread = { _: View ->
+        mainScope.launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+            queryUser("ttttaylor",4000)
+        }
+        Unit
+    }
+
     private val coroutineScope = { _: View ->
         launch { showUser() }
         Unit
@@ -213,14 +233,14 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     /**
      * case: custom continuation which print log when resume from suspend point
      */
-    private val customContinuation = {_:View->
-        Log.v("ttaylor","tag=LogContinuation, 0  thread id=${Thread.currentThread().id}")
+    private val customContinuation = { _: View ->
+        Log.v("ttaylor", "tag=LogContinuation, 0  thread id=${Thread.currentThread().id}")
         launch(context = LogContinuationInterceptor()) {
-            Log.v("ttaylor","tag=LogContinuation, 1  thread id=${Thread.currentThread().id}")
+            Log.v("ttaylor", "tag=LogContinuation, 1  thread id=${Thread.currentThread().id}")
             val user = async(Dispatchers.IO) { queryUser("LogContinuationInterceptor", 6000) }
-            Log.v("ttaylor","tag=LogContinuation, 2  thread id=${Thread.currentThread().id}")
+            Log.v("ttaylor", "tag=LogContinuation, 2  thread id=${Thread.currentThread().id}")
             tvCountdown.text = user.await()
-            Log.v("ttaylor","tag=LogContinuation, 3  thread id=${Thread.currentThread().id}")
+            Log.v("ttaylor", "tag=LogContinuation, 3  thread id=${Thread.currentThread().id}")
         }
         Unit
     }
@@ -258,11 +278,12 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         Log.v("ttaylor", "tag=async, main thread id=${Thread.currentThread().id}  ")
         mainScope.launch {
             Log.i("ttaylor", "tag=async, main scope before thread id=${Thread.currentThread().id} ")
-            val user1 = async { queryUser("dddd", 5000) }//async wont block current thread
+            val user1 = async { queryUser("dddd", 5000) }//async wont block current coroutine
             Log.e("ttaylor", "tag=async, before await thread id=${Thread.currentThread().id} ")
-            user1.await()//await will block current thread
+            user1.await()//await will block current coroutine
             Log.i("ttaylor", "tag=async, main scope after thread id=${Thread.currentThread().id} ")
         }
+        Log.v("ttaylor", "tag=async, main thread id=${Thread.currentThread().id}  ")
         Unit
     }
 
