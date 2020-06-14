@@ -6,6 +6,7 @@ import android.os.HandlerThread
 import android.os.Looper
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 
 class HandlerThreadVsCoroutineActivity : AppCompatActivity() {
@@ -26,27 +27,36 @@ class HandlerThreadVsCoroutineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(rootView)
 
-        val mainHandler = Handler(Looper.getMainLooper())
-        val handlerThread = HandlerThread("user")
-        handlerThread.start()
-        val handler = Handler(handlerThread.looper)
-        runOnUiThread {  }
-        handler.post(object : Runnable {
-            override fun run() {
-                val user = fetchUser()
-                mainHandler.post(object : Runnable {
-                    override fun run() {
-                        tvName.text = user.name
-                    }
-                })
-            }
-        })
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        val handlerThread = HandlerThread("user")
+//        handlerThread.start()
+//        val handler = Handler(handlerThread.looper)
+//        runOnUiThread { }
+//        handler.post(object : Runnable {
+//            override fun run() {
+//                val user = fetchUser()
+//                mainHandler.post(object : Runnable {
+//                    override fun run() {
+//                        tvName.text = user.name
+//                    }
+//                })
+//            }
+//        })
+
+        GlobalScope.launch {
+            val user = async(Dispatchers.IO) { fetchUser() }
+        }
     }
 
-    private fun fetchUser(): User {
-        Thread.sleep(1000)
+    suspend fun fetchUser(): User {
+        delay(1000)
         return User("taylor", 20, 0)
     }
+
+//    private fun fetchUser(): User {
+//        Thread.sleep(1000)
+//        return User("taylor", 20, 0)
+//    }
 }
 
 data class User(var name: String, var age: Int, var gender: Int)
