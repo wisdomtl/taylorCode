@@ -24,6 +24,17 @@ class KotlinActivity : AppCompatActivity() {
         setContentView(R.layout.constraint_layout_activity)
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
+        /**
+         * case: copy
+         */
+        data class ChinaPerson(var name:String,var age:Int)
+
+        val cp1 = ChinaPerson("sb",10)
+        val cp2 = cp1.copy()
+        cp1.age  = 20
+        Log.v("ttaylor","tag=copy , KotlinActivity.onCreate()  cp2.age=${cp2.age}")
+
+
         listEquals()
         split()
         Log.v("ttaylor", "tag=sss, KotlinActivity.onCreate() isInToday=${isInToday(1567057536000)} [savedInstanceState]")

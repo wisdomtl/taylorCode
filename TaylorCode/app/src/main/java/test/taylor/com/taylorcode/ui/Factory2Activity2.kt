@@ -26,13 +26,14 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.override_property.ColorBean
 import test.taylor.com.taylorcode.kotlin.override_property.MyAdapter
 import test.taylor.com.taylorcode.kotlin.override_property.MyBean
+import test.taylor.com.taylorcode.kotlin.override_property.MyViewHolder
 import test.taylor.com.taylorcode.util.dp
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 class Factory2Activity2 : AppCompatActivity() {
     private var sum: Double = 0.0
-    private lateinit var rv:RecyclerView
+    private lateinit var rv: RecyclerView
 
     @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,9 +61,32 @@ class Factory2Activity2 : AppCompatActivity() {
 
     private fun initView() {
         rv.layoutManager = LinearLayoutManager(this)
-        rv.adapter = object : MyAdapter(listOf(MyBean("a"), MyBean("b"), MyBean("c"), MyBean("d"))) {
+        val beans =
+            listOf(
+                MyBean("a"),
+                MyBean("b"),
+                MyBean("c"),
+                MyBean("d"),
+                MyBean("e"),
+                MyBean("f"),
+                MyBean("h"),
+                MyBean("i"),
+                MyBean("j"),
+                MyBean("k"),
+                MyBean("l"),
+                MyBean("m"),
+                MyBean("o"),
+                MyBean("p"),
+                MyBean("q")
+            )
+        val adapter: RecyclerView.Adapter<MyViewHolder> = object : MyAdapter(beans) {
             override val color: ColorBean?
                 get() = ColorBean("#ff00ff")
+        }
+        rv.adapter = adapter
+
+        rv.addInOutListener { childView, adapterIndex, inOrOut ->
+            Log.v("ttaylor", "tag=12345, Factory2Activity2.initView() item(${beans[adapterIndex]}) is ${if (inOrOut == 1) "in" else "out"} ")
         }
     }
 
@@ -234,18 +258,19 @@ class Factory2Activity2 : AppCompatActivity() {
                 start_toEndOf = "tvCancel"
             }
 
-           rv =  RecyclerView {
+            rv = RecyclerView {
                 layout_id = "rvTest"
                 layout_width = match_parent
-                layout_height = wrap_content
-               top_toBottomOf = "tvTime"
+                layout_height = 0
+                top_toBottomOf = "tvTime"
+                bottom_toBottomOf = parent_id
                 onItemClick = { v, i -> onItemClickEvent(v, i) }
             }
 
         }
 
     private fun onItemClickEvent(v: View, i: Int) {
-        Log.v("ttaylor","tag=, Factory2Activity2.onItemClickEvent()  index=${i}")
+        Log.v("ttaylor", "tag=, Factory2Activity2.onItemClickEvent()  index=${i}")
     }
 
     private fun onBackClick() {
