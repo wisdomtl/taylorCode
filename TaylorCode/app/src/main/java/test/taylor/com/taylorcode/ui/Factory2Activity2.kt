@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.addItemInOutListener
 import test.taylor.com.taylorcode.kotlin.override_property.ColorBean
 import test.taylor.com.taylorcode.kotlin.override_property.MyAdapter
 import test.taylor.com.taylorcode.kotlin.override_property.MyBean
@@ -85,8 +86,8 @@ class Factory2Activity2 : AppCompatActivity() {
         }
         rv.adapter = adapter
 
-        rv.addInOutListener { childView, adapterIndex, inOrOut ->
-            Log.v("ttaylor", "tag=12345, Factory2Activity2.initView() item(${beans[adapterIndex]}) is ${if (inOrOut == 1) "in" else "out"} ")
+        rv.addItemInOutListener { childView, adapterIndex, inOrOut ->
+            Log.v("ttaylor", "tag=12345, Factory2Activity2.initView() item(${beans[adapterIndex]}) is ${if (inOrOut == 1) "in" else if(inOrOut == 0) "out" else "fully visible"} ")
         }
     }
 

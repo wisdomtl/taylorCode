@@ -20,7 +20,7 @@ import android.widget.*
 import kotlinx.android.synthetic.main.anim_activity.*
 
 import test.taylor.com.taylorcode.R
-import test.taylor.com.taylorcode.extension.extraAnimClickListener
+import test.taylor.com.taylorcode.kotlin.extension.extraAnimClickListener
 import test.taylor.com.taylorcode.kotlin.AnimSet
 import test.taylor.com.taylorcode.kotlin.addListener
 import test.taylor.com.taylorcode.kotlin.animSet

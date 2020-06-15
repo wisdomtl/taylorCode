@@ -19,6 +19,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
+import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
