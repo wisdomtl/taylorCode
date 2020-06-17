@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
 import test.taylor.com.taylorcode.aysnc.priority.PriorityActivity
+import test.taylor.com.taylorcode.aysnc.priority.SplashActivity
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
@@ -162,7 +163,7 @@ class MainActivity : AppCompatActivity() {
         btn_no_field.setOnClickListener { startActivity<NoFieldActivity>() }
         btnViewFlipper.setOnClickListener { startActivity<ViewFlipperActivity>() }
         btnCoroutineSample.setOnClickListener { startActivity<HandlerThreadVsCoroutineActivity>() }
-        btnPriority.setOnClickListener { startActivity<PriorityActivity>() }
+        btnSuspendCrossActivities.setOnClickListener { startActivity<SplashActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

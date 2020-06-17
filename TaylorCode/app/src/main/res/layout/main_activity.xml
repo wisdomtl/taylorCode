@@ -10,10 +10,10 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnPriority"
+            android:id="@+id/btnSuspendCrossActivities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="priotiry"
+            android:text="suspend list cross activiteis"
             android:textAllCaps="false" />
         <Button
             android:id="@+id/btnCoroutineSample"
