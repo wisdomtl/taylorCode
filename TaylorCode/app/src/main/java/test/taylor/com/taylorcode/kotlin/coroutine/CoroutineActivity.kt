@@ -19,7 +19,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var job: Job? = null
     private val mainScope = MainScope()
 
-    private val TAG = "CoroutineActivity"
+    private val TAG = "CoroutineActivity1"
 
     private lateinit var tvCountdown: TextView
 
@@ -36,6 +36,14 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 textSize = 25f
             }
 
+            Button {
+                layout_width = match_parent
+                layout_height = wrap_content
+                textSize = 15f
+                text = "coroutineScope"
+                textAllCaps = false
+                onClick = coroutineScope2
+            }
             Button {
                 layout_width = match_parent
                 layout_height = wrap_content
@@ -210,11 +218,41 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     /**
+     * GlobalScope is not affected by it's parent cancel
+     */
+    val globalCoroutineNotEffectByCancel = launch {
+        // it spawns two other jobs, one with GlobalScope
+        GlobalScope.launch {
+            println("job1: I run in GlobalScope and execute independently!")
+            delay(1000)
+            println("job1: I am not affected by cancellation of the request")
+        }
+        // and the other inherits the parent context
+        launch {
+            delay(100)
+            println("job2: I am a child of the request coroutine")
+            delay(1000)
+            println("job2: I will not execute this line if my parent request is cancelled")
+        }
+    }
+
+    private val coroutineScope2 = { _: View ->
+        launch {
+            loadDataByCoroutineScope()
+//            loadDataByGlobalLaunch()
+//            loadDataByLaunch()
+//            queryBill(4000)
+            Log.d(TAG, "after loadDataByGlobalLaunch ")
+        }
+        Unit
+    }
+
+    /**
      * dispatch coroutine to customized thread
      */
     private val dispatchCoroutineByCustomThread = { _: View ->
         mainScope.launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
-            queryUser("ttttaylor",4000)
+            queryUser("ttttaylor", 4000)
         }
         Unit
     }
@@ -245,10 +283,45 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         Unit
     }
 
+    private fun loadDataByGlobalLaunch() = GlobalScope.launch {
+        Log.d(TAG, "loadDataByGlobalLaunch: start")
+        val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
+        val gift = async(Dispatchers.IO) { fetchGift(3000) }
+        throw CancellationException()
+        val ret = user.await() + gift.await()
+        Log.d(TAG, "loadDataByGlobalLaunch: finish")
+        ret
+    }
+
+    private fun loadDataByLaunch() = launch {
+        Log.d(TAG, "loadByLaunch: start")
+        val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
+        val gift = async(Dispatchers.IO) { fetchGift(3000) }
+        throw CancellationException()
+        val ret = user.await() + gift.await()
+        Log.d(TAG, "loadByLaunch: finish")
+        ret
+    }
+
     /**
-     * load data async by coroutineScope
+     * case: coroutineScope is used by the situation that waiting for several async result util it returns (coroutineScope() is suspend and return business data)
      */
-    private suspend fun showUser() = coroutineScope {
+    private suspend fun loadDataByCoroutineScope() = coroutineScope {
+        Log.d(TAG, "loadDataByCoroutineScope: start")
+        val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
+        val gift = async(Dispatchers.IO) {
+            fetchGift(3000)
+        }
+//        throw CancellationException() // queryUser and fetchGift will be canceled
+        val ret = user.await() + gift.await()
+        Log.d(TAG, "loadDataByCoroutineScope: finish") // if either queryUser and fetchGift cancels, this wont ben executed
+        ret
+    }
+
+    /**
+     * load data async by coroutineScope and wait all sub job to finish
+     */
+    private suspend fun showUser(): Unit = coroutineScope {
         Log.v("ttaylor", "tag=coroutinScope, 1 thread id=${Thread.currentThread().id}  ")
         val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
         withContext(Dispatchers.Main) {
@@ -351,7 +424,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 Log.e("ttaylor", "tag=asdf, Dispatchers.IO before suspend fun  thread id=${Thread.currentThread().id}")//new thread 2
                 queryUser("CoroutineStart.UNDISPATCHED")
                 Log.e("ttaylor", "tag=asdf, Dispatchers.IO after suspend fun  thread id=${Thread.currentThread().id}")//different new thread
-            }
+            }// withContext will block the current coroutine
             Log.d("ttaylor", "tag=asdf CoroutineStart.UNDISPATCHED,  after suspend fun thread id=${Thread.currentThread().id}")//new thread 1
         }
         Log.v("ttaylor", "tag=asdf ,EmptyCoroutineContext after launch")
@@ -710,10 +783,26 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
      * case3: suspend fun could only be invoked in coroutine
      */
     private suspend fun queryUser(name: String, time: Long = 500): String {
-        Log.i("ttaylor", "tag=parallel, queryUser()  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
+        Log.i(TAG, "queryUser: start  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
         delay(time)
-        Log.i("ttaylor", "tag=parallel, queryUser()  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
+        Log.i(TAG, "queryUser: finish  name=${name}, time=${time} thread id=${Thread.currentThread().id}")
         return name
+    }
+
+    private suspend fun queryBill(time: Long): String {
+        Log.i(TAG, "queryBill: start   time=${time} thread id=${Thread.currentThread().id}")
+        delay(time)
+        Log.i(TAG, "queryBill: finish   time=${time} thread id=${Thread.currentThread().id}")
+        return "bill"
+    }
+
+    private suspend fun fetchGift(time: Long): String {
+        Log.i(TAG, "fetchGift: start thread id=${Thread.currentThread().id}")
+        delay(time)
+//        throw Exception()
+        throw CancellationException()
+        Log.i(TAG, "fetchGift: end thread id=${Thread.currentThread().id}")
+        return "gift"
     }
 
     override fun onDestroy() {

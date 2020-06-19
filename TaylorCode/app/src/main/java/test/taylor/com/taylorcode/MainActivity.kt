@@ -20,6 +20,7 @@ import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineCancelActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
@@ -164,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         btnViewFlipper.setOnClickListener { startActivity<ViewFlipperActivity>() }
         btnCoroutineSample.setOnClickListener { startActivity<HandlerThreadVsCoroutineActivity>() }
         btnSuspendCrossActivities.setOnClickListener { startActivity<SplashActivity>() }
+        btnCancelCoroutine.setOnClickListener { startActivity<CoroutineCancelActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

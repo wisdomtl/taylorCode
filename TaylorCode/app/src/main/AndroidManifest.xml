@@ -197,6 +197,7 @@
         <activity android:name=".aysnc.HandlerThreadVsCoroutineActivity" />
         <activity android:name=".aysnc.priority.PriorityActivity" />
         <activity android:name=".aysnc.priority.SplashActivity" />
+        <activity android:name=".kotlin.coroutine.CoroutineCancelActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
