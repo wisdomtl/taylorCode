@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
-import kotlin.coroutines.coroutineContext
 
 class HandlerThreadVsCoroutineActivity : AppCompatActivity() {
+
+    private val TAG = "HandlerThreadVs1"
 
     private lateinit var tvName: TextView
     private lateinit var rvBill: RecyclerView
@@ -69,29 +70,31 @@ class HandlerThreadVsCoroutineActivity : AppCompatActivity() {
 //            tvName.text = name
 //        }
 
-//        /**
-//         * case: sequence network request
-//         */
-//        GlobalScope.launch {
-//            val user = fetchUser()
-//            val bills = fetchBill(user)
-//            withContext(Dispatchers.Main) {
-//                delay(4000)
-//                rvBill.adapter = BillAdapter(bills)
-//            }
-//            Log.v("ttaylor","tag=withContext, HandlerThreadVsCoroutineActivity.onCreate()  ")
-//        }
-
         /**
-         * case: parallel network request
+         * case: sequence network request
          */
-        mainScope.launch {
-            val user = async(Dispatchers.IO) { fetchUser() }
-            val gifts = async(Dispatchers.IO) { fetchGift() }
-            user.await()
-            gifts.await()
-            Log.v("ttaylor","tag=asdf, parallel network request all finished  ")
+        GlobalScope.launch {
+            val user = fetchUser()
+            Log.d(TAG, " after fetchUser")
+            val bills = fetchBill(user)
+            Log.d(TAG, " after fetchBill")
+            withContext(Dispatchers.Main) {
+                rvBill.adapter = BillAdapter(bills)
+                Log.i(TAG, "after ui display tid=${Thread.currentThread().id}")
+            }
+            Log.v(TAG, " after launche")
         }
+
+//        /**
+//         * case: parallel network request
+//         */
+//        mainScope.launch {
+//            val user = async(Dispatchers.IO) { fetchUser() }
+//            val gifts = async(Dispatchers.IO) { fetchGift() }
+//            user.await()
+//            gifts.await()
+//            Log.v("ttaylor","tag=asdf, parallel network request all finished  ")
+//        }
 
     }
 
