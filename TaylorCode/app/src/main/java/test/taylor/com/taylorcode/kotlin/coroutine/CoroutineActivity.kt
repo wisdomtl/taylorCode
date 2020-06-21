@@ -12,6 +12,7 @@ import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 
 class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+    private var jobs = mutableListOf<Job>()
     private var user1: Deferred<String>? = null
     private var user2: Deferred<String>? = null
     private var completableDeferred1: CompletableDeferred<String> = CompletableDeferred()
@@ -20,6 +21,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val mainScope = MainScope()
 
     private val TAG = "CoroutineActivity1"
+
+    private var globalScope: Job? = null
 
     private lateinit var tvCountdown: TextView
 
@@ -34,6 +37,81 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 layout_height = wrap_content
                 gravity = gravity_center
                 textSize = 25f
+            }
+            LinearLayout {
+                layout_width = match_parent
+                layout_height = wrap_content
+                orientation = horizontal
+
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 10f
+                    text = "GlobalScope no structure concurrency"
+                    textAllCaps = false
+                    onClick = globalScopeNoJob
+                }
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 10f
+                    text = "coroutineScope has structure concurrency "
+                    textAllCaps = false
+                    onClick = scopeCoroutineParentJob
+                }
+            }
+            Button {
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                text = "Global scope wont wait all child coroutine"
+                textAllCaps = false
+                onClick = globalScopeNoWaitChildCoroutine
+            }
+            LinearLayout {
+                layout_width = match_parent
+                layout_height = wrap_content
+                orientation = horizontal
+
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 20f
+                    text = "stop main scope"
+                    textAllCaps = false
+                    onClick = cancelMainScope
+                }
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 20f
+                    text = "mainScope will stop"
+                    textAllCaps = false
+                    onClick = mainScopeWillStop
+                }
+            }
+            LinearLayout {
+                layout_width = match_parent
+                layout_height = wrap_content
+                orientation = horizontal
+
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 20f
+                    text = "stop global scope"
+                    textAllCaps = false
+                    onClick = cancelGlobalScope
+                }
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 20f
+                    text = "GlobalScope wont stop"
+                    textAllCaps = false
+                    onClick = globalScopeWontCancel
+                }
+
             }
 
             Button {
@@ -233,6 +311,74 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+
+    private val scopeCoroutineParentJob = { _: View ->
+        launch {
+            coroutineScope {
+                repeat(3) {
+                    GlobalScope.launch {
+                        queryUser("ttaylor${it}", 2000)
+                    }
+                }
+            }
+            Log.d(TAG, "globalScopeNotWait: after joinAll")
+        }
+        Unit
+    }
+
+    private val globalScopeNoJob = { _: View ->
+        GlobalScope.launch {
+            var jobs = mutableListOf<Job>()
+            repeat(3) {
+                val job = launch {
+                    queryUser("ttaylor${it}", 2000)
+                }
+                jobs.add(job)
+            }
+            jobs.joinAll()
+            Log.d(TAG, "globalScopeNotWait: after joinAll")
+        }
+        Unit
+    }
+    private val globalScopeNoWaitChildCoroutine = { _: View ->
+        launch {
+            var jobs = mutableListOf<Job>()
+            repeat(3) {
+                val job = GlobalScope.launch {
+                    queryUser("ttaylor${it}", 2000)
+                }
+                jobs.add(job)
+            }
+            jobs.joinAll()
+            Log.d(TAG, "globalScopeNotWait: after joinAll")
+        }
+        Unit
+    }
+    private val cancelMainScope = { _: View ->
+        mainScope.cancel()
+        Unit
+    }
+
+    private val mainScopeWillStop = { _: View ->
+        mainScope.launch {
+            val bill = getBillByLaunch()
+            Log.i(TAG, "globalScopeWontStop() bill=$bill tid=${Thread.currentThread().id}")
+        }
+        Unit
+    }
+
+    private val cancelGlobalScope = { _: View ->
+        globalScope?.cancel()
+        Unit
+    }
+
+    private val globalScopeWontCancel = { _: View ->
+        globalScope = GlobalScope.launch {
+            val bill = getBillByLaunch()
+            Log.i(TAG, "globalScopeWontStop() bill=$bill tid=${Thread.currentThread().id}")
+        }
+        Unit
+    }
 
     /**
      * case: coroutineScope will not end until all sub async has completed
@@ -880,6 +1026,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onDestroy() {
         super.onDestroy()
+        cancel()
         //if comment this, long run task will be executing event after activity exits and activity will be leaked
 //        cancel(CancellationException("coroutine started by main scope is canceled"))
     }
