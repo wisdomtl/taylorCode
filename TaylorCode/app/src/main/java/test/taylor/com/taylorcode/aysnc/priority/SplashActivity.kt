@@ -29,11 +29,13 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(rootView)
 
-        SuspendList.of("start-up").add(suspendItem {
-            suspendAction = { fetchUpdateInfo() }
-            resumeAction = { resumeUpdateInfo() }
-            priority = 2
-        })
+        SuspendList.of("start-up") {
+            Item {
+                suspendAction = { fetchUpdateInfo() }
+                resumeAction = { resumeUpdateInfo() }
+                priority = 2
+            }
+        }
 
         delaySplash()
     }
@@ -41,11 +43,11 @@ class SplashActivity : AppCompatActivity() {
     private fun delaySplash() {
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(
-            {
-                startActivity(Intent(this@SplashActivity, PriorityActivity::class.java))
-                finish()
-            },
-            5000
+                {
+                    startActivity(Intent(this@SplashActivity, PriorityActivity::class.java))
+                    finish()
+                },
+                5000
         )
     }
 

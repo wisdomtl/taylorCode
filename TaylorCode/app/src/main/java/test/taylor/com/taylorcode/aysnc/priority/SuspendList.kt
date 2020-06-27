@@ -1,26 +1,29 @@
 package test.taylor.com.taylorcode.aysnc.priority
 
+import android.util.Log
 import androidx.collection.ArrayMap
 import kotlinx.coroutines.*
 
 class SuspendList private constructor() {
+    private val TAG = "SuspendList"
 
     companion object {
         var map = ArrayMap<String, SuspendList>()
-        fun of(key: String): SuspendList = map[key] ?: let {
+        fun of(key: String, init: SuspendList.() -> Unit): SuspendList = (map[key] ?: let {
             val p = SuspendList()
             map[key] = p
             p
-        }
+        }).apply(init)
     }
 
-    private var head: Item = emptySuspendItem()
+    private var head: Item = emptyItem()
 
     fun add(item: Item) {
         head.findItem(item.priority).addNext(item)
     }
 
     fun observe() = GlobalScope.launch(Dispatchers.Main) {
+        Log.d(TAG, "observe: ")
         var p: Item? = head.next
         while (p != null) {
             p.resumeAction?.invoke(p.deferred?.await())
@@ -48,14 +51,16 @@ class SuspendList private constructor() {
         }
 
         var suspendAction: (suspend () -> Any?)? = null
-            set(value) {
-                field = value
-                value?.let {
-                    GlobalScope.launch { deferred = async { it.invoke() } }
-                }
-            }
+
+        //            set(value) {
+//                field = value
+//                value?.let {
+//                    GlobalScope.launch { deferred = async { it.invoke() } }
+//                }
+//            }
         var resumeAction: ((Any?) -> Unit)? = null
         var deferred: Deferred<*>? = null
+        var timeout: Long = -1
         var priority: Int = PRIORITY_DEFAULT
 
         internal var next: Item? = null
@@ -89,6 +94,18 @@ class SuspendList private constructor() {
     }
 }
 
-fun suspendItem(init: SuspendList.Item.() -> Unit): SuspendList.Item = SuspendList.Item().apply(init)
+fun SuspendList.Item(init: SuspendList.Item.() -> Unit): SuspendList.Item =
+        SuspendList.Item().apply {
+            init()
+            GlobalScope.launch {
+                deferred = async {
+                    if (timeout > 0) {
+                        withTimeoutOrNull(timeout) { suspendAction?.invoke() }
+                    } else {
+                        suspendAction?.invoke()
+                    }
+                }
+            }
+        }.also { add(it) }
 
-fun emptySuspendItem(): SuspendList.Item = SuspendList.Item().apply { priority = -1 }
+fun emptyItem(): SuspendList.Item = SuspendList.Item().apply { priority = -1 }

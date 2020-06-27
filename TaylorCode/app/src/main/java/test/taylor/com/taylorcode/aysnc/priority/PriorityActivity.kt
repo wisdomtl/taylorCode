@@ -8,6 +8,8 @@ import test.taylor.com.taylorcode.kotlin.*
 
 class PriorityActivity : AppCompatActivity() {
 
+    private val TAG = "PriorityActivity2"
+
     private val rootView by lazy {
         ConstraintLayout {
             layout_width = match_parent
@@ -23,20 +25,22 @@ class PriorityActivity : AppCompatActivity() {
     }
 
     private val onObserve = {
-        val pr = SuspendList.of("start-up")
-        pr.add(suspendItem {
-            suspendAction = { fetchUser() }
-            resumeAction = { user: Any? -> onUserResume(user) }
-            priority = 3
-        })
+        SuspendList.of("start-up") {
+            Item {
+                Log.d(TAG, ": item user")
+                suspendAction = { fetchUser() }
+                resumeAction = { user: Any? -> onUserResume(user) }
+                priority = 3
+            }
+            Item {
+                Log.d(TAG, ": item activity")
+                suspendAction = { fetchActivity() }
+                timeout = 3000
+                resumeAction = { activity: Any? -> onActivityResume(activity) }
+                priority = 1
+            }
+        }.observe()
 
-        pr.add(suspendItem {
-            suspendAction = { fetchActivity() }
-            resumeAction = { activity: Any? -> onActivityResume(activity) }
-            priority = 1
-        })
-
-        pr.observe()
         Unit
     }
 

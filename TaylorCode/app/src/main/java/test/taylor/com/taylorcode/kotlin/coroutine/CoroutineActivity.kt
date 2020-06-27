@@ -38,6 +38,23 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 gravity = gravity_center
                 textSize = 25f
             }
+
+            Button {
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                text = "timeout and async"
+                textAllCaps = false
+                onClick = withTimeoutAndAsync
+            }
+            Button {
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                text = "withTimeout"
+                textAllCaps = false
+                onClick = withTimeout
+            }
             LinearLayout {
                 layout_width = match_parent
                 layout_height = wrap_content
@@ -311,6 +328,35 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    /**
+     * timeout with async
+     */
+    private val withTimeoutAndAsync = { _: View ->
+        launch {
+            val bill = async { withTimeoutOrNull(2000) { queryBill(3000) } }
+            Log.d(TAG, "time out and async: bill=${bill.await()}")
+        }
+        Unit
+    }
+
+    /**
+     * case: timeout for coroutine
+     */
+    private val withTimeout = { _: View ->
+        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.d(TAG, "exception from timeout: ${throwable.message}")
+        }
+        launch(exceptionHandler) {
+            val name = kotlinx.coroutines.withTimeoutOrNull(2000) {
+                Log.i(TAG, "inside timeout() tid=${Thread.currentThread().id}") // run in the same thread as the out layer
+                delay(3000)
+                Log.d(TAG, ": after delay in timeout")
+                "Taylor"
+            }
+            Log.d(TAG, ": after timeout =$name")
+        }
+        Unit
+    }
 
     private val scopeCoroutineParentJob = { _: View ->
         launch {
