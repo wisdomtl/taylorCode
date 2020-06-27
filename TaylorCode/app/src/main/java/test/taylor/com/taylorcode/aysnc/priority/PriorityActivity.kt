@@ -26,13 +26,13 @@ class PriorityActivity : AppCompatActivity() {
         val pr = SuspendList.of("start-up")
         pr.add(suspendItem {
             suspendAction = { fetchUser() }
-            resumeAction = { onUserResume() }
+            resumeAction = { user: Any? -> onUserResume(user) }
             priority = 3
         })
 
         pr.add(suspendItem {
             suspendAction = { fetchActivity() }
-            resumeAction = { onActivityResume() }
+            resumeAction = { activity: Any? -> onActivityResume(activity) }
             priority = 1
         })
 
@@ -41,12 +41,12 @@ class PriorityActivity : AppCompatActivity() {
     }
 
 
-    private fun onActivityResume() {
-        Log.v("ttaylor", "tag=suspend list, fetch activity resume  thread id=${Thread.currentThread().id}")
+    private fun onActivityResume(activty: Any?) {
+        Log.v("ttaylor", "tag=suspend list, fetch activity(${activty.toString()}) resume  thread id=${Thread.currentThread().id}")
     }
 
-    private fun onUserResume() {
-        Log.v("ttaylor", "tag=suspend list, fetch user resume  thread id=${Thread.currentThread().id}")
+    private fun onUserResume(user: Any?) {
+        Log.v("ttaylor", "tag=suspend list, fetch user(${user.toString()}) resume  thread id=${Thread.currentThread().id}")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,16 +56,18 @@ class PriorityActivity : AppCompatActivity() {
         onObserve()
     }
 
-    suspend fun fetchUser() {
+    suspend fun fetchUser(): String {
         Log.v("ttaylor", " PriorityActivity.fetchUser()  thread id=${Thread.currentThread().id}")
         delay(4000)
         Log.w("ttaylor", " PriorityActivity.fetchUser()  thread id=${Thread.currentThread().id}")
+        return "User Taylor"
     }
 
-    suspend fun fetchActivity() {
+    suspend fun fetchActivity(): String {
         Log.v("ttaylor", " PriorityActivity.fetchActivity()  thread id=${Thread.currentThread().id}")
         delay(5000)
         Log.w("ttaylor", " PriorityActivity.fetchActivity()  thread id=${Thread.currentThread().id}")
+        return "Activity Bonus"
     }
 
 }

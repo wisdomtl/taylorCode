@@ -23,8 +23,7 @@ class SuspendList private constructor() {
     fun observe() = GlobalScope.launch(Dispatchers.Main) {
         var p: Item? = head.next
         while (p != null) {
-            p.deferred?.await()
-            p.resumeAction?.invoke()
+            p.resumeAction?.invoke(p.deferred?.await())
             p = p.next
         }
     }
@@ -55,7 +54,7 @@ class SuspendList private constructor() {
                     GlobalScope.launch { deferred = async { it.invoke() } }
                 }
             }
-        var resumeAction: (() -> Unit)? = null
+        var resumeAction: ((Any?) -> Unit)? = null
         var deferred: Deferred<*>? = null
         var priority: Int = PRIORITY_DEFAULT
 
