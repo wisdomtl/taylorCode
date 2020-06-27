@@ -27,6 +27,7 @@ class SuspendList private constructor() {
         var p: Item? = head.next
         while (p != null) {
             p.resumeAction?.invoke(p.deferred?.await())
+            p.job?.cancel()
             p = p.next
         }
     }
@@ -51,18 +52,12 @@ class SuspendList private constructor() {
         }
 
         var suspendAction: (suspend () -> Any?)? = null
-
-        //            set(value) {
-//                field = value
-//                value?.let {
-//                    GlobalScope.launch { deferred = async { it.invoke() } }
-//                }
-//            }
         var resumeAction: ((Any?) -> Unit)? = null
         var deferred: Deferred<*>? = null
         var timeout: Long = -1
         var priority: Int = PRIORITY_DEFAULT
 
+        internal var job: Job? = null
         internal var next: Item? = null
         internal var pre: Item? = null
 
@@ -97,7 +92,7 @@ class SuspendList private constructor() {
 fun SuspendList.Item(init: SuspendList.Item.() -> Unit): SuspendList.Item =
         SuspendList.Item().apply {
             init()
-            GlobalScope.launch {
+            job = GlobalScope.launch {
                 deferred = async {
                     if (timeout > 0) {
                         withTimeoutOrNull(timeout) { suspendAction?.invoke() }
