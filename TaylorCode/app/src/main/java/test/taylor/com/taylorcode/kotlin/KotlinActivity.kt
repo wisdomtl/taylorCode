@@ -27,12 +27,12 @@ class KotlinActivity : AppCompatActivity() {
         /**
          * case: copy
          */
-        data class ChinaPerson(var name:String,var age:Int)
+        data class ChinaPerson(var name: String, var age: Int)
 
-        val cp1 = ChinaPerson("sb",10)
+        val cp1 = ChinaPerson("sb", 10)
         val cp2 = cp1.copy()
-        cp1.age  = 20
-        Log.v("ttaylor","tag=copy , KotlinActivity.onCreate()  cp2.age=${cp2.age}")
+        cp1.age = 20
+        Log.v("ttaylor", "tag=copy , KotlinActivity.onCreate()  cp2.age=${cp2.age}")
 
 
         listEquals()
@@ -287,8 +287,13 @@ class KotlinActivity : AppCompatActivity() {
         Log.v("ttaylor", "tag=subdigit, KotlinActivity.onCreate()  digit=${charSequence.subDigit}")
 
         charSequence.splitByDigit().forEach {
-            Log.v("ttaylor","tag=split by digit, KotlinActivity.onCreate()  c=${it}")
+            Log.v("ttaylor", "tag=split by digit, KotlinActivity.onCreate()  c=${it}")
         }
+        textCompanionObjec.sec
+        textCompanionObjec.sec2
+        textCompanionObjec.sec3
+        textCompanionObjec.CC.doB()
+        textCompanionObjec.doA()
     }
 
     private fun split() {
@@ -346,5 +351,20 @@ class KotlinActivity : AppCompatActivity() {
 
     interface Iinterface {
         fun dod()
+    }
+}
+
+class textCompanionObjec {
+    companion object {
+        val sec = 1
+        @JvmStatic
+        val sec2 = 2
+        @JvmField
+        val sec3 = 3
+        fun doA(){}
+    }
+
+    object CC{
+        fun doB(){}
     }
 }
