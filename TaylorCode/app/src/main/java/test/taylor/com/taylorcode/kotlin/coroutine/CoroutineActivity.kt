@@ -908,6 +908,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     fun createJob() {
         job = GlobalScope.launch {
+            coroutineContext[Job2]
             logDelay(1100)
             Log.v("ttaylor", "tag=join, CoroutineActivity.join()  job is done")
         }

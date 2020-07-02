@@ -10,6 +10,8 @@ import test.taylor.com.taylorcode.R
 class KotlinExample : Activity() {
     companion object {
         val SEX = 0
+        @JvmStatic
+        val SEX2 =1
     }
 
     private var trolley: MutableMap<Int, String> = mutableMapOf(Pair(1, "q"), Pair(2, "r"), Pair(3, "e"), Pair(4, "w"))
