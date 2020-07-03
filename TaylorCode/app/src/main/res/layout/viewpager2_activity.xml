@@ -11,17 +11,26 @@
         android:layout_height="50dp"
         app:tabIndicatorColor="#00ff00"
         app:tabIndicatorHeight="0dp"
-        app:layout_constraintBottom_toTopOf="@id/vp2"
+        app:layout_constraintBottom_toTopOf="@id/fl"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp2"
+    <test.taylor.com.taylorcode.ui.pagers.TouchableViewPagerWrapper
+        android:id="@+id/fl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#00ff00"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tablayout"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@id/tablayout">
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingConstraints" />
+
+    </test.taylor.com.taylorcode.ui.pagers.TouchableViewPagerWrapper>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
