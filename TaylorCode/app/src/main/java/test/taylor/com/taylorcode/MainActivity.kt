@@ -27,6 +27,7 @@ import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
+import test.taylor.com.taylorcode.lifecycle.LifecycleActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
@@ -169,6 +170,7 @@ class MainActivity : AppCompatActivity() {
         btnCancelCoroutine.setOnClickListener { startActivity<CoroutineCancelActivity>() }
         btnSuspendCoroutine.setOnClickListener { startActivity<SuspendCoroutineActivity>() }
         btnDarkActivity.setOnClickListener { startActivity<DarkActivity>() }
+        btnLifecycleActivity.setOnClickListener { startActivity<LifecycleActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
