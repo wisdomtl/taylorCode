@@ -198,6 +198,8 @@
         <activity android:name=".aysnc.priority.PriorityActivity" />
         <activity android:name=".aysnc.priority.SplashActivity" />
         <activity android:name=".kotlin.coroutine.CoroutineCancelActivity" />
+        <activity android:name=".kotlin.coroutine.SuspendCoroutineActivity" />
+        <activity android:name=".ui.DarkActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
