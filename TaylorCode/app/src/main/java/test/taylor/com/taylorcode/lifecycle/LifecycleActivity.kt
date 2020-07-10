@@ -1,9 +1,9 @@
 package test.taylor.com.taylorcode.lifecycle
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 
-class LifecycleActivity:AppCompatActivity() {
+class LifecycleActivity:BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -48,7 +48,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -201,6 +202,7 @@
         <activity android:name=".kotlin.coroutine.SuspendCoroutineActivity" />
         <activity android:name=".ui.DarkActivity" />
         <activity android:name=".lifecycle.LifecycleActivity" />
+        <activity android:name=".ui.night_mode.BaseActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

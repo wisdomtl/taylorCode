@@ -21,12 +21,6 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
 }
 
 
-fun Activity.contentView(): FrameLayout? =
-    takeIf { !isFinishing && !isDestroyed }?.window?.decorView?.findViewById(android.R.id.content)
-
-val Activity.decorView: FrameLayout?
-    get() = (takeIf { !isFinishing && !isDestroyed }?.window?.decorView) as? FrameLayout
-
 val View.inScreen: Boolean
     get() {
         val screenWidth = context?.resources?.displayMetrics?.widthPixels ?: 0
