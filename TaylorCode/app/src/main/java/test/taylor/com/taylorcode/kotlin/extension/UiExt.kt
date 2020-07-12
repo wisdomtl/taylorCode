@@ -38,7 +38,7 @@ val AppCompatDialog.decorView: FrameLayout?
  * toggle night mode in [AppCompatActivity]
  * the algorithm is exactly the same as [DialogFragment.nightMode]
  */
-fun AppCompatActivity.nightMode(lightOff: Boolean, color: String = "#c8000000") {
+fun Activity.nightMode(lightOff: Boolean, color: String = "#c8000000") {
     val handler = Handler(Looper.getMainLooper())
     val id = "darkMask"
     if (lightOff) {
