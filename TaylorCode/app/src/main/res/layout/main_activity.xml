@@ -8,6 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnChannelActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin channel"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btnLifecycleActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

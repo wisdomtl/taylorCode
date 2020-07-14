@@ -18,6 +18,7 @@ import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineCancelActivity
@@ -172,6 +173,7 @@ class MainActivity : BaseActivity() {
         btnSuspendCoroutine.setOnClickListener { startActivity<SuspendCoroutineActivity>() }
         btnDarkActivity.setOnClickListener { startActivity<DarkActivity>() }
         btnLifecycleActivity.setOnClickListener { startActivity<LifecycleActivity>() }
+        btnChannelActivity.setOnClickListener { startActivity<ChannelActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

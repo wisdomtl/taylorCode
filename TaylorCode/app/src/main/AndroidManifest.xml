@@ -203,6 +203,7 @@
         <activity android:name=".ui.DarkActivity" />
         <activity android:name=".lifecycle.LifecycleActivity" />
         <activity android:name=".ui.night_mode.BaseActivity" />
+        <activity android:name=".kotlin.Channel.ChannelActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
