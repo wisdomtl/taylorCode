@@ -21,25 +21,32 @@ class ChannelActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
             btn = Button {
+                layout_id = "btnClick"
                 layout_width = match_parent
                 layout_height = wrap_content
                 text = "click test"
                 textAllCaps = false
                 textSize = 20f
             }
-        }
-    }
 
-    private val mainScope = MainScope()
+            EditText et@{
+                layout_width = match_parent
+                layout_height = 50
+                top_toBottomOf = "btnClick"
+                textSize = 20f
+                onTextChange = textWatcher {
+                    val mainScope = MainScope()
+                    val textActor = mainScope.actor<CharSequence?>(capacity = Channel.CONFLATED) {
 
-    private val clickActor = mainScope.actor<Click>(capacity = Channel.UNLIMITED) {
-        var lastClickTime = System.currentTimeMillis()
-        val isShake = { last: Long, now: Long -> now - last < 1000 }
-        for (click in channel) {
-            if (!isShake(lastClickTime, System.currentTimeMillis())) {
-                click.onClick(click.view)
+                    }.autoDispose(this@et)
+                    onTextChanged = { text: CharSequence?, start: Int, count: Int, after: Int ->
+                        mainScope.launch {
+                            textActor.send(text)
+                        }.autoDispose(this@et)
+                    }
+                }
+
             }
-            lastClickTime = System.currentTimeMillis()
         }
     }
 
@@ -49,19 +56,12 @@ class ChannelActivity : AppCompatActivity() {
         btn.setShakelessClickListener(1000) {
             Log.v("ttaylor", "tag=asdfff, ChannelActivity.onCreate()  ")
         }
-//        btn.setOnClickListener {
-//            mainScope.launch {
-//                clickActor.send(SingleClick(it) {
-//                    Log.v("ttaylor", "tag=asdf, ChannelActivity.onCreate()  ")
-//                })
-//            }
-//        }
     }
 }
 
-sealed class Click(var view: View, var onClick: (View) -> Unit)
-class SingleClick(view: View, onClick: (View) -> Unit) : Click(view, onClick)
-
+/**
+ * actor case: shakeless click listener
+ */
 fun View.setShakelessClickListener(threshold: Long, onClick: (View) -> Unit) {
     class Click(var view: View, var onClick: (View) -> Unit)
 
