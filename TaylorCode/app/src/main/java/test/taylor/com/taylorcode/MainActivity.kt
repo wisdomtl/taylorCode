@@ -174,6 +174,7 @@ class MainActivity : BaseActivity() {
         btnDarkActivity.setOnClickListener { startActivity<DarkActivity>() }
         btnLifecycleActivity.setOnClickListener { startActivity<LifecycleActivity>() }
         btnChannelActivity.setOnClickListener { startActivity<ChannelActivity>() }
+        btnDynamic.setOnClickListener { startActivity<DynamicalLayoutActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
