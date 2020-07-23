@@ -73,6 +73,7 @@ class MainActivity : BaseActivity() {
     private fun testValueDiliver() {
         Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
         Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
+        Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
     }
 
     private fun readPhoneInfo() {
