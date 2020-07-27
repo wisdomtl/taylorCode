@@ -141,7 +141,7 @@ public class TaylorApplication extends Application {
             forgroundActivityCount--;
             if (forgroundActivityCount == 0) {
                 if (appStatusListener != null) {
-//                    appStatusListener.onAppBackground();
+                    appStatusListener.onAppBackground();
                 }
             }
         }

@@ -26,6 +26,9 @@ public class ActionBarActivity extends Activity implements View.OnClickListener 
         //case2:set click listener for custom view in action bar
         actionBar.getCustomView().findViewById(R.id.btn_back).setOnClickListener(this);
 
+
+
+
     }
 
     @Override

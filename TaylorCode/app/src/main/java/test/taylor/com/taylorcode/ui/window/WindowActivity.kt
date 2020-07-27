@@ -17,8 +17,10 @@ import android.util.Log
 import android.util.Pair
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.Toast
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.launch_mode.ActivityB
 import test.taylor.com.taylorcode.rxjava.TimeoutActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.ProgressRing
@@ -167,7 +169,7 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             val windowView = getWindowView(context, layoutId)
             popupWindow = CustomPopupWindow(windowView as ViewGroup,
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT, this)
+                    500, this)
             popupWindow!!.setOnItemClickListener(this)
         }
         if (popupWindow!!.isShowing) {
@@ -175,6 +177,18 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
         } else {
             popupWindow!!.showAtLocation(this.window.decorView, Gravity.BOTTOM, 0, 0)
         }
+
+        val classWindow2:Class<*>? = popupWindow?.javaClass
+        val father = classWindow2?.superclass
+        val popupDecorView = father?.getDeclaredField("mDecorView")
+        popupDecorView?.isAccessible  = true
+        val mask = View {
+            layout_id = "mask"
+            layout_width = match_parent
+            layout_height = match_parent
+            background_color = "#80ff00ff"
+        }
+        (popupDecorView?.get(popupWindow) as? FrameLayout)?.addView(mask)
     }
 
     private fun bindWindowClickListener(rootView: View) {
