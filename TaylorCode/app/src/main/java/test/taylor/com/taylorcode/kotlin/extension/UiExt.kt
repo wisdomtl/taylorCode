@@ -165,4 +165,5 @@ fun Window.nightMode(lightOff: Boolean, color: String = "#c8000000") {
             find<View>(id)?.let { removeView(it) }
         }
     }
+}
 
