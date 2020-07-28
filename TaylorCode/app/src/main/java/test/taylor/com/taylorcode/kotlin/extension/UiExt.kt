@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.DialogFragment
@@ -59,6 +60,27 @@ fun Activity.nightMode(lightOff: Boolean, color: String = "#c8000000") {
     } else {
         decorView?.apply {
             find<View>(id)?.let { removeView(it) }
+        }
+    }
+}
+
+fun PopupWindow.nightMode(lightOff: Boolean, color: String = "#c8000000"){
+    contentView.post {
+        try {
+            val classWindow2: Class<*>? = this.javaClass
+            val father = classWindow2?.superclass
+            val popupDecorView = father?.getDeclaredField("mDecorView")
+            popupDecorView?.isAccessible = true
+            val mask = contentView.context.run {
+                View {
+                    layout_width = contentView.width
+                    layout_height = contentView.height
+                    background_color = color
+                }
+            }
+            (popupDecorView?.get(this) as? FrameLayout)?.addView(mask, FrameLayout.LayoutParams(contentView.width, contentView.height))
+        } catch (e: Exception) {
+
         }
     }
 }
@@ -119,3 +141,27 @@ fun AppCompatDialog.nightMode(lightOff: Boolean, color: String = "#c8000000") {
         }
     }
 }
+
+fun Window.nightMode(lightOff: Boolean, color: String = "#c8000000") {
+    val handler = Handler(Looper.getMainLooper())
+    val id = "darkMask"
+    if (lightOff) {
+        handler.postAtFrontOfQueue {
+            val maskView = View(context).apply {
+                setId(id.toLayoutId())
+                layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+                setBackgroundColor(Color.parseColor(color))
+            }
+            (decorView as? ViewGroup)?.apply {
+                val view = findViewById<View>(id.toLayoutId())
+                if (view == null) {
+                    addView(maskView)
+                }
+            }
+        }
+    } else {
+        (decorView as? ViewGroup)?.apply {
+            find<View>(id)?.let { removeView(it) }
+        }
+    }
+
