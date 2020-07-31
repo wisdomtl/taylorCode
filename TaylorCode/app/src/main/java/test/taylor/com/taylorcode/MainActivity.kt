@@ -15,6 +15,7 @@ import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
+import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.kotlin.*
@@ -178,6 +179,7 @@ class MainActivity : BaseActivity() {
         btnLifecycleActivity.setOnClickListener { startActivity<LifecycleActivity>() }
         btnChannelActivity.setOnClickListener { startActivity<ChannelActivity>() }
         btnDynamic.setOnClickListener { startActivity<DynamicalLayoutActivity>() }
+        btnDns.setOnClickListener { startActivity<DnsActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

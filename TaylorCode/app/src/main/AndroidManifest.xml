@@ -205,6 +205,7 @@
         <activity android:name=".ui.night_mode.BaseActivity" />
         <activity android:name=".kotlin.Channel.ChannelActivity" />
         <activity android:name=".ui.DynamicalLayoutActivity" />
+        <activity android:name=".dns.DnsActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
