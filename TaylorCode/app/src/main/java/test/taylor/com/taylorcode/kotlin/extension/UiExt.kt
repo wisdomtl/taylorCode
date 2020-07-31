@@ -68,9 +68,9 @@ fun Activity.nightMode(lightOff: Boolean, color: String = "#c8000000") {
 fun PopupWindow.nightMode(lightOff: Boolean, color: String = "#c8000000"){
     contentView.post {
         try {
-            val classWindow2: Class<*>? = this.javaClass
-            val father = classWindow2?.superclass
-            val popupDecorView = father?.getDeclaredField("mDecorView")
+            val windowClass: Class<*>? = this.javaClass
+//            val father = windowClass?.superclass
+            val popupDecorView = windowClass?.getDeclaredField("mDecorView")
             popupDecorView?.isAccessible = true
             val mask = contentView.context.run {
                 View {
