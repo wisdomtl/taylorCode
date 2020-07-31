@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import test.taylor.com.taylorcode.exception.ExceptionActivity;
 import test.taylor.com.taylorcode.util.DateUtil;
 
 
@@ -77,6 +78,11 @@ public class TaylorApplication extends Application {
         String date = DateUtil.INSTANCE.formatDate(System.currentTimeMillis(),"yyyy-MM-dd");
         Log.v("ttaylor", "TaylorApplication.onCreate()" + "  date="+date);
 
+        ExceptionActivity.TaylorHandler handler = new ExceptionActivity.TaylorHandler();
+        handler.init(this);
+
+        String str = null;
+        str.toCharArray();
     }
 
     /**
