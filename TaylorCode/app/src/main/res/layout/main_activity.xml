@@ -7,12 +7,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnMaskViewGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="mask viewgroup"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnDns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="dns"
             android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnDynamic"
             android:layout_width="match_parent"

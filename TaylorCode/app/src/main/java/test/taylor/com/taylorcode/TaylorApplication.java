@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import test.taylor.com.taylorcode.exception.ExceptionActivity;
 import test.taylor.com.taylorcode.util.DateUtil;
 
 
@@ -71,18 +70,21 @@ public class TaylorApplication extends Application {
         //java round case1:
         int i = ((int) Math.round(4.5d));
         int j = ((int) Math.round(4.1d));
-        int k = (int) (10/2.3) ;
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j+" ,k="+k);
+        int k = (int) (10 / 2.3);
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  i=" + i + " ,j=" + j + " ,k=" + k);
 
         //case: format milliseconds to string date
-        String date = DateUtil.INSTANCE.formatDate(System.currentTimeMillis(),"yyyy-MM-dd");
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  date="+date);
+        String date = DateUtil.INSTANCE.formatDate(System.currentTimeMillis(), "yyyy-MM-dd");
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  date=" + date);
 
-        ExceptionActivity.TaylorHandler handler = new ExceptionActivity.TaylorHandler();
-        handler.init(this);
-
-        String str = null;
-        str.toCharArray();
+        /**
+         * case: handle exception in global scope
+         */
+//        ExceptionActivity.TaylorHandler handler = new ExceptionActivity.TaylorHandler();
+//        handler.init(this);
+//
+//        String str = null;
+//        str.toCharArray();
     }
 
     /**

@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.main_activity.*
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
-import test.taylor.com.taylorcode.aysnc.priority.PriorityActivity
 import test.taylor.com.taylorcode.aysnc.priority.SplashActivity
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
@@ -49,6 +47,7 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
+import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
@@ -180,6 +179,7 @@ class MainActivity : BaseActivity() {
         btnChannelActivity.setOnClickListener { startActivity<ChannelActivity>() }
         btnDynamic.setOnClickListener { startActivity<DynamicalLayoutActivity>() }
         btnDns.setOnClickListener { startActivity<DnsActivity>() }
+        btnMaskViewGroup.setOnClickListener { startActivity<TestMaskActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
