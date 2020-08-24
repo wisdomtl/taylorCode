@@ -101,7 +101,8 @@
         <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateActivity">
 
         </activity>
-        <activity android:name=".ui.window.WindowActivity"></activity>
+        <activity android:name=".ui.window.WindowActivity"
+            android:theme="@style/DialogActivity"></activity>
         <activity android:name="test.taylor.com.taylorcode.ui.SpannableActivity"></activity>
         <activity android:name=".ui.ScrollViewActivity"></activity>
         <activity android:name=".ui.SelectorActivity"></activity>

@@ -49,4 +49,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+<!--    透明Activity-->
+    <style name="DialogActivity" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item><!-- 无标题 -->
+        <item name="android:windowIsTranslucent">true</item><!-- 半透明,设置为false无透明效果 -->
+    </style>
+
 </resources>

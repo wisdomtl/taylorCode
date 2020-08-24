@@ -24,6 +24,10 @@ class OverridePropertyActivity : AppCompatActivity() {
         registerObserver()
         initView()
         initData()
+        if (!viewModel.showed){
+            Log.v("ttaylor","tag=view model, OverridePropertyActivity.onCreate()  ")
+            viewModel.showed = true
+        }
     }
 
     private fun registerObserver() {

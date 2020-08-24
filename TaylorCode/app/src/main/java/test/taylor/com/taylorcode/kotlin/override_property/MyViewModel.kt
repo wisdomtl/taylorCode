@@ -7,6 +7,8 @@ import kotlinx.coroutines.launch
 
 class MyViewModel : ViewModel() {
 
+    var showed = false
+
     internal val beanLiveData = MutableLiveData<List<MyBean>>()
 
     internal val colorLiveData = MutableLiveData<ColorBean>()
