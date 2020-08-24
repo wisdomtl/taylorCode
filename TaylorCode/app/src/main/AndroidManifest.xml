@@ -208,6 +208,7 @@
         <activity android:name=".ui.DynamicalLayoutActivity" />
         <activity android:name=".dns.DnsActivity" />
         <activity android:name=".ui.night_mode.TestMaskActivity" />
+        <activity android:name=".ui.custom_view.progress_view.ProgressBarActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
