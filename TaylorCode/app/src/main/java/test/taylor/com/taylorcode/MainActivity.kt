@@ -38,6 +38,8 @@ import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBar
+import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
@@ -180,6 +182,7 @@ class MainActivity : BaseActivity() {
         btnDynamic.setOnClickListener { startActivity<DynamicalLayoutActivity>() }
         btnDns.setOnClickListener { startActivity<DnsActivity>() }
         btnMaskViewGroup.setOnClickListener { startActivity<TestMaskActivity>() }
+        btnProgressBar.setOnClickListener { startActivity<ProgressBarActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
