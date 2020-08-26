@@ -1,10 +1,11 @@
 package test.taylor.com.taylorcode.ui.recyclerview
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import test.taylor.com.taylorcode.ui.recyclerview.VarietyAdapter.AdapterProxy
 
 class MutableAdapterProxys(
     var proxys: MutableList<AdapterProxy<*, *>> = mutableListOf()
-) : AdapterProxys {
+) : VarietyAdapter.AdapterProxys {
     override fun size() = proxys.size
 
     @Suppress("UNCHECKED_CAST")
