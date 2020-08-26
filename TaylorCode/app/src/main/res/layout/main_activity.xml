@@ -8,6 +8,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnVarietyAdapter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="variety adapter"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
