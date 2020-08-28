@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.ui.custom_view.progress_view
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.R
@@ -14,8 +13,8 @@ class ProgressBarActivity:AppCompatActivity() {
             progress = 0.3f
             rx = 30f
             ry = 30f
-            progressBackgroundColor  = Color.parseColor("#F5F5F5")
-            colors = intArrayOf(Color.parseColor("#FFC39E"),Color.parseColor("#FF6797"))
+            barColor  = "#F5F5F5"
+            colors = arrayOf("#FFC39E","#FF6797")
         }
     }
 }
