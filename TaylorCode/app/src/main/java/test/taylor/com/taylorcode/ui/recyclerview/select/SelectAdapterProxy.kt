@@ -63,7 +63,7 @@ class SelectAdapterProxy : VarietyAdapter.AdapterProxy<SelectionBeanWrapper, Sel
         return SelectionViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: SelectionViewHolder, data: SelectionBeanWrapper) {
+    override fun onBindViewHolder(holder: SelectionViewHolder, data: SelectionBeanWrapper, index: Int, action: ((Any?) -> Unit)?) {
         holder.selector?.apply {
             visibility = if (data.showSelector) visible else gone
             group = data.selectorGroup

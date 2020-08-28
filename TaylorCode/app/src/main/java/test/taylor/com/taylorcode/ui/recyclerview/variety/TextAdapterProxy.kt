@@ -14,15 +14,21 @@ class TextAdapterProxy : AdapterProxy<Text, TextViewHolder>() {
                 layout_id = "tvName"
                 layout_width = match_parent
                 layout_height = wrap_content
-                textSize = 20f
+                textSize = 40f
+                gravity = gravity_center
                 textColor = "#ff00ff"
             }
         }
         return TextViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: TextViewHolder, data: Text) {
-        holder.tvName?.text = data.text
+    override fun onBindViewHolder(holder: TextViewHolder, data: Text, index: Int, action: ((Any?) -> Unit)?) {
+        holder.tvName?.apply {
+            text = data.text
+            onClick = {
+                action?.invoke(index)
+            }
+        }
     }
 }
 

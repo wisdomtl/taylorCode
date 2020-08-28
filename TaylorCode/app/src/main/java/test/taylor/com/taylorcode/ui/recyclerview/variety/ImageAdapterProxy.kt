@@ -22,7 +22,7 @@ class ImageAdapterProxy: AdapterProxy<Image, ImageViewHolder>() {
         return ImageViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, data: Image) {
+    override fun onBindViewHolder(holder: ImageViewHolder, data: Image, index: Int, action: ((Any?) -> Unit)?) {
         Glide.with(holder.ivAvatar?.context)
             .load(data.url)
             .into(holder.ivAvatar)

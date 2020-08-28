@@ -34,12 +34,17 @@ class VarietyAdapter(
         adapterProxys.remove(proxy)
     }
 
+    /**
+     * a way for [ViewHolder] to communicate with [RecyclerView.Adapter]
+     */
+    var action:((Any?)->Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return adapterProxys.get<Any, ViewHolder>(viewType).onCreateViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        adapterProxys.get<Any, ViewHolder>(getItemViewType(position)).onBindViewHolder(holder, datas[position])
+        adapterProxys.get<Any, ViewHolder>(getItemViewType(position)).onBindViewHolder(holder, datas[position], position, action)
     }
 
     override fun getItemCount(): Int = datas.size
@@ -62,11 +67,7 @@ class VarietyAdapter(
 
         abstract fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 
-        abstract fun onBindViewHolder(holder: VH, data: T)
-
-        fun onBindViewHolder(holder: VH, data: T, payloads: List<Any>) {
-            onBindViewHolder(holder, data)
-        }
+        abstract fun onBindViewHolder(holder: VH, data: T, index: Int, action: ((Any?) -> Unit)? = null)
     }
 
     /**
