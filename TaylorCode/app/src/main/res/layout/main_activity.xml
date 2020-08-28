@@ -8,6 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnSelectRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="selection in recyclerview"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btnVarietyAdapter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

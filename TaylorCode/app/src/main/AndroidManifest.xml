@@ -210,6 +210,7 @@
         <activity android:name=".ui.night_mode.TestMaskActivity" />
         <activity android:name=".ui.custom_view.progress_view.ProgressBarActivity" />
         <activity android:name=".ui.recyclerview.variety.VarietyAdapterActivity" />
+        <activity android:name=".ui.recyclerview.select.SelectRecycleViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

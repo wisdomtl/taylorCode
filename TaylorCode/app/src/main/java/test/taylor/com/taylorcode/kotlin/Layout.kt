@@ -24,15 +24,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import test.taylor.com.taylorcode.ui.custom_view.selector.kt.Selector
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 
 //<editor-fold desc="widget creation function">
 inline fun ViewGroup.TextView(init: TextView.() -> Unit) =
     TextView(context).apply(init).also { addView(it) }
 
-
-inline fun ViewGroup.ImageView(init: ImageView.() -> Unit) =
-    ImageView(context).apply(init).also { addView(it) }
+inline fun ViewGroup.ImageView(autoAdd: Boolean = true, init: ImageView.() -> Unit) =
+    ImageView(context).apply(init).also { if (autoAdd) addView(it) }
 
 inline fun ViewGroup.Button(init: Button.() -> Unit) =
     Button(context).apply(init).also { addView(it) }
@@ -141,6 +141,15 @@ inline fun Fragment.EditText(init: EditText.() -> Unit) =
 
 inline fun Fragment.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
     context?.let { LineFeedLayout(it).apply(init) }
+
+inline fun ViewGroup.Selector(init: Selector.() -> Unit) =
+    Selector(context).apply(init).also { addView(it) }
+
+inline fun Context.Selector(init: Selector.() -> Unit): Selector =
+    Selector(this).apply(init)
+
+inline fun Fragment.Selector(init: Selector.() -> Unit) =
+    context?.let { Selector(it).apply(init) }
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
@@ -151,6 +160,7 @@ inline var View.layout_id: String
     set(value) {
         id = value.toLayoutId()
     }
+
 inline var View.padding_top: Int
     get() {
         return 0
@@ -791,7 +801,7 @@ fun <T : View> View.find(id: String): T? = findViewById(id.toLayoutId())
 
 fun <T : View> AppCompatActivity.find(id: String): T? = findViewById(id.toLayoutId())
 
-fun <T> View. observe(liveData: LiveData<T>?, action: (T) -> Unit) {
+fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
     (context as? LifecycleOwner)?.let { owner ->
         liveData?.observe(owner, Observer { action(it) })
     }
