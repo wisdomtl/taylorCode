@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.ui.recyclerview
+package test.taylor.com.taylorcode.ui.recyclerview.variety
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

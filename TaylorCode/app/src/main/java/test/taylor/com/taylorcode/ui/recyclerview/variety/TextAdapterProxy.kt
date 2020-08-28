@@ -1,11 +1,11 @@
-package test.taylor.com.taylorcode.ui.recyclerview
+package test.taylor.com.taylorcode.ui.recyclerview.variety
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.recyclerview.VarietyAdapter.AdapterProxy
+import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter.AdapterProxy
 
 class TextAdapterProxy : AdapterProxy<Text, TextViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

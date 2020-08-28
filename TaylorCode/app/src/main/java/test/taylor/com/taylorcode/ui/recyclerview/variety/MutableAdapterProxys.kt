@@ -1,7 +1,7 @@
-package test.taylor.com.taylorcode.ui.recyclerview
+package test.taylor.com.taylorcode.ui.recyclerview.variety
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import test.taylor.com.taylorcode.ui.recyclerview.VarietyAdapter.AdapterProxy
+import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter.AdapterProxy
 
 class MutableAdapterProxys(
     var proxys: MutableList<AdapterProxy<*, *>> = mutableListOf()

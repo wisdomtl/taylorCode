@@ -1,9 +1,9 @@
-package test.taylor.com.taylorcode.ui.recyclerview
+package test.taylor.com.taylorcode.ui.recyclerview.variety
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import test.taylor.com.taylorcode.ui.recyclerview.VarietyAdapter.AdapterProxy
+import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter.AdapterProxy
 
 /**
  * A special [RecyclerView.Adapter] which could show variety type of item without rewrite [onCreateViewHolder], [onBindViewHolder] and [getItemViewType].
