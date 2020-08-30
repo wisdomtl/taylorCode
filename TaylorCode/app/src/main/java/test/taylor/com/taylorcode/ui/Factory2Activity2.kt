@@ -265,7 +265,7 @@ class Factory2Activity2 : AppCompatActivity() {
                 layout_height = 0
                 top_toBottomOf = "tvTime"
                 bottom_toBottomOf = parent_id
-                onItemClick = { v, i -> onItemClickEvent(v, i) }
+                onItemClick = { v, i, x, y -> onItemClickEvent(v, i) }
             }
 
         }

@@ -29,127 +29,127 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 
 //<editor-fold desc="widget creation function">
 inline fun ViewGroup.TextView(init: TextView.() -> Unit) =
-    TextView(context).apply(init).also { addView(it) }
+        TextView(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.ImageView(autoAdd: Boolean = true, init: ImageView.() -> Unit) =
-    ImageView(context).apply(init).also { if (autoAdd) addView(it) }
+        ImageView(context).apply(init).also { if (autoAdd) addView(it) }
 
 inline fun ViewGroup.Button(init: Button.() -> Unit) =
-    Button(context).apply(init).also { addView(it) }
+        Button(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.View(init: View.() -> Unit): View =
-    View(context).apply(init).also { addView(it) }
+        View(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.RelativeLayout(init: RelativeLayout.() -> Unit) =
-    RelativeLayout(context).apply(init).also { addView(it) }
+        RelativeLayout(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.LinearLayout(init: LinearLayout.() -> Unit) =
-    LinearLayout(context).apply(init).also { addView(it) }
+        LinearLayout(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.NestedScrollView(init: NestedScrollView.() -> Unit) =
-    NestedScrollView(context).apply(init).also { addView(it) }
+        NestedScrollView(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.RecyclerView(init: RecyclerView.() -> Unit) =
-    RecyclerView(context).apply(init).also { addView(it) }
+        RecyclerView(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
-    ConstraintLayout(context).apply(init).also { addView(it) }
+        ConstraintLayout(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.FrameLayout(init: FrameLayout.() -> Unit) =
-    FrameLayout(context).apply(init).also { addView(it) }
+        FrameLayout(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.ViewFlipper(init: ViewFlipper.() -> Unit) =
-    ViewFlipper(context).apply(init).also { addView(it) }
+        ViewFlipper(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.EditText(init: EditText.() -> Unit) =
-    EditText(context).apply(init).also { addView(it) }
+        EditText(context).apply(init).also { addView(it) }
 
 inline fun ViewGroup.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-    LineFeedLayout(context).apply(init).also { addView(it) }
+        LineFeedLayout(context).apply(init).also { addView(it) }
 
 inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
-    Guideline(context).apply(init).also { addView(it) }
+        Guideline(context).apply(init).also { addView(it) }
 
 inline fun ConstraintLayout.Flow(init: Flow.() -> Unit) =
-    Flow(context).apply(init).also { addView(it) }
+        Flow(context).apply(init).also { addView(it) }
 
 inline fun ConstraintLayout.Layer(init: Layer.() -> Unit) =
-    Layer(context).apply(init).also { addView(it) }
+        Layer(context).apply(init).also { addView(it) }
 
 inline fun Context.ConstraintLayout(init: ConstraintLayout.() -> Unit): ConstraintLayout =
-    ConstraintLayout(this).apply(init)
+        ConstraintLayout(this).apply(init)
 
 inline fun Context.LinearLayout(init: LinearLayout.() -> Unit): LinearLayout =
-    LinearLayout(this).apply(init)
+        LinearLayout(this).apply(init)
 
 inline fun Context.FrameLayout(init: FrameLayout.() -> Unit) =
-    FrameLayout(this).apply(init)
+        FrameLayout(this).apply(init)
 
 inline fun Context.NestedScrollView(init: NestedScrollView.() -> Unit) =
-    NestedScrollView(this).apply(init)
+        NestedScrollView(this).apply(init)
 
 inline fun Context.TextView(init: TextView.() -> Unit) =
-    TextView(this).apply(init)
+        TextView(this).apply(init)
 
 inline fun Context.Button(init: Button.() -> Unit) =
-    Button(this).apply(init)
+        Button(this).apply(init)
 
 inline fun Context.ImageView(init: ImageView.() -> Unit) =
-    ImageView(this).apply(init)
+        ImageView(this).apply(init)
 
 inline fun Context.View(init: View.() -> Unit) =
-    View(this).apply(init)
+        View(this).apply(init)
 
 inline fun Context.EditText(init: EditText.() -> Unit) =
-    EditText(this).apply(init)
+        EditText(this).apply(init)
 
 inline fun Context.ViewFlipper(init: ViewFlipper.() -> Unit) =
-    ViewFlipper(this).apply(init)
+        ViewFlipper(this).apply(init)
 
 inline fun Context.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-    LineFeedLayout(this).apply(init)
+        LineFeedLayout(this).apply(init)
 
 inline fun Fragment.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
-    context?.let { ConstraintLayout(it).apply(init) }
+        context?.let { ConstraintLayout(it).apply(init) }
 
 inline fun Fragment.LinearLayout(init: LinearLayout.() -> Unit) =
-    context?.let { LinearLayout(it).apply(init) }
+        context?.let { LinearLayout(it).apply(init) }
 
 inline fun Fragment.FrameLayout(init: FrameLayout.() -> Unit) =
-    context?.let { FrameLayout(it).apply(init) }
+        context?.let { FrameLayout(it).apply(init) }
 
 inline fun Fragment.NestedScrollView(init: NestedScrollView.() -> Unit) =
-    context?.let { NestedScrollView(it).apply(init) }
+        context?.let { NestedScrollView(it).apply(init) }
 
 inline fun Fragment.TextView(init: TextView.() -> Unit) =
-    context?.let { TextView(it).apply(init) }
+        context?.let { TextView(it).apply(init) }
 
 inline fun Fragment.Button(init: Button.() -> Unit) =
-    context?.let { Button(it).apply(init) }
+        context?.let { Button(it).apply(init) }
 
 inline fun Fragment.ImageView(init: ImageView.() -> Unit) =
-    context?.let { ImageView(it).apply(init) }
+        context?.let { ImageView(it).apply(init) }
 
 inline fun Fragment.View(init: View.() -> Unit) =
-    context?.let { View(it).apply(init) }
+        context?.let { View(it).apply(init) }
 
 inline fun Fragment.ViewFlipper(init: ViewFlipper.() -> Unit) =
-    context?.let { ViewFlipper(it).apply(init) }
+        context?.let { ViewFlipper(it).apply(init) }
 
 inline fun Fragment.EditText(init: EditText.() -> Unit) =
-    context?.let { EditText(it).apply(init) }
+        context?.let { EditText(it).apply(init) }
 
 inline fun Fragment.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-    context?.let { LineFeedLayout(it).apply(init) }
+        context?.let { LineFeedLayout(it).apply(init) }
 
 inline fun ViewGroup.Selector(init: Selector.() -> Unit) =
-    Selector(context).apply(init).also { addView(it) }
+        Selector(context).apply(init).also { addView(it) }
 
 inline fun Context.Selector(init: Selector.() -> Unit): Selector =
-    Selector(this).apply(init)
+        Selector(this).apply(init)
 
 inline fun Fragment.Selector(init: Selector.() -> Unit) =
-    context?.let { Selector(it).apply(init) }
+        context?.let { Selector(it).apply(init) }
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
@@ -636,10 +636,10 @@ inline var TextView.onTextChange: TextWatcher
             }
 
             override fun beforeTextChanged(
-                text: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
+                    text: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
             ) {
                 value.beforeTextChanged.invoke(text, start, count, after)
             }
@@ -708,9 +708,9 @@ var View.onClick: (View) -> Unit
         setOnClickListener { v -> value(v) }
     }
 
-var RecyclerView.onItemClick: (View, Int) -> Unit
+var RecyclerView.onItemClick: (View, Int, Float, Float) -> Unit
     get() {
-        return { _, _ -> }
+        return { _, _, _, _ -> }
     }
     set(value) {
         setOnItemClickListener(value)
@@ -773,22 +773,23 @@ val parent_id = "0"
 val Int.dp: Int
     get() {
         return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            Resources.getSystem().displayMetrics
+                TypedValue.COMPLEX_UNIT_DIP,
+                this.toFloat(),
+                Resources.getSystem().displayMetrics
         ).toInt()
     }
 
 fun ViewGroup.MarginLayoutParams.toConstraintLayoutParam() =
-    ConstraintLayout.LayoutParams(width, height).also { it ->
-        it.topMargin = this.topMargin
-        it.bottomMargin = this.bottomMargin
-        it.marginStart = this.marginStart
-        it.marginEnd = this.marginEnd
-    }
+        ConstraintLayout.LayoutParams(width, height).also { it ->
+            it.topMargin = this.topMargin
+            it.bottomMargin = this.bottomMargin
+            it.marginStart = this.marginStart
+            it.marginEnd = this.marginEnd
+        }
 
 fun ViewGroup.LayoutParams.append(set: ConstraintLayout.LayoutParams.() -> Unit) =
-    (this as? ConstraintLayout.LayoutParams)?.apply(set) ?: (this as? ViewGroup.MarginLayoutParams)?.toConstraintLayoutParam()?.apply(set)
+        (this as? ConstraintLayout.LayoutParams)?.apply(set)
+                ?: (this as? ViewGroup.MarginLayoutParams)?.toConstraintLayoutParam()?.apply(set)
 
 
 fun String.toLayoutId(): Int {
@@ -807,7 +808,7 @@ fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
     }
 }
 
-fun RecyclerView.setOnItemClickListener(listener: (View, Int) -> Unit) {
+fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> Unit) {
     addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
         val gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
             override fun onShowPress(e: MotionEvent?) {
@@ -816,7 +817,7 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int) -> Unit) {
             override fun onSingleTapUp(e: MotionEvent?): Boolean {
                 e?.let {
                     findChildViewUnder(it.x, it.y)?.let { child ->
-                        listener(child, getChildAdapterPosition(child))
+                        listener(child, getChildAdapterPosition(child), it.x - child.left, it.y - child.top)
                     }
                 }
                 return false
@@ -856,19 +857,19 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int) -> Unit) {
 
 //<editor-fold desc="listener helper class">
 class TextWatcher(
-    var beforeTextChanged: (
-        text: CharSequence?,
-        start: Int,
-        count: Int,
-        after: Int
-    ) -> Unit = { _, _, _, _ -> },
-    var onTextChanged: (
-        text: CharSequence?,
-        start: Int,
-        count: Int,
-        after: Int
-    ) -> Unit = { _, _, _, _ -> },
-    var afterTextChanged: (text: Editable?) -> Unit = {}
+        var beforeTextChanged: (
+                text: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+        ) -> Unit = { _, _, _, _ -> },
+        var onTextChanged: (
+                text: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+        ) -> Unit = { _, _, _, _ -> },
+        var afterTextChanged: (text: Editable?) -> Unit = {}
 )
 
 fun textWatcher(init: TextWatcher.() -> Unit): TextWatcher = TextWatcher().apply(init)
