@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.custom_view.selector.kt.SelectorGroup
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter
@@ -71,6 +72,7 @@ class SelectRecycleViewActivity: AppCompatActivity() {
                 layout_id = "tvDelete"
                 layout_width = wrap_content
                 layout_height = wrap_content
+                background_color = "#ff00ff"
                 text = "delete"
                 textSize = 15f
                 center_horizontal = true
@@ -83,6 +85,17 @@ class SelectRecycleViewActivity: AppCompatActivity() {
                     }
                     selectorAdapter.notifyDataSetChanged()
                 }
+            }
+
+            ImageView {
+                layout_id = "ivCircle"
+                layout_width = 40
+                layout_height = 40
+                src = R.drawable.diamond_tag
+                scaleType = scale_fix_xy
+                toCircleOf = "tvDelete"
+                circle_angle = 45f
+                circle_radius = 30
             }
         })
         selectorAdapter.notifyDataSetChanged()
