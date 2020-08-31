@@ -1,11 +1,9 @@
 package test.taylor.com.taylorcode.kotlin.extension
 
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.View
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
@@ -20,6 +18,25 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
     setOnClickListener { action(this) }
 }
 
+/**
+ * get relative position of this [View] relative to [otherView]
+ */
+fun View.getRelativeRectTo(otherView: View): Rect {
+    val parentRect = Rect().also { otherView.getGlobalVisibleRect(it) }
+    val childRect = Rect().also { getGlobalVisibleRect(it) }
+    return childRect.relativeTo(parentRect)
+}
+
+/**
+ * get the relative rect of the [Rect] according to the [otherRect] ,considering the [otherRect]'s left and top is zero
+ */
+fun Rect.relativeTo(otherRect: Rect): Rect {
+    val relativeLeft = left - otherRect.left
+    val relativeTop = top - otherRect.top
+    val relativeRight = relativeLeft + right - left
+    val relativeBottom = relativeTop + bottom - top
+    return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
+}
 
 val View.inScreen: Boolean
     get() {
@@ -31,6 +48,7 @@ val View.inScreen: Boolean
         val viewRect = Rect(array[0], array[1], array[0] + width, array[1] + height)
         return screenRect.intersect(viewRect)
     }
+
 /**
  * add listener to RecyclerView which listens it's items in and out event
  * @param inOrOut 1 means item enter RecyclerView, 0 means item leave RecyclerView, 2 means item is fully visible in RecyclerView
