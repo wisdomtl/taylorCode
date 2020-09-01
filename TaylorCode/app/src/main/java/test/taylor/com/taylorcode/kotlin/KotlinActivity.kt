@@ -294,6 +294,25 @@ class KotlinActivity : AppCompatActivity() {
         textCompanionObjec.sec3
         textCompanionObjec.CC.doB()
         textCompanionObjec.doA()
+
+
+        /**
+         * spread array to listOf()
+         */
+        val otherList = mutableListOf<String>().apply {
+            add("bbbb")
+            add("ccc")
+        }
+        val list = listOf<Any>(
+            "aaa",
+            *otherList.toTypedArray()
+        )
+        val list2 = listOf<Any>(
+            "aaa",
+            otherList
+        )
+        list.print { it.toString() }?.let { Log.v("ttaylor", "tag=spread array, list=$it") }
+        list2.print { it.toString() }?.let { Log.v("ttaylor", "tag=spread array failed, list=$it") }
     }
 
     private fun split() {
@@ -357,14 +376,16 @@ class KotlinActivity : AppCompatActivity() {
 class textCompanionObjec {
     companion object {
         val sec = 1
+
         @JvmStatic
         val sec2 = 2
+
         @JvmField
         val sec3 = 3
-        fun doA(){}
+        fun doA() {}
     }
 
-    object CC{
-        fun doB(){}
+    object CC {
+        fun doB() {}
     }
 }
