@@ -41,7 +41,7 @@ class SelectRecycleViewActivity: AppCompatActivity() {
 //            SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),singleSelectorGroup,false)
 //        )
 
-        datas = listOf(
+        datas = mutableListOf(
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),

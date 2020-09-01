@@ -17,7 +17,7 @@ class VarietyAdapter(
     /**
      * the data of this adapter
      */
-    var datas: List<Any> = emptyList()
+    var datas: MutableList<Any> = mutableListOf()
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
