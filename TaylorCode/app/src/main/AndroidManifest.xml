@@ -211,6 +211,7 @@
         <activity android:name=".ui.custom_view.progress_view.ProgressBarActivity" />
         <activity android:name=".ui.recyclerview.variety.VarietyAdapterActivity" />
         <activity android:name=".ui.recyclerview.select.SelectRecycleViewActivity" />
+        <activity android:name=".ui.custom_view.recyclerview_indicator.IndicatorActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

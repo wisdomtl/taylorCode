@@ -39,6 +39,7 @@ import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
+import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.IndicatorActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
@@ -186,6 +187,7 @@ class MainActivity : BaseActivity() {
         btnProgressBar.setOnClickListener { startActivity<ProgressBarActivity>() }
         btnVarietyAdapter.setOnClickListener { startActivity<VarietyAdapterActivity>() }
         btnSelectRecyclerView.setOnClickListener { startActivity<SelectRecycleViewActivity>() }
+        btnRecyclerViewIndicator.setOnClickListener { startActivity<IndicatorActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

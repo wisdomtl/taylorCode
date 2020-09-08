@@ -24,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
 import test.taylor.com.taylorcode.ui.custom_view.selector.kt.Selector
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 
@@ -67,6 +68,9 @@ inline fun ViewGroup.EditText(init: EditText.() -> Unit) =
 inline fun ViewGroup.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
         LineFeedLayout(context).apply(init).also { addView(it) }
 
+inline fun ViewGroup.Indicator(init: Indicator.() -> Unit) =
+    Indicator(context).apply(init).also { addView(it) }
+
 inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
         Guideline(context).apply(init).also { addView(it) }
 
@@ -108,6 +112,9 @@ inline fun Context.ViewFlipper(init: ViewFlipper.() -> Unit) =
 
 inline fun Context.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
         LineFeedLayout(this).apply(init)
+
+inline fun Context.RecyclerView(init: RecyclerView.() -> Unit) =
+    RecyclerView(this).apply(init)
 
 inline fun Fragment.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
         context?.let { ConstraintLayout(it).apply(init) }
