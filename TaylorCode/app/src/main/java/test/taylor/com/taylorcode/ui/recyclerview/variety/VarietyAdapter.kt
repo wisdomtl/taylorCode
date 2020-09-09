@@ -65,6 +65,13 @@ class VarietyAdapter(
      */
     var action: ((Any?) -> Unit)? = null
 
+    var onAttachedToRecyclerView: ((recyclerView: RecyclerView) -> Unit)? = null
+    var onDetachedFromRecyclerView: ((recyclerView: RecyclerView) -> Unit)? = null
+    var onFailedToRecycleView: ((holder: ViewHolder) -> Boolean)? = null
+    var onViewAttachedToWindow: ((holder: ViewHolder) -> Unit)? = null
+    var onViewDetachedFromWindow: ((holder: ViewHolder) -> Unit)? = null
+    var onViewRecycled: ((holder: ViewHolder) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return adapterProxys.get<Any, ViewHolder>(viewType).onCreateViewHolder(parent, viewType)
     }
@@ -81,6 +88,30 @@ class VarietyAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return getProxyIndex(datas[position])
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        onAttachedToRecyclerView?.invoke(recyclerView)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        onDetachedFromRecyclerView?.invoke(recyclerView)
+    }
+
+    override fun onFailedToRecycleView(holder: ViewHolder): Boolean {
+        return onFailedToRecycleView?.invoke(holder) ?: return super.onFailedToRecycleView(holder)
+    }
+
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        onViewAttachedToWindow?.invoke(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: ViewHolder) {
+        onViewDetachedFromWindow?.invoke(holder)
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        onViewRecycled?.invoke(holder)
     }
 
     private fun getProxyIndex(data: Any): Int = adapterProxys.indexOf(data.javaClass)
