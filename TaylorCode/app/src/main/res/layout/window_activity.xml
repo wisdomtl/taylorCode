@@ -7,6 +7,12 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="40dp"
+        android:src="@drawable/abc_vector_test"
+        android:tint="#00ff00"
+        android:layout_height="40dp"/>
+
     <!--<Button-->
         <!--android:id="@+id/btn_show_window"-->
         <!--android:layout_width="match_parent"-->
