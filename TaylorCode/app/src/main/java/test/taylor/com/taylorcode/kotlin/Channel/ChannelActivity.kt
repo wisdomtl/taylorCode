@@ -11,6 +11,7 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.autoDispose
+import kotlin.math.abs
 
 class ChannelActivity : AppCompatActivity() {
 
@@ -63,24 +64,29 @@ class ChannelActivity : AppCompatActivity() {
  * actor case: shakeless click listener
  */
 fun View.setShakelessClickListener(threshold: Long, onClick: (View) -> Unit) {
-    class Click(var view: View, var onClick: (View) -> Unit)
+    class Click(
+        var view: View? = null,
+        var clickTime: Long = -1,
+        var onClick: ((View?) -> Unit)? = null
+    ) {
+        fun isShake(click: Click) = abs(clickTime - click.clickTime) < threshold
+    }
 
     val mainScope = MainScope()
     val clickActor = mainScope.actor<Click>(capacity = Channel.UNLIMITED) {
-        var lastClickTime = System.currentTimeMillis()
-        val isShake = { last: Long, now: Long -> now - last < threshold }
+        var preClick: Click = Click()
         for (click in channel) {
-            if (!isShake(lastClickTime, System.currentTimeMillis())) {
-                click.onClick(click.view)
+            if (!click.isShake(preClick)) {
+                click.onClick?.invoke(click.view)
             }
-            lastClickTime = System.currentTimeMillis()
+            preClick = click
         }
     }.autoDispose(this)
     setOnClickListener { view ->
         mainScope.launch {
-            clickActor.send(Click(view) {
-                onClick(view)
-            })
+            clickActor.send(
+                Click(view, System.currentTimeMillis()) { onClick(view) }
+            )
         }.autoDispose(this)
     }
 }
