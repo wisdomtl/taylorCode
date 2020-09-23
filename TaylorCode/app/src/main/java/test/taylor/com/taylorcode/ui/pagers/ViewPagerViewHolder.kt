@@ -8,8 +8,8 @@ import test.taylor.com.taylorcode.kotlin.find
 class ViewPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(url: String) {
-        itemView.apply {
-            Glide.with(context).load(url).into(find("iv"))
-        }
+//        itemView.apply {
+//            Glide.with(context).load(url).into(find("iv"))
+//        }
     }
 }
