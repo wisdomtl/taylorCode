@@ -212,6 +212,7 @@
         <activity android:name=".ui.recyclerview.variety.VarietyAdapterActivity" />
         <activity android:name=".ui.recyclerview.select.SelectRecycleViewActivity" />
         <activity android:name=".ui.custom_view.recyclerview_indicator.IndicatorActivity" />
+        <activity android:name=".type_parameter.TypeParameterActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -35,6 +35,7 @@ import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
+import test.taylor.com.taylorcode.type_parameter.TypeParameterActivity
 import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
@@ -188,6 +189,7 @@ class MainActivity : BaseActivity() {
         btnVarietyAdapter.setOnClickListener { startActivity<VarietyAdapterActivity>() }
         btnSelectRecyclerView.setOnClickListener { startActivity<SelectRecycleViewActivity>() }
         btnRecyclerViewIndicator.setOnClickListener { startActivity<IndicatorActivity>() }
+        btnTypeParameter.setOnClickListener { startActivity<TypeParameterActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
