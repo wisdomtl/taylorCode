@@ -1,11 +1,12 @@
 package test.taylor.com.taylorcode.ui
 
-import android.graphics.Color
+import shadow
+import android.graphics.*
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Handler
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.constraintlayou_activity2.*
@@ -19,13 +20,36 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
     val id3 = 3
     val id4 = 4
     val id5 = 5
-    val tags = listOf("dkfj" ,"dfsf" ,"dsfds","dfsf" ,"dsfds","dfsf" ,"dsfds","dfsf" ,"dsfds" ,"dfsf" ,"dsfds","dfsf" ,"dsfds","dfsf" ,"dsfds","dfsf" ,"dsfds")
+    val tags = listOf(
+        "dkfj",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds",
+        "dfsf",
+        "dsfds"
+    )
+
+    val handler = Handler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraintlayou_activity2)
-        build()
+//        build()
+        tvShadow.shadow()
+
+        container.shadow()
     }
 
     private fun build() {
@@ -35,10 +59,11 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
             textSize = DimensionUtil.dp2px(20.0).toFloat()
             setBackgroundColor(Color.parseColor("#00ff00"))
             setTextColor(Color.parseColor("#404852"))
-            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
-                topToTop = ConstraintSet.PARENT_ID
-                startToStart = ConstraintSet.PARENT_ID
-            }
+            layoutParams =
+                ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+                    topToTop = ConstraintSet.PARENT_ID
+                    startToStart = ConstraintSet.PARENT_ID
+                }
         }.also { croot2?.addView(it) }
 
         TextView(this).apply {
@@ -47,17 +72,19 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
             textSize = DimensionUtil.dp2px(20.0).toFloat()
             setBackgroundColor(Color.parseColor("#ffff00"))
             setTextColor(Color.parseColor("#404852"))
-            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
-                topToBottom = id1
-                startToStart = ConstraintSet.PARENT_ID
-            }
+            layoutParams =
+                ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+                    topToBottom = id1
+                    startToStart = ConstraintSet.PARENT_ID
+                }
         }.also { croot2?.addView(it) }
 
         LineFeedLayout(this).apply {
-            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
-                topToBottom = id2
-                startToStart = ConstraintSet.PARENT_ID
-            }
+            layoutParams =
+                ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+                    topToBottom = id2
+                    startToStart = ConstraintSet.PARENT_ID
+                }
             setBackgroundColor(Color.parseColor("#38ff00"))
             tags?.forEach { tag ->
                 TextView(this@ConstraintLayoutActivity2).apply {

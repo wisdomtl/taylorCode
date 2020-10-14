@@ -53,6 +53,5 @@ public class ConstraintLayoutActivity extends Activity {
         };
         ViewUtil.addExtraAnimClickListener(btn3, animator, onClickListener);
 
-
     }
 }
