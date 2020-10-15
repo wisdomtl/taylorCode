@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.yalantis.ucrop.UCrop;
+//import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -109,16 +109,17 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         } else if (requestCode == REQUEST_CODE_PICK_PHOTO) {
 //            showPicturePicked(data);
             cropPicture(data.getData());
-        } else if (requestCode == UCrop.REQUEST_CROP) {
-            if (isFinishing()) {
-                return;
-            }
-
-            Glide.with(this)
-                    .load(UCrop.getOutput(data))
-//                    .bitmapTransform(new GlideCircleTransform(this))
-                    .into(originImageView);
         }
+//        else if (requestCode == UCrop.REQUEST_CROP) {
+//            if (isFinishing()) {
+//                return;
+//            }
+//
+////            Glide.with(this)
+////                    .load(UCrop.getOutput(data))
+//////                    .bitmapTransform(new GlideCircleTransform(this))
+////                    .into(originImageView);
+//        }
     }
 
     private void showOriginPictureTaken(Uri imageUri) {
@@ -136,25 +137,25 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
 
 
     public void cropPicture(Uri uri) {
-        if (uri == null) {
-            return;
-        }
-        UCrop.Options options = new UCrop.Options();
-        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        options.setHideBottomControls(true);
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-        options.setCompressionQuality(50);
-        options.setCircleDimmedLayer(true);
-        options.setShowCropGrid(false);
-
-        File cropFile = createImageFile();
-
-        UCrop.of(uri, Uri.fromFile(cropFile))
-                .withAspectRatio(1, 1)
-                .withMaxResultSize(200, 200)
-                .withOptions(options)
-                .start(this);
+//        if (uri == null) {
+//            return;
+//        }
+//        UCrop.Options options = new UCrop.Options();
+//        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+//        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//        options.setHideBottomControls(true);
+//        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+//        options.setCompressionQuality(50);
+//        options.setCircleDimmedLayer(true);
+//        options.setShowCropGrid(false);
+//
+//        File cropFile = createImageFile();
+//
+//        UCrop.of(uri, Uri.fromFile(cropFile))
+//                .withAspectRatio(1, 1)
+//                .withMaxResultSize(200, 200)
+//                .withOptions(options)
+//                .start(this);
     }
 
     private void showPicturePicked(Intent data) {
