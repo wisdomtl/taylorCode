@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.constraintlayou_activity2.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 import test.taylor.com.taylorcode.util.DimensionUtil
 
@@ -47,9 +48,22 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraintlayou_activity2)
 //        build()
-        tvShadow.shadow()
+        tvShadow.apply {
+            background_drawable_state_list = listOf(
+                intArrayOf(state_enable) to shape {
+                    corner_radius = 10
+                    solid_color = "#0000ff"
+                },
+                intArrayOf(state_disable) to shape {
+                    corner_radius = 10
+                    solid_color = "#ffff00"
+                }
+            )
 
-        container.shadow()
+        }
+        tvNormal?.onClick = {
+           tvShadow.isEnabled = !tvShadow.isEnabled
+        }
     }
 
     private fun build() {

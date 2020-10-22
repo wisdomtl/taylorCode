@@ -1,14 +1,21 @@
 package test.taylor.com.taylorcode.kotlin
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.StateListDrawable
+import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.constraintlayout.helper.widget.Layer
@@ -802,6 +809,14 @@ val spread_inside = ConstraintLayout.LayoutParams.CHAIN_SPREAD_INSIDE
 val wrap_none = Flow.WRAP_NONE
 val wrap_chain = Flow.WRAP_CHAIN
 val wrap_aligned = Flow.WRAP_ALIGNED
+val state_enable = android.R.attr.state_enabled
+val state_disable = -android.R.attr.state_enabled
+val state_pressed = android.R.attr.state_pressed
+val state_unpressed = -android.R.attr.state_pressed
+val state_focused = android.R.attr.state_focused
+val state_unfocused = -android.R.attr.state_focused
+val state_selected = android.R.attr.state_selected
+val state_unselected = -android.R.attr.state_selected
 
 val parent_id = "0"
 //</editor-fold>
@@ -910,5 +925,77 @@ class TextWatcher(
 )
 
 fun textWatcher(init: TextWatcher.() -> Unit): TextWatcher = TextWatcher().apply(init)
+
+/**
+ * use this attribute to build shape dynamically, getting rid of "shape.xml"
+ */
+inline var View.shape: GradientDrawable
+    get() {
+        return GradientDrawable()
+    }
+    set(value) {
+        background = value
+    }
+
+inline fun shape(init: GradientDrawable.() -> Unit) = GradientDrawable().apply(init)
+inline var GradientDrawable.solid_color: String
+    get() {
+        return ""
+    }
+    set(value) {
+        setColor(Color.parseColor(value))
+    }
+
+inline var GradientDrawable.corner_radius: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        cornerRadius = value.dp.toFloat()
+    }
+
+inline var GradientDrawable.corner_radii: IntArray
+    get() {
+        return intArrayOf()
+    }
+    set(value) {
+        cornerRadii = value.map { it.dp.toFloat() }.toFloatArray()
+    }
+
+inline var GradientDrawable.gradient_colors: List<String>
+    get() {
+        return emptyList()
+    }
+    set(value) {
+        colors = value.map { Color.parseColor(it) }.toIntArray()
+    }
+
+
+inline var GradientDrawable.color_state_list: List<Pair<IntArray, String>>
+    get() {
+        return listOf(intArrayOf() to "#000000")
+    }
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    set(value) {
+        val states = mutableListOf<IntArray>()
+        val colors = mutableListOf<Int>()
+        value.forEach { pair ->
+            states.add(pair.first)
+            colors.add(Color.parseColor(pair.second))
+        }
+        color = ColorStateList(states.toTypedArray(), colors.toIntArray())
+    }
+
+inline var View.background_drawable_state_list: List<Pair<IntArray, Drawable>>
+    get() {
+        return listOf(intArrayOf() to GradientDrawable())
+    }
+    set(value) {
+        background = StateListDrawable().apply {
+            value.forEach { pair ->
+                addState(pair.first, pair.second)
+            }
+        }
+    }
 
 //</editor-fold>

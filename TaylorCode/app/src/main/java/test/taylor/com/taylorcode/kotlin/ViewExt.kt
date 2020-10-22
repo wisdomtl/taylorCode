@@ -1,8 +1,10 @@
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.doOnPreDraw
 import test.taylor.com.taylorcode.kotlin.dp
 
 val SHADOW_LEFT: Int
@@ -24,7 +26,7 @@ fun View.shadow(
 ) {
     post {
         // keep the origin background here
-        val backgroundBitmap = background.let { it.toBitmap(it.bounds.width(), it.bounds.height()) }
+        val backgroundBitmap = background.let { it.toBitmap(width,height) }
         var extraPaddingRight = 0
         var extraPaddingLeft = 0
         var extraPaddingBottom = 0
@@ -87,3 +89,4 @@ fun View.shadow(
         }
     }
 }
+
