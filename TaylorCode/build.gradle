@@ -8,7 +8,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha01'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -19,14 +19,10 @@ buildscript {
 
 allprojects {
     repositories {
-
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
         jcenter()
         google()
         maven { url 'https://maven.google.com' }
-
+        maven { url "https://jitpack.io" }
     }
 }
 
