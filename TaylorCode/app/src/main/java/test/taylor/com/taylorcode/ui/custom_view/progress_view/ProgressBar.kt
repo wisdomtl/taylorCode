@@ -22,7 +22,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
     /**
      * the background color of the whole bar
      */
-    var barColor: String = "#00ff00"
+    var backgroundColor: String = "#00ff00"
         set(value) {
             field = value
             barPaint.color = Color.parseColor(value)
@@ -40,7 +40,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
     /**
      * the gradient colors of progress part
      */
-    var colors = emptyArray<String>()
+    var progressColors = emptyArray<String>()
         set(value) {
             field = value
             _colors = value.map { Color.parseColor(it) }.toIntArray()
@@ -76,28 +76,43 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private var _colors = intArrayOf()
 
     /**
-     * the horizontal radius of round corner
+     * the horizontal radius of background round corner
      */
-    var rx: Float = 0f
+    var backgroundRx: Float = 0f
         set(value) {
             field = value.dp
         }
 
     /**
-     * the vertical radius of round corner
+     * the vertical radius of background round corner
      */
-    var ry: Float = 0f
+    var backgroundRy: Float = 0f
         set(value) {
             field = value.dp
         }
 
+    /**
+     * the horizontal radius of progress round corner
+     */
+    var progressRx: Float = 0f
+        set(value) {
+            field = value.dp
+        }
+
+    /**
+     * the vertical radius of progress round corner
+     */
+    var progressRy: Float = 0f
+        set(value) {
+            field = value.dp
+        }
     /**
      * the progress of bar, range from 0 to 1
      */
     var progress: Float = 0f
 
     private var barPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor(barColor)
+        color = Color.parseColor(backgroundColor)
         style = Paint.Style.FILL
     }
 
@@ -112,7 +127,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         backgroundRectF.set(0f, 0f, width.toFloat(), height.toFloat())
-        canvas?.drawRoundRect(backgroundRectF, rx, ry, barPaint)
+        canvas?.drawRoundRect(backgroundRectF, backgroundRx, backgroundRy, barPaint)
 
         val foregroundWidth = if (orientation == HORIZONTAL) width * progress else width.toFloat()
         val foregroundTop = if (orientation == HORIZONTAL) 0f else height * (1 - progress) + paddingTop
@@ -120,7 +135,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
         val foregroundBottom = height.toFloat() - paddingBottom
         val foregroundLeft = paddingStart
         progressPaint.shader =
-            if (colors.isEmpty()) null else LinearGradient(
+            if (progressColors.isEmpty()) null else LinearGradient(
                 foregroundLeft,
                 foregroundTop,
                 foregroundRight,
@@ -130,7 +145,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 Shader.TileMode.CLAMP
             )
         foregroundRectF.set(foregroundLeft, foregroundTop, foregroundRight, foregroundBottom)
-        canvas?.drawRoundRect(foregroundRectF, rx, ry, progressPaint)
+        canvas?.drawRoundRect(foregroundRectF, progressRx, progressRy, progressPaint)
     }
 }
 
