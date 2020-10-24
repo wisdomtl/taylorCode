@@ -6,16 +6,17 @@
 
     <test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBar
         android:id="@+id/pb"
-        android:layout_width="30dp"
-        android:layout_height="200dp"
+        android:layout_width="300dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dklfslfjdkl"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/pb"
         app:layout_constraintTop_toBottomOf="@id/pb" />

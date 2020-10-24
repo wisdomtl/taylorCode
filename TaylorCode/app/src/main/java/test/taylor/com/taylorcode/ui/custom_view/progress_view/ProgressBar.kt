@@ -3,10 +3,14 @@ package test.taylor.com.taylorcode.ui.custom_view.progress_view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import kotlin.properties.Delegates
 
 /**
  * a linear progress bar
@@ -28,23 +32,7 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
             barPaint.color = Color.parseColor(value)
         }
 
-    /**
-     * the color of progress part
-     */
-    var progressColor: String = "#ff00ff"
-        set(value) {
-            field = value
-            progressPaint.color = Color.parseColor(value)
-        }
-
-    /**
-     * the gradient colors of progress part
-     */
-    var progressColors = emptyArray<String>()
-        set(value) {
-            field = value
-            _colors = value.map { Color.parseColor(it) }.toIntArray()
-        }
+    var progress: Progress? = null
 
     var orientation: Int = HORIZONTAL
     var paddingStart: Float = 0f
@@ -72,8 +60,6 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
             paddingTop = value
             paddingBottom = value
         }
-
-    private var _colors = intArrayOf()
 
     /**
      * the horizontal radius of background round corner
@@ -106,22 +92,22 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
         set(value) {
             field = value.dp
         }
+
     /**
-     * the progress of bar, range from 0 to 1
+     * the percentage of bar, range from 0% to 100%
      */
-    var progress: Float = 0f
+    var percentage: Int by Delegates.observable(0) { _, oldValue, newValue ->
+        progress?.onPercentageChange(oldValue, newValue)
+        postInvalidate()
+    }
 
     private var barPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.parseColor(backgroundColor)
         style = Paint.Style.FILL
     }
 
-    private var progressPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor(progressColor)
-        style = Paint.Style.FILL
-    }
 
-    private var foregroundRectF = RectF()
+    var progressRectF = RectF()
     private var backgroundRectF = RectF()
 
     @SuppressLint("DrawAllocation")
@@ -129,24 +115,20 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
         backgroundRectF.set(0f, 0f, width.toFloat(), height.toFloat())
         canvas?.drawRoundRect(backgroundRectF, backgroundRx, backgroundRy, barPaint)
 
-        val foregroundWidth = if (orientation == HORIZONTAL) width * progress else width.toFloat()
-        val foregroundTop = if (orientation == HORIZONTAL) 0f else height * (1 - progress) + paddingTop
+        val foregroundWidth = if (orientation == HORIZONTAL) width * percentage/100F else width.toFloat()
+        val foregroundTop = if (orientation == HORIZONTAL) paddingTop else height * (1 - percentage/100F) + paddingTop
         val foregroundRight = foregroundWidth - paddingEnd
         val foregroundBottom = height.toFloat() - paddingBottom
         val foregroundLeft = paddingStart
-        progressPaint.shader =
-            if (progressColors.isEmpty()) null else LinearGradient(
-                foregroundLeft,
-                foregroundTop,
-                foregroundRight,
-                foregroundBottom,
-                _colors,
-                null,
-                Shader.TileMode.CLAMP
-            )
-        foregroundRectF.set(foregroundLeft, foregroundTop, foregroundRight, foregroundBottom)
-        canvas?.drawRoundRect(foregroundRectF, progressRx, progressRy, progressPaint)
+        progressRectF.set(foregroundLeft, foregroundTop, foregroundRight, foregroundBottom)
+        progress?.draw(canvas, this)
     }
+}
+
+interface Progress {
+    fun draw(canvas: Canvas?, progressBar: ProgressBar)
+
+    fun onPercentageChange(old: Int, new: Int) {}
 }
 
 val Float.dp: Float
