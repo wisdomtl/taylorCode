@@ -37,7 +37,7 @@ class ProgressBarActivity : AppCompatActivity() {
             backgroundColor = "#F5F5F5"
             progressRx = 15f
             progressRy = 15f
-            padding = 1f
+            padding = 3f
             progress = stateListOf(
                 0..19 to arrayOf(0x8000FFE5, 0x80E7FFAA),
                 20..59 to arrayOf(0xFF00FFE5, 0xFFE7FFAA),

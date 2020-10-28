@@ -115,12 +115,13 @@ class ProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSe
         backgroundRectF.set(0f, 0f, width.toFloat(), height.toFloat())
         canvas?.drawRoundRect(backgroundRectF, backgroundRx, backgroundRy, barPaint)
 
-        val foregroundWidth = if (orientation == HORIZONTAL) width * percentage/100F else width.toFloat()
-        val foregroundTop = if (orientation == HORIZONTAL) paddingTop else height * (1 - percentage/100F) + paddingTop
-        val foregroundRight = foregroundWidth - paddingEnd
-        val foregroundBottom = height.toFloat() - paddingBottom
-        val foregroundLeft = paddingStart
-        progressRectF.set(foregroundLeft, foregroundTop, foregroundRight, foregroundBottom)
+        val progressMaxWidth = width - paddingStart - paddingEnd
+        val progressMaxHeight = height - paddingTop - paddingBottom
+        val progressWidth = if (orientation == HORIZONTAL) progressMaxWidth * percentage / 100F else progressMaxWidth.toFloat()
+        val progressTop = if (orientation == HORIZONTAL) paddingTop else progressMaxHeight * (1 - percentage / 100F) + paddingTop
+        val progressBottom = height - paddingBottom
+        val progressLeft = paddingStart
+        progressRectF.set(progressLeft, progressTop, progressLeft + progressWidth, progressBottom)
         progress?.draw(canvas, this)
     }
 }
