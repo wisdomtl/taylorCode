@@ -7,7 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <Button
+            android:id="@+id/btn_new_activity_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="new activity result"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_constraint_add"
             android:layout_width="match_parent"

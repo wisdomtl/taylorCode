@@ -29,6 +29,7 @@ import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActiv
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.lifecycle.LifecycleActivity
 import test.taylor.com.taylorcode.list.ListActivity
+import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
@@ -190,6 +191,7 @@ class MainActivity : BaseActivity() {
         btnSelectRecyclerView.setOnClickListener { startActivity<SelectRecycleViewActivity>() }
         btnRecyclerViewIndicator.setOnClickListener { startActivity<IndicatorActivity>() }
         btnTypeParameter.setOnClickListener { startActivity<TypeParameterActivity>() }
+        btn_new_activity_result.setOnClickListener { startActivity<NewActivityResultActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

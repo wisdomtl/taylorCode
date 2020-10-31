@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.kotlin.coroutine
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -501,6 +502,13 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val launchAsync = { _: View ->
         showUser2()
         Unit
+    }
+
+    override fun finish() {
+        setResult(RESULT_OK,Intent().apply {
+            putExtra("name",1)
+        })
+        super.finish()
     }
 
 
