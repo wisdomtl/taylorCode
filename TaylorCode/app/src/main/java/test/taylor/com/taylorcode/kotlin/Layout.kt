@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
 import test.taylor.com.taylorcode.ui.custom_view.selector.kt.Selector
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
+import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBar
 
 //<editor-fold desc="widget creation function">
 inline fun ViewGroup.TextView(init: TextView.() -> Unit) =
@@ -164,6 +165,15 @@ inline fun Context.Selector(init: Selector.() -> Unit): Selector =
 
 inline fun Fragment.Selector(init: Selector.() -> Unit) =
         context?.let { Selector(it).apply(init) }
+
+inline fun ViewGroup.ProgressBar(autoAdd: Boolean = true, init: ProgressBar.() -> Unit) =
+    ProgressBar(context).apply(init).also { if (autoAdd) addView(it) }
+
+inline fun Context.ProgressBar(init: ProgressBar.() -> Unit): ProgressBar =
+    ProgressBar(this).apply(init)
+
+inline fun Fragment.ProgressBar(init: ProgressBar.() -> Unit) =
+    context?.let { ProgressBar(it).apply(init) }
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
