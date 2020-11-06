@@ -78,9 +78,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun testValueDiliver() {
-        Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
-        Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
-        Log.v("ttaylor","tag=, MainActivity.testValueDiliver()  ")
+        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
+        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
+        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
     }
 
     private fun readPhoneInfo() {
@@ -199,10 +199,10 @@ class MainActivity : BaseActivity() {
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
 
         btn_room.setOnClickListener(onClickListener)
-        1280.fmtCount().let { Log.v("ttaylor","tag=aaaadf, MainActivity.initView()  it=${it}") }
+        1280.fmtCount().let { Log.v("ttaylor", "tag=aaaadf, MainActivity.initView()  it=${it}") }
 
-        val str:String = (java.lang.String("0").bytes.sum() - 48).toString()
-        Log.v("ttaylor","tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
+        val str: String = (java.lang.String("0").bytes.sum() - 48).toString()
+        Log.v("ttaylor", "tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
 
 
         /**
@@ -223,7 +223,7 @@ class MainActivity : BaseActivity() {
     }
 
 
-    fun Int.fmtCount() : String = let {
+    fun Int.fmtCount(): String = let {
         return when {
             it >= 1000 -> {
                 val integer = it / 1000
@@ -283,4 +283,15 @@ class MainActivity : BaseActivity() {
  */
 inline fun <reified T> Context.startActivity() {
     Intent(this, T::class.java).also { startActivity(it) }
+}
+
+fun Float.cutEndZero(): String = this.toString().reversed().let {
+    val dotIndex = it.indexOf('.')
+    var zeroCount = 0
+    for (i in 0 until  dotIndex) {
+        if (it[i] != '0') break
+        zeroCount++
+    }
+    val ret = it.takeLast(it.length - zeroCount).reversed()
+    if (ret.endsWith('.')) ret.dropLast(1) else ret
 }
