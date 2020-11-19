@@ -1,9 +1,9 @@
 package test.taylor.com.taylorcode.kotlin
 
+import android.R
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
@@ -12,11 +12,17 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.text.Editable
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
+import android.text.InputType
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.*
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.constraintlayout.helper.widget.Layer
 import androidx.constraintlayout.widget.ConstraintHelper
@@ -32,148 +38,708 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
-import test.taylor.com.taylorcode.ui.custom_view.selector.kt.Selector
-import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
-import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBar
+import androidx.viewpager2.widget.ViewPager2
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
+/**
+ * the extension functions and field in this file help you to build layout dynamically,
+ * which has a better performance than xml files and more readable than normal java and kotlin code
+ */
 //<editor-fold desc="widget creation function">
-inline fun ViewGroup.TextView(init: TextView.() -> Unit) =
-        TextView(context).apply(init).also { addView(it) }
+/**
+ * create [AppCompatTextView] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [AppCompatTextView] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.TextView(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: AppCompatTextView.() -> Unit
+): TextView {
+    val textView =
+        if (style != null) AppCompatTextView(
+            ContextThemeWrapper(context, style)
+        ) else AppCompatTextView(context)
+    return textView.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.ImageView(autoAdd: Boolean = true, init: ImageView.() -> Unit) =
-        ImageView(context).apply(init).also { if (autoAdd) addView(it) }
+/**
+ * create [AppCompatImageView] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [AppCompatImageView] into [ViewGroup] automatically
+ *  @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.ImageView(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: AppCompatImageView.() -> Unit
+): ImageView {
+    val imageView =
+        if (style != null) AppCompatImageView(
+            ContextThemeWrapper(context, style)
+        ) else AppCompatImageView(context)
+    return imageView.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.Button(init: Button.() -> Unit) =
-        Button(context).apply(init).also { addView(it) }
+/**
+ * create [AppCompatButton] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [AppCompatButton] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.Button(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: AppCompatButton.() -> Unit
+): Button {
+    val button =
+        if (style != null) AppCompatButton(
+            ContextThemeWrapper(context, style)
+        ) else AppCompatButton(context)
+    return button.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.View(init: View.() -> Unit): View =
-        View(context).apply(init).also { addView(it) }
+/**
+ * create [View] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [View] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.View(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: View.() -> Unit
+): View {
+    val view =
+        if (style != null) View(
+            ContextThemeWrapper(context, style)
+        ) else View(context)
+    return view.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.RelativeLayout(init: RelativeLayout.() -> Unit) =
-        RelativeLayout(context).apply(init).also { addView(it) }
+/**
+ * create [RelativeLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [RelativeLayout] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.RelativeLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: RelativeLayout.() -> Unit
+): RelativeLayout {
+    val relativeLayout =
+        if (style != null) RelativeLayout(
+            ContextThemeWrapper(context, style)
+        ) else RelativeLayout(context)
+    return relativeLayout.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.LinearLayout(init: LinearLayout.() -> Unit) =
-        LinearLayout(context).apply(init).also { addView(it) }
+/**
+ * create [LinearLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [LinearLayoutCompat] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.LinearLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: LinearLayout.() -> Unit
+): LinearLayout {
+    val linearLayout =
+        if (style != null) LinearLayout(
+            ContextThemeWrapper(context, style)
+        ) else LinearLayout(context)
+    return linearLayout.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.NestedScrollView(init: NestedScrollView.() -> Unit) =
-        NestedScrollView(context).apply(init).also { addView(it) }
+/**
+ * create [NestedScrollView] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [NestedScrollView] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.NestedScrollView(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: NestedScrollView.() -> Unit
+): NestedScrollView {
+    val nestedScrollView =
+        if (style != null) NestedScrollView(
+            ContextThemeWrapper(context, style)
+        ) else NestedScrollView(context)
+    return nestedScrollView.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.RecyclerView(init: RecyclerView.() -> Unit) =
-        RecyclerView(context).apply(init).also { addView(it) }
+/**
+ * create [RecyclerView] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [RecyclerView] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.RecyclerView(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: RecyclerView.() -> Unit
+): RecyclerView {
+    val recyclerView =
+        if (style != null) RecyclerView(
+            ContextThemeWrapper(context, style)
+        ) else RecyclerView(context)
+    return recyclerView.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
-        ConstraintLayout(context).apply(init).also { addView(it) }
+/**
+ * create [ConstraintLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [ConstraintLayout] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.ConstraintLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: ConstraintLayout.() -> Unit
+): ConstraintLayout {
+    val constraintLayout =
+        if (style != null) ConstraintLayout(
+            ContextThemeWrapper(context, style)
+        ) else ConstraintLayout(context)
+    return constraintLayout.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.FrameLayout(init: FrameLayout.() -> Unit) =
-        FrameLayout(context).apply(init).also { addView(it) }
+/**
+ * create [FrameLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [FrameLayout] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.FrameLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: FrameLayout.() -> Unit
+): FrameLayout {
+    val frameLayout =
+        if (style != null) FrameLayout(
+            ContextThemeWrapper(context, style)
+        ) else FrameLayout(context)
+    return frameLayout.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.ViewFlipper(init: ViewFlipper.() -> Unit) =
-        ViewFlipper(context).apply(init).also { addView(it) }
+/**
+ * create [ViewFlipper] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [ViewFlipper] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.ViewFlipper(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: ViewFlipper.() -> Unit
+): ViewFlipper {
+    val viewFlipper =
+        if (style != null) ViewFlipper(
+            ContextThemeWrapper(context, style)
+        ) else ViewFlipper(context)
+    return viewFlipper.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.EditText(init: EditText.() -> Unit) =
-        EditText(context).apply(init).also { addView(it) }
+/**
+ * create [AppCompatEditText] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [AppCompatEditText] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.EditText(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: AppCompatEditText.() -> Unit
+): AppCompatEditText {
+    val editText =
+        if (style != null) AppCompatEditText(
+            ContextThemeWrapper(context, style)
+        ) else AppCompatEditText(context)
+    return editText.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ViewGroup.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-        LineFeedLayout(context).apply(init).also { addView(it) }
-
+/**
+ * create [HorizontalScrollView] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [HorizontalScrollView] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.HorizontalScrollView(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: HorizontalScrollView.() -> Unit
+): HorizontalScrollView {
+    val horizontalScrollView =
+        if (style != null) HorizontalScrollView(
+            ContextThemeWrapper(context, style)
+        ) else HorizontalScrollView(context)
+    return horizontalScrollView.apply(init).also { if (autoAdd) addView(it) }
+}
 inline fun ViewGroup.Indicator(init: Indicator.() -> Unit) =
     Indicator(context).apply(init).also { addView(it) }
 
-inline fun ConstraintLayout.Guideline(init: Guideline.() -> Unit) =
-        Guideline(context).apply(init).also { addView(it) }
+/**
+ * create [ViewPager2] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [ViewPager2] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.ViewPager2(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: ViewPager2.() -> Unit
+): ViewPager2 {
+    val viewPager2 =
+        if (style != null) ViewPager2(
+            ContextThemeWrapper(context, style)
+        ) else ViewPager2(context)
+    return viewPager2.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ConstraintLayout.Flow(init: Flow.() -> Unit) =
-        Flow(context).apply(init).also { addView(it) }
+/**
+ * create [Guideline] instance within a [ConstraintLayout]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [Guideline] into [ConstraintLayout] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ConstraintLayout.Guideline(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: Guideline.() -> Unit
+): Guideline {
+    val guideline =
+        if (style != null) Guideline(
+            ContextThemeWrapper(context, style)
+        ) else Guideline(context)
+    return guideline.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun ConstraintLayout.Layer(init: Layer.() -> Unit) =
-        Layer(context).apply(init).also { addView(it) }
+/**
+ * create [Flow] instance within a [ConstraintLayout]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [Flow] into [ConstraintLayout] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ConstraintLayout.Flow(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: Flow.() -> Unit
+): Flow {
+    val flow =
+        if (style != null) Flow(
+            ContextThemeWrapper(context, style)
+        ) else Flow(context)
+    return flow.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun Context.ConstraintLayout(init: ConstraintLayout.() -> Unit): ConstraintLayout =
-        ConstraintLayout(this).apply(init)
+/**
+ * create [Layer] instance within a [ConstraintLayout]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [Layer] into [ConstraintLayout] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ConstraintLayout.Layer(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: Layer.() -> Unit
+): Layer {
+    val layer =
+        if (style != null) Layer(
+            ContextThemeWrapper(context, style)
+        ) else Layer(context)
+    return layer.apply(init).also { if (autoAdd) addView(it) }
+}
 
-inline fun Context.LinearLayout(init: LinearLayout.() -> Unit): LinearLayout =
-        LinearLayout(this).apply(init)
+/**
+ * create [ConstraintLayout] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.ConstraintLayout(
+    style: Int? = null,
+    init: ConstraintLayout.() -> Unit
+): ConstraintLayout {
+    val constraintLayout =
+        if (style != null) ConstraintLayout(
+            ContextThemeWrapper(this, style)
+        ) else ConstraintLayout(this)
+    return constraintLayout.apply(init)
+}
 
-inline fun Context.FrameLayout(init: FrameLayout.() -> Unit) =
-        FrameLayout(this).apply(init)
+/**
+ * create [LinearLayout] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.LinearLayout(
+    style: Int? = null,
+    init: LinearLayout.() -> Unit
+): LinearLayout {
+    val LinearLayout =
+        if (style != null) LinearLayout(
+            ContextThemeWrapper(this, style)
+        ) else LinearLayout(this)
+    return LinearLayout.apply(init)
+}
 
-inline fun Context.NestedScrollView(init: NestedScrollView.() -> Unit) =
-        NestedScrollView(this).apply(init)
+/**
+ * create [FrameLayout] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.FrameLayout(style: Int? = null, init: FrameLayout.() -> Unit): FrameLayout {
+    val frameLayout =
+        if (style != null) FrameLayout(
+            ContextThemeWrapper(this, style)
+        ) else FrameLayout(this)
+    return frameLayout.apply(init)
+}
 
-inline fun Context.TextView(init: TextView.() -> Unit) =
-        TextView(this).apply(init)
+/**
+ * create [NestedScrollView] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.NestedScrollView(
+    style: Int? = null,
+    init: NestedScrollView.() -> Unit
+): NestedScrollView {
+    val nestedScrollView =
+        if (style != null) NestedScrollView(
+            ContextThemeWrapper(this, style)
+        ) else NestedScrollView(this)
+    return nestedScrollView.apply(init)
+}
 
-inline fun Context.Button(init: Button.() -> Unit) =
-        Button(this).apply(init)
+/**
+ * create [AppCompatTextView] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.TextView(
+    style: Int? = null,
+    init: AppCompatTextView.() -> Unit
+): AppCompatTextView {
+    val textView =
+        if (style != null) AppCompatTextView(
+            ContextThemeWrapper(this, style)
+        ) else AppCompatTextView(this)
+    return textView.apply(init)
 
-inline fun Context.ImageView(init: ImageView.() -> Unit) =
-        ImageView(this).apply(init)
+}
 
-inline fun Context.View(init: View.() -> Unit) =
-        View(this).apply(init)
+/**
+ * create [AppCompatButton] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.Button(style: Int? = null, init: AppCompatButton.() -> Unit): AppCompatButton {
+    val button =
+        if (style != null) AppCompatButton(
+            ContextThemeWrapper(this, style)
+        ) else AppCompatButton(this)
+    return button.apply(init)
+}
 
-inline fun Context.EditText(init: EditText.() -> Unit) =
-        EditText(this).apply(init)
+/**
+ * create [AppCompatImageView] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.ImageView(
+    style: Int? = null,
+    init: AppCompatImageView.() -> Unit
+): AppCompatImageView {
+    val imageView =
+        if (style != null) AppCompatImageView(
+            ContextThemeWrapper(this, style)
+        ) else AppCompatImageView(this)
+    return imageView.apply(init)
+}
 
-inline fun Context.ViewFlipper(init: ViewFlipper.() -> Unit) =
-        ViewFlipper(this).apply(init)
+/**
+ * create [View] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.View(style: Int? = null, init: View.() -> Unit): View {
+    val view =
+        if (style != null) View(
+            ContextThemeWrapper(this, style)
+        ) else View(this)
+    return view.apply(init)
+}
 
-inline fun Context.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-        LineFeedLayout(this).apply(init)
+/**
+ * create [AppCompatEditText] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.EditText(
+    style: Int? = null,
+    init: AppCompatEditText.() -> Unit
+): AppCompatEditText {
+    val editText =
+        if (style != null) AppCompatEditText(
+            ContextThemeWrapper(this, style)
+        ) else AppCompatEditText(this)
+    return editText.apply(init)
+}
 
-inline fun Context.RecyclerView(init: RecyclerView.() -> Unit) =
-    RecyclerView(this).apply(init)
+/**
+ * create [ViewFlipper] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.ViewFlipper(style: Int? = null, init: ViewFlipper.() -> Unit): ViewFlipper {
+    val viewFlipper =
+        if (style != null) ViewFlipper(
+            ContextThemeWrapper(this, style)
+        ) else ViewFlipper(this)
+    return viewFlipper.apply(init)
 
-inline fun Fragment.ConstraintLayout(init: ConstraintLayout.() -> Unit) =
-        context?.let { ConstraintLayout(it).apply(init) }
+}
 
-inline fun Fragment.LinearLayout(init: LinearLayout.() -> Unit) =
-        context?.let { LinearLayout(it).apply(init) }
+/**
+ * create [HorizontalScrollView] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.HorizontalScrollView(
+    style: Int? = null,
+    init: HorizontalScrollView.() -> Unit
+): HorizontalScrollView {
+    val horizontalScrollView =
+        if (style != null) HorizontalScrollView(
+            ContextThemeWrapper(this, style)
+        ) else HorizontalScrollView(this)
+    return horizontalScrollView.apply(init)
+}
 
-inline fun Fragment.FrameLayout(init: FrameLayout.() -> Unit) =
-        context?.let { FrameLayout(it).apply(init) }
+/**
+ * create [ViewPager2] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.ViewPager2(
+    style: Int? = null,
+    init: ViewPager2.() -> Unit
+): ViewPager2 {
+    val viewPager2 =
+        if (style != null) ViewPager2(
+            ContextThemeWrapper(this, style)
+        ) else ViewPager2(this)
+    return viewPager2.apply(init)
+}
 
-inline fun Fragment.NestedScrollView(init: NestedScrollView.() -> Unit) =
-        context?.let { NestedScrollView(it).apply(init) }
+/**
+ * create [ViewPager2] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.RecyclerView(
+    style: Int? = null,
+    init: RecyclerView.() -> Unit
+): RecyclerView {
+    val recyclerView =
+        if (style != null) RecyclerView(
+            ContextThemeWrapper(this, style)
+        ) else RecyclerView(this)
+    return recyclerView.apply(init)
+}
 
-inline fun Fragment.TextView(init: TextView.() -> Unit) =
-        context?.let { TextView(it).apply(init) }
+/**
+ * create [ConstraintLayout] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.ConstraintLayout(
+    style: Int? = null,
+    init: ConstraintLayout.() -> Unit
+): ConstraintLayout? = context?.let {
+    if (style != null) ConstraintLayout(
+        ContextThemeWrapper(it, style)
+    ) else ConstraintLayout(it)
+}?.apply(init)
 
-inline fun Fragment.Button(init: Button.() -> Unit) =
-        context?.let { Button(it).apply(init) }
+/**
+ * create [LinearLayout] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.LinearLayout(
+    style: Int? = null,
+    init: LinearLayout.() -> Unit
+): LinearLayout? = context?.let {
+    if (style != null) LinearLayout(
+        ContextThemeWrapper(it, style)
+    ) else LinearLayout(it)
+}?.apply(init)
 
-inline fun Fragment.ImageView(init: ImageView.() -> Unit) =
-        context?.let { ImageView(it).apply(init) }
+/**
+ * create [FrameLayout] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.FrameLayout(
+    style: Int? = null,
+    init: FrameLayout.() -> Unit
+): FrameLayout? = context?.let {
+    if (style != null) FrameLayout(
+        ContextThemeWrapper(it, style)
+    ) else FrameLayout(it)
+}?.apply(init)
 
-inline fun Fragment.View(init: View.() -> Unit) =
-        context?.let { View(it).apply(init) }
+/**
+ * create [NestedScrollView] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.NestedScrollView(
+    style: Int? = null,
+    init: FrameLayout.() -> Unit
+): NestedScrollView? = context?.let {
+    if (style != null) NestedScrollView(
+        ContextThemeWrapper(it, style)
+    ) else NestedScrollView(it)
+}?.apply(init)
 
-inline fun Fragment.ViewFlipper(init: ViewFlipper.() -> Unit) =
-        context?.let { ViewFlipper(it).apply(init) }
+/**
+ * create [AppCompatTextView] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.TextView(
+    style: Int? = null,
+    init: AppCompatTextView.() -> Unit
+): AppCompatTextView? = context?.let {
+    if (style != null) AppCompatTextView(
+        ContextThemeWrapper(it, style)
+    ) else AppCompatTextView(it)
+}?.apply(init)
 
-inline fun Fragment.EditText(init: EditText.() -> Unit) =
-        context?.let { EditText(it).apply(init) }
+/**
+ * create [AppCompatButton] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.Button(
+    style: Int? = null,
+    init: AppCompatButton.() -> Unit
+): AppCompatButton? = context?.let {
+    if (style != null) AppCompatButton(
+        ContextThemeWrapper(it, style)
+    ) else AppCompatButton(it)
+}?.apply(init)
 
-inline fun Fragment.LineFeedLayout(init: LineFeedLayout.() -> Unit) =
-        context?.let { LineFeedLayout(it).apply(init) }
+/**
+ * create [AppCompatImageView] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.ImageView(
+    style: Int? = null,
+    init: AppCompatImageView.() -> Unit
+): AppCompatImageView? = context?.let {
+    if (style != null) AppCompatImageView(
+        ContextThemeWrapper(it, style)
+    ) else AppCompatImageView(it)
+}?.apply(init)
 
-inline fun ViewGroup.Selector(init: Selector.() -> Unit) =
-        Selector(context).apply(init).also { addView(it) }
+/**
+ * create [View] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.View(
+    style: Int? = null,
+    init: View.() -> Unit
+): View? = context?.let {
+    if (style != null) View(
+        ContextThemeWrapper(it, style)
+    ) else View(it)
+}?.apply(init)
 
-inline fun Context.Selector(init: Selector.() -> Unit): Selector =
-        Selector(this).apply(init)
+/**
+ * create [ViewFlipper] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.ViewFlipper(
+    style: Int? = null,
+    init: ViewFlipper.() -> Unit
+): ViewFlipper? = context?.let {
+    if (style != null) ViewFlipper(
+        ContextThemeWrapper(it, style)
+    ) else ViewFlipper(it)
+}?.apply(init)
 
-inline fun Fragment.Selector(init: Selector.() -> Unit) =
-        context?.let { Selector(it).apply(init) }
+/**
+ * create [AppCompatEditText] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.EditText(
+    style: Int? = null,
+    init: AppCompatEditText.() -> Unit
+): AppCompatEditText? = context?.let {
+    if (style != null) AppCompatEditText(
+        ContextThemeWrapper(it, style)
+    ) else AppCompatEditText(it)
+}?.apply(init)
 
-inline fun ViewGroup.ProgressBar(autoAdd: Boolean = true, init: ProgressBar.() -> Unit) =
-    ProgressBar(context).apply(init).also { if (autoAdd) addView(it) }
+/**
+ * create [HorizontalScrollView] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.HorizontalScrollView(
+    style: Int? = null,
+    init: HorizontalScrollView.() -> Unit
+): HorizontalScrollView? = context?.let {
+    if (style != null) HorizontalScrollView(
+        ContextThemeWrapper(it, style)
+    ) else HorizontalScrollView(it)
+}?.apply(init)
 
-inline fun Context.ProgressBar(init: ProgressBar.() -> Unit): ProgressBar =
-    ProgressBar(this).apply(init)
+/**
+ * create [ViewPager2] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.ViewPager2(
+    style: Int? = null,
+    init: ViewPager2.() -> Unit
+): ViewPager2? = context?.let {
+    if (style != null) ViewPager2(
+        ContextThemeWrapper(it, style)
+    ) else ViewPager2(it)
+}?.apply(init)
 
-inline fun Fragment.ProgressBar(init: ProgressBar.() -> Unit) =
-    context?.let { ProgressBar(it).apply(init) }
+/**
+ * create [ViewPager2] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.RecyclerView(
+    style: Int? = null,
+    init: RecyclerView.() -> Unit
+): RecyclerView? = context?.let {
+    if (style != null) RecyclerView(
+        ContextThemeWrapper(it, style)
+    ) else RecyclerView(it)
+}?.apply(init)
+
 //</editor-fold>
 
 //<editor-fold desc="View extend field">
@@ -184,7 +750,6 @@ inline var View.layout_id: String
     set(value) {
         id = value.toLayoutId()
     }
-
 inline var View.padding_top: Int
     get() {
         return 0
@@ -230,7 +795,14 @@ inline var View.layout_width: Int
     set(value) {
         val w = if (value > 0) value.dp else value
         val h = layoutParams?.height ?: 0
-        layoutParams = ViewGroup.MarginLayoutParams(w, h)
+        layoutParams = if (layoutParams == null) {
+            ViewGroup.MarginLayoutParams(w, h)
+        } else {
+            layoutParams.append {
+                width = w
+                height = h
+            }
+        }
     }
 
 inline var View.layout_height: Int
@@ -241,7 +813,14 @@ inline var View.layout_height: Int
 
         val w = layoutParams?.width ?: 0
         val h = if (value > 0) value.dp else value
-        layoutParams = ViewGroup.MarginLayoutParams(w, h)
+        layoutParams = if (layoutParams == null) {
+            ViewGroup.MarginLayoutParams(w, h)
+        } else {
+            layoutParams.append {
+                width = w
+                height = h
+            }
+        }
     }
 
 inline var View.alignParentStart: Boolean
@@ -305,23 +884,25 @@ inline var View.weight: Float
         return 0f
     }
     set(value) {
-        layoutParams = LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
-            it.gravity = (layoutParams as? LinearLayout.LayoutParams)?.gravity ?: -1
-            it.weight = value
-        }
+        layoutParams =
+            LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
+                it.gravity = (layoutParams as? LinearLayout.LayoutParams)?.gravity ?: -1
+                it.weight = value
+            }
     }
 inline var View.layout_gravity: Int
     get() {
         return -1
     }
     set(value) {
-        layoutParams = LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
-            it.weight = (layoutParams as? LinearLayout.LayoutParams)?.weight ?: 0f
-            it.gravity = value
-        }
+        layoutParams =
+            LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
+                it.weight = (layoutParams as? LinearLayout.LayoutParams)?.weight ?: 0f
+                it.gravity = value
+            }
     }
 
-inline var View.toCircleOf:String
+inline var View.toCircleOf: String
     get() {
         return ""
     }
@@ -341,9 +922,9 @@ inline var View.circle_radius: Int
         }
     }
 
-inline var View.circle_angle:Float
+inline var View.circle_angle: Float
     get() {
-        return  -1f
+        return -1f
     }
     set(value) {
         layoutParams = layoutParams.append {
@@ -468,6 +1049,16 @@ inline var View.horizontal_bias: Float
             horizontalBias = value
         }
     }
+inline var View.dimension_radio: String
+    get() {
+        return ""
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            dimensionRatio = value
+        }
+    }
+
 inline var View.vertical_bias: Float
     get() {
         return -1f
@@ -516,6 +1107,28 @@ inline var View.align_horizontal_to: String
         end_toEndOf = value
     }
 
+inline var View.width_percentage: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+            matchConstraintPercentWidth = value
+        }
+    }
+
+inline var View.height_percentage: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+            matchConstraintPercentHeight = value
+        }
+    }
+
 inline var View.background_color: String
     get() {
         return ""
@@ -530,6 +1143,26 @@ inline var View.background_res: Int
     }
     set(value) {
         setBackgroundResource(value)
+    }
+
+inline var View.background_drawable: Drawable?
+    get() {
+        return null
+    }
+    set(value) {
+        value?.let { background = it }
+    }
+
+inline var View.background_drawable_state_list: List<Pair<IntArray, Drawable>>
+    get() {
+        return listOf(intArrayOf() to GradientDrawable())
+    }
+    set(value) {
+        background = StateListDrawable().apply {
+            value.forEach { pair ->
+                addState(pair.first, pair.second)
+            }
+        }
     }
 
 inline var View.margin_top: Int
@@ -572,6 +1205,26 @@ inline var View.margin_end: Int
         }
     }
 
+inline var View.guide_percentage: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            guidePercent = value
+        }
+    }
+
+inline var View.guide_orientation: Int
+    get() {
+        return 1
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            orientation = value
+        }
+    }
+
 inline var View.layout_visibility: Int
     get() {
         return -1
@@ -580,32 +1233,58 @@ inline var View.layout_visibility: Int
         visibility = value
     }
 
-inline var View.bindVisibility: LiveData<Int>?
+/**
+ * bind async data
+ */
+inline var View.bindLiveData: LiveDataBinder?
     get() {
         return null
     }
     set(value) {
-        observe(value) { visibility = it }
-    }
-
-inline var View.bindBackgroundColor: LiveData<String>?
-    get() {
-        return null
-    }
-    set(value) {
-        observe(value) {
-            background_color = it
+        observe(value?.liveData) {
+            value?.action?.invoke(it)
         }
     }
 
-inline var View.bindBackgroundRes: LiveData<Int>?
+/**
+ * old fashion for binding data
+ */
+inline var View.bind: Binder?
     get() {
         return null
     }
     set(value) {
-        observe(value) {
-            background_res = it
-        }
+        value?.action?.invoke(this, value.data)
+    }
+
+/**
+ * bind sync data
+ */
+inline var View.bindData: () -> Unit
+    get() {
+        return {}
+    }
+    set(value) {
+        value()
+    }
+
+inline var View.fitsSystemWindows: Boolean
+    get() {
+        return false
+    }
+    set(value) {
+        fitsSystemWindows = value
+    }
+
+/**
+ * use this attribute to build shape dynamically, getting rid of "shape.xml"
+ */
+inline var View.shape: GradientDrawable
+    get() {
+        return GradientDrawable()
+    }
+    set(value) {
+        background = value
     }
 
 inline var ImageView.src: Int
@@ -616,37 +1295,12 @@ inline var ImageView.src: Int
         setImageResource(value)
     }
 
-inline var ImageView.bindSrc: LiveData<Bitmap>?
+inline var TextView.maxLength: Int
     get() {
-        return null
+        return 1
     }
     set(value) {
-        observe(value) { setImageBitmap(it) }
-    }
-
-inline var ImageView.bindSrcRes: LiveData<Int>?
-    get() {
-        return null
-    }
-    set(value) {
-        observe(value) { setImageResource(it) }
-    }
-
-inline var TextView.bindText: LiveData<CharSequence>?
-    get() {
-        return null
-    }
-    set(value) {
-        observe(value) { text = it }
-    }
-inline var TextView.bindTextColor: LiveData<String>?
-    get() {
-        return null
-    }
-    set(value) {
-        observe(value) {
-            textColor = it
-        }
+        filters = arrayOf<InputFilter>(LengthFilter(value))
     }
 
 inline var TextView.textRes: Int
@@ -655,6 +1309,38 @@ inline var TextView.textRes: Int
     }
     set(value) {
         setText(value)
+    }
+
+inline var TextView.hint_color: String
+    get() {
+        return ""
+    }
+    set(value) {
+        setHintTextColor(Color.parseColor(value))
+    }
+
+inline var TextView.hint_text_res: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setHint(value)
+    }
+
+inline var TextView.line_space_multiplier: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        setLineSpacing(lineSpacingExtra, value)
+    }
+
+inline var TextView.line_space_extra: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        setLineSpacing(value, lineSpacingMultiplier)
     }
 
 inline var TextView.textStyle: Int
@@ -679,6 +1365,46 @@ inline var TextView.fontFamily: Int
         typeface = ResourcesCompat.getFont(context, value)
     }
 
+inline var TextView.drawable_start: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(value, 0, 0, 0)
+    }
+
+inline var TextView.drawable_end: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, value, 0)
+    }
+
+inline var TextView.drawable_top: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(0, value, 0, 0)
+    }
+
+inline var TextView.drawable_bottom: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, value)
+    }
+
+inline var TextView.drawable_padding: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        compoundDrawablePadding = value.dp
+    }
+
 inline var TextView.onTextChange: TextWatcher
     get() {
         return TextWatcher()
@@ -690,10 +1416,10 @@ inline var TextView.onTextChange: TextWatcher
             }
 
             override fun beforeTextChanged(
-                    text: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                text: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
             ) {
                 value.beforeTextChanged.invoke(text, start, count, after)
             }
@@ -754,6 +1480,15 @@ inline var Flow.flow_wrapMode: Int
         setWrapMode(value)
     }
 
+inline var Flow.reference_ids: List<String>
+    get() {
+        return emptyList()
+    }
+    set(value) {
+        referencedIds = value.map { it.toLayoutId() }.toIntArray()
+    }
+
+
 var View.onClick: (View) -> Unit
     get() {
         return {}
@@ -762,12 +1497,30 @@ var View.onClick: (View) -> Unit
         setOnClickListener { v -> value(v) }
     }
 
+var View.shakelessClick: (View) -> Unit
+    get() {
+        return {}
+    }
+    set(value) {
+        setShakelessClickListener(1000) {
+            value(it)
+        }
+    }
+
 var RecyclerView.onItemClick: (View, Int, Float, Float) -> Unit
     get() {
         return { _, _, _, _ -> }
     }
     set(value) {
         setOnItemClickListener(value)
+    }
+
+var RecyclerView.hasFixedSize: Boolean
+    get() {
+        return false
+    }
+    set(value) {
+        setHasFixedSize(value)
     }
 //</editor-fold>
 
@@ -796,7 +1549,7 @@ val gravity_top = Gravity.TOP
 val gravity_center_horizontal = Gravity.CENTER_HORIZONTAL
 val gravity_center_vertical = Gravity.CENTER_VERTICAL
 
-val scale_fix_xy = ImageView.ScaleType.FIT_XY
+val scale_fit_xy = ImageView.ScaleType.FIT_XY
 val scale_center_crop = ImageView.ScaleType.CENTER_CROP
 val scale_center = ImageView.ScaleType.CENTER
 val scale_center_inside = ImageView.ScaleType.CENTER_INSIDE
@@ -819,14 +1572,44 @@ val spread_inside = ConstraintLayout.LayoutParams.CHAIN_SPREAD_INSIDE
 val wrap_none = Flow.WRAP_NONE
 val wrap_chain = Flow.WRAP_CHAIN
 val wrap_aligned = Flow.WRAP_ALIGNED
-val state_enable = android.R.attr.state_enabled
-val state_disable = -android.R.attr.state_enabled
-val state_pressed = android.R.attr.state_pressed
-val state_unpressed = -android.R.attr.state_pressed
-val state_focused = android.R.attr.state_focused
-val state_unfocused = -android.R.attr.state_focused
-val state_selected = android.R.attr.state_selected
-val state_unselected = -android.R.attr.state_selected
+
+val gradient_top_bottom = GradientDrawable.Orientation.TOP_BOTTOM
+val gradient_tr_bl = GradientDrawable.Orientation.TR_BL
+val gradient_right_left = GradientDrawable.Orientation.RIGHT_LEFT
+val gradient_br_tl = GradientDrawable.Orientation.BR_TL
+val gradient_bottom_top = GradientDrawable.Orientation.BOTTOM_TOP
+val gradient_bl_tr = GradientDrawable.Orientation.BL_TR
+val gradient_left_right = GradientDrawable.Orientation.LEFT_RIGHT
+val gradient_tl_br = GradientDrawable.Orientation.TL_BR
+
+val shape_rectangle = GradientDrawable.RECTANGLE
+val shape_oval = GradientDrawable.OVAL
+val shape_line = GradientDrawable.LINE
+val shape_ring = GradientDrawable.RING
+
+val gradient_type_linear = GradientDrawable.LINEAR_GRADIENT
+val gradient_type_radial = GradientDrawable.RADIAL_GRADIENT
+val gradient_type_sweep = GradientDrawable.SWEEP_GRADIENT
+
+val state_enable = R.attr.state_enabled
+val state_disable = -R.attr.state_enabled
+val state_pressed = R.attr.state_pressed
+val state_unpressed = -R.attr.state_pressed
+val state_focused = R.attr.state_focused
+val state_unfocused = -R.attr.state_focused
+val state_selected = R.attr.state_selected
+val state_unselected = -R.attr.state_selected
+
+val input_type_number = InputType.TYPE_CLASS_NUMBER
+
+val wrap_mode_chain = Flow.WRAP_CHAIN
+val wrap_mode_none = Flow.WRAP_NONE
+val wrap_mode_aligned = Flow.WRAP_ALIGNED
+
+val ellipsize_end = TextUtils.TruncateAt.END
+val ellipsize_marquee = TextUtils.TruncateAt.MARQUEE
+val ellipsize_middle = TextUtils.TruncateAt.MIDDLE
+val ellipsize_start = TextUtils.TruncateAt.START
 
 val parent_id = "0"
 //</editor-fold>
@@ -835,29 +1618,38 @@ val parent_id = "0"
 val Int.dp: Int
     get() {
         return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                this.toFloat(),
-                Resources.getSystem().displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
         ).toInt()
     }
 
+val Float.dp: Float
+    get() {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        )
+    }
+
 fun ViewGroup.MarginLayoutParams.toConstraintLayoutParam() =
-        ConstraintLayout.LayoutParams(width, height).also { it ->
-            it.topMargin = this.topMargin
-            it.bottomMargin = this.bottomMargin
-            it.marginStart = this.marginStart
-            it.marginEnd = this.marginEnd
-        }
+    ConstraintLayout.LayoutParams(width, height).also { it ->
+        it.topMargin = this.topMargin
+        it.bottomMargin = this.bottomMargin
+        it.marginStart = this.marginStart
+        it.marginEnd = this.marginEnd
+    }
 
 fun ViewGroup.LayoutParams.append(set: ConstraintLayout.LayoutParams.() -> Unit) =
-        (this as? ConstraintLayout.LayoutParams)?.apply(set)
-                ?: (this as? ViewGroup.MarginLayoutParams)?.toConstraintLayoutParam()?.apply(set)
+    (this as? ConstraintLayout.LayoutParams)?.apply(set)
+        ?: (this as? ViewGroup.MarginLayoutParams)?.toConstraintLayoutParam()?.apply(set)
 
 
 fun String.toLayoutId(): Int {
-    var id = java.lang.String(this).bytes.sum()
-    if (id == 48) id = 0
-    return id
+    var id = hashCode()
+    if (this == parent_id) id = 0
+    return abs(id)
 }
 
 fun <T : View> View.find(id: String): T? = findViewById(id.toLayoutId())
@@ -879,7 +1671,12 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> U
             override fun onSingleTapUp(e: MotionEvent?): Boolean {
                 e?.let {
                     findChildViewUnder(it.x, it.y)?.let { child ->
-                        listener(child, getChildAdapterPosition(child), it.x - child.left, it.y - child.top)
+                        listener(
+                            child,
+                            getChildAdapterPosition(child),
+                            it.x - child.left,
+                            it.y - child.top
+                        )
                     }
                 }
                 return false
@@ -889,11 +1686,21 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> U
                 return false
             }
 
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent?,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
                 return false
             }
 
-            override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+            override fun onScroll(
+                e1: MotionEvent?,
+                e2: MotionEvent?,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
                 return false
             }
 
@@ -914,40 +1721,166 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> U
         }
     })
 }
+
+/**
+ * get relative position of this [View] relative to [otherView]
+ */
+fun View.getRelativeRectTo(otherView: View): Rect {
+    val parentRect = Rect().also { otherView.getGlobalVisibleRect(it) }
+    val childRect = Rect().also { getGlobalVisibleRect(it) }
+    return childRect.relativeTo(parentRect)
+}
+
+/**
+ *  listen click action for the child view of [RecyclerView]'s item
+ */
+inline fun View.onChildViewClick(
+    vararg layoutId: String, // the id of the child view of RecyclerView's item
+    x: Float, // the x coordinate of click point
+    y: Float,// the y coordinate of click point,
+    clickAction: ((View?) -> Unit)
+) {
+    var clickedView: View? = null
+    layoutId
+        .map { id ->
+            find<View>(id)?.let { view ->
+                view.getRelativeRectTo(this).also { rect ->
+                    if (rect.contains(x.toInt(), y.toInt())) {
+                        clickedView = view
+                    }
+                }
+            } ?: Rect()
+        }
+        .fold(Rect()) { init, rect -> init.apply { union(rect) } }
+        .takeIf { it.contains(x.toInt(), y.toInt()) }
+        ?.let { clickAction.invoke(clickedView) }
+}
+
+/**
+ * a new View.OnClickListener which prevents click shaking
+ */
+fun View.setShakelessClickListener(threshold: Long, onClick: (View) -> Unit) {
+    class Click(
+        var view: View? = null,
+        var clickTime: Long = -1,
+        var onClick: ((View?) -> Unit)? = null
+    ) {
+        fun isShake(click: Click) = abs(clickTime - click.clickTime) < threshold
+    }
+
+    val mainScope = MainScope()
+    val clickActor = mainScope.actor<Click>(capacity = Channel.UNLIMITED) {
+        var preClick: Click = Click()
+        for (click in channel) {
+            if (!click.isShake(preClick)) {
+                click.onClick?.invoke(click.view)
+            }
+            preClick = click
+        }
+    }.autoDispose(this)
+    setOnClickListener { view ->
+        mainScope.launch {
+            clickActor.send(
+                Click(view, System.currentTimeMillis()) { onClick(view) }
+            )
+        }.autoDispose(this)
+    }
+}
+
+
+/**
+ * avoid memory leak for View and activity when activity has finished while coroutine is still running
+ */
+fun Job.autoDispose(view: View): Job {
+    val isAttached =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
+
+    val listener = object : View.OnAttachStateChangeListener {
+        override fun onViewDetachedFromWindow(v: View?) {
+            cancel()
+            v?.removeOnAttachStateChangeListener(this)
+        }
+
+        override fun onViewAttachedToWindow(v: View?) = Unit
+    }
+
+    view.addOnAttachStateChangeListener(listener)
+    invokeOnCompletion {
+        view.removeOnAttachStateChangeListener(listener)
+    }
+    return this
+}
+
+/**
+ * avoid memory leak
+ */
+fun <T> SendChannel<T>.autoDispose(view: View): SendChannel<T> {
+    val isAttached =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
+    val listener = object : View.OnAttachStateChangeListener {
+        override fun onViewDetachedFromWindow(v: View?) {
+            close()
+            v?.removeOnAttachStateChangeListener(this)
+        }
+
+        override fun onViewAttachedToWindow(v: View?) = Unit
+    }
+
+    view.addOnAttachStateChangeListener(listener)
+    invokeOnClose {
+        view.removeOnAttachStateChangeListener(listener)
+    }
+    return this
+}
+
+
+/**
+ * get the relative rect of the [Rect] according to the [otherRect] ,considering the [otherRect]'s left and top is zero
+ */
+fun Rect.relativeTo(otherRect: Rect): Rect {
+    val relativeLeft = left - otherRect.left
+    val relativeTop = top - otherRect.top
+    val relativeRight = relativeLeft + right - left
+    val relativeBottom = relativeTop + bottom - top
+    return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
+}
 //</editor-fold>
 
 
 //<editor-fold desc="listener helper class">
 class TextWatcher(
-        var beforeTextChanged: (
-                text: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-        ) -> Unit = { _, _, _, _ -> },
-        var onTextChanged: (
-                text: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-        ) -> Unit = { _, _, _, _ -> },
-        var afterTextChanged: (text: Editable?) -> Unit = {}
+    var beforeTextChanged: (
+        text: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit = { _, _, _, _ -> },
+    var onTextChanged: (
+        text: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit = { _, _, _, _ -> },
+    var afterTextChanged: (text: Editable?) -> Unit = {}
 )
 
 fun textWatcher(init: TextWatcher.() -> Unit): TextWatcher = TextWatcher().apply(init)
 
 /**
- * use this attribute to build shape dynamically, getting rid of "shape.xml"
+ * helper class for data binding
  */
-inline var View.shape: GradientDrawable
-    get() {
-        return GradientDrawable()
-    }
-    set(value) {
-        background = value
-    }
+class LiveDataBinder(var liveData: LiveData<*>? = null, var action: ((Any?) -> Unit)? = null)
 
-inline fun shape(init: GradientDrawable.() -> Unit) = GradientDrawable().apply(init)
+fun liveDataBinder(liveData: LiveData<*>?, init: LiveDataBinder.() -> Unit): LiveDataBinder =
+    LiveDataBinder(liveData).apply(init)
+
+class Binder(var data: Any?, var action: ((View, Any?) -> Unit)? = null)
+//</editor-fold>
+
+//<editor-fold desc="building helper class">
+/**
+ * helper attribute for building [GradientDrawable]
+ */
 inline var GradientDrawable.solid_color: String
     get() {
         return ""
@@ -980,6 +1913,53 @@ inline var GradientDrawable.gradient_colors: List<String>
         colors = value.map { Color.parseColor(it) }.toIntArray()
     }
 
+inline var GradientDrawable.padding_start: Int
+    get() {
+        return -1
+    }
+    @RequiresApi(Build.VERSION_CODES.Q)
+    set(value) {
+        val paddingRect = Rect().also { getPadding(it) }
+        setPadding(value.dp, paddingRect.top, paddingRect.right, paddingRect.bottom)
+    }
+
+inline var GradientDrawable.padding_end: Int
+    get() {
+        return -1
+    }
+    @RequiresApi(Build.VERSION_CODES.Q)
+    set(value) {
+        val paddingRect = Rect().also { getPadding(it) }
+        setPadding(paddingRect.left, paddingRect.top, value.dp, paddingRect.bottom)
+    }
+
+inline var GradientDrawable.padding_top: Int
+    get() {
+        return -1
+    }
+    @RequiresApi(Build.VERSION_CODES.Q)
+    set(value) {
+        val paddingRect = Rect().also { getPadding(it) }
+        setPadding(paddingRect.left, value.dp, paddingRect.right, paddingRect.bottom)
+    }
+
+inline var GradientDrawable.padding_bottom: Int
+    get() {
+        return -1
+    }
+    @RequiresApi(Build.VERSION_CODES.Q)
+    set(value) {
+        val paddingRect = Rect().also { getPadding(it) }
+        setPadding(paddingRect.left, paddingRect.top, paddingRect.right, value.dp)
+    }
+
+inline var GradientDrawable.strokeAttr: Stroke?
+    get() {
+        return null
+    }
+    set(value) {
+        value?.apply { setStroke(width.dp, Color.parseColor(color), dashWidth.dp, dashGap.dp) }
+    }
 
 inline var GradientDrawable.color_state_list: List<Pair<IntArray, String>>
     get() {
@@ -996,16 +1976,19 @@ inline var GradientDrawable.color_state_list: List<Pair<IntArray, String>>
         color = ColorStateList(states.toTypedArray(), colors.toIntArray())
     }
 
-inline var View.background_drawable_state_list: List<Pair<IntArray, Drawable>>
-    get() {
-        return listOf(intArrayOf() to GradientDrawable())
-    }
-    set(value) {
-        background = StateListDrawable().apply {
-            value.forEach { pair ->
-                addState(pair.first, pair.second)
-            }
-        }
-    }
+/**
+ * helper function for building [GradientDrawable]
+ */
+inline fun shape(init: GradientDrawable.() -> Unit) = GradientDrawable().apply(init)
+
+/**
+ * helper class for set stroke for [GradientDrawable]
+ */
+data class Stroke(
+    var width: Int = 0,
+    var color: String = "#000000",
+    var dashWidth: Float = 0f,
+    var dashGap: Float = 0f
+)
 
 //</editor-fold>

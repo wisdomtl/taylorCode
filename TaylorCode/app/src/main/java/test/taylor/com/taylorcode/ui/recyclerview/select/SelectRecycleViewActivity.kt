@@ -92,7 +92,7 @@ class SelectRecycleViewActivity: AppCompatActivity() {
                 layout_width = 40
                 layout_height = 40
                 src = R.drawable.diamond_tag
-                scaleType = scale_fix_xy
+                scaleType = scale_fit_xy
                 toCircleOf = "tvDelete"
                 circle_angle = 45f
                 circle_radius = 30

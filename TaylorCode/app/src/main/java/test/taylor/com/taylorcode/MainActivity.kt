@@ -40,6 +40,7 @@ import test.taylor.com.taylorcode.type_parameter.TypeParameterActivity
 import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.IndicatorActivity
@@ -194,6 +195,7 @@ class MainActivity : BaseActivity() {
         btnTypeParameter.setOnClickListener { startActivity<TypeParameterActivity>() }
         btn_new_activity_result.setOnClickListener { startActivity<NewActivityResultActivity>() }
         btnPpath.setOnClickListener { startActivity<PathActivity>() }
+        btnLiveComment.setOnClickListener { startActivity<LiveCommentActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

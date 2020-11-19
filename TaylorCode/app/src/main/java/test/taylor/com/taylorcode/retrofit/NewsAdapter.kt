@@ -26,7 +26,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsViewHolder>() {
                     layout_id = "ivNewsImg"
                     layout_width = 50
                     layout_height = 50
-                    scaleType = scale_fix_xy
+                    scaleType = scale_fit_xy
                     center_vertical = true
                     start_toStartOf = parent_id
                 }

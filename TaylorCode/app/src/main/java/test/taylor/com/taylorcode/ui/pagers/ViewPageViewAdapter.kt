@@ -14,7 +14,7 @@ class ViewPageViewAdapter : RecyclerView.Adapter<ViewPagerViewHolder>() {
                 layout_id = "iv"
                 layout_width = match_parent
                 layout_height = match_parent
-                scaleType = scale_fix_xy
+                scaleType = scale_fit_xy
             }
         }
         return ViewPagerViewHolder(itemView)

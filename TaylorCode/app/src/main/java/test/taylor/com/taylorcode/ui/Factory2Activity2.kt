@@ -389,7 +389,7 @@ class Factory2Activity2 : AppCompatActivity() {
                         layout_width = 100
                         layout_height = 100
                         weight = 3f
-                        scaleType = scale_fix_xy
+                        scaleType = scale_fit_xy
                         src = R.drawable.user_portrait_gender_female
                     }
                 }

@@ -41,7 +41,7 @@ class ViewFlipperActivity : AppCompatActivity() {
             val iv = ImageView {
                 layout_width = match_parent
                 layout_height = 200
-                scaleType = scale_fix_xy
+                scaleType = scale_fit_xy
             }
 
             vp.addView(iv)

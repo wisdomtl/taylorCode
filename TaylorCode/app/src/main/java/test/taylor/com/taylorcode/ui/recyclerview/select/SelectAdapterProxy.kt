@@ -46,12 +46,12 @@ class SelectAdapterProxy : VarietyAdapter.AdapterProxy<SelectionBeanWrapper, Sel
                     layout_height = 40
                     end_toEndOf = parent_id
                     center_vertical = true
-                    contentView = ImageView(false) {
+                    contentView = ImageView(autoAdd = false) {
                         layout_id = "ivsel"
                         layout_width = 40
                         layout_height = 40
                         src = R.drawable.unselect
-                        scaleType = scale_fix_xy
+                        scaleType = scale_fit_xy
                     }
 
                     onSelectChange = { selector, select ->
