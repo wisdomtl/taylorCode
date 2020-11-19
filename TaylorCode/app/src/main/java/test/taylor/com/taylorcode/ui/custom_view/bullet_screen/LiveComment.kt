@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
 import androidx.core.util.Pools
@@ -26,7 +27,7 @@ object LiveComment {
     /**
      * define how live comments animates
      */
-    lateinit var animateView: (View, Rect, Int, Int) -> Unit
+    lateinit var animateView: (View, Rect, Int, Int, (View) -> Unit) -> Unit
 
     /**
      * the host [Activity] which live comments settle in
@@ -34,6 +35,7 @@ object LiveComment {
     lateinit var activity: Activity
 
     private lateinit var anchorRect: Rect
+
 
     /**
      * the place which live comments show in
@@ -89,6 +91,10 @@ object LiveComment {
      */
     private lateinit var pool: Pools.SimplePool<View>
 
+    private val onAnimationEnd = { view: View ->
+        recycle(view)
+    }
+
     /**
      * the capacity of [pool]
      */
@@ -120,7 +126,7 @@ object LiveComment {
                     val lane = randomLane(localAnchorRect, commentView.measuredHeight)
                     commentView.layout(localAnchorRect.right, lane, anchorRect.right + commentView.measuredWidth, lane + commentView.measuredHeight)
                 }
-                animateView(commentView, anchorRect, commentView.measuredWidth, commentView.measuredHeight)
+                animateView(commentView, anchorRect, commentView.measuredWidth, commentView.measuredHeight, onAnimationEnd)
             }
             activity.contentView?.addView(commentView, LayoutParams(wrap_content, wrap_content))
         }
@@ -136,7 +142,7 @@ object LiveComment {
             val extraPadding = lanesHeight - liveCommentHeight * lanesCapacity - verticalGap * (lanesCapacity - 1)
             val firstLaneTop = anchorRect.top + paddingTop + extraPadding / 2
             val randomOffset = (0 until lanesCapacity).random() * (liveCommentHeight + verticalGap)
-            firstLaneTop + randomOffset
+            firstLaneTop +randomOffset
         } else {
             0
         }
@@ -151,6 +157,8 @@ object LiveComment {
      * recycle a live comment view after it gets across the screen
      */
     private fun recycle(view: View) {
+        view.detch()
+        view.translationX = 0f
         pool.release(view)
     }
 
@@ -169,11 +177,13 @@ object LiveComment {
             ).toInt()
         }
 
-    fun Rect.relativeTo(otherRect: Rect): Rect {
+    private fun Rect.relativeTo(otherRect: Rect): Rect {
         val relativeLeft = left - otherRect.left
         val relativeTop = top - otherRect.top
         val relativeRight = relativeLeft + right - left
         val relativeBottom = relativeTop + bottom - top
         return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
     }
+
+    private fun View?.detch() = this?.parent?.let { it as? ViewGroup }?.also { it.removeView(this) }
 }

@@ -1,6 +1,11 @@
 package test.taylor.com.taylorcode.ui.custom_view.bullet_screen
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
+import android.util.Log
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,6 +15,7 @@ import test.taylor.com.taylorcode.kotlin.*
 class LiveCommentActivity : AppCompatActivity() {
 
     private lateinit var container: LinearLayout
+    private var tagCount = 1
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -24,7 +30,7 @@ class LiveCommentActivity : AppCompatActivity() {
                 background_color = "#ff00ff"
             }
 
-            TextView {
+            MyTextView(this@LiveCommentActivity).apply  {
                 layout_width = wrap_content
                 layout_height = wrap_content
                 text = "show live comments"
@@ -33,10 +39,11 @@ class LiveCommentActivity : AppCompatActivity() {
                 textSize = 30f
                 margin_bottom = 10
                 background_color = "#ffff00"
+                tag = "dddd"
                 onClick = {
                     LiveComment.show(CommentBean("1234567891011"))
                 }
-            }
+            }.also { addView(it) }
         }
     }
 
@@ -47,7 +54,7 @@ class LiveCommentActivity : AppCompatActivity() {
             activity = this@LiveCommentActivity
             anchorView = container
             createView = {
-                TextView {
+                MyTextView(this@LiveCommentActivity).apply {
                     layout_width = wrap_content
                     layout_height = 60
                     textColor = "#0000ff"
@@ -56,6 +63,7 @@ class LiveCommentActivity : AppCompatActivity() {
                     ellipsize = ellipsize_end
                     background_color = "#00ff00"
                     gravity = gravity_center
+                    tag = "${tagCount++}"
                 }
             }
 
@@ -63,14 +71,38 @@ class LiveCommentActivity : AppCompatActivity() {
                 (view as? TextView)?.text = (data as? CommentBean)?.title
             }
 
-            animateView = { view, rect, width, height ->
+            animateView = { view, rect, width, height, onAnimationEnd ->
                 val translationX = -(rect.right - rect.left) - width
                 view.animate()
                     .setDuration(3000)
                     .translationXBy(translationX.toFloat())
                     .setInterpolator(LinearInterpolator())
+                    .setListener(object : AnimatorListener {
+                        override fun onAnimationStart(animation: Animator?) {
+                        }
+
+                        override fun onAnimationEnd(animation: Animator?) {
+                            Log.v("ttaylor", "tag=, LiveCommentActivity.onAnimationEnd()  ")
+//                            onAnimationEnd(view)
+                        }
+
+                        override fun onAnimationCancel(animation: Animator?) {
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator?) {
+                        }
+                    })
                     .start()
             }
         }
+    }
+}
+
+class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        Log.v("ttaylor", "tag=, MyTextView.onLayout(tag=${tag}) change=${changed},left=$left,top=$top,right=$right,bottom=$bottom")
     }
 }
