@@ -34,7 +34,7 @@ class LiveCommentActivity : AppCompatActivity() {
                 margin_bottom = 10
                 background_color = "#ffff00"
                 onClick = {
-                    LiveComment.show(this@LiveCommentActivity, CommentBean("1234567891011"))
+                    LiveComment.show(CommentBean("1234567891011"))
                 }
             }
         }
@@ -44,6 +44,7 @@ class LiveCommentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         LiveComment.apply {
+            activity = this@LiveCommentActivity
             anchorView = container
             createView = {
                 TextView {

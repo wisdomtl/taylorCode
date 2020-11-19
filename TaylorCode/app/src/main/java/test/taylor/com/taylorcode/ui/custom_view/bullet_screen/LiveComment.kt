@@ -28,6 +28,11 @@ object LiveComment {
      */
     lateinit var animateView: (View, Rect, Int, Int) -> Unit
 
+    /**
+     * the host [Activity] which live comments settle in
+     */
+    lateinit var activity: Activity
+
     private lateinit var anchorRect: Rect
 
     /**
@@ -104,20 +109,20 @@ object LiveComment {
     /**
      * show live comment within [anchorView] which belongs to [activity], and bind [data] with it
      */
-    fun show(activity: Activity, data: Any) {
+    fun show(data: Any) {
         requireNotNull(anchorView) { "anchor view must not be null" }
-        obtain().also { view ->
-            bindView(data, view)
-            view.doOnLayout {
+        obtain().also { commentView ->
+            bindView(data, commentView)
+            commentView.doOnLayout {
                 Rect().also { contentViewRect ->
                     activity.contentView?.getGlobalVisibleRect(contentViewRect)
                     val localAnchorRect = anchorRect.relativeTo(contentViewRect)
-                    val lane = randomLane(localAnchorRect, view.measuredHeight)
-                    view.layout(localAnchorRect.right, lane, anchorRect.right + view.measuredWidth, lane + view.measuredHeight)
+                    val lane = randomLane(localAnchorRect, commentView.measuredHeight)
+                    commentView.layout(localAnchorRect.right, lane, anchorRect.right + commentView.measuredWidth, lane + commentView.measuredHeight)
                 }
-                animateView(view, anchorRect, view.measuredWidth, view.measuredHeight)
+                animateView(commentView, anchorRect, commentView.measuredWidth, commentView.measuredHeight)
             }
-            activity.contentView?.addView(view, LayoutParams(wrap_content, 60.dp))
+            activity.contentView?.addView(commentView, LayoutParams(wrap_content, wrap_content))
         }
     }
 
