@@ -6,4 +6,6 @@
     <item name="lf1" type="id" />
     <item name="lf2" type="id" />
     <item name="lf3" type="id" />
+
+    <item name="layout_tag" type="id" />
 </resources>

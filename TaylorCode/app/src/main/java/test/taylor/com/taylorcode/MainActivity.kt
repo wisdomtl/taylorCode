@@ -38,6 +38,7 @@ import test.taylor.com.taylorcode.rxjava.LoginActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.type_parameter.TypeParameterActivity
 import test.taylor.com.taylorcode.ui.*
+import test.taylor.com.taylorcode.ui.anim.AddViewActivity
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
@@ -196,6 +197,7 @@ class MainActivity : BaseActivity() {
         btn_new_activity_result.setOnClickListener { startActivity<NewActivityResultActivity>() }
         btnPpath.setOnClickListener { startActivity<PathActivity>() }
         btnLiveComment.setOnClickListener { startActivity<LiveCommentActivity>() }
+        btnAddViewActivity.setOnClickListener { startActivity<AddViewActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

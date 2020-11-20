@@ -30,7 +30,7 @@ class LiveCommentActivity : AppCompatActivity() {
                 background_color = "#ff00ff"
             }
 
-            MyTextView(this@LiveCommentActivity).apply  {
+            MyTextView(this@LiveCommentActivity).apply {
                 layout_width = wrap_content
                 layout_height = wrap_content
                 text = "show live comments"
@@ -104,5 +104,14 @@ class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         Log.v("ttaylor", "tag=, MyTextView.onLayout(tag=${tag}) change=${changed},left=$left,top=$top,right=$right,bottom=$bottom")
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        Log.v("ttaylor", "tag=, MyTextView.onMeasure()  widthMode=${widthMode},width=${widthSize} ,heightMode=${heightMode}, height=${heightSize}")
     }
 }

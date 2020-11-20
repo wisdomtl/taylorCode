@@ -216,6 +216,7 @@
         <activity android:name=".new_activity_result.NewActivityResultActivity" />
         <activity android:name=".ui.custom_view.path.PathActivity" />
         <activity android:name=".ui.custom_view.bullet_screen.LiveCommentActivity" />
+        <activity android:name=".ui.anim.AddViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
