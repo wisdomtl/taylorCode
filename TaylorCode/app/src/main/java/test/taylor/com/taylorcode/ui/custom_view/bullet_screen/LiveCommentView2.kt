@@ -38,7 +38,7 @@ class LiveCommentView2
 
     init {
         verticalGap = 5
-        horizontalGap = 50
+        horizontalGap = 5
     }
 
     private var laneMap = ArrayMap<Int, Lane>()
@@ -60,19 +60,10 @@ class LiveCommentView2
         val originLeft = measuredWidth
         val top = getRandomTop(child.measuredHeight)
         child.layout(originLeft, top, originLeft + child.measuredWidth, top + child.measuredHeight)
-        child.animate()
-            ?.setDuration(3000)
-            ?.setInterpolator(LinearInterpolator())
-            ?.setUpdateListener {
-                val value = it.animatedFraction
-                val left = (measuredWidth - value * (measuredWidth + child.measuredWidth)).toInt()
-                child.layout(left, top, left + child.measuredWidth, top + child.measuredHeight)
-            }
         laneMap[top]?.add(child) ?: run {
             Lane(measuredWidth).also {
                 it.add(child)
                 laneMap[top] = it
-                it.fire()
             }
         }
     }
@@ -94,12 +85,35 @@ class LiveCommentView2
     }
 
     inner class Lane(var laneWidth: Int) : CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
-
-        var viewQueue = LinkedList<View>()
-
+        private var viewQueue = LinkedList<View>()
         private var onLayoutChangeListener = LayoutListener()
-
         private var blockShow = true
+
+        init {
+            launch {
+                while (true) {
+                    val currentView = viewQueue.poll()
+                    currentView?.apply {
+                        addOnLayoutChangeListener(onLayoutChangeListener.apply { width = currentView.measuredWidth })
+                        postOnAnimation {
+                            animate()
+                                .setDuration(3000)
+                                .setInterpolator(LinearInterpolator())
+                                .setUpdateListener {
+                                    val value = it.animatedFraction
+                                    val left = (laneWidth - value * (laneWidth + measuredWidth)).toInt()
+                                    layout(left, top, left + measuredWidth, top + measuredHeight)
+                                }
+                                .start()
+                        }
+                        blockShow = true
+                    }
+                    while (blockShow) {
+                    }
+                    currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
+                }
+            }
+        }
 
         inner class LayoutListener : OnLayoutChangeListener {
             var width: Int = 0
@@ -119,24 +133,6 @@ class LiveCommentView2
                 }
             }
 
-        }
-
-        fun fire() {
-            launch {
-                while (true) {
-                    val currentView = viewQueue.poll()
-                    currentView?.apply {
-                        addOnLayoutChangeListener(onLayoutChangeListener.apply { width = currentView.measuredWidth  })
-                        postOnAnimation {
-                            animate().start()
-                        }
-                        blockShow = true
-                    }
-                    while (blockShow) {
-                    }
-                    currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
-                }
-            }
         }
 
         fun add(view: View) {
