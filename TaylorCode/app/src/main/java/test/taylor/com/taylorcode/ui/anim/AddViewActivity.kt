@@ -17,7 +17,7 @@ class AddViewActivity : AppCompatActivity() {
 
             viewGroup = LiveCommentView2(context).apply {
                 layout_width = 300
-                layout_height = 200
+                layout_height = 100
                 center_horizontal = true
                 background_color = "#00ff00"
                 center_vertical = true

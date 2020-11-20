@@ -4,9 +4,12 @@ import android.content.Context
 import android.util.ArrayMap
 import android.util.AttributeSet
 import android.view.View
-import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveComment.dp
 import java.util.*
 
@@ -35,7 +38,7 @@ class LiveCommentView2
 
     init {
         verticalGap = 5
-        horizontalGap = 5
+        horizontalGap = 50
     }
 
     private var laneMap = ArrayMap<Int, Lane>()
@@ -52,7 +55,7 @@ class LiveCommentView2
         child ?: return
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         val h = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        measureChild(child,w,h)
+        measureChild(child, w, h)
         super.addView(child)
         val originLeft = measuredWidth
         val top = getRandomTop(child.measuredHeight)
@@ -90,23 +93,49 @@ class LiveCommentView2
         }
     }
 
-    inner class Lane(var laneWidth: Int) {
-        var currentView: View? = null
+    inner class Lane(var laneWidth: Int) : CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
 
         var viewQueue = LinkedList<View>()
 
-        var onLayoutChangeListener = OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            if (laneWidth - left > measuredWidth + horizontalGap) {
-                fire()
+        private var onLayoutChangeListener = LayoutListener()
+
+        private var blockShow = true
+
+        inner class LayoutListener : OnLayoutChangeListener {
+            var width: Int = 0
+            override fun onLayoutChange(
+                v: View?,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
+                if (laneWidth - left > width + horizontalGap) {
+                    blockShow = false
+                }
             }
+
         }
 
         fun fire() {
-            currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
-            currentView = viewQueue.poll()
-            currentView?.apply {
-                addOnLayoutChangeListener(onLayoutChangeListener)
-                animate().start()
+            launch {
+                while (true) {
+                    val currentView = viewQueue.poll()
+                    currentView?.apply {
+                        addOnLayoutChangeListener(onLayoutChangeListener.apply { width = currentView.measuredWidth  })
+                        postOnAnimation {
+                            animate().start()
+                        }
+                        blockShow = true
+                    }
+                    while (blockShow) {
+                    }
+                    currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
+                }
             }
         }
 
