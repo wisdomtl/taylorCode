@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentView2
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView
 
 class AddViewActivity : AppCompatActivity() {
 
@@ -15,9 +15,9 @@ class AddViewActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-            viewGroup = LiveCommentView2(context).apply {
+            viewGroup = LaneView(context).apply {
                 layout_width = 300
-                layout_height = 100
+                layout_height = 200
                 center_horizontal = true
                 background_color = "#00ff00"
                 center_vertical = true
@@ -50,28 +50,6 @@ class AddViewActivity : AppCompatActivity() {
                     viewGroup.addView(tv)
                 }
             }
-//            TextView {
-//                layout_id = "tv2"
-//                layout_width = wrap_content
-//                layout_height = wrap_content
-//                textSize = 20f
-//                text = "add view2"
-//                textColor = "#3F4658"
-//                padding = 10
-//                gravity = gravity_center
-//                bottom_toTopOf = "tv1"
-//                center_horizontal = true
-//                background_color = "#ff00ff"
-//                onClick = {
-//                    viewGroup.addView(
-//                        TextView(autoAdd = false) {
-//                            layout_width = wrap_content
-//                            layout_height = wrap_content
-//                            textSize = 20f
-//                            text = "dddddddddd"
-//                        })
-//                }
-//            }
         }
     }
 

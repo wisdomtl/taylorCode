@@ -13,7 +13,10 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveComment.dp
 import java.util.*
 
-class LiveCommentView2
+/**
+ * [LaneView] is used to show live comments all over the screen
+ */
+class LaneView
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ViewGroup(context, attrs, defStyleAttr) {
     /**
      * whether live comments overlap with each other
@@ -41,6 +44,9 @@ class LiveCommentView2
         horizontalGap = 5
     }
 
+    /**
+     * [Lane] is sorted by it's top coordinate in [LaneView]
+     */
     private var laneMap = ArrayMap<Int, Lane>()
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -53,13 +59,25 @@ class LiveCommentView2
 
     override fun addView(child: View?) {
         child ?: return
+        /**
+         * measure child view
+         */
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         val h = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         measureChild(child, w, h)
+        /**
+         * add child view
+         */
         super.addView(child)
-        val originLeft = measuredWidth
+        val left = measuredWidth
         val top = getRandomTop(child.measuredHeight)
-        child.layout(originLeft, top, originLeft + child.measuredWidth, top + child.measuredHeight)
+        /**
+         * layout child view just behind the most right of [LaneView]
+         */
+        child.layout(left, top, left + child.measuredWidth, top + child.measuredHeight)
+        /**
+         * put child view into [Lane]
+         */
         laneMap[top]?.add(child) ?: run {
             Lane(measuredWidth).also {
                 it.add(child)
@@ -84,11 +102,17 @@ class LiveCommentView2
         }
     }
 
+    /**
+     * a  [Lane] is used to show live comments in sequence without overlapping
+     */
     inner class Lane(var laneWidth: Int) : CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
         private var viewQueue = LinkedList<View>()
         private var onLayoutChangeListener = LayoutListener()
         private var blockShow = true
 
+        /**
+         * launch a Coroutine to pop child view infinitely
+         */
         init {
             launch {
                 while (true) {
@@ -139,6 +163,4 @@ class LiveCommentView2
             viewQueue.addLast(view)
         }
     }
-
-
 }
