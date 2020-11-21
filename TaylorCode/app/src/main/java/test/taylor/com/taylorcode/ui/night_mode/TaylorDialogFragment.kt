@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 
 class TaylorDialogFragment : BaseDialogFragment() {
@@ -55,9 +56,12 @@ class TaylorDialogFragment : BaseDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dialog?.window?.attributes?.apply {
-            width = WindowManager.LayoutParams.WRAP_CONTENT
-            height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window?.apply {
+            attributes?.apply {
+                width = WindowManager.LayoutParams.WRAP_CONTENT
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
+            setWindowAnimations(R.style.BottomInAndOut)
         }
     }
 }

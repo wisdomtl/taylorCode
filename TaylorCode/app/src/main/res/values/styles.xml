@@ -37,6 +37,12 @@
         <item name="android:windowExitAnimation">@anim/translate_out</item>
     </style>
 
+    /
+    <style name="BottomInAndOut" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/party_battle_slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/party_battle_slide_out_bottom</item>
+    </style>
+
 
     <!--window in and out animation-->
     <style name="popup_window_anim">
