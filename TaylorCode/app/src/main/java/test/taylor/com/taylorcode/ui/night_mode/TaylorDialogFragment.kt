@@ -54,6 +54,11 @@ class TaylorDialogFragment : BaseDialogFragment() {
         Unit
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.SlideDialog)//slide in from bottom and exit out from bottom
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog?.window?.apply {
@@ -61,7 +66,6 @@ class TaylorDialogFragment : BaseDialogFragment() {
                 width = WindowManager.LayoutParams.WRAP_CONTENT
                 height = WindowManager.LayoutParams.WRAP_CONTENT
             }
-            setWindowAnimations(R.style.BottomInAndOut)
         }
     }
 }
