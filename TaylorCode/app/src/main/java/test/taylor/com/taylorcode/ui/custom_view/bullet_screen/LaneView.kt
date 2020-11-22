@@ -4,12 +4,9 @@ import android.content.Context
 import android.util.ArrayMap
 import android.util.AttributeSet
 import android.view.View
+import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveComment.dp
 import java.util.*
 
@@ -82,6 +79,7 @@ class LaneView
             Lane(measuredWidth).also {
                 it.add(child)
                 laneMap[top] = it
+                it.showNext()
             }
         }
     }
@@ -103,64 +101,44 @@ class LaneView
     }
 
     /**
-     * a  [Lane] is used to show live comments in sequence without overlapping
+     * a [Lane] is used to show live comments in sequence without overlapping
      */
-    inner class Lane(var laneWidth: Int) : CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
+    inner class Lane(var laneWidth: Int) {
         private var viewQueue = LinkedList<View>()
-        private var onLayoutChangeListener = LayoutListener()
-        private var blockShow = true
+        private var currentView: View? = null
 
-        /**
-         * launch a Coroutine to pop child view infinitely
-         */
-        init {
-            launch {
-                while (true) {
-                    val currentView = viewQueue.poll()
-                    currentView?.apply {
-                        addOnLayoutChangeListener(onLayoutChangeListener.apply { width = currentView.measuredWidth })
-                        postOnAnimation {
-                            animate()
-                                .setDuration(3000)
-                                .setInterpolator(LinearInterpolator())
-                                .setUpdateListener {
-                                    val value = it.animatedFraction
-                                    val left = (laneWidth - value * (laneWidth + measuredWidth)).toInt()
-                                    layout(left, top, left + measuredWidth, top + measuredHeight)
-                                }
-                                .start()
-                        }
-                        blockShow = true
-                    }
-                    while (blockShow) {
-                    }
-                    currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
-                }
-            }
-        }
-
-        inner class LayoutListener : OnLayoutChangeListener {
-            var width: Int = 0
-            override fun onLayoutChange(
-                v: View?,
-                left: Int,
-                top: Int,
-                right: Int,
-                bottom: Int,
-                oldLeft: Int,
-                oldTop: Int,
-                oldRight: Int,
-                oldBottom: Int
-            ) {
-                if (laneWidth - left > width + horizontalGap) {
+        //a valve to control live comments showing without overlapping
+        private var blockShow = false
+        private var onLayoutChangeListener =
+            OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                if (laneWidth - left > v?.measuredWidth ?: 0 + horizontalGap) {
                     blockShow = false
+                    showNext()
                 }
             }
 
+        fun showNext() {
+            if (blockShow) return
+            currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
+            currentView = viewQueue.poll()
+            currentView?.let { view ->
+                view.addOnLayoutChangeListener(onLayoutChangeListener)
+                view.animate()
+                    .setDuration(3000)
+                    .setInterpolator(LinearInterpolator())
+                    .setUpdateListener {
+                        val value = it.animatedFraction
+                        val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
+                        view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
+                    }
+                    .start()
+                blockShow = true
+            }
         }
 
         fun add(view: View) {
             viewQueue.addLast(view)
+            showNext()
         }
     }
 }
