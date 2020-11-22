@@ -13,8 +13,8 @@ import java.util.*
 /**
  * [LaneView] is used to show live comments all over the screen
  */
-class LaneView
-@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ViewGroup(context, attrs, defStyleAttr) {
+class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    ViewGroup(context, attrs, defStyleAttr) {
     /**
      * whether live comments overlap with each other
      */
