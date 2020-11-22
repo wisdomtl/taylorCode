@@ -1,9 +1,9 @@
 package test.taylor.com.taylorcode.ui
 
-import shadow
-import android.graphics.*
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +48,7 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraintlayou_activity2)
 //        build()
+        buildChain()
         tvShadow.apply {
             background_drawable_state_list = listOf(
                 intArrayOf(state_enable) to shape {
@@ -62,7 +63,7 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
 
         }
         tvNormal?.onClick = {
-           tvShadow.isEnabled = !tvShadow.isEnabled
+            tvShadow.isEnabled = !tvShadow.isEnabled
         }
     }
 
@@ -112,7 +113,25 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                 }.also { addView(it) }
             }
         }.also { croot2?.addView(it) }
+    }
 
-
+    private fun buildChain() {
+        val views = mutableListOf<View>()
+        (0..3).forEachIndexed { index, i ->
+            TextView {
+                layout_id = "tddv$index"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 16f
+                textColor = "#3F4658"
+                text = "$index   $index"
+                gravity = gravity_center
+                fontFamily = R.font.pingfang
+            }.also {
+                views.add(it)
+                croot2?.addView(it)
+            }
+        }
+        croot2.buildChain(start, views, croot2, horizontal)
     }
 }

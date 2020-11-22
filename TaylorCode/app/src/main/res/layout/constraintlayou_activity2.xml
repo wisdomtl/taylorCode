@@ -6,6 +6,42 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="-----"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/end"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="-----"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/startTOp"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="-----"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/endBottom"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="-----"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
         android:id="@+id/tvShadow"
         android:layout_width="wrap_content"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.kotlin
 
-import android.R
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -37,7 +36,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -45,6 +43,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
 import kotlin.math.abs
 
 /**
@@ -285,6 +284,7 @@ inline fun ViewGroup.HorizontalScrollView(
         ) else HorizontalScrollView(context)
     return horizontalScrollView.apply(init).also { if (autoAdd) addView(it) }
 }
+
 inline fun ViewGroup.Indicator(init: Indicator.() -> Unit) =
     Indicator(context).apply(init).also { addView(it) }
 
@@ -1591,14 +1591,14 @@ val gradient_type_linear = GradientDrawable.LINEAR_GRADIENT
 val gradient_type_radial = GradientDrawable.RADIAL_GRADIENT
 val gradient_type_sweep = GradientDrawable.SWEEP_GRADIENT
 
-val state_enable = R.attr.state_enabled
-val state_disable = -R.attr.state_enabled
-val state_pressed = R.attr.state_pressed
-val state_unpressed = -R.attr.state_pressed
-val state_focused = R.attr.state_focused
-val state_unfocused = -R.attr.state_focused
-val state_selected = R.attr.state_selected
-val state_unselected = -R.attr.state_selected
+val state_enable = android.R.attr.state_enabled
+val state_disable = -android.R.attr.state_enabled
+val state_pressed = android.R.attr.state_pressed
+val state_unpressed = -android.R.attr.state_pressed
+val state_focused = android.R.attr.state_focused
+val state_unfocused = -android.R.attr.state_focused
+val state_selected = android.R.attr.state_selected
+val state_unselected = -android.R.attr.state_selected
 
 val input_type_number = InputType.TYPE_CLASS_NUMBER
 
@@ -1655,6 +1655,64 @@ fun String.toLayoutId(): Int {
 fun <T : View> View.find(id: String): T? = findViewById(id.toLayoutId())
 
 fun <T : View> AppCompatActivity.find(id: String): T? = findViewById(id.toLayoutId())
+
+/**
+ * build a horizontal or vertical chain in [ConstraintLayout]
+ * [startView] is the starting point of the chain
+ * [endView] is the endding point of the chain
+ * [views] is the body of the chain
+ * [orientation] could be [horizontal] or [vertical]
+ */
+fun ConstraintLayout.buildChain(
+    startView: View,
+    views: List<View>,
+    endView: View,
+    orientation: Int
+) {
+    if (views.isNullOrEmpty()) return
+    var preView = startView
+    var startSide = if (orientation == horizontal) constraint_start else constraint_top
+    var endSide = if (orientation == horizontal) constraint_end else constraint_bottom
+
+    val firstView = views.first()
+    val isStartViewParent = firstView.isChildOf(startView)
+    val isEndViewParent = firstView.isChildOf(endView)
+
+    // deal with the first view
+    ConstraintProperties(firstView)
+        .connect(
+            startSide,
+            if (isStartViewParent) ConstraintProperties.PARENT_ID else preView.id,
+            if (isStartViewParent) startSide else endSide,
+            0
+        )
+        .apply()
+
+    preView = firstView
+
+    (1 until views.size).map { views[it] }.forEach { currentView ->
+        ConstraintProperties(currentView)
+            .connect(startSide, preView.id, endSide, 0)
+            .apply()
+        ConstraintProperties(preView)
+            .connect(endSide, currentView.id, startSide, 0)
+            .apply()
+        preView = currentView
+    }
+
+    // deal with the last view
+    ConstraintProperties(preView)
+        .connect(
+            endSide,
+            if (isEndViewParent) ConstraintProperties.PARENT_ID else endView.id,
+            if (isEndViewParent) endSide else startSide,
+            0
+        )
+        .apply()
+}
+
+fun View.isChildOf(view: View) = view.findViewById<View>(this.id) != null
+
 
 fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
     (context as? LifecycleOwner)?.let { owner ->
