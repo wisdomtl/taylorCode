@@ -1,13 +1,18 @@
 package test.taylor.com.taylorcode.ui.custom_view.bullet_screen
 
+import android.animation.Animator
 import android.content.Context
+import android.content.res.Resources
 import android.util.ArrayMap
 import android.util.AttributeSet
+import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
+import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveComment.dp
+import androidx.core.util.Pools
 import java.util.*
 
 /**
@@ -36,15 +41,40 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             field = value.dp
         }
 
-    init {
-        verticalGap = 5
-        horizontalGap = 5
-    }
+    /**
+     * define how to create live comment view
+     */
+    lateinit var createView: () -> View
+
+    /**
+     * define how to bind data with live comment view
+     */
+    lateinit var bindView: (Any, View) -> Unit
+
+    /**
+     * a pool which holds several live comments view to be reuse
+     */
+    private lateinit var pool: Pools.SimplePool<View>
+
+    /**
+     * the capacity of [pool]
+     */
+    var poolCapacity: Int = 20
+        set(value) {
+            field = value
+            pool = Pools.SimplePool(value)
+        }
 
     /**
      * [Lane] is sorted by it's top coordinate in [LaneView]
      */
     private var laneMap = ArrayMap<Int, Lane>()
+
+    init {
+        verticalGap = 5
+        horizontalGap = 5
+        poolCapacity = 20
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -54,8 +84,9 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     }
 
-    override fun addView(child: View?) {
-        child ?: return
+    fun show() {
+        val child = obtain()
+
         /**
          * measure child view
          */
@@ -65,7 +96,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         /**
          * add child view
          */
-        super.addView(child)
+        addView(child)
         val left = measuredWidth
         val top = getRandomTop(child.measuredHeight)
         /**
@@ -82,6 +113,20 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 it.showNext()
             }
         }
+    }
+
+    /**
+     * obtain a live comment view whether in [pool] or creating a new one
+     */
+    private fun obtain(): View = pool.acquire() ?: createView()
+
+    /**
+     * recycle a live comment view after it gets across the screen
+     */
+    private fun recycle(view: View) {
+        Log.v("ttaylor", "tag=lanelane recycler  ")
+        view.detach()
+        pool.release(view)
     }
 
     /**
@@ -109,7 +154,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
         //a valve to control live comments showing without overlapping
         private var blockShow = false
-        private var onLayoutChangeListener =
+        private val onLayoutChangeListener =
             OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
                 if (laneWidth - left > v?.measuredWidth ?: 0 + horizontalGap) {
                     blockShow = false
@@ -131,6 +176,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
                         view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
                     }
+                    .addListener { onEnd = { recycle(view) } }
                     .start()
                 blockShow = true
             }
@@ -140,5 +186,45 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             viewQueue.addLast(view)
             showNext()
         }
+    }
+
+    private fun View?.detach() = this?.parent?.let { it as? ViewGroup }?.also { it.removeView(this) }
+
+    val Int.dp: Int
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        ).toInt()
+
+    fun ViewPropertyAnimator.addListener(action: AnimatorListenerBuilder.() -> Unit): ViewPropertyAnimator {
+        AnimatorListenerBuilder().apply(action).let { builder ->
+            setListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                    animation?.let { builder.onRepeat?.invoke(animation) }
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    animation?.let { builder.onEnd?.invoke(animation) }
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                    animation?.let { builder.onCancel?.invoke(animation) }
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    animation?.let { builder.onStart?.invoke(animation) }
+                }
+
+            })
+        }
+        return this
+    }
+
+    class AnimatorListenerBuilder {
+        var onRepeat: ((Animator) -> Unit)? = null
+        var onEnd: ((Animator) -> Unit)? = null
+        var onCancel: ((Animator) -> Unit)? = null
+        var onStart: ((Animator) -> Unit)? = null
     }
 }

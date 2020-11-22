@@ -7,7 +7,7 @@ import android.view.animation.LinearInterpolator
 
 
 fun AnimatorSet.addListener(action: AnimatorListenerBuilder.() -> Unit) {
-    AnimatorListenerBuilder().apply { action }.let { builder ->
+    AnimatorListenerBuilder().apply(action).let { builder ->
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
                 animation?.let { builder.onRepeat?.invoke(animation) }
