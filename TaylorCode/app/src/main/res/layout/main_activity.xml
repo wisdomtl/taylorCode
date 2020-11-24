@@ -8,6 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btn_kotlin_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin Activity"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_constraint_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -502,12 +508,7 @@
             android:text="SurfaceView"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_kotlin_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="kotlin Activity"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_kotlin_example"

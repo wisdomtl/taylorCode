@@ -24,6 +24,15 @@ class KotlinActivity : AppCompatActivity() {
         setContentView(R.layout.constraint_layout_activity)
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
+        val oldList = listOf("1", "2", "3")
+        val newList =  oldList.toMutableList().apply {
+            clear()
+            add("11")
+            add("22")
+        }
+        oldList.print { it.toString() }.let { Log.v("ttaylor", "old list=${it}  ") }
+        newList.print { it.toString() }.let { Log.v("ttaylor", "new list=${it}  ") }
+
         /**
          * case: copy
          */

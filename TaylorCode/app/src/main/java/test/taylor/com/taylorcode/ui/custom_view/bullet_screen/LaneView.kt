@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.ArrayMap
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -124,7 +123,6 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * recycle a live comment view after it gets across the screen
      */
     private fun recycle(view: View) {
-        Log.v("ttaylor", "tag=lanelane recycler  ")
         view.detach()
         pool.release(view)
     }
@@ -188,6 +186,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
     }
 
+    //<editor-fold desc="helper function">
     private fun View?.detach() = this?.parent?.let { it as? ViewGroup }?.also { it.removeView(this) }
 
     val Int.dp: Int
@@ -227,4 +226,5 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         var onCancel: ((Animator) -> Unit)? = null
         var onStart: ((Animator) -> Unit)? = null
     }
+    //</editor-fold>
 }

@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.ui.anim
 
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView
@@ -24,15 +23,18 @@ class AddViewActivity : AppCompatActivity() {
                 center_vertical = true
                 verticalGap = 0
                 createView = {
-                    Log.v("ttaylor","tag=lanelane  create view")
+                    Log.v("ttaylor", "tag=lanelane  create view")
                     TextView(autoAdd = false) {
                         layout_width = wrap_content
                         layout_height = 100
                         gravity = gravity_center
-                        background_color ="#0000ff"
+                        background_color = "#0000ff"
                         textSize = 20f
                         text = "asdf"
                     }
+                }
+                bindView = { data, view ->
+
                 }
             }.also {
                 addView(it)
