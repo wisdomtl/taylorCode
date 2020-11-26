@@ -22,6 +22,31 @@ class KotlinActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
+
+
+        val list1 = listOf(
+            "11",
+            "22",
+            "33",
+            "44"
+        )
+
+        val list1ReadOnly = Collections.unmodifiableList(list1)
+        val newList1 = list1ReadOnly.toMutableList()
+        newList1[1] = "111"
+        list1ReadOnly.print { it.toString() }.let { Log.v("ttaylor"," read only list=$it") }
+        newList1.print { it.toString() }.let { Log.v("ttaylor","new list = ${it}  ") }
+
+
+        val readOnlyList1 = list1.toList()
+        val mutableList1 = readOnlyList1.toMutableList()
+        mutableList1[1] = "aaaa"
+        readOnlyList1.print { it.toString() }.let { Log.v("ttaylor"," readOnlyList1=$it") }
+        mutableList1.print { it.toString() }.let { Log.v("ttaylor","mutableList1= ${it}  ") }
+
+
+
+
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
         val oldList = listOf("1", "2", "3")
