@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.ArrayMap
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -12,6 +13,8 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
 import androidx.core.util.Pools
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Mode.AsyncMode
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Mode.SyncMode
 import java.util.*
 
 /**
@@ -39,6 +42,16 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         set(value) {
             field = value.dp
         }
+
+    /**
+     * how one live comment should sync with others
+     */
+    var mode: Mode = AsyncMode
+
+    /**
+     * how long a live comment will show in screen
+     */
+    var duration = 4000L
 
     /**
      * define how to create live comment view
@@ -83,8 +96,14 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     }
 
-    fun show() {
+    fun show(datas: List<Any>) {
+        datas.forEach { show(it) }
+    }
+
+    fun show(data: Any) {
         val child = obtain()
+
+        bindView(data, child)
 
         /**
          * measure child view
@@ -154,20 +173,36 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         private var blockShow = false
         private val onLayoutChangeListener =
             OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                Log.e(
+                    "ttaylor",
+                    "tag=, Lane.()  laneWidth=${laneWidth} ,left=${left}, measureWidth=${v?.measuredWidth} ,horizontalGap=${horizontalGap}"
+                )
                 if (laneWidth - left > v?.measuredWidth ?: 0 + horizontalGap) {
                     blockShow = false
+                    Log.w("ttaylor", "onLayoutChange() blockShow=${blockShow}")
                     showNext()
                 }
             }
 
         fun showNext() {
+            Log.w("ttaylor", "showNext1() blockShow=${blockShow}")
             if (blockShow) return
             currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
             currentView = viewQueue.poll()
             currentView?.let { view ->
                 view.addOnLayoutChangeListener(onLayoutChangeListener)
+                val duration = when (mode) {
+                    is SyncMode -> {
+                        val distance = laneWidth + view.measuredWidth
+                        val speed = laneWidth.toFloat() / duration
+                        (distance / speed).toLong()
+                    }
+                    is AsyncMode -> {
+                        duration
+                    }
+                }
                 view.animate()
-                    .setDuration(3000)
+                    .setDuration(duration)
                     .setInterpolator(LinearInterpolator())
                     .setUpdateListener {
                         val value = it.animatedFraction
@@ -177,6 +212,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     .addListener { onEnd = { recycle(view) } }
                     .start()
                 blockShow = true
+                Log.w("ttaylor", "showNext2() blockShow=${blockShow}")
             }
         }
 
@@ -227,4 +263,9 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         var onStart: ((Animator) -> Unit)? = null
     }
     //</editor-fold>
+
+    sealed class Mode() {
+        object SyncMode : Mode()
+        object AsyncMode : Mode()
+    }
 }
