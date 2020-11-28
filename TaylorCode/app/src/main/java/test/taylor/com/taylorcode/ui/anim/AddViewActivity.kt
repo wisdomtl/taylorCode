@@ -1,7 +1,6 @@
 package test.taylor.com.taylorcode.ui.anim
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.kotlin.*
@@ -51,15 +50,14 @@ class AddViewActivity : AppCompatActivity() {
                 background_color = "#00ff00"
                 center_vertical = true
                 verticalGap = 5
-                horizontalGap = 90
-                mode = LaneView.Mode.AsyncMode
+                horizontalGap = 10
+                mode = LaneView.Mode.SyncMode
                 duration = 4000L
                 createView = {
-                    Log.v("ttaylor", "tag=lanelane  create view")
                     TextView(autoAdd = false) {
                         layout_id = "tv"
                         layout_width = wrap_content
-                        layout_height =  200
+                        layout_height = wrap_content
                         gravity = gravity_center
                         textSize = 20f
                         text = "asdf"
@@ -95,7 +93,7 @@ class AddViewActivity : AppCompatActivity() {
                 center_horizontal = true
                 background_color = "#ff00ff"
                 onClick = {
-                    laneView.show(LaneBean("暗恋"))
+                    laneView.show(laneBeans)
                 }
             }
         }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.ArrayMap
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -173,19 +172,13 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         private var blockShow = false
         private val onLayoutChangeListener =
             OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-                Log.e(
-                    "ttaylor",
-                    "tag=, Lane.()  laneWidth=${laneWidth} ,left=${left}, measureWidth=${v?.measuredWidth} ,horizontalGap=${horizontalGap}"
-                )
-                if (laneWidth - left > v?.measuredWidth ?: 0 + horizontalGap) {
+                if (laneWidth - left > v.measuredWidth + horizontalGap) {
                     blockShow = false
-                    Log.w("ttaylor", "onLayoutChange() blockShow=${blockShow}")
                     showNext()
                 }
             }
 
         fun showNext() {
-            Log.w("ttaylor", "showNext1() blockShow=${blockShow}")
             if (blockShow) return
             currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
             currentView = viewQueue.poll()
@@ -212,7 +205,6 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     .addListener { onEnd = { recycle(view) } }
                     .start()
                 blockShow = true
-                Log.w("ttaylor", "showNext2() blockShow=${blockShow}")
             }
         }
 
