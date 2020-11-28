@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.ui.anim
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.kotlin.*
@@ -51,7 +52,8 @@ class AddViewActivity : AppCompatActivity() {
                 center_vertical = true
                 verticalGap = 5
                 horizontalGap = 10
-                mode = LaneView.Mode.SyncMode
+                speedMode = LaneView.Speed.Sync
+                loopMode = LaneView.Loop.Forever
                 duration = 4000L
                 createView = {
                     TextView(autoAdd = false) {
@@ -75,6 +77,10 @@ class AddViewActivity : AppCompatActivity() {
                     (data as? LaneBean)?.let {
                         view.find<TextView>("tv")?.text = it.text
                     }
+                }
+
+                onEmpty = {
+                    Log.v("ttaylor","tag=, AddViewActivity.()  lane is empty")
                 }
             }.also {
                 addView(it)

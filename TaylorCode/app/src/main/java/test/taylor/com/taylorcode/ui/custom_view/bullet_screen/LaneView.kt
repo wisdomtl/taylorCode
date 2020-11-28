@@ -12,8 +12,11 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
 import androidx.core.util.Pools
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Mode.AsyncMode
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Mode.SyncMode
+import androidx.core.view.ViewCompat
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Loop.Forever
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Loop.Once
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Speed.Async
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Speed.Sync
 import java.util.*
 
 /**
@@ -45,12 +48,27 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * how one live comment should sync with others
      */
-    var mode: Mode = AsyncMode
+    var speedMode: Speed = Async
+
+    /**
+     * the action after all lane is empty
+     */
+    var loopMode: Loop = Once
 
     /**
      * how long a live comment will show in screen
      */
     var duration = 4000L
+
+    /**
+     * a lambda will be invoked when all lanes have nothing to show
+     */
+    var onEmpty: (() -> Unit)? = null
+
+    /**
+     * hold data for looping
+     */
+    private var datas = emptyList<Any>()
 
     /**
      * define how to create live comment view
@@ -96,6 +114,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     fun show(datas: List<Any>) {
+        this.datas = datas
         datas.forEach { show(it) }
     }
 
@@ -145,6 +164,14 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         pool.release(view)
     }
 
+    private fun checkLanes() {
+        val isAllEmpty = laneMap.values.fold(true) { acc, lane -> acc.and(lane.isEmpty) }
+        if (isAllEmpty) {
+            onEmpty?.invoke()
+            if (loopMode == Forever) show(datas)
+        }
+    }
+
     /**
      * get the lane top by random
      */
@@ -167,6 +194,9 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     inner class Lane(var laneWidth: Int) {
         private var viewQueue = LinkedList<View>()
         private var currentView: View? = null
+        private var _isEmpty = false
+        val isEmpty: Boolean
+            get() = _isEmpty
 
         //a valve to control live comments showing without overlapping
         private var blockShow = false
@@ -183,28 +213,35 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             currentView?.removeOnLayoutChangeListener(onLayoutChangeListener)
             currentView = viewQueue.poll()
             currentView?.let { view ->
+                _isEmpty = false
                 view.addOnLayoutChangeListener(onLayoutChangeListener)
-                val duration = when (mode) {
-                    is SyncMode -> {
+                val duration = when (speedMode) {
+                    is Sync -> {
                         val distance = laneWidth + view.measuredWidth
                         val speed = laneWidth.toFloat() / duration
                         (distance / speed).toLong()
                     }
-                    is AsyncMode -> {
+                    is Async -> {
                         duration
                     }
                 }
-                view.animate()
-                    .setDuration(duration)
-                    .setInterpolator(LinearInterpolator())
-                    .setUpdateListener {
-                        val value = it.animatedFraction
-                        val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
-                        view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
-                    }
-                    .addListener { onEnd = { recycle(view) } }
-                    .start()
+                ViewCompat.postOnAnimation(view){
+                    view.animate()
+                        .setDuration(duration)
+                        .setInterpolator(LinearInterpolator())
+                        .setUpdateListener {
+                            val value = it.animatedFraction
+                            val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
+                            view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
+                        }
+                        .addListener { onEnd = { recycle(view) } }
+                        .start()
+                }
+
                 blockShow = true
+            } ?: kotlin.run {
+                _isEmpty = true
+                checkLanes()
             }
         }
 
@@ -256,8 +293,13 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
     //</editor-fold>
 
-    sealed class Mode() {
-        object SyncMode : Mode()
-        object AsyncMode : Mode()
+    sealed class Speed() {
+        object Sync : Speed()
+        object Async : Speed()
+    }
+
+    sealed class Loop() {
+        object Forever : Loop()
+        object Once : Loop()
     }
 }
