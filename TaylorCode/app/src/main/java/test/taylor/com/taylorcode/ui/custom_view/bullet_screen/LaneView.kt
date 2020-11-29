@@ -3,13 +3,13 @@ package test.taylor.com.taylorcode.ui.custom_view.bullet_screen
 import android.animation.Animator
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Rect
 import android.util.ArrayMap
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
-import android.view.View
+import android.view.*
 import android.view.View.OnLayoutChangeListener
-import android.view.ViewGroup
-import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
 import androidx.core.util.Pools
 import androidx.core.view.ViewCompat
@@ -66,6 +66,11 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     var onEmpty: (() -> Unit)? = null
 
     /**
+     * the listener invoked when the child item in the [LaneView] is clicked
+     */
+    var onItemClick: ((View, Any) -> Any)? = null
+
+    /**
      * hold data for looping
      */
     private var datas = emptyList<Any>()
@@ -103,6 +108,63 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         verticalGap = 5
         horizontalGap = 5
         poolCapacity = 20
+        isClickable = true
+    }
+
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
+        override fun onShowPress(e: MotionEvent?) {
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            e?.let {
+                findDataUnder(it.x, it.y)?.let { pair ->
+                    onItemClick?.invoke(pair.first, pair.second)
+                }
+            }
+            return false
+        }
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return false
+        }
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent?,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            return false
+        }
+
+        override fun onScroll(
+            e1: MotionEvent?,
+            e2: MotionEvent?,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            return false
+        }
+
+        override fun onLongPress(e: MotionEvent?) {
+        }
+    })
+
+    /**
+     * find the view under (x,y) and it's data
+     */
+    private fun findDataUnder(x: Float, y: Float): Pair<View, Any>? {
+        var pair: Pair<View, Any>? = null
+        laneMap.values.forEach { lane ->
+            lane.forEachView { view, data ->
+                view.getRelativeRectTo(this@LaneView).also { rect ->
+                    if (rect.contains(x.toInt(), y.toInt())) {
+                        pair = view to data
+                    }
+                }
+            }
+        }
+        return pair
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -142,13 +204,18 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         /**
          * put child view into [Lane]
          */
-        laneMap[top]?.add(child) ?: run {
+        laneMap[top]?.add(child, data) ?: run {
             Lane(measuredWidth).also {
-                it.add(child)
+                it.add(child, data)
                 laneMap[top] = it
                 it.showNext()
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     /**
@@ -164,6 +231,9 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         pool.release(view)
     }
 
+    /**
+     * check whether all [Lane] have nothing to show
+     */
     private fun checkLanes() {
         val isAllEmpty = laneMap.values.fold(true) { acc, lane -> acc.and(lane.isEmpty) }
         if (isAllEmpty) {
@@ -193,7 +263,12 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      */
     inner class Lane(var laneWidth: Int) {
         private var viewQueue = LinkedList<View>()
+        private val dataQueue = LinkedList<Any>()
         private var currentView: View? = null
+        /**
+         * all showing view and it's data are here
+         */
+        private val viewDataMap = ArrayMap<View, Any>()
         private var _isEmpty = false
         val isEmpty: Boolean
             get() = _isEmpty
@@ -225,7 +300,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         duration
                     }
                 }
-                ViewCompat.postOnAnimation(view){
+                ViewCompat.postOnAnimation(view) {
                     view.animate()
                         .setDuration(duration)
                         .setInterpolator(LinearInterpolator())
@@ -234,9 +309,15 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                             val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
                             view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
                         }
-                        .addListener { onEnd = { recycle(view) } }
+                        .addListener {
+                            onEnd = {
+                                recycle(view)
+                                viewDataMap.remove(view)
+                            }
+                        }
                         .start()
                 }
+                dataQueue.poll()?.let { viewDataMap[view] = it }
 
                 blockShow = true
             } ?: kotlin.run {
@@ -245,7 +326,12 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             }
         }
 
-        fun add(view: View) {
+        fun forEachView(each: (View, Any) -> Any) {
+            viewDataMap.forEach { entry -> each(entry.key, entry.value) }
+        }
+
+        fun add(view: View, data: Any) {
+            dataQueue.addLast(data)
             viewQueue.addLast(view)
             showNext()
         }
@@ -291,14 +377,28 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         var onCancel: ((Animator) -> Unit)? = null
         var onStart: ((Animator) -> Unit)? = null
     }
+
+    private fun Rect.relativeTo(otherRect: Rect): Rect {
+        val relativeLeft = left - otherRect.left
+        val relativeTop = top - otherRect.top
+        val relativeRight = relativeLeft + right - left
+        val relativeBottom = relativeTop + bottom - top
+        return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
+    }
+
+    private fun View.getRelativeRectTo(otherView: View): Rect {
+        val parentRect = Rect().also { otherView.getGlobalVisibleRect(it) }
+        val childRect = Rect().also { getGlobalVisibleRect(it) }
+        return childRect.relativeTo(parentRect)
+    }
     //</editor-fold>
 
-    sealed class Speed() {
+    sealed class Speed {
         object Sync : Speed()
         object Async : Speed()
     }
 
-    sealed class Loop() {
+    sealed class Loop {
         object Forever : Loop()
         object Once : Loop()
     }

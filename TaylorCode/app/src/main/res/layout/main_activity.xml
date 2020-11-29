@@ -8,6 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnOverrideProperty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Override property"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_kotlin_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -374,12 +380,7 @@
             android:text="kotlin collection"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btnOverrideProperty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Override property"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_transparent_fragment"
