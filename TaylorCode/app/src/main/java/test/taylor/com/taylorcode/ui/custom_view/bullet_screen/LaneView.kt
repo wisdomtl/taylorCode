@@ -68,7 +68,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * the listener invoked when the child item in the [LaneView] is clicked
      */
-    var onItemClick: ((View, Any) -> Any)? = null
+    var onItemClick: ((View, Any) -> Unit)? = null
 
     /**
      * hold data for looping
