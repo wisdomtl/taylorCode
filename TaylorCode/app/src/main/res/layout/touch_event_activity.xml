@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <test.taylor.com.taylorcode.ui.touch_event.TouchEventViewGroup
         android:layout_width="200dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="900dp"
         android:background="#00ff00"
-        android:layout_height="900dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <test.taylor.com.taylorcode.ui.touch_event.TouchEventView
             android:id="@+id/v_te"
@@ -17,5 +17,28 @@
             android:layout_height="100dp"
             android:background="#ff00ff" />
     </test.taylor.com.taylorcode.ui.touch_event.TouchEventViewGroup>
+
+    <TextView
+        android:id="@+id/tvExppppadn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="哈哈的看法打了飞机了第三款就疯啦的时间父类的解放路快速点击弗兰克斯到家了发跨境电商雷锋精神底滤科菲都是浪费酸辣粉来得及福利费解放路快速点击弗兰克斯到家了发跨"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="2"
+        android:textSize="30sp"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvExpand"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="expand and collapse"
+        android:textSize="40sp"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
