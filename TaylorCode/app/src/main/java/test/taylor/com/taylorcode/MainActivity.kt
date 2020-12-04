@@ -224,6 +224,36 @@ class MainActivity : BaseActivity() {
             this.topMargin = 100.dp
             this.marginStart = 50.dp
         })
+
+        val atString = "//@有毛病：早安哦//@天天：小甜甜"
+
+        val sb = StringBuffer()
+        atString.splitAtString(
+            { string, highlight ->
+                sb.append("$string($highlight)")
+            }, {
+              sb.append("//")
+            }, {
+                sb.append("：")
+            }
+        )
+        Log.v("ttaylor","tag=, MainActivity.initView()   splitAtString=${sb.toString()}")
+    }
+
+    fun String.splitAtString(onEach: (String, Boolean) -> Unit, onEntryEnd: () -> Unit, onSubEntryEnd: () -> Unit) {
+        val entryList = split("//")
+        entryList.forEachIndexed { index, s ->
+            val subEntryList = s.split("：")
+            subEntryList.forEachIndexed { subIndex, splitString ->
+                onEach(splitString, splitString.startsWith("@"))
+                if (subIndex != subEntryList.size - 1) {
+                    onSubEntryEnd()
+                }
+            }
+            if (index != entryList.size - 1) {
+                onEntryEnd()
+            }
+        }
     }
 
 
@@ -292,7 +322,7 @@ inline fun <reified T> Context.startActivity() {
 fun Float.cutEndZero(): String = this.toString().reversed().let {
     val dotIndex = it.indexOf('.')
     var zeroCount = 0
-    for (i in 0 until  dotIndex) {
+    for (i in 0 until dotIndex) {
         if (it[i] != '0') break
         zeroCount++
     }
