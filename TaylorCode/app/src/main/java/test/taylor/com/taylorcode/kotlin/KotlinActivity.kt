@@ -24,6 +24,12 @@ class KotlinActivity : AppCompatActivity() {
         setContentView(R.layout.constraint_layout_activity)
 
 
+        val padWithChar = "12345".padStart(10, '.')
+        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  padwithchar=${padWithChar}")
+
+        val padend = "a".padEnd(10,'.')
+        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  pad end=$padend")
+
         val list1 = listOf(
             "11",
             "22",
