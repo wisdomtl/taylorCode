@@ -1,18 +1,17 @@
 package test.taylor.com.taylorcode.ui.custom_view.bullet_screen
 
 import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.util.ArrayMap
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnLayoutChangeListener
 import android.view.animation.LinearInterpolator
 import androidx.core.util.Pools
-import androidx.core.view.ViewCompat
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Loop.Forever
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Loop.Once
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneView.Speed.Async
@@ -180,6 +179,18 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         datas.forEach { show(it) }
     }
 
+    fun pause() {
+        laneMap.values.forEach { lane ->
+            lane.pause()
+        }
+    }
+
+    fun resume(){
+        laneMap.values.forEach { lane->
+            lane.resume()
+        }
+    }
+
     fun show(data: Any) {
         val child = obtain()
 
@@ -265,10 +276,11 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         private var viewQueue = LinkedList<View>()
         private val dataQueue = LinkedList<Any>()
         private var currentView: View? = null
+
         /**
          * all showing view and it's data are here
          */
-        private val viewDataMap = ArrayMap<View, Any>()
+        private val viewDataMap = ArrayMap<View, ViewData>()
         private var _isEmpty = false
         val isEmpty: Boolean
             get() = _isEmpty
@@ -300,25 +312,23 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         duration
                     }
                 }
-                ViewCompat.postOnAnimation(view) {
-                    view.animate()
-                        .setDuration(duration)
-                        .setInterpolator(LinearInterpolator())
-                        .setUpdateListener {
-                            val value = it.animatedFraction
-                            val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
-                            view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
+                val valueAnimator = ValueAnimator.ofFloat(1.0f).apply {
+                    setDuration(duration)
+                    interpolator = LinearInterpolator()
+                    addUpdateListener {
+                        val value = it.animatedFraction
+                        val left = (laneWidth - value * (laneWidth + view.measuredWidth)).toInt()
+                        view.layout(left, view.top, left + view.measuredWidth, view.top + view.measuredHeight)
+                    }
+                    addListener {
+                        onEnd = {
+                            recycle(view)
+                            viewDataMap.remove(view)
                         }
-                        .addListener {
-                            onEnd = {
-                                recycle(view)
-                                viewDataMap.remove(view)
-                            }
-                        }
-                        .start()
+                    }
                 }
-                dataQueue.poll()?.let { viewDataMap[view] = it }
-
+                valueAnimator.start()
+                dataQueue.poll()?.let { viewDataMap[view] = ViewData(it, valueAnimator) }
                 blockShow = true
             } ?: kotlin.run {
                 _isEmpty = true
@@ -327,7 +337,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
 
         fun forEachView(each: (View, Any) -> Any) {
-            viewDataMap.forEach { entry -> each(entry.key, entry.value) }
+            viewDataMap.forEach { entry -> each(entry.key, entry.value.data) }
         }
 
         fun add(view: View, data: Any) {
@@ -335,6 +345,23 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             viewQueue.addLast(view)
             showNext()
         }
+
+        fun pause() {
+            viewDataMap.values.forEach { viewData ->
+                viewData.animator.pause()
+            }
+        }
+
+        fun resume(){
+            viewDataMap.values.forEach { viewData ->
+                viewData.animator.resume()
+            }
+        }
+
+        /**
+         * keep view's data and animator here
+         */
+        inner class ViewData(var data: Any, var animator: ValueAnimator)
     }
 
     //<editor-fold desc="helper function">
@@ -347,9 +374,9 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             Resources.getSystem().displayMetrics
         ).toInt()
 
-    fun ViewPropertyAnimator.addListener(action: AnimatorListenerBuilder.() -> Unit): ViewPropertyAnimator {
+    fun ValueAnimator.addListener(action: AnimatorListenerBuilder.() -> Unit): ValueAnimator {
         AnimatorListenerBuilder().apply(action).let { builder ->
-            setListener(object : Animator.AnimatorListener {
+            addListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(animation: Animator?) {
                     animation?.let { builder.onRepeat?.invoke(animation) }
                 }

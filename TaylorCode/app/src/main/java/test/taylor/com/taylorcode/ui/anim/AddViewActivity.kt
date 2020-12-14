@@ -108,6 +108,39 @@ class AddViewActivity : AppCompatActivity() {
                     laneView.show(laneBeans)
                 }
             }
+
+            TextView {
+                layout_id = "tvPause"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 16f
+                textColor ="#3F4658"
+                gravity = gravity_center
+                text = "pause"
+                bottom_toTopOf = "tv1"
+                center_horizontal = true
+                background_color = "#c0c0c0"
+                padding = 20
+                onClick = {
+                    laneView.pause()
+                }
+            }
+            TextView {
+                layout_id = "tvResume"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 16f
+                textColor ="#3F4658"
+                gravity = gravity_center
+                text = "resume"
+                bottom_toTopOf = "tvPause"
+                center_horizontal = true
+                background_color = "#c0c0c0"
+                padding = 20
+                onClick = {
+                    laneView.resume()
+                }
+            }
         }
     }
 
