@@ -41,7 +41,7 @@ class SelectRecycleViewActivity: AppCompatActivity() {
 //            SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),singleSelectorGroup,false)
 //        )
 
-        datas = mutableListOf(
+         dataList = mutableListOf(
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),
             SelectionBeanWrapper(SelectionBean(UUID.randomUUID().toString()),multiSelectorGroup,false),
@@ -78,7 +78,7 @@ class SelectRecycleViewActivity: AppCompatActivity() {
                 center_horizontal = true
                 bottom_toBottomOf = parent_id
                 onClick = {
-                    selectorAdapter.datas.forEach { selectBean ->
+                    selectorAdapter.dataList.forEach { selectBean ->
                         if (selectBean is SelectionBeanWrapper){
                             selectBean.showSelector = !selectBean.showSelector
                         }

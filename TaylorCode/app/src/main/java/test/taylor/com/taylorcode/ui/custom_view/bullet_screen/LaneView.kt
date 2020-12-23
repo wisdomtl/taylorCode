@@ -185,41 +185,61 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
     }
 
-    fun resume(){
-        laneMap.values.forEach { lane->
+    fun resume() {
+        laneMap.values.forEach { lane ->
             lane.resume()
         }
     }
 
+    fun saveSnapshot(): List<ViewPosition> {
+        val viewPositions = mutableListOf<List<ViewPosition>>()
+        laneMap.values.forEach { lane ->
+            viewPositions.add(lane.snapshot())
+        }
+        return viewPositions.flatten()
+    }
+
+    fun restoreSnapshot(viewPositions: List<ViewPosition>) {
+        viewPositions.forEach { position ->
+            val child = obtain()
+            addView(child)
+            measureChild(child, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            val left = position.left
+            val top = position.top
+            child.layout(left, top, left + child.measuredWidth, top + child.measuredHeight)
+        }
+    }
+
+
     fun show(data: Any) {
-        val child = obtain()
+        post {
+            val child = obtain()
 
-        bindView(data, child)
+            bindView(data, child)
 
-        /**
-         * measure child view
-         */
-        val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        val h = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        measureChild(child, w, h)
-        /**
-         * add child view
-         */
-        addView(child)
-        val left = measuredWidth
-        val top = getRandomTop(child.measuredHeight)
-        /**
-         * layout child view just behind the most right of [LaneView]
-         */
-        child.layout(left, top, left + child.measuredWidth, top + child.measuredHeight)
-        /**
-         * put child view into [Lane]
-         */
-        laneMap[top]?.add(child, data) ?: run {
-            Lane(measuredWidth).also {
-                it.add(child, data)
-                laneMap[top] = it
-                it.showNext()
+            /**
+             * measure child view
+             */
+            measureChild(child, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            /**
+             * add child view
+             */
+            addView(child)
+            val left = measuredWidth
+            val top = getRandomTop(child.measuredHeight)
+            /**
+             * layout child view just behind the most right of [LaneView]
+             */
+            child.layout(left, top, left + child.measuredWidth, top + child.measuredHeight)
+            /**
+             * put child view into [Lane]
+             */
+            laneMap[top]?.add(child, data) ?: run {
+                Lane(measuredWidth).also {
+                    it.add(child, data)
+                    laneMap[top] = it
+                    it.showNext()
+                }
             }
         }
     }
@@ -352,16 +372,25 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             }
         }
 
-        fun resume(){
+        fun resume() {
             viewDataMap.values.forEach { viewData ->
                 viewData.animator.resume()
             }
+        }
+
+        fun snapshot(): List<ViewPosition> {
+            val viewPositions = mutableListOf<ViewPosition>()
+            viewDataMap.forEach { entry ->
+                viewPositions.add(ViewPosition(entry.key.left, entry.key.top, entry.value.data))
+            }
+            return viewPositions
         }
 
         /**
          * keep view's data and animator here
          */
         inner class ViewData(var data: Any, var animator: ValueAnimator)
+
     }
 
     //<editor-fold desc="helper function">
@@ -430,3 +459,5 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         object Once : Loop()
     }
 }
+
+class ViewPosition(var left: Int, var top: Int, var data: Any)

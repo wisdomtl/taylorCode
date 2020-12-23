@@ -41,6 +41,7 @@ import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AddViewActivity
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
@@ -198,6 +199,7 @@ class MainActivity : BaseActivity() {
         btnPpath.setOnClickListener { startActivity<PathActivity>() }
         btnLiveComment.setOnClickListener { startActivity<LiveCommentActivity>() }
         btnAddViewActivity.setOnClickListener { startActivity<AddViewActivity>() }
+        btn_livecomment.setOnClickListener { startActivity<LaneViewActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

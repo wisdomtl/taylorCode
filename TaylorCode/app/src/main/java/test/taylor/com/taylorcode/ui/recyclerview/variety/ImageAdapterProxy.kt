@@ -6,9 +6,9 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter.AdapterProxy
+import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter.Proxy
 
-class ImageAdapterProxy: AdapterProxy<Image, ImageViewHolder>() {
+class ImageAdapterProxy: Proxy<Image, ImageViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ImageView {

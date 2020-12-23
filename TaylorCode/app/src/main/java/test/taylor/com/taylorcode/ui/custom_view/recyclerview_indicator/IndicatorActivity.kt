@@ -14,7 +14,7 @@ class IndicatorActivity : AppCompatActivity() {
 
     private val indicatorAdapter = VarietyAdapter().apply {
         addProxy(IndicatorAdapterProxy())
-        datas = mutableListOf(
+        dataList = listOf(
             IndicatorBean(1),
             IndicatorBean(2),
             IndicatorBean(3),

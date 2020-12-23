@@ -67,7 +67,7 @@ class VarietyAdapterActivity : AppCompatActivity() {
             Image("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1598432560218&di=86775e7582bd602267d8d77a4e04c734&imgtype=0&src=http%3A%2F%2Fatth.jzb.com%2Fforum%2F201507%2F30%2F133923yldlw9959ethludz.png"),
             Text("item 9")
         )
-        varietyAdapter.datas = datas
+        varietyAdapter.dataList = datas
 
         rv?.adapter = varietyAdapter
         rv?.layoutManager = LinearLayoutManager(this)

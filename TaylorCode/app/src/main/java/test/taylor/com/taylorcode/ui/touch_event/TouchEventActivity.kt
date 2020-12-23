@@ -68,7 +68,7 @@ fun TextView.ellipsisText(text: String, onMeasure: (Boolean, String) -> Unit) {
         paint.textSize = textSize
         val totalWidth = paint.measureText(text)
         if (totalWidth > maxLines * width) {
-            val lineCount = layout.lineCount
+            val lineCount = layout?.lineCount ?: 2
             val ellipsisIndex = layout.getEllipsisCount(lineCount - 1)
             val showingTextIndex = text.length - ellipsisIndex
             val showingText = text.subSequence(0, showingTextIndex)

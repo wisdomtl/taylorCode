@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter
 
-class IndicatorAdapterProxy : VarietyAdapter.AdapterProxy<IndicatorBean, IndicatorViewHolder>() {
+class IndicatorAdapterProxy : VarietyAdapter.Proxy<IndicatorBean, IndicatorViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {

@@ -12,7 +12,7 @@ import test.taylor.com.taylorcode.ui.custom_view.selector.kt.SelectorGroup
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter
 import test.taylor.com.taylorcode.util.value
 
-class SelectAdapterProxy : VarietyAdapter.AdapterProxy<SelectionBeanWrapper, SelectionViewHolder>() {
+class SelectAdapterProxy : VarietyAdapter.Proxy<SelectionBeanWrapper, SelectionViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {
