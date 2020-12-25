@@ -127,11 +127,12 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                 text = "$index   $index"
                 gravity = gravity_center
                 fontFamily = R.font.pingfang
+                background_color = "#00ffff"
             }.also {
                 views.add(it)
                 croot2?.addView(it)
             }
         }
-        croot2.buildChain(start, views, croot2, horizontal)
+        croot2.buildChain(start, views, null, horizontal)
     }
 }

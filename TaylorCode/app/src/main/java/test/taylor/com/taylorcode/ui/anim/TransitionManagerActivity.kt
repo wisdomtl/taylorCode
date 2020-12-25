@@ -22,7 +22,7 @@ class TransitionManagerActivity : AppCompatActivity() {
             val transition = ChangeBounds()
             transition.interpolator = AnticipateOvershootInterpolator(1.0f)
             transition.duration = 1200
-            TransitionManager.beginDelayedTransition(layoutroot22)
+            TransitionManager.beginDelayedTransition(layoutroot22,transition)
             constraintSet.applyTo(layoutroot22)
         }
         btnReverseAnim.setOnClickListener {

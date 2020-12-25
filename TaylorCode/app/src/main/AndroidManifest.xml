@@ -218,6 +218,7 @@
         <activity android:name=".ui.custom_view.bullet_screen.LiveCommentActivity" />
         <activity android:name=".ui.anim.AddViewActivity" />
         <activity android:name=".ui.custom_view.bullet_screen.LaneViewActivity" />
+        <activity android:name=".ui.anim.transitionmanager.TransitionManagerActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

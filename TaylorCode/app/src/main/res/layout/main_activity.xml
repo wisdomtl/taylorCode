@@ -7,6 +7,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_constraint_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="constraint add "
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btnTransition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="transitionManager "
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btn_constraint_set_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="constrainst set "
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_livecomment"
             android:layout_width="match_parent"
@@ -33,12 +54,6 @@
             android:text="Override property"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_constraint_add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="constraint add "
-            android:textAllCaps="false" />
         <Button
             android:id="@+id/btnAddViewActivity"
             android:layout_width="match_parent"
@@ -366,12 +381,6 @@
             android:text="tag activity"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_constraint_set_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="constrainst set "
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_anonymous_fun"
