@@ -69,6 +69,7 @@ inline fun ViewGroup.TextView(
     return textView.apply(init).also { if (autoAdd) addView(it) }
 }
 
+
 /**
  * create [AppCompatImageView] instance within a [ViewGroup]
  * @param style an style int value defined in xml

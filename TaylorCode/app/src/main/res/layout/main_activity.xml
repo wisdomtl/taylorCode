@@ -9,6 +9,12 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_constraintlayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="visibility of chain"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_constraint_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
