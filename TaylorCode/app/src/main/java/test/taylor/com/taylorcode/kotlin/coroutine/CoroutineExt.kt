@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 /**
- * start counting down from [duration] to 0 in a background thread and invoking the [onCountdown] every [interval]
+ * start counting down from [duration] to 0 in a background thread and invoking the [onCountdown] every [interval] in main thread
  */
 fun countdown(
     duration: Long,
@@ -18,8 +18,8 @@ fun countdown(
     producerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     consumerDispatcher: CoroutineDispatcher = Dispatchers.Main,
     onCountdown: () -> Unit
-) {
-    GlobalScope.launch(consumerDispatcher) {
+): Job {
+    return GlobalScope.launch(consumerDispatcher) {
         var d = duration
         val flow = flow {
             while (isActive) {
