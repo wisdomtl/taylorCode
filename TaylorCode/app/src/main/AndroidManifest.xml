@@ -220,6 +220,7 @@
         <activity android:name=".ui.custom_view.bullet_screen.LaneViewActivity" />
         <activity android:name=".ui.anim.transitionmanager.TransitionManagerActivity" />
         <activity android:name=".ui.ConstraintLayout4" />
+        <activity android:name=".kotlin.coroutine.FlowActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

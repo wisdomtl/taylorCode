@@ -202,6 +202,7 @@ class MainActivity : BaseActivity() {
         btn_livecomment.setOnClickListener { startActivity<LaneViewActivity>() }
         btnTransition.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.anim.transitionmanager.TransitionManagerActivity>() }
         btn_constraintlayout4.setOnClickListener { startActivity<ConstraintLayout4>() }
+        btn_kotlin_flow.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.FlowActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
