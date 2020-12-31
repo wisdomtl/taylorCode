@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.flowOn
 /**
  * start counting down from [duration] to 0 in a background thread and invoking the [onCountdown] every [interval]
  */
-@InternalCoroutinesApi
 fun countdown(
     duration: Long,
     interval: Long,
