@@ -17,7 +17,7 @@ fun countdown(
     view: View?,
     producerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     consumerDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    onCountdown: () -> Unit
+    onCountdown: () -> Boolean
 ): Job {
     return GlobalScope.launch(consumerDispatcher) {
         var d = duration
@@ -31,7 +31,9 @@ fun countdown(
         }.flowOn(producerDispatcher)
 
         try {
-            flow.collect { onCountdown() }
+            flow.collect {
+                if (onCountdown()) cancel()
+            }
         } catch (t: Throwable) {
             t.printStackTrace()
         }
