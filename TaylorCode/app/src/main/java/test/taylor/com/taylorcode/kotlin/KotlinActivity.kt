@@ -50,7 +50,15 @@ class KotlinActivity : AppCompatActivity() {
         readOnlyList1.print { it.toString() }.let { Log.v("ttaylor"," readOnlyList1=$it") }
         mutableList1.print { it.toString() }.let { Log.v("ttaylor","mutableList1= ${it}  ") }
 
+        /**
+         * chunked
+         */
+        class String1(var list:List<String>)
+        val ret = list1.chunked(2){
+            String1(listOf(*it.toTypedArray()))
+        }
 
+        ret.print { it.toString() }.let { Log.v("ttaylor","chunked content=${it}") }
 
 
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }

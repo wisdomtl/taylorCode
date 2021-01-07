@@ -20,6 +20,7 @@ class FlowActivity : AppCompatActivity() {
 
         countdown(200000, 100, contentView()) {
            Log.e("ttaylor","cout down by flow ")
+            true
         }
     }
 
