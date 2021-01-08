@@ -23,12 +23,43 @@ class KotlinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
 
+        data class D1(var string: String) {
+            fun copy() = D1(string)
+        }
 
+        data class D2(var strings: List<D1>)
+
+        val data1 = listOf<Any>(
+            D1("aaa"),
+            D2(
+                listOf(
+                    D1("bbbb"),
+                    D1("b"),
+                    D1("a"),
+                    D1("ccc")
+                )
+            )
+        )
+
+        val d2 = data1.getOrNull(1) as? D2 ?: return
+        val target = d2.strings.find { it.string == "bbbb" } ?: return
+        val index = d2.strings.indexOf(target)
+        val newTarget = target.copy().apply { string = "changed bbbb"}
+        val newTargetList = d2.strings.toMutableList().apply {
+            set(index,newTarget)
+        }
+        d2.ofMap()?.print().let { Log.v("ttaylor","change list, old list = $it") }
+        d2.strings = newTargetList
+        d2.ofMap()?.print().let { Log.v("ttaylor","change list, new list = $it") }
+
+        /**
+         * change of list
+         */
         val padWithChar = "12345".padStart(10, '.')
-        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  padwithchar=${padWithChar}")
+        Log.v("ttaylor", "tag=, KotlinActivity.onCreate()  padwithchar=${padWithChar}")
 
-        val padend = "a".padEnd(10,'.')
-        Log.v("ttaylor","tag=, KotlinActivity.onCreate()  pad end=$padend")
+        val padend = "a".padEnd(10, '.')
+        Log.v("ttaylor", "tag=, KotlinActivity.onCreate()  pad end=$padend")
 
         val list1 = listOf(
             "11",
@@ -40,31 +71,32 @@ class KotlinActivity : AppCompatActivity() {
         val list1ReadOnly = Collections.unmodifiableList(list1)
         val newList1 = list1ReadOnly.toMutableList()
         newList1[1] = "111"
-        list1ReadOnly.print { it.toString() }.let { Log.v("ttaylor"," read only list=$it") }
-        newList1.print { it.toString() }.let { Log.v("ttaylor","new list = ${it}  ") }
+        list1ReadOnly.print { it.toString() }.let { Log.v("ttaylor", " read only list=$it") }
+        newList1.print { it.toString() }.let { Log.v("ttaylor", "new list = ${it}  ") }
 
 
         val readOnlyList1 = list1.toList()
         val mutableList1 = readOnlyList1.toMutableList()
         mutableList1[1] = "aaaa"
-        readOnlyList1.print { it.toString() }.let { Log.v("ttaylor"," readOnlyList1=$it") }
-        mutableList1.print { it.toString() }.let { Log.v("ttaylor","mutableList1= ${it}  ") }
+        readOnlyList1.print { it.toString() }.let { Log.v("ttaylor", " readOnlyList1=$it") }
+        mutableList1.print { it.toString() }.let { Log.v("ttaylor", "mutableList1= ${it}  ") }
 
         /**
          * chunked
          */
-        class String1(var list:List<String>)
-        val ret = list1.chunked(2){
+        class String1(var list: List<String>)
+
+        val ret = list1.chunked(2) {
             String1(listOf(*it.toTypedArray()))
         }
 
-        ret.print { it.toString() }.let { Log.v("ttaylor","chunked content=${it}") }
+        ret.print { it.toString() }.let { Log.v("ttaylor", "chunked content=${it}") }
 
 
         btn3.setOnClickListener { Toast.makeText(this, "onclick for kotlin", Toast.LENGTH_LONG).show() }
 
         val oldList = listOf("1", "2", "3")
-        val newList =  oldList.toMutableList().apply {
+        val newList = oldList.toMutableList().apply {
             clear()
             add("11")
             add("22")
