@@ -33,6 +33,14 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             layout_height = match_parent
             orientation = vertical
 
+            EditText {
+                layout_width = match_parent
+                layout_height = 40
+                setDebounceListener(500) {
+                    Log.v("ttaylor", "shake less edit text listener char=${it}")
+                }
+            }
+
             tvCountdown = TextView {
                 layout_width = match_parent
                 layout_height = wrap_content
@@ -505,8 +513,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     override fun finish() {
-        setResult(RESULT_OK,Intent().apply {
-            putExtra("name",1)
+        setResult(RESULT_OK, Intent().apply {
+            putExtra("name", 1)
         })
         super.finish()
     }
@@ -821,8 +829,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         //        timeoutByNull()
         timeoutByException()
         Log.v(
-                "ttaylor",
-                "tag=timeout2, CoroutineActivity.onCreate()  after timeoutByException()"
+            "ttaylor",
+            "tag=timeout2, CoroutineActivity.onCreate()  after timeoutByException()"
         )
         Unit
     }
@@ -843,8 +851,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val runTaskParallelByLaunch = { _: View ->
         runParallelByLaunch()
         Log.e(
-                "ttaylor",
-                "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]"
+            "ttaylor",
+            "tag=parallel, CoroutineActivity.onCreate()  after [runParallelByLaunch]"
         )
         Unit
     }
@@ -938,8 +946,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 //isActive is the key point for canceling a job
                 if (isActive) {
                     Log.v(
-                            "ttaylor",
-                            "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}"
+                        "ttaylor",
+                        "tag=cancel2, CoroutineActivity.cancelCoroutine()  time = ${i}"
                     )
                 } else {
                     Log.d("ttaylor", "tag=cancel2, CoroutineActivity.cancelCoroutine()  time=${i}")
@@ -998,8 +1006,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
          * case2: Deferred.await will block the current coroutine
          */
         Log.v(
-                "ttaylor",
-                "tag=parallel, CoroutineActivity.runParallel()  user1=${user1.await()},user2=${user2.await()}"
+            "ttaylor",
+            "tag=parallel, CoroutineActivity.runParallel()  user1=${user1.await()},user2=${user2.await()}"
         )
         Log.e("ttaylor", "tag=parallel, CoroutineActivity.runParallel() after [Deferred.await]")
     }
@@ -1013,12 +1021,12 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         user2 = async { queryUser("titi", 5000) }
 
         Log.v(
-                "ttaylor",
-                "tag=parallel, CoroutineActivity.runParallelByLaunch()  user1=${user1?.await()},user2=${user2?.await()}"
+            "ttaylor",
+            "tag=parallel, CoroutineActivity.runParallelByLaunch()  user1=${user1?.await()},user2=${user2?.await()}"
         )
         Log.e(
-                "ttaylor",
-                "tag=parallel, CoroutineActivity.runParallelByLaunch() after [Deferred.await]"
+            "ttaylor",
+            "tag=parallel, CoroutineActivity.runParallelByLaunch() after [Deferred.await]"
         )
     }
 
@@ -1027,8 +1035,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         //wrap server return in CompletableDeferred
         val result = completableDeferred1.complete(ret)
         Log.v(
-                "ttaylor",
-                "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}"
+            "ttaylor",
+            "tag=completableDeferred1, CoroutineActivity.completeDeferred1()  result=${result}"
         )
     }
 
@@ -1037,8 +1045,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         //wrap server return in CompletableDeferred
         val result = completableDeferred2.complete(ret)
         Log.v(
-                "ttaylor",
-                "tag=completableDeferred2, CoroutineActivity.completeDeferred2()  result=${result}"
+            "ttaylor",
+            "tag=completableDeferred2, CoroutineActivity.completeDeferred2()  result=${result}"
         )
     }
 
@@ -1047,8 +1055,8 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         completableDeferred1.await()
         completableDeferred2.await()
         Log.v(
-                "ttaylor",
-                "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}"
+            "ttaylor",
+            "tag=completable deferred, CoroutineActivity.waitDeferred()  1=${completableDeferred1.await()},2=${completableDeferred2.await()}"
         )
     }
 

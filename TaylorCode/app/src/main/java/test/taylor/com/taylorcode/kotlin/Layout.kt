@@ -42,6 +42,9 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
 import kotlin.math.abs
@@ -1846,6 +1849,23 @@ fun View.setShakelessClickListener(threshold: Long, onClick: (View) -> Unit) {
     }
 }
 
+/**
+ * a new View.OnClickListener which prevents click shaking
+ */
+fun EditText.setDebounceListener(timeoutMillis: Long, action: (CharSequence) -> Unit) {
+    val mainScope = MainScope()
+    val textChangeActor = mainScope.actor<CharSequence>(capacity = Channel.UNLIMITED) {
+        consumeAsFlow().debounce(timeoutMillis).collect { action.invoke(text) }
+    }.autoDispose(this)
+
+    onTextChange = textWatcher {
+        onTextChanged = change@{ text: CharSequence?, _: Int, _: Int, _: Int ->
+            mainScope.launch {
+                text.toString().trim().takeIf { it.isNotEmpty() }?.let { textChangeActor.send(it) }
+            }.autoDispose(this@setDebounceListener)
+        }
+    }
+}
 
 /**
  * avoid memory leak for View and activity when activity has finished while coroutine is still running
