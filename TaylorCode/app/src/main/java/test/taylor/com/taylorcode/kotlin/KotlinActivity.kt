@@ -23,6 +23,13 @@ class KotlinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
 
+
+        /**
+         * sub string before and after
+         */
+        val string2 = "abcccdef"
+        Log.v("ttaylor","sub string before = ${string2.substringBefore("ccc")} sub string after = ${string2.substringAfter("ccc")}")
+
         data class D1(var string: String) {
             fun copy() = D1(string)
         }
