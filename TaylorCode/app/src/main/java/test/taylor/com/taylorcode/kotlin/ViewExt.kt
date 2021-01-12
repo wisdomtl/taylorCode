@@ -4,6 +4,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.doOnAttach
+import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 
@@ -90,5 +91,19 @@ fun View.shadow(
             }
         }
     }
+}
+
+fun RecyclerView.addTopBottomListener(listener: ((direction: Int) -> Unit)?) {
+    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (dy ==0) return
+            if (!recyclerView.canScrollVertically(1)) {
+                listener?.invoke(2)
+            } else if (!recyclerView.canScrollVertically(-1)) {
+                listener?.invoke(1)
+            }
+        }
+    })
 }
 
