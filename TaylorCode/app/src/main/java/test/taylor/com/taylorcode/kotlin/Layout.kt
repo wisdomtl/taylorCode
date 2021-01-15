@@ -1511,9 +1511,9 @@ var View.shakelessClick: (View) -> Unit
         }
     }
 
-var RecyclerView.onItemClick: (View, Int, Float, Float) -> Unit
+var RecyclerView.onItemClick: (View, Int, Float, Float) -> Boolean
     get() {
-        return { _, _, _, _ -> }
+        return { _, _, _, _ -> false}
     }
     set(value) {
         setOnItemClickListener(value)
@@ -1724,7 +1724,7 @@ fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
     }
 }
 
-fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> Unit) {
+fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> Boolean) {
     addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
         val gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
             override fun onShowPress(e: MotionEvent?) {
@@ -1733,12 +1733,7 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> U
             override fun onSingleTapUp(e: MotionEvent?): Boolean {
                 e?.let {
                     findChildViewUnder(it.x, it.y)?.let { child ->
-                        listener(
-                            child,
-                            getChildAdapterPosition(child),
-                            it.x - child.left,
-                            it.y - child.top
-                        )
+                        return listener(child, getChildAdapterPosition(child), it.x - child.left, it.y - child.top)
                     }
                 }
                 return false
@@ -1748,21 +1743,11 @@ fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> U
                 return false
             }
 
-            override fun onFling(
-                e1: MotionEvent?,
-                e2: MotionEvent?,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
                 return false
             }
 
-            override fun onScroll(
-                e1: MotionEvent?,
-                e2: MotionEvent?,
-                distanceX: Float,
-                distanceY: Float
-            ): Boolean {
+            override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
                 return false
             }
 

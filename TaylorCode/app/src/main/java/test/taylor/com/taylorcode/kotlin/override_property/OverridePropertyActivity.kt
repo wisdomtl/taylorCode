@@ -48,7 +48,7 @@ class OverridePropertyActivity : AppCompatActivity() {
     private fun initView() {
         myRv.layoutManager = LinearLayoutManager(this)
         myRv.setOnItemClickListener { view, pos, localX, localY ->
-            Log.v("ttaylor", "tag=onRecyclerView click, OverridePropertyActivity.initView()  pos=${pos},localX=${localX},localy=${localY}")
+            true
         }
     }
 }

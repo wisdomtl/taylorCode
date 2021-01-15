@@ -270,8 +270,9 @@ class Factory2Activity2 : AppCompatActivity() {
 
         }
 
-    private fun onItemClickEvent(v: View, i: Int) {
+    private fun onItemClickEvent(v: View, i: Int):Boolean {
         Log.v("ttaylor", "tag=, Factory2Activity2.onItemClickEvent()  index=${i}")
+        return false
     }
 
     private fun onBackClick() {
