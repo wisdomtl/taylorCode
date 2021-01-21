@@ -110,7 +110,7 @@
         android:layout_gravity="center"
         app:blurRadius="11"
         app:downsampleFactor="6"
-        app:overlayColor="#99FFFFFF"/>
+        app:overlayColor="#A30C0B1C"/>
 
     <Button
         android:id="@+id/shuffle_button"
