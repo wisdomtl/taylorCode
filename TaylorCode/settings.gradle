@@ -1,1 +1,1 @@
-include ':app', ':app-monitor', ':class-tamper'
+include ':app', ':app-monitor'

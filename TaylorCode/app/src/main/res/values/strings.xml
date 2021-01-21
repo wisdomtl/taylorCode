@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TaylorCode</string>
+
+    <integer name="default_blur_radius">15</integer>
+    <integer name="default_downsample_factor">8</integer>
+    <color name="default_overlay_color">#AAFFFFFF</color>
 </resources>

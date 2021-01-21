@@ -41,6 +41,7 @@ import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AddViewActivity
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
@@ -203,6 +204,7 @@ class MainActivity : BaseActivity() {
         btnTransition.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.anim.transitionmanager.TransitionManagerActivity>() }
         btn_constraintlayout4.setOnClickListener { startActivity<ConstraintLayout4>() }
         btn_kotlin_flow.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.FlowActivity>() }
+        btnBlur.setOnClickListener { startActivity<BlurActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

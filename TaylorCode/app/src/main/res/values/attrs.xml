@@ -15,4 +15,10 @@
         <attr name="reference_offsetX" format="string" />
         <attr name="reference_offsetY" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="PxBlurringView">
+        <attr name="blurRadius" format="integer"/>
+        <attr name="downsampleFactor" format="integer"/>
+        <attr name="overlayColor" format="color"/>
+    </declare-styleable>
 </resources>

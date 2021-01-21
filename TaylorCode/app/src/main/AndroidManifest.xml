@@ -98,9 +98,8 @@
         <activity android:name=".contact.ContactActivity"></activity>
         <activity android:name=".ui.DialogActivity"></activity>
         <activity android:name=".ui.touch_event.TouchEventActivity"></activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateActivity">
-
-        </activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateActivity"></activity>
+        <activity android:name=".ui.custom_view.blur.BlurActivity"> </activity>
         <activity android:name=".ui.window.WindowActivity"
             android:theme="@style/DialogActivity"></activity>
         <activity android:name="test.taylor.com.taylorcode.ui.SpannableActivity"></activity>
