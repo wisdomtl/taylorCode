@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.navigation.Navigation;
+//import androidx.navigation.Navigation;
 import test.taylor.com.taylorcode.R;
 import test.taylor.com.taylorcode.ui.custom_view.selector.Selector;
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorGroup;
@@ -26,7 +26,7 @@ public class NavFragment1 extends StateFragment implements Selector.OnSelectorSt
 
     private void initView(View view) {
         view.findViewById(R.id.btn1).setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_to_f2);
+//            Navigation.findNavController(view).navigate(R.id.action_to_f2);
         });
 //        selector = view.findViewById(R.id.selector1);
 //        selector.setOnSelectorClick(() -> {

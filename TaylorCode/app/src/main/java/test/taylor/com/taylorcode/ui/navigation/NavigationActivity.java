@@ -11,7 +11,7 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_activity);
+//        setContentView(R.layout.navigation_activity);
     }
 //
 //    @Override

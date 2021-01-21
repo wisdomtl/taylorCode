@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.navigation.Navigation;
+//import androidx.navigation.Navigation;
 import test.taylor.com.taylorcode.R;
 
 
@@ -23,7 +23,7 @@ public class NavFragment2 extends Fragment {
 
     private void initView(View view) {
         view.findViewById(R.id.btn2).setOnClickListener(v->{
-            Navigation.findNavController(view).navigateUp() ;
+//            Navigation.findNavController(view).navigateUp() ;
         });
 
     }

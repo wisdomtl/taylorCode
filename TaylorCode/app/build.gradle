@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'androidx.navigation.safeargs'
+//apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
         minSdkVersion 21
@@ -46,11 +46,12 @@ configurations {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     testImplementation 'junit:junit:4.12'
     implementation 'org.jetbrains:annotations-java5:15.0'
     //ReactiveX
@@ -78,8 +79,8 @@ dependencies {
 //    implementation 'androidx.work:work-runtime:2.3.1'
     implementation "androidx.work:work-runtime-ktx:2.3.1"
     //Navigation
-    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
-    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
+//    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
+//    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
     //Room
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
