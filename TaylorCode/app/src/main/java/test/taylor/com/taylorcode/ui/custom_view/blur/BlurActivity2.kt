@@ -32,7 +32,7 @@ class BlurActivity2:AppCompatActivity() {
                     bottom_toBottomOf = parent_id
                     center_horizontal = true
                     onClick = {
-                        BlurDialogFragment.show(supportFragmentManager)
+                        BlurDialogFragment2.show(supportFragmentManager)
                     }
                 }
             }
