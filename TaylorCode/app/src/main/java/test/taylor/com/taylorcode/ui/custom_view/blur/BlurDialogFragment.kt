@@ -1,5 +1,7 @@
 package test.taylor.com.taylorcode.ui.custom_view.blur
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,11 +31,17 @@ class BlurDialogFragment:DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog?.window?.apply {
-            attributes?.apply {
-                width = WindowManager.LayoutParams.MATCH_PARENT
-                height= WindowManager.LayoutParams.MATCH_PARENT
-            }
+        fullScreenMode()
+    }
+}
+
+fun DialogFragment.fullScreenMode(){
+    dialog?.window?.apply {
+        attributes?.apply {
+            width = WindowManager.LayoutParams.MATCH_PARENT
+            height= WindowManager.LayoutParams.MATCH_PARENT
         }
+        decorView.setPadding(0,0,0,0)
+        setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }
