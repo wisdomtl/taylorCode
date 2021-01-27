@@ -23,6 +23,32 @@ class KotlinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
 
+        /**
+         * val and var
+         */
+        class ClassA(val list:List<String>){
+            fun print(){
+                list.print { it }.let { Log.v("ttaylor","val list=${it}") }
+            }
+        }
+
+        var listA = mutableListOf<String>("a","b","c")
+        val classA = ClassA(listA)
+        classA.print()
+        listA = mutableListOf("1","2","3")
+        classA.print()
+
+
+        class ClassB(var list:List<String>){
+            fun print(){
+                list.print { it }.let { Log.v("ttaylor","var list=${it}") }
+            }
+        }
+        var listB = mutableListOf<String>("a","b","c")
+        val classB = ClassB(listB)
+        classB.print()
+        listB = mutableListOf("1","2","3")
+        classB.print()
 
         /**
          * sub string before and after

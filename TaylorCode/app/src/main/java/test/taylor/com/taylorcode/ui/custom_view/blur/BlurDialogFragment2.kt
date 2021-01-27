@@ -35,6 +35,7 @@ class BlurDialogFragment2 : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         fullScreenMode()
 
+        // blur the background activity
         activity?.decorView?.let { contentView.setBlurredView(it) }
     }
 
