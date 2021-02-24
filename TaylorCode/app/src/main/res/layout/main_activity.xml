@@ -7,6 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnCrop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="crop view"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btnBlur2"
             android:layout_width="match_parent"

@@ -45,6 +45,7 @@ import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity2
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
+import test.taylor.com.taylorcode.ui.custom_view.crop_view.CropActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.IndicatorActivity
@@ -207,6 +208,7 @@ class MainActivity : BaseActivity() {
         btn_kotlin_flow.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.FlowActivity>() }
         btnBlur.setOnClickListener { startActivity<BlurActivity>() }
         btnBlur2.setOnClickListener { startActivity<BlurActivity2>() }
+        btnCrop.setOnClickListener { startActivity<CropActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

@@ -221,6 +221,7 @@
         <activity android:name=".ui.ConstraintLayout4" />
         <activity android:name=".kotlin.coroutine.FlowActivity" />
         <activity android:name=".ui.custom_view.blur.BlurActivity2" />
+        <activity android:name=".ui.custom_view.crop_view.CropActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
