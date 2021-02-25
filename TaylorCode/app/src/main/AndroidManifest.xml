@@ -222,6 +222,8 @@
         <activity android:name=".kotlin.coroutine.FlowActivity" />
         <activity android:name=".ui.custom_view.blur.BlurActivity2" />
         <activity android:name=".ui.custom_view.crop_view.CropActivity" />
+        <activity android:name=".ui.custom_view.shader.CropActivity" />
+        <activity android:name=".ui.custom_view.shader.ShaderActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

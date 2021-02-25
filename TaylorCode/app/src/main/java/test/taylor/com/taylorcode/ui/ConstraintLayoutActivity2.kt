@@ -133,6 +133,6 @@ class ConstraintLayoutActivity2 : AppCompatActivity() {
                 croot2?.addView(it)
             }
         }
-        croot2.buildChain(start, views, null, horizontal)
+        croot2.buildChain(start, views, null, horizontal,0,0,0)
     }
 }

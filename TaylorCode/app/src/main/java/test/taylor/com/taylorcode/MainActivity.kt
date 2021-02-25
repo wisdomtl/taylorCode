@@ -50,6 +50,7 @@ import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.IndicatorActivity
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
+import test.taylor.com.taylorcode.ui.custom_view.shader.ShaderActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
@@ -209,6 +210,7 @@ class MainActivity : BaseActivity() {
         btnBlur.setOnClickListener { startActivity<BlurActivity>() }
         btnBlur2.setOnClickListener { startActivity<BlurActivity2>() }
         btnCrop.setOnClickListener { startActivity<CropActivity>() }
+        btnCrop2.setOnClickListener { startActivity<ShaderActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

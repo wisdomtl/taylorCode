@@ -3,9 +3,11 @@ package test.taylor.com.taylorcode.kotlin
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
@@ -24,19 +26,20 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.*
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.constraintlayout.helper.widget.Layer
-import androidx.constraintlayout.widget.ConstraintHelper
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintProperties
-import androidx.constraintlayout.widget.Guideline
+import androidx.constraintlayout.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MarginLayoutParamsCompat
+import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
@@ -52,6 +55,37 @@ import kotlin.math.abs
 /**
  * the extension functions and field in this file help you to build layout dynamically,
  * which has a better performance than xml files and more readable than normal java and kotlin code
+ *
+ * using this dsl to build view in kotlin like the following:
+ * private val rootView by lazy {
+ *   ConstraintLayout {
+ *      layout_width = match_parent
+ *      layout_height = match_parent
+ *
+ *       ImageView {
+ *          layout_id = "ivBack"
+ *          layout_width = 40
+ *          layout_height = 40
+ *          margin_start = 20
+ *          margin_top = 20
+ *          src = R.drawable.ic_back_black
+ *          start_toStartOf = parent_id
+ *          top_toTopOf = parent_id
+ *          onClick = onBackClick
+ *       }
+ *
+ *       TextView {
+ *          layout_width = wrap_content
+ *          layout_height = wrap_content
+ *          text = "commit"
+ *          textSize = 30f
+ *          layout_visibility = gone
+ *          textStyle = bold
+ *          align_vertical_to = "ivBack"
+ *          center_horizontal = true
+ *       }
+ *   }
+ * }
  */
 //<editor-fold desc="widget creation function">
 /**
@@ -71,7 +105,6 @@ inline fun ViewGroup.TextView(
         ) else AppCompatTextView(context)
     return textView.apply(init).also { if (autoAdd) addView(it) }
 }
-
 
 /**
  * create [AppCompatImageView] instance within a [ViewGroup]
@@ -326,6 +359,24 @@ inline fun ConstraintLayout.Guideline(
             ContextThemeWrapper(context, style)
         ) else Guideline(context)
     return guideline.apply(init).also { if (autoAdd) addView(it) }
+}
+
+/**
+ * create [Barrier] instance within a [ConstraintLayout]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [Barrier] into [ConstraintLayout] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ConstraintLayout.Barrier(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: Barrier.() -> Unit
+): Barrier {
+    val barrier =
+        if (style != null) Barrier(
+            ContextThemeWrapper(context, style)
+        ) else Barrier(context)
+    return barrier.apply(init).also { if (autoAdd) addView(it) }
 }
 
 /**
@@ -754,7 +805,7 @@ inline var View.layout_id: String
     set(value) {
         id = value.toLayoutId()
     }
-inline var View.padding_top: Int
+inline var View.padding_top: Number
     get() {
         return 0
     }
@@ -762,7 +813,7 @@ inline var View.padding_top: Int
         setPadding(paddingLeft, value.dp, paddingRight, paddingBottom)
     }
 
-inline var View.padding_bottom: Int
+inline var View.padding_bottom: Number
     get() {
         return 0
     }
@@ -770,7 +821,7 @@ inline var View.padding_bottom: Int
         setPadding(paddingLeft, paddingTop, paddingRight, value.dp)
     }
 
-inline var View.padding_start: Int
+inline var View.padding_start: Number
     get() {
         return 0
     }
@@ -778,26 +829,46 @@ inline var View.padding_start: Int
         setPadding(value.dp, paddingTop, paddingRight, paddingBottom)
     }
 
-inline var View.padding_end: Int
+inline var View.padding_end: Number
     get() {
         return 0
     }
     set(value) {
         setPadding(paddingLeft, paddingTop, value.dp, paddingBottom)
     }
-inline var View.padding: Int
+
+inline var View.padding: Number
     get() {
         return 0
     }
     set(value) {
         setPadding(value.dp, value.dp, value.dp, value.dp)
     }
-inline var View.layout_width: Int
+
+inline var View.padding_horizontal: Number
     get() {
         return 0
     }
     set(value) {
-        val w = if (value > 0) value.dp else value
+        padding_start = value.dp
+        padding_end = value.dp
+    }
+
+inline var View.padding_vertical: Number
+    get() {
+        return 0
+    }
+    set(value) {
+        padding_top = value.dp
+        padding_bottom = value.dp
+    }
+
+inline var View.layout_width: Number
+    get() {
+        return 0
+    }
+    set(value) {
+        val w = if (value.dp > 0) value.dp else value.toInt()
         val h = layoutParams?.height ?: 0
         layoutParams = if (layoutParams == null) {
             ViewGroup.MarginLayoutParams(w, h)
@@ -809,14 +880,14 @@ inline var View.layout_width: Int
         }
     }
 
-inline var View.layout_height: Int
+inline var View.layout_height: Number
     get() {
         return 0
     }
     set(value) {
 
         val w = layoutParams?.width ?: 0
-        val h = if (value > 0) value.dp else value
+        val h = if (value.dp > 0) value.dp else value.toInt()
         layoutParams = if (layoutParams == null) {
             ViewGroup.MarginLayoutParams(w, h)
         } else {
@@ -888,8 +959,7 @@ inline var View.weight: Float
         return 0f
     }
     set(value) {
-        layoutParams =
-            LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
+        layoutParams = LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
                 it.gravity = (layoutParams as? LinearLayout.LayoutParams)?.gravity ?: -1
                 it.weight = value
             }
@@ -899,8 +969,7 @@ inline var View.layout_gravity: Int
         return -1
     }
     set(value) {
-        layoutParams =
-            LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
+        layoutParams = LinearLayout.LayoutParams(layoutParams.width, layoutParams.height).also { it ->
                 it.weight = (layoutParams as? LinearLayout.LayoutParams)?.weight ?: 0f
                 it.gravity = value
             }
@@ -947,6 +1016,17 @@ inline var View.start_toStartOf: String
         }
     }
 
+inline var View.start_toStartViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            startToStart = value?.id ?: -1
+            startToEnd = -1
+        }
+    }
+
 inline var View.start_toEndOf: String
     get() {
         return ""
@@ -954,6 +1034,17 @@ inline var View.start_toEndOf: String
     set(value) {
         layoutParams = layoutParams.append {
             startToEnd = value.toLayoutId()
+            startToStart = -1
+        }
+    }
+
+inline var View.start_toEndViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            startToEnd = value?.id ?: -1
             startToStart = -1
         }
     }
@@ -969,6 +1060,17 @@ inline var View.top_toBottomOf: String
         }
     }
 
+inline var View.top_toBottomViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            topToBottom = value?.id ?: -1
+            topToTop = -1
+        }
+    }
+
 inline var View.top_toTopOf: String
     get() {
         return ""
@@ -976,6 +1078,17 @@ inline var View.top_toTopOf: String
     set(value) {
         layoutParams = layoutParams.append {
             topToTop = value.toLayoutId()
+            topToBottom = -1
+        }
+    }
+
+inline var View.top_toTopViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            topToTop = value?.id ?: -1
             topToBottom = -1
         }
     }
@@ -991,6 +1104,17 @@ inline var View.end_toEndOf: String
         }
     }
 
+inline var View.end_toEndViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            endToEnd = value?.id ?: -1
+            endToStart = -1
+        }
+    }
+
 inline var View.end_toStartOf: String
     get() {
         return ""
@@ -998,6 +1122,17 @@ inline var View.end_toStartOf: String
     set(value) {
         layoutParams = layoutParams.append {
             endToStart = value.toLayoutId()
+            endToEnd = -1
+        }
+    }
+
+inline var View.end_toStartViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            endToStart = value?.id ?: -1
             endToEnd = -1
         }
     }
@@ -1013,6 +1148,17 @@ inline var View.bottom_toBottomOf: String
         }
     }
 
+inline var View.bottom_toBottomViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            bottomToBottom = value?.id ?: -1
+            bottomToTop = -1
+        }
+    }
+
 inline var View.bottom_toTopOf: String
     get() {
         return ""
@@ -1020,6 +1166,17 @@ inline var View.bottom_toTopOf: String
     set(value) {
         layoutParams = layoutParams.append {
             bottomToTop = value.toLayoutId()
+            bottomToBottom = -1
+        }
+    }
+
+inline var View.bottom_toTopViewOf: View?
+    get() {
+        return null
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            bottomToTop = value?.id ?: -1
             bottomToBottom = -1
         }
     }
@@ -1133,6 +1290,7 @@ inline var View.height_percentage: Float
         }
     }
 
+
 inline var View.background_color: String
     get() {
         return ""
@@ -1147,6 +1305,15 @@ inline var View.background_res: Int
     }
     set(value) {
         setBackgroundResource(value)
+    }
+
+inline var View.background_vector: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        val drawable = VectorDrawableCompat.create(context.getResources(), value, null)
+        background = drawable
     }
 
 inline var View.background_drawable: Drawable?
@@ -1169,7 +1336,7 @@ inline var View.background_drawable_state_list: List<Pair<IntArray, Drawable>>
         }
     }
 
-inline var View.margin_top: Int
+inline var View.margin_top: Number
     get() {
         return -1
     }
@@ -1179,7 +1346,7 @@ inline var View.margin_top: Int
         }
     }
 
-inline var View.margin_bottom: Int
+inline var View.margin_bottom: Number
     get() {
         return -1
     }
@@ -1189,7 +1356,7 @@ inline var View.margin_bottom: Int
         }
     }
 
-inline var View.margin_start: Int
+inline var View.margin_start: Number
     get() {
         return -1
     }
@@ -1199,13 +1366,75 @@ inline var View.margin_start: Int
         }
     }
 
-inline var View.margin_end: Int
+inline var View.margin_end: Number
     get() {
         return -1
     }
     set(value) {
         (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
             MarginLayoutParamsCompat.setMarginEnd(this, value.dp)
+        }
+    }
+
+inline var View.margin_horizontal: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
+            MarginLayoutParamsCompat.setMarginEnd(this, value.dp)
+            MarginLayoutParamsCompat.setMarginStart(this, value.dp)
+        }
+    }
+
+inline var View.margin_vertical: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        (layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
+            topMargin = value.dp
+            bottomMargin = value.dp
+        }
+    }
+
+inline var View.gone_margin_end: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            goneEndMargin = value.dp
+        }
+    }
+
+inline var View.gone_margin_start: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            goneStartMargin = value.dp
+        }
+    }
+
+inline var View.gone_margin_top: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            goneTopMargin = value.dp
+        }
+    }
+
+inline var View.gone_margin_bottom: Number
+    get() {
+        return -1
+    }
+    set(value) {
+        layoutParams = layoutParams.append {
+            goneBottomMargin = value.dp
         }
     }
 
@@ -1299,6 +1528,23 @@ inline var ImageView.src: Int
         setImageResource(value)
     }
 
+inline var ImageView.bitmap: Bitmap?
+    get() {
+        return null
+    }
+    set(value) {
+        setImageBitmap(value)
+    }
+
+inline var ImageView.vector_src: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        val src = VectorDrawableCompat.create(context.getResources(), value, null)
+        setImageDrawable(src)
+    }
+
 inline var TextView.maxLength: Int
     get() {
         return 1
@@ -1326,6 +1572,14 @@ inline var TextView.hint_color: String
 inline var TextView.hint_text_res: Int
     get() {
         return -1
+    }
+    set(value) {
+        setHint(value)
+    }
+
+inline var TextView.hint_text: String
+    get() {
+        return ""
     }
     set(value) {
         setHint(value)
@@ -1366,7 +1620,10 @@ inline var TextView.fontFamily: Int
         return 1
     }
     set(value) {
+        try {
         typeface = ResourcesCompat.getFont(context, value)
+        } catch (e: Resources.NotFoundException) {
+        }
     }
 
 inline var TextView.drawable_start: Int
@@ -1435,6 +1692,19 @@ inline var TextView.onTextChange: TextWatcher
         addTextChangedListener(textWatcher)
     }
 
+inline var TextView.onEditorAction: EditorActionListener
+    get() {
+        return EditorActionListener()
+    }
+    set(value) {
+        val editorActionListener = object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                return value.onEditorAction(v, actionId, event)
+            }
+        }
+        setOnEditorActionListener(editorActionListener)
+    }
+
 inline var Button.textAllCaps: Boolean
     get() {
         return false
@@ -1484,7 +1754,7 @@ inline var Flow.flow_wrapMode: Int
         setWrapMode(value)
     }
 
-inline var Flow.reference_ids: List<String>
+inline var ConstraintHelper.reference_ids: List<String>
     get() {
         return emptyList()
     }
@@ -1492,6 +1762,13 @@ inline var Flow.reference_ids: List<String>
         referencedIds = value.map { it.toLayoutId() }.toIntArray()
     }
 
+inline var Barrier.barrier_direction: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        type = value
+    }
 
 var View.onClick: (View) -> Unit
     get() {
@@ -1513,10 +1790,18 @@ var View.shakelessClick: (View) -> Unit
 
 var RecyclerView.onItemClick: (View, Int, Float, Float) -> Boolean
     get() {
-        return { _, _, _, _ -> false}
+        return { _, _, _, _ -> false }
     }
     set(value) {
         setOnItemClickListener(value)
+    }
+
+var RecyclerView.onItemLongClick: (View, Int, Float, Float) -> Unit
+    get() {
+        return { _, _, _, _ -> }
+    }
+    set(value) {
+        setOnItemLongClickListener(value)
     }
 
 var RecyclerView.hasFixedSize: Boolean
@@ -1573,6 +1858,13 @@ val spread = ConstraintLayout.LayoutParams.CHAIN_SPREAD
 val packed = ConstraintLayout.LayoutParams.CHAIN_PACKED
 val spread_inside = ConstraintLayout.LayoutParams.CHAIN_SPREAD_INSIDE
 
+val barrier_left = Barrier.LEFT
+val barrier_top = Barrier.TOP
+val barrier_right = Barrier.RIGHT
+val barrier_bottom = Barrier.BOTTOM
+val barrier_start = Barrier.START
+val barrier_end = Barrier.END
+
 val wrap_none = Flow.WRAP_NONE
 val wrap_chain = Flow.WRAP_CHAIN
 val wrap_aligned = Flow.WRAP_ALIGNED
@@ -1620,22 +1912,26 @@ val parent_id = "0"
 
 //<editor-fold desc="layout helper function">
 val Int.dp: Int
-    get() {
-        return TypedValue.applyDimension(
+    get() = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             this.toFloat(),
             Resources.getSystem().displayMetrics
         ).toInt()
-    }
+
 
 val Float.dp: Float
-    get() {
-        return TypedValue.applyDimension(
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this,
+        Resources.getSystem().displayMetrics
+    )
+
+val Number.dp: Int
+    get() = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             this.toFloat(),
             Resources.getSystem().displayMetrics
-        )
-    }
+    ).toInt()
 
 fun ViewGroup.MarginLayoutParams.toConstraintLayoutParam() =
     ConstraintLayout.LayoutParams(width, height).also { it ->
@@ -1656,6 +1952,17 @@ fun String.toLayoutId(): Int {
     return abs(id)
 }
 
+fun DialogFragment.fullScreenMode(){
+    dialog?.window?.apply {
+        attributes?.apply {
+            width = WindowManager.LayoutParams.MATCH_PARENT
+            height= WindowManager.LayoutParams.MATCH_PARENT
+        }
+        decorView.setPadding(0,0,0,0)
+        setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+}
+
 fun <T : View> View.find(id: String): T? = findViewById(id.toLayoutId())
 
 fun <T : View> AppCompatActivity.find(id: String): T? = findViewById(id.toLayoutId())
@@ -1671,7 +1978,10 @@ fun ConstraintLayout.buildChain(
     startView: View,
     views: List<View>,
     endView: View?,
-    orientation: Int
+    orientation: Int,
+    outMarginStart: Int,
+    outMarinEnd: Int,
+    innerMargin: Int
 ) {
     if (views.isNullOrEmpty()) return
     var preView = startView
@@ -1688,7 +1998,7 @@ fun ConstraintLayout.buildChain(
             startSide,
             if (isStartViewParent) ConstraintProperties.PARENT_ID else preView.id,
             if (isStartViewParent) startSide else endSide,
-            0
+            outMarginStart
         )
         .apply()
 
@@ -1696,10 +2006,10 @@ fun ConstraintLayout.buildChain(
 
     (1 until views.size).map { views[it] }.forEach { currentView ->
         ConstraintProperties(currentView)
-            .connect(startSide, preView.id, endSide, 0)
+            .connect(startSide, preView.id, endSide, innerMargin)
             .apply()
         ConstraintProperties(preView)
-            .connect(endSide, currentView.id, startSide, 0)
+            .connect(endSide, currentView.id, startSide, innerMargin)
             .apply()
         preView = currentView
     }
@@ -1708,20 +2018,79 @@ fun ConstraintLayout.buildChain(
     ConstraintProperties(preView)
         .connect(
             endSide,
-            if (isEndViewParent) ConstraintProperties.PARENT_ID else endView?.id ?: -1,
+            if (isEndViewParent) ConstraintProperties.PARENT_ID else endView?.id ?: ConstraintSet.UNSET,
             if (isEndViewParent) endSide else startSide,
-            0
+            outMarinEnd
         )
         .apply()
 }
 
 fun View.isChildOf(view: View?) = view?.findViewById<View>(this.id) != null
 
-
 fun <T> View.observe(liveData: LiveData<T>?, action: (T) -> Unit) {
     (context as? LifecycleOwner)?.let { owner ->
         liveData?.observe(owner, Observer { action(it) })
     }
+}
+
+fun RecyclerView.setOnItemLongClickListener(listener: (View, Int, Float, Float) -> Unit) {
+    addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+        val gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
+            override fun onShowPress(e: MotionEvent?) {
+            }
+
+            override fun onSingleTapUp(e: MotionEvent?): Boolean {
+                return false
+            }
+
+            override fun onDown(e: MotionEvent?): Boolean {
+                return false
+            }
+
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent?,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                return false
+            }
+
+            override fun onScroll(
+                e1: MotionEvent?,
+                e2: MotionEvent?,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
+                return false
+            }
+
+            override fun onLongPress(e: MotionEvent?) {
+                e?.let {
+                    findChildViewUnder(it.x, it.y)?.let { child ->
+                        listener(
+                            child,
+                            getChildAdapterPosition(child),
+                            it.x - child.left,
+                            it.y - child.top
+                        )
+                    }
+                }
+            }
+        })
+
+        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+
+        }
+
+        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+            gestureDetector.onTouchEvent(e)
+            return false
+        }
+
+        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        }
+    })
 }
 
 fun RecyclerView.setOnItemClickListener(listener: (View, Int, Float, Float) -> Boolean) {
@@ -1790,7 +2159,32 @@ inline fun View.onChildViewClick(
     var clickedView: View? = null
     layoutId
         .map { id ->
-            find<View>(id)?.let { view ->
+            find<View>(id)?.takeIf { it.visibility == visible }?.let { view ->
+                view.getRelativeRectTo(this).also { rect ->
+                    if (rect.contains(x.toInt(), y.toInt())) {
+                        clickedView = view
+                    }
+                }
+            } ?: Rect()
+        }
+        .fold(Rect()) { init, rect -> init.apply { union(rect) } }
+        .takeIf { it.contains(x.toInt(), y.toInt()) }
+        ?.let { clickAction.invoke(clickedView) }
+}
+
+/**
+ *  listen click action for the child view of [RecyclerView]'s item
+ */
+inline fun View.onChildViewClick(
+    vararg layoutId: Int, // the id of the child view of RecyclerView's item
+    x: Float, // the x coordinate of click point
+    y: Float,// the y coordinate of click point,
+    clickAction: ((View?) -> Unit)
+) {
+    var clickedView: View? = null
+    layoutId
+        .map { id ->
+            findViewById<View>(id)?.takeIf { it.visibility == visible }?.let { view ->
                 view.getRelativeRectTo(this).also { rect ->
                     if (rect.contains(x.toInt(), y.toInt())) {
                         clickedView = view
@@ -1835,7 +2229,7 @@ fun View.setShakelessClickListener(threshold: Long, onClick: (View) -> Unit) {
 }
 
 /**
- * a new View.OnClickListener which prevents click shaking
+ * a debounce listener for [EditText]'s text change event
  */
 fun EditText.setDebounceListener(timeoutMillis: Long, action: (CharSequence) -> Unit) {
     val mainScope = MainScope()
@@ -1846,18 +2240,18 @@ fun EditText.setDebounceListener(timeoutMillis: Long, action: (CharSequence) -> 
     onTextChange = textWatcher {
         onTextChanged = change@{ text: CharSequence?, _: Int, _: Int, _: Int ->
             mainScope.launch {
-                text.toString().trim().takeIf { it.isNotEmpty() }?.let { textChangeActor.send(it) }
+                text.toString().trim().let { textChangeActor.send(it) }
             }.autoDispose(this@setDebounceListener)
         }
     }
 }
 
+
 /**
  * avoid memory leak for View and activity when activity has finished while coroutine is still running
  */
-fun Job.autoDispose(view: View): Job {
-    val isAttached =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
+fun Job.autoDispose(view: View?): Job {
+    view ?: return this
 
     val listener = object : View.OnAttachStateChangeListener {
         override fun onViewDetachedFromWindow(v: View?) {
@@ -1878,9 +2272,10 @@ fun Job.autoDispose(view: View): Job {
 /**
  * avoid memory leak
  */
-fun <T> SendChannel<T>.autoDispose(view: View): SendChannel<T> {
-    val isAttached =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
+fun <T> SendChannel<T>.autoDispose(view: View?): SendChannel<T> {
+    view ?: return this
+
+    val isAttached = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
     val listener = object : View.OnAttachStateChangeListener {
         override fun onViewDetachedFromWindow(v: View?) {
             close()
@@ -1929,6 +2324,17 @@ class TextWatcher(
 )
 
 fun textWatcher(init: TextWatcher.() -> Unit): TextWatcher = TextWatcher().apply(init)
+
+class EditorActionListener(
+    var onEditorAction: (
+        textView: TextView?,
+        actionId: Int,
+        keyEvent: KeyEvent?
+    ) -> Boolean = { _, _, _ -> false }
+)
+
+fun editorAction(init: EditorActionListener.() -> Unit): EditorActionListener =
+    EditorActionListener().apply(init)
 
 /**
  * helper class for data binding
