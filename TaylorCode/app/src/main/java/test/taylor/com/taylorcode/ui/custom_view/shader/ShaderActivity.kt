@@ -7,7 +7,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.custom_view.clip_path.Corners
 import test.taylor.com.taylorcode.ui.custom_view.clip_path.crop
+import test.taylor.com.taylorcode.ui.custom_view.clip_path.crop2
 
 class ShaderActivity : AppCompatActivity() {
 
@@ -18,12 +20,12 @@ class ShaderActivity : AppCompatActivity() {
 
             ImageView {
                 layout_id = "tvChange"
-                layout_width = 100
-                layout_height = 100
+                layout_width = 300
+                layout_height = 300
                 scaleType = scale_fit_xy
                 center_horizontal = true
                 center_vertical = true
-                bitmap = getMutableBitmap(R.drawable.p1).crop(300f)
+                bitmap = getMutableBitmap(R.drawable.p1).crop2(Corners(leftTopRx = 400f,leftTopRy = 100f))
             }
         }
     }
