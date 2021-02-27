@@ -62,6 +62,7 @@ import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
+import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
@@ -211,6 +212,7 @@ class MainActivity : BaseActivity() {
         btnBlur2.setOnClickListener { startActivity<BlurActivity2>() }
         btnCrop.setOnClickListener { startActivity<CropActivity>() }
         btnCrop2.setOnClickListener { startActivity<ShaderActivity>() }
+        btnRecyclerViewPerformance.setOnClickListener { startActivity<RecyclerViewPerformanceActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

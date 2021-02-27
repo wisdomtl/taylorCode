@@ -224,6 +224,7 @@
         <activity android:name=".ui.custom_view.crop_view.CropActivity" />
         <activity android:name=".ui.custom_view.shader.CropActivity" />
         <activity android:name=".ui.custom_view.shader.ShaderActivity" />
+        <activity android:name=".ui.performance.RecyclerViewPerformanceActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
