@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#ffffff"
+    android:paddingStart="20dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="20dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#3F4658"
+        android:textSize="16sp"
+        android:text="本周热梦"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9DA4AD"
+        android:textSize="11sp"
+        android:text="排名"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:textColor="#9DA4AD"
+        android:textSize="11sp"
+        android:text="主播"
+        app:layout_constraintBottom_toBottomOf="@id/tvRank"
+        app:layout_constraintStart_toEndOf="@id/tvRank"
+        app:layout_constraintTop_toTopOf="@id/tvRank" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:textColor="#9DA4AD"
+        android:textSize="11sp"
+        android:text="粉丝数"
+        app:layout_constraintBottom_toBottomOf="@id/tvRank"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvRank" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

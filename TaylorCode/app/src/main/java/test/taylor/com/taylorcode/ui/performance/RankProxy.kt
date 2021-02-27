@@ -95,7 +95,9 @@ data class Rank(
     val name: String,
     val count: Int,
     val avatarUrl: String,
-    val levelUrl: String
+    val levelUrl: String,
+    val level:Int = 200,
+    val tag:String = "达人"
 )
 
 class RankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

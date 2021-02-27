@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container11"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:background="#ffffff"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <TextView
+        android:id="@+id/ivRank"
+        android:layout_width="18dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivRank"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:includeFontPadding="false"
+        android:text="name"
+        android:textSize="11sp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/tvTag"
+        app:layout_constraintStart_toEndOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:text="tag"
+        android:textSize="8sp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:background="@drawable/fans_level_shape2"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvAvatar"
+        app:layout_constraintTop_toBottomOf="@id/tvAvatar" />
+
+    <ImageView
+        android:id="@+id/ivLevel"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@id/tvAvatar"
+        app:layout_constraintStart_toEndOf="@id/tvAvatar"
+        app:layout_constraintTop_toTopOf="@id/tvAvatar" />
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:background="@drawable/fans_level_shape"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textSize="7sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvAvatar"
+        app:layout_constraintStart_toEndOf="@id/ivLevel"
+        app:layout_constraintTop_toTopOf="@id/tvAvatar" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#747E8B"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

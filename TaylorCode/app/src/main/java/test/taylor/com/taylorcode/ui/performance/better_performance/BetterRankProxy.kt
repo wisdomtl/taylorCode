@@ -95,7 +95,6 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
                     layout_width = match_parent
                     layout_height = 30
 
-
                     TextView {
                         layout_id = "vAnchormanRank"
                         layout_width = 18

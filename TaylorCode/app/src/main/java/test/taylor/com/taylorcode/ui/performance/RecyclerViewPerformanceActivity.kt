@@ -13,13 +13,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance.BetterRank
 import test.taylor.com.taylorcode.ui.performance.better_performance.BetterRankProxy
+import test.taylor.com.taylorcode.ui.performance.poor_performance.PoorHeaderProxy
+import test.taylor.com.taylorcode.ui.performance.poor_performance.PoorRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewPerformanceActivity : AppCompatActivity() {
     private val myAdapter = VarietyAdapter2().apply {
-        addProxy(HeaderProxy())
-        addProxy(RankProxy())
-        addProxy(BetterRankProxy())
+        // several item by xml
+        addProxy(PoorHeaderProxy())
+        addProxy(PoorRankProxy())
+
+//        // several item by dsl
+//        addProxy(HeaderProxy())
+//        addProxy(RankProxy())
+//
+//        // one item
+//        addProxy(BetterRankProxy())
     }
 
     private val contentView by lazy {
@@ -33,7 +42,6 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() {
                 layout_height = match_parent
                 margin_horizontal = 10
                 adapter = myAdapter
-                margin_top =  20
                 layoutManager = LinearLayoutManager(this@RecyclerViewPerformanceActivity)
             }
         }
@@ -47,8 +55,8 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() {
 
         detectFrame()
 
-//        bindData1()
-        bindData2()
+        bindData1()
+//        bindData2()
     }
 
     private fun bindData2() {
