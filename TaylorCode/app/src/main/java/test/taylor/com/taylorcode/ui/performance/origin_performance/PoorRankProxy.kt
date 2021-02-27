@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.ui.performance.poor_performance
+package test.taylor.com.taylorcode.ui.performance.origin_performance
 
 import android.view.LayoutInflater
 import android.view.View

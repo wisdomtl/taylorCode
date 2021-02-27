@@ -1,6 +1,5 @@
-package test.taylor.com.taylorcode.ui.performance.better_performance
+package test.taylor.com.taylorcode.ui.performance.better_performance2
 
-import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import com.bumptech.glide.Glide
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.Rank
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
-import kotlin.math.min
 
 class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

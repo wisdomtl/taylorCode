@@ -11,10 +11,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.performance.better_performance.BetterRank
-import test.taylor.com.taylorcode.ui.performance.better_performance.BetterRankProxy
-import test.taylor.com.taylorcode.ui.performance.poor_performance.PoorHeaderProxy
-import test.taylor.com.taylorcode.ui.performance.poor_performance.PoorRankProxy
+import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
+import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorHeaderProxy
+import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewPerformanceActivity : AppCompatActivity() {
