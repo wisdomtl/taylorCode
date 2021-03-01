@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.ui.performance.origin_performance
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,11 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class PoorHeaderProxy:VarietyAdapter2.Proxy<Header, PoorHeaderViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val start = System.currentTimeMillis()
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fans_rank_header_layout,parent,false)
-        return PoorHeaderViewHolder(itemView)
+        val viewHolder = PoorHeaderViewHolder(itemView)
+        Log.v("ttaylor","header create duration = ${System.currentTimeMillis() - start}")
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: PoorHeaderViewHolder, data: Header, index: Int, action: ((Any?) -> Unit)?) {

@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.ui.performance.origin_performance
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,11 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class PoorRankProxy : VarietyAdapter2.Proxy<Rank, PoorFansRankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val start = System.currentTimeMillis()
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fans_rank_layout2, parent, false)
-        return PoorFansRankViewHolder(itemView)
+        val viewHolder = PoorFansRankViewHolder(itemView)
+        Log.v("ttaylor","rank bind duration = ${System.currentTimeMillis() - start}")
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: PoorFansRankViewHolder, data: Rank, index: Int, action: ((Any?) -> Unit)?) {
