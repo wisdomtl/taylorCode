@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.performance.Rank
+import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>() {

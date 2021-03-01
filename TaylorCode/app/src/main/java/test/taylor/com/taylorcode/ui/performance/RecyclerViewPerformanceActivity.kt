@@ -11,6 +11,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
+import test.taylor.com.taylorcode.ui.performance.better_performance1.HeaderProxy
+import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
+import test.taylor.com.taylorcode.ui.performance.better_performance1.RankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
 import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorHeaderProxy
 import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorRankProxy
@@ -19,12 +23,12 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 class RecyclerViewPerformanceActivity : AppCompatActivity() {
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
-        addProxy(PoorHeaderProxy())
-        addProxy(PoorRankProxy())
+//        addProxy(PoorHeaderProxy())
+//        addProxy(PoorRankProxy())
 
 //        // several item by dsl
-//        addProxy(HeaderProxy())
-//        addProxy(RankProxy())
+        addProxy(HeaderProxy())
+        addProxy(RankProxy())
 
 //        // one item
 //        addProxy(BetterRankProxy())

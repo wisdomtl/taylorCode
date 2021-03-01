@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.R
-import test.taylor.com.taylorcode.ui.performance.Header
+import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class PoorHeaderProxy:VarietyAdapter2.Proxy<Header, PoorHeaderViewHolder>() {

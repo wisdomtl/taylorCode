@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.formatNums
-import test.taylor.com.taylorcode.ui.performance.Rank
+import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class PoorRankProxy : VarietyAdapter2.Proxy<Rank, PoorFansRankViewHolder>() {
