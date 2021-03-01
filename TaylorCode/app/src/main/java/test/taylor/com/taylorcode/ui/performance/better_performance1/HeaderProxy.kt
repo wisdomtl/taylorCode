@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.ui.performance
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,6 +11,11 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val start = System.currentTimeMillis()
+        lateinit var tvTitle: TextView
+        lateinit var tvRank: TextView
+        lateinit var tvName: TextView
+        lateinit var tvCount: TextView
         val itemView = parent.context.run {
             LinearLayout {
                 layout_width = match_parent
@@ -22,7 +28,7 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     solid_color = "#ffffff"
                 }
 
-                TextView {
+                tvTitle = TextView {
                     layout_id = "tvTitle"
                     layout_width = wrap_content
                     layout_height = wrap_content
@@ -37,7 +43,7 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     layout_height = wrap_content
                     margin_top = 16
 
-                    TextView {
+                    tvRank = TextView {
                         layout_id = "tvRank"
                         layout_width = wrap_content
                         layout_height = wrap_content
@@ -47,7 +53,7 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                         center_vertical = true
                     }
 
-                    TextView {
+                    tvName = TextView {
                         layout_id = "tvName"
                         layout_width = wrap_content
                         layout_height = wrap_content
@@ -58,7 +64,7 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                         margin_start = 19
                     }
 
-                    TextView {
+                    tvCount = TextView {
                         layout_id = "tvCount"
                         layout_width = wrap_content
                         layout_height = wrap_content
@@ -70,14 +76,18 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                 }
             }
         }
-        return HeaderViewHolder(itemView)
+        val viewHolder = HeaderViewHolder(itemView)
+        Log.v("ttaylor", " header create view holder duration = ${System.currentTimeMillis() - start}")
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: HeaderViewHolder, data: Header, index: Int, action: ((Any?) -> Unit)?) {
+        val start = System.currentTimeMillis()
         holder.tvCount?.text = data.count
         holder.tvName?.text = data.name
         holder.tvRank?.text = data.rank
         holder.tvTitle?.text = data.title
+        Log.v("ttaylor", " header bind view duration = ${System.currentTimeMillis() - start}")
     }
 }
 
@@ -85,7 +95,7 @@ data class Header(
     val rank: String,
     val name: String,
     val count: String,
-    val title:String
+    val title: String
 )
 
 class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -94,3 +104,12 @@ class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tvCount = itemView.find<TextView>("tvCount")
     val tvTitle = itemView.find<TextView>("tvTitle")
 }
+
+
+class HeaderViewHolder2(
+    itemView: View,
+    var tvRank: TextView,
+    var tvName: TextView,
+    var tvCount: TextView,
+    var tvTitle: TextView
+) : RecyclerView.ViewHolder(itemView)

@@ -19,13 +19,13 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 class RecyclerViewPerformanceActivity : AppCompatActivity() {
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
-        addProxy(PoorHeaderProxy())
-        addProxy(PoorRankProxy())
+//        addProxy(PoorHeaderProxy())
+//        addProxy(PoorRankProxy())
 
 //        // several item by dsl
-//        addProxy(HeaderProxy())
-//        addProxy(RankProxy())
-//
+        addProxy(HeaderProxy())
+        addProxy(RankProxy())
+
 //        // one item
 //        addProxy(BetterRankProxy())
     }

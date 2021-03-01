@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.ui.performance
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -12,14 +13,22 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val start = System.currentTimeMillis()
+        lateinit var tvRank: TextView
+        lateinit var tvName: TextView
+        lateinit var ivAvatar: ImageView
+        lateinit var ivLevel: ImageView
+        lateinit var tvCount: TextView
+        lateinit var tvTag: TextView
+        lateinit var tvLevel: TextView
         val itemView = parent.context.run {
             ConstraintLayout {
                 layout_width = match_parent
-                layout_height = 30
+                layout_height = 35
                 padding_horizontal = 10
                 background_color = "#ffffff"
 
-                TextView {
+                tvRank = TextView {
                     layout_id = "tvRank"
                     layout_width = 18
                     layout_height = wrap_content
@@ -29,7 +38,7 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     center_vertical = true
                 }
 
-                ImageView {
+                ivAvatar = ImageView {
                     layout_id = "ivAvatar"
                     layout_width = 20
                     layout_height = 20
@@ -39,30 +48,72 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     margin_start = 12
                 }
 
-                TextView {
+                tvName = TextView {
                     layout_id = "tvName"
                     layout_width = wrap_content
                     layout_height = wrap_content
-                    textSize = 14f
+                    textSize = 11f
                     textColor = "#3F4658"
                     gravity = gravity_center
                     maxLines = 1
-                    center_vertical = true
                     start_toEndOf = "ivAvatar"
                     margin_start = 10
+                    top_toTopOf = parent_id
+                    bottom_toTopOf = "tvTag"
+                    includeFontPadding = false
+                    vertical_chain_style = packed
                 }
 
-                ImageView {
+                tvTag = TextView {
+                    layout_id = "tvTag"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 8f
+                    textColor = "#ffffff"
+                    text = "save"
+                    gravity = gravity_center
+                    start_toStartOf = "tvName"
+                    top_toBottomOf = "tvName"
+                    bottom_toBottomOf = parent_id
+                    vertical_chain_style = packed
+                    padding_vertical = 1
+                    includeFontPadding = false
+                    padding_horizontal = 2
+                    shape = shape {
+                        corner_radius = 4
+                        solid_color = "#8cc8c8c8"
+                    }
+                }
+
+                ivLevel = ImageView {
                     layout_id = "ivLevel"
-                    layout_width = 15
-                    layout_height = 15
+                    layout_width = 10
+                    layout_height = 10
                     scaleType = scale_fit_xy
-                    center_vertical = true
+                    align_vertical_to = "tvName"
                     start_toEndOf = "tvName"
                     margin_start = 5
                 }
 
-                TextView {
+                tvLevel = TextView {
+                    layout_id = "tvLevel"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 7f
+                    textColor = "#ffffff"
+                    gravity = gravity_center
+                    align_vertical_to = "ivLevel"
+                    start_toEndOf = "ivLevel"
+                    margin_start = 5
+                    padding_horizontal = 2
+                    shape = shape {
+                        gradient_colors = listOf("#FFC39E", "#FFC39E")
+                        orientation = gradient_left_right
+                        corner_radius = 20
+                    }
+                }
+
+                tvCount = TextView {
                     layout_id = "tvCount"
                     layout_width = wrap_content
                     layout_height = wrap_content
@@ -74,10 +125,20 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                 }
             }
         }
-        return RankViewHolder(itemView)
+        val viewHolder = RankViewHolder(
+            itemView
+//            ,
+//            tvRank,
+//            tvName,
+//            ivAvatar,
+//            ivLevel, tvCount, tvTag, tvLevel
+        )
+        Log.w("ttaylor", "rank create view duration = ${System.currentTimeMillis() - start}")
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: RankViewHolder, data: Rank, index: Int, action: ((Any?) -> Unit)?) {
+        val start = System.currentTimeMillis()
         holder.tvCount?.text = data.count.formatNums()
         holder.ivAvatar?.let {
             Glide.with(holder.ivAvatar.context).load(data.avatarUrl).into(it)
@@ -87,6 +148,9 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
         }
         holder.tvRank?.text = data.rank.toString()
         holder.tvName?.text = data.name
+        holder.tvLevel?.text = data.level.toString()
+        holder.tvTag?.text = data.tag
+        Log.w("ttaylor", "rank bind view duration = ${System.currentTimeMillis() - start}")
     }
 }
 
@@ -96,8 +160,8 @@ data class Rank(
     val count: Int,
     val avatarUrl: String,
     val levelUrl: String,
-    val level:Int = 200,
-    val tag:String = "达人"
+    val level: Int = 200,
+    val tag: String = "达人"
 )
 
 class RankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -106,4 +170,17 @@ class RankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val ivAvatar = itemView.find<ImageView>("ivAvatar")
     val ivLevel = itemView.find<ImageView>("ivLevel")
     val tvCount = itemView.find<TextView>("tvCount")
+    val tvTag = itemView.find<TextView>("tvTag")
+    val tvLevel = itemView.find<TextView>("tvLevel")
 }
+
+class RankViewHolder2(
+    itemView: View,
+    var tvRank: TextView,
+   var tvName: TextView,
+   var ivAvatar: ImageView,
+   var ivLevel: ImageView,
+   var tvCount: TextView,
+   var tvTag: TextView,
+   var tvLevel: TextView
+) : RecyclerView.ViewHolder(itemView)
