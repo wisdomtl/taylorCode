@@ -22,7 +22,110 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
         lateinit var tvTag: TextView
         lateinit var tvLevel: TextView
         val itemView = parent.context.run {
-            ConstraintLayout {
+//            ConstraintLayout {
+//                layout_width = match_parent
+//                layout_height = 35
+//                padding_horizontal = 10
+//                background_color = "#ffffff"
+//
+//                tvRank = TextView {
+//                    layout_id = "tvRank"
+//                    layout_width = 18
+//                    layout_height = wrap_content
+//                    textSize = 14f
+//                    textColor = "#9DA4AD"
+//                    gravity = gravity_center
+//                    center_vertical = true
+//                }
+//
+//                ivAvatar = ImageView {
+//                    layout_id = "ivAvatar"
+//                    layout_width = 20
+//                    layout_height = 20
+//                    scaleType = scale_center_crop
+//                    center_vertical = true
+//                    start_toEndOf = "tvRank"
+//                    margin_start = 12
+//                }
+//
+//                tvName = TextView {
+//                    layout_id = "tvName"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 11f
+//                    textColor = "#3F4658"
+//                    gravity = gravity_center
+//                    maxLines = 1
+//                    start_toEndOf = "ivAvatar"
+//                    margin_start = 10
+//                    top_toTopOf = parent_id
+//                    bottom_toTopOf = "tvTag"
+//                    includeFontPadding = false
+//                    vertical_chain_style = packed
+//                }
+//
+//                tvTag = TextView {
+//                    layout_id = "tvTag"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 8f
+//                    textColor = "#ffffff"
+//                    text = "save"
+//                    gravity = gravity_center
+//                    start_toStartOf = "tvName"
+//                    top_toBottomOf = "tvName"
+//                    bottom_toBottomOf = parent_id
+//                    vertical_chain_style = packed
+//                    padding_vertical = 1
+//                    includeFontPadding = false
+//                    padding_horizontal = 2
+//                    shape = shape {
+//                        corner_radius = 4
+//                        solid_color = "#8cc8c8c8"
+//                    }
+//                }
+//
+//                ivLevel = ImageView {
+//                    layout_id = "ivLevel"
+//                    layout_width = 10
+//                    layout_height = 10
+//                    scaleType = scale_fit_xy
+//                    align_vertical_to = "tvName"
+//                    start_toEndOf = "tvName"
+//                    margin_start = 5
+//                }
+//
+//                tvLevel = TextView {
+//                    layout_id = "tvLevel"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 7f
+//                    textColor = "#ffffff"
+//                    gravity = gravity_center
+//                    align_vertical_to = "ivLevel"
+//                    start_toEndOf = "ivLevel"
+//                    margin_start = 5
+//                    padding_horizontal = 2
+//                    shape = shape {
+//                        gradient_colors = listOf("#FFC39E", "#FFC39E")
+//                        orientation = gradient_left_right
+//                        corner_radius = 20
+//                    }
+//                }
+//
+//                tvCount = TextView {
+//                    layout_id = "tvCount"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 14f
+//                    textColor = "#3F4658"
+//                    gravity = gravity_center
+//                    end_toEndOf = parent_id
+//                    center_vertical = true
+//                }
+//            }
+
+            FrameLayout {
                 layout_width = match_parent
                 layout_height = 35
                 padding_horizontal = 10
@@ -34,8 +137,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_height = wrap_content
                     textSize = 14f
                     textColor = "#9DA4AD"
-                    gravity = gravity_center
-                    center_vertical = true
                 }
 
                 ivAvatar = ImageView {
@@ -44,7 +145,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_height = 20
                     scaleType = scale_center_crop
                     center_vertical = true
-                    start_toEndOf = "tvRank"
                     margin_start = 12
                 }
 
@@ -56,12 +156,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textColor = "#3F4658"
                     gravity = gravity_center
                     maxLines = 1
-                    start_toEndOf = "ivAvatar"
                     margin_start = 10
-                    top_toTopOf = parent_id
-                    bottom_toTopOf = "tvTag"
                     includeFontPadding = false
-                    vertical_chain_style = packed
                 }
 
                 tvTag = TextView {
@@ -72,10 +168,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textColor = "#ffffff"
                     text = "save"
                     gravity = gravity_center
-                    start_toStartOf = "tvName"
-                    top_toBottomOf = "tvName"
-                    bottom_toBottomOf = parent_id
-                    vertical_chain_style = packed
                     padding_vertical = 1
                     includeFontPadding = false
                     padding_horizontal = 2
@@ -90,8 +182,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_width = 10
                     layout_height = 10
                     scaleType = scale_fit_xy
-                    align_vertical_to = "tvName"
-                    start_toEndOf = "tvName"
                     margin_start = 5
                 }
 
@@ -102,8 +192,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textSize = 7f
                     textColor = "#ffffff"
                     gravity = gravity_center
-                    align_vertical_to = "ivLevel"
-                    start_toEndOf = "ivLevel"
                     margin_start = 5
                     padding_horizontal = 2
                     shape = shape {
@@ -120,8 +208,6 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textSize = 14f
                     textColor = "#3F4658"
                     gravity = gravity_center
-                    end_toEndOf = parent_id
-                    center_vertical = true
                 }
             }
         }

@@ -29,7 +29,6 @@ import androidx.constraintlayout.helper.widget.Layer
 import androidx.constraintlayout.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MarginLayoutParamsCompat
-import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -39,7 +38,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
@@ -50,6 +48,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
+import test.taylor.com.taylorcode.ui.performance.widget.PercentLayout
 import kotlin.math.abs
 
 /**
@@ -458,6 +457,19 @@ inline fun Context.FrameLayout(style: Int? = null, init: FrameLayout.() -> Unit)
             ContextThemeWrapper(this, style)
         ) else FrameLayout(this)
     return frameLayout.apply(init)
+}
+
+/**
+ * create [PercentLayout] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.PercentLayout(style: Int? = null, init: PercentLayout.() -> Unit): PercentLayout {
+    val percentLayout =
+        if (style != null) PercentLayout(
+            ContextThemeWrapper(this, style)
+        ) else PercentLayout(this)
+    return percentLayout.apply(init)
 }
 
 /**
@@ -1390,6 +1402,25 @@ inline var View.margin_vertical: Number
         }
     }
 
+inline var View.left_percent: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            leftPercent = value
+        }
+    }
+
+inline var View.top_percent: Float
+    get() {
+        return -1f
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam>{
+            topPercent = value
+        }
+    }
 inline var View.gone_margin_end: Number
     get() {
         return -1

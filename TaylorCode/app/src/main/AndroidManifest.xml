@@ -225,6 +225,7 @@
         <activity android:name=".ui.custom_view.shader.CropActivity" />
         <activity android:name=".ui.custom_view.shader.ShaderActivity" />
         <activity android:name=".ui.performance.RecyclerViewPerformanceActivity" />
+        <activity android:name=".ui.performance.widget.PercentActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

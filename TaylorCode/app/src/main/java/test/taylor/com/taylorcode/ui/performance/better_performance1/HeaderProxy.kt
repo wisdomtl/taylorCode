@@ -17,12 +17,69 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
         lateinit var tvName: TextView
         lateinit var tvCount: TextView
         val itemView = parent.context.run {
-            LinearLayout {
+//            LinearLayout {
+//                layout_width = match_parent
+//                layout_height = wrap_content
+//                orientation = vertical
+//                padding_top = 10
+//                padding_horizontal = 10
+//                shape = shape {
+//                    corner_radii = intArrayOf(20, 20, 20, 20, 0, 0, 0, 0)
+//                    solid_color = "#ffffff"
+//                }
+//
+//                tvTitle = TextView {
+//                    layout_id = "tvTitle"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 16f
+//                    textColor = "#3F4658"
+//                    textStyle = bold
+//                    margin_bottom = 3
+//                }
+//
+//                ConstraintLayout {
+//                    layout_width = match_parent
+//                    layout_height = wrap_content
+//                    margin_top = 16
+//
+//                    tvRank = TextView {
+//                        layout_id = "tvRank"
+//                        layout_width = wrap_content
+//                        layout_height = wrap_content
+//                        textSize = 11f
+//                        textColor = "#9DA4AD"
+//                        start_toStartOf = parent_id
+//                        center_vertical = true
+//                    }
+//
+//                    tvName = TextView {
+//                        layout_id = "tvName"
+//                        layout_width = wrap_content
+//                        layout_height = wrap_content
+//                        textSize = 11f
+//                        textColor = "#9DA4AD"
+//                        align_vertical_to = "tvRank"
+//                        start_toEndOf = "tvRank"
+//                        margin_start = 19
+//                    }
+//
+//                    tvCount = TextView {
+//                        layout_id = "tvCount"
+//                        layout_width = wrap_content
+//                        layout_height = wrap_content
+//                        textSize = 11f
+//                        textColor = "#9DA4AD"
+//                        align_vertical_to = "tvRank"
+//                        end_toEndOf = parent_id
+//                    }
+//                }
+//            }
+
+
+            FrameLayout {
                 layout_width = match_parent
                 layout_height = wrap_content
-                orientation = vertical
-                padding_top = 10
-                padding_horizontal = 10
                 shape = shape {
                     corner_radii = intArrayOf(20, 20, 20, 20, 0, 0, 0, 0)
                     solid_color = "#ffffff"
@@ -35,44 +92,38 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     textSize = 16f
                     textColor = "#3F4658"
                     textStyle = bold
-                    margin_bottom = 3
+                    margin_start = 20
+                    margin_top =  16
                 }
 
-                ConstraintLayout {
-                    layout_width = match_parent
+                tvRank = TextView {
+                    layout_id = "tvRank"
+                    layout_width = wrap_content
                     layout_height = wrap_content
-                    margin_top = 16
+                    textSize = 11f
+                    textColor = "#9DA4AD"
+                    margin_top = 54
+                    margin_start = 20
+                }
 
-                    tvRank = TextView {
-                        layout_id = "tvRank"
-                        layout_width = wrap_content
-                        layout_height = wrap_content
-                        textSize = 11f
-                        textColor = "#9DA4AD"
-                        start_toStartOf = parent_id
-                        center_vertical = true
-                    }
+                tvName = TextView {
+                    layout_id = "tvName"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 11f
+                    textColor = "#9DA4AD"
+                    margin_start = 61
+                    margin_top =  54
+                }
 
-                    tvName = TextView {
-                        layout_id = "tvName"
-                        layout_width = wrap_content
-                        layout_height = wrap_content
-                        textSize = 11f
-                        textColor = "#9DA4AD"
-                        align_vertical_to = "tvRank"
-                        start_toEndOf = "tvRank"
-                        margin_start = 19
-                    }
-
-                    tvCount = TextView {
-                        layout_id = "tvCount"
-                        layout_width = wrap_content
-                        layout_height = wrap_content
-                        textSize = 11f
-                        textColor = "#9DA4AD"
-                        align_vertical_to = "tvRank"
-                        end_toEndOf = parent_id
-                    }
+                tvCount = TextView {
+                    layout_id = "tvCount"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 11f
+                    textColor = "#9DA4AD"
+                    margin_start = 260
+                    margin_top =  54
                 }
             }
         }
