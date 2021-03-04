@@ -59,17 +59,17 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() ,CoroutineScope by M
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
-        bindData1()
+//        bindData1()
         detectFrame()
 
     }
 
     override fun onPostResume() {
         super.onPostResume()
-//       launch(Dispatchers.Main) {
-//           bindData1()
-////        bindData2()
-//       }
+       launch(Dispatchers.Main) {
+           bindData1()
+//        bindData2()
+       }
     }
 
     private fun bindData2() {
