@@ -883,10 +883,10 @@ inline var View.layout_width: Number
         val w = if (value.dp > 0) value.dp else value.toInt()
         val h = layoutParams?.height ?: 0
         updateLayoutParams<ViewGroup.LayoutParams> {
-                width = w
-                height = h
-            }
+            width = w
+            height = h
         }
+    }
 
 inline var View.layout_height: Number
     get() {
@@ -896,10 +896,10 @@ inline var View.layout_height: Number
         val w = layoutParams?.width ?: 0
         val h = if (value.dp > 0) value.dp else value.toInt()
         updateLayoutParams<ViewGroup.LayoutParams> {
-                width = w
-                height = h
-            }
+            width = w
+            height = h
         }
+    }
 
 inline var View.alignParentStart: Boolean
     get() {
@@ -965,7 +965,7 @@ inline var View.weight: Float
         updateLayoutParams<LinearLayout.LayoutParams> {
             gravity = (layoutParams as? LinearLayout.LayoutParams)?.gravity ?: -1
             weight = value
-            }
+        }
     }
 inline var View.layout_gravity: Int
     get() {
@@ -975,7 +975,7 @@ inline var View.layout_gravity: Int
         updateLayoutParams<LinearLayout.LayoutParams> {
             weight = (layoutParams as? LinearLayout.LayoutParams)?.weight ?: 0f
             gravity = value
-            }
+        }
     }
 
 inline var View.toCircleOf: String
@@ -1417,10 +1417,32 @@ inline var View.top_percent: Float
         return -1f
     }
     set(value) {
-        updateLayoutParams<PercentLayout.LayoutParam>{
+        updateLayoutParams<PercentLayout.LayoutParam> {
             topPercent = value
         }
     }
+
+inline var View.center_vertical_percent: Boolean
+    get() {
+        return false
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            centerVertical = true
+        }
+    }
+
+inline var View.center_horizontal_percent: Boolean
+    get() {
+        return false
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            centerHorizontal = true
+        }
+    }
+
+
 inline var View.gone_margin_end: Number
     get() {
         return -1
@@ -1644,7 +1666,7 @@ inline var TextView.fontFamily: Int
     }
     set(value) {
         try {
-        typeface = ResourcesCompat.getFont(context, value)
+            typeface = ResourcesCompat.getFont(context, value)
         } catch (e: Resources.NotFoundException) {
         }
     }
@@ -1936,10 +1958,10 @@ val parent_id = "0"
 //<editor-fold desc="layout helper function">
 val Int.dp: Int
     get() = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            Resources.getSystem().displayMetrics
-        ).toInt()
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    ).toInt()
 
 
 val Float.dp: Float
@@ -1951,9 +1973,9 @@ val Float.dp: Float
 
 val Number.dp: Int
     get() = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            Resources.getSystem().displayMetrics
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
     ).toInt()
 
 fun ViewGroup.MarginLayoutParams.toConstraintLayoutParam() =
@@ -1971,7 +1993,7 @@ inline fun <reified T : ViewGroup.LayoutParams> View.updateLayoutParams(block: T
     layoutParams = (layoutParams as? T)?.apply(block) ?: kotlin.run {
         val width = layoutParams?.width ?: 0
         val height = layoutParams?.height ?: 0
-        val lp = ViewGroup.LayoutParams(width,height)
+        val lp = ViewGroup.LayoutParams(width, height)
         new<T>(lp).apply(block)
     }
 }

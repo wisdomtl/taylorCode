@@ -125,10 +125,9 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
 //                }
 //            }
 
-            FrameLayout {
+            PercentLayout {
                 layout_width = match_parent
                 layout_height = 35
-                padding_horizontal = 10
                 background_color = "#ffffff"
 
                 tvRank = TextView {
@@ -137,6 +136,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_height = wrap_content
                     textSize = 14f
                     textColor = "#9DA4AD"
+                    left_percent = 0.08f
+                    center_vertical_percent = true
                 }
 
                 ivAvatar = ImageView {
@@ -144,8 +145,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_width = 20
                     layout_height = 20
                     scaleType = scale_center_crop
-                    center_vertical = true
-                    margin_start = 12
+                    center_vertical_percent = true
+                    left_percent = 0.15f
                 }
 
                 tvName = TextView {
@@ -156,8 +157,9 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textColor = "#3F4658"
                     gravity = gravity_center
                     maxLines = 1
-                    margin_start = 10
                     includeFontPadding = false
+                    center_vertical_percent = true
+                    left_percent = 0.3f
                 }
 
                 tvTag = TextView {
@@ -175,6 +177,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                         corner_radius = 4
                         solid_color = "#8cc8c8c8"
                     }
+                    center_vertical_percent = true
+                    left_percent = 0.3f
                 }
 
                 ivLevel = ImageView {
@@ -182,7 +186,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     layout_width = 10
                     layout_height = 10
                     scaleType = scale_fit_xy
-                    margin_start = 5
+                    left_percent = 0.4f
+                    top_percent = 0.3f
                 }
 
                 tvLevel = TextView {
@@ -192,13 +197,14 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textSize = 7f
                     textColor = "#ffffff"
                     gravity = gravity_center
-                    margin_start = 5
                     padding_horizontal = 2
                     shape = shape {
                         gradient_colors = listOf("#FFC39E", "#FFC39E")
                         orientation = gradient_left_right
                         corner_radius = 20
                     }
+                    left_percent = 0.3f
+                    top_percent = 0.5f
                 }
 
                 tvCount = TextView {
@@ -208,6 +214,8 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textSize = 14f
                     textColor = "#3F4658"
                     gravity = gravity_center
+                    center_vertical_percent = true
+                    left_percent = 0.7f
                 }
             }
         }

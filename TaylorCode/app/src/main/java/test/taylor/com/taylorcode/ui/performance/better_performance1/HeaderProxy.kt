@@ -77,9 +77,9 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
 //            }
 
 
-            FrameLayout {
+            PercentLayout {
                 layout_width = match_parent
-                layout_height = wrap_content
+                layout_height = 60
                 shape = shape {
                     corner_radii = intArrayOf(20, 20, 20, 20, 0, 0, 0, 0)
                     solid_color = "#ffffff"
@@ -92,8 +92,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     textSize = 16f
                     textColor = "#3F4658"
                     textStyle = bold
-                    margin_start = 20
-                    margin_top =  16
+                    left_percent = 0.06f
+                    top_percent = 0.23f
                 }
 
                 tvRank = TextView {
@@ -102,8 +102,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     layout_height = wrap_content
                     textSize = 11f
                     textColor = "#9DA4AD"
-                    margin_top = 54
-                    margin_start = 20
+                    left_percent = 0.06f
+                    top_percent = 0.78f
                 }
 
                 tvName = TextView {
@@ -112,8 +112,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     layout_height = wrap_content
                     textSize = 11f
                     textColor = "#9DA4AD"
-                    margin_start = 61
-                    margin_top =  54
+                    left_percent = 0.18f
+                    top_percent = 0.78f
                 }
 
                 tvCount = TextView {
@@ -122,8 +122,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     layout_height = wrap_content
                     textSize = 11f
                     textColor = "#9DA4AD"
-                    margin_start = 260
-                    margin_top =  54
+                    left_percent = 0.18f
+                    top_percent = 0.78f
                 }
             }
         }
