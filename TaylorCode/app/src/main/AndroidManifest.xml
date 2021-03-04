@@ -224,7 +224,13 @@
         <activity android:name=".ui.custom_view.crop_view.CropActivity" />
         <activity android:name=".ui.custom_view.shader.CropActivity" />
         <activity android:name=".ui.custom_view.shader.ShaderActivity" />
-        <activity android:name=".ui.performance.RecyclerViewPerformanceActivity" />
+        <activity android:name=".ui.performance.RecyclerViewPerformanceActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.performance.widget.PercentActivity" />
 
         <service android:name=".aidl.LocalServer" />

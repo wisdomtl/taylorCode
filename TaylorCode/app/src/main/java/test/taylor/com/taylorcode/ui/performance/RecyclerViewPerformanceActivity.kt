@@ -10,6 +10,10 @@ import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.performance.better_performance1.HeaderProxy
@@ -20,7 +24,7 @@ import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorHeaderPr
 import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class RecyclerViewPerformanceActivity : AppCompatActivity() {
+class RecyclerViewPerformanceActivity : AppCompatActivity() ,CoroutineScope by MainScope(){
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
 //        addProxy(PoorHeaderProxy())
@@ -55,11 +59,17 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
-
+        bindData1()
         detectFrame()
 
-        bindData1()
-//        bindData2()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+//       launch(Dispatchers.Main) {
+//           bindData1()
+////        bindData2()
+//       }
     }
 
     private fun bindData2() {
