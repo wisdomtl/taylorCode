@@ -27,7 +27,7 @@ private Handler handler = new Handler(Looper.getMainLooper(), new Handler.Callba
             }
             case MSG_TASK_COUNTING: {
                 int time = msg.arg1;
-                System.out.println("task is executing for " + time + " s");
+                System.out.println("task is executing for " + time + " ms");
                 break;
             }
             case MSG_TASK_COMPLETE: {
@@ -48,7 +48,7 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
     Message timeoutMessage = handler.obtainMessage(MSG_TASK_TIMEOUT);
     handler.sendMessageDelayed(timeoutMessage, TASK_TIMEOUT);
     TaskRunnable taskRunnable = new TaskRunnable(6);
-    handler.post(taskRunnable);
+    handler.postDelayed(taskRunnable,1000);
 }
 
 class TaskRunnable implements Runnable {
@@ -64,7 +64,7 @@ class TaskRunnable implements Runnable {
     public void run() {
         duration++;
         Message msg = handler.obtainMessage();
-        msg.arg1 = duration;
+        msg.arg1 = duration * 1000;
         if (duration < max) {
             msg.what = MSG_TASK_COUNTING;
             handler.sendMessage(msg);

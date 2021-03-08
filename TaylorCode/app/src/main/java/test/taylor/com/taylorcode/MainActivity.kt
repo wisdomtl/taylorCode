@@ -53,6 +53,7 @@ import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicato
 import test.taylor.com.taylorcode.ui.custom_view.selector.SelectorDemoActivity
 import test.taylor.com.taylorcode.ui.custom_view.shader.ShaderActivity
 import test.taylor.com.taylorcode.ui.custom_view.tag_view.TagTextViewActivity
+import test.taylor.com.taylorcode.ui.custom_view.time_picker.TimePickerActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
@@ -217,6 +218,7 @@ class MainActivity : BaseActivity() {
         btnRecyclerViewPerformance.setOnClickListener { startActivity<RecyclerViewPerformanceActivity>() }
         btnPercentLayout.setOnClickListener { startActivity<PercentActivity>() }
         btnInterView.setOnClickListener { startActivity<InterViewActivity>() }
+        btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
