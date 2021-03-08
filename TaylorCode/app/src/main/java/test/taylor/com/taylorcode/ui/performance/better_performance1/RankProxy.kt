@@ -215,7 +215,7 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
                     textColor = "#3F4658"
                     gravity = gravity_center
                     center_vertical_percent = true
-                    left_percent = 0.7f
+                    end_to_end_of_percent = parent_id
                 }
             }
         }

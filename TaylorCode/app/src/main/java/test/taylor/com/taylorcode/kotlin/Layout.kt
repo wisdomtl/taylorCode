@@ -1442,6 +1442,45 @@ inline var View.center_horizontal_percent: Boolean
         }
     }
 
+inline var View.start_to_start_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            startToStartOf = value.toLayoutId()
+        }
+    }
+
+inline var View.start_to_end_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            startToEndOf = value.toLayoutId()
+        }
+    }
+
+inline var View.end_to_end_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            endToEndOf = value.toLayoutId()
+        }
+    }
+
+inline var View.end_to_start_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            endToStartOf = value.toLayoutId()
+        }
+    }
 
 inline var View.gone_margin_end: Number
     get() {
