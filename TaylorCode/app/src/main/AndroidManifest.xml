@@ -232,6 +232,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.performance.widget.PercentActivity" />
+        <activity android:name=".interview.InterViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

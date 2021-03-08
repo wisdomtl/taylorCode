@@ -16,6 +16,7 @@ import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
+import test.taylor.com.taylorcode.interview.InterViewActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
@@ -215,6 +216,7 @@ class MainActivity : BaseActivity() {
         btnCrop2.setOnClickListener { startActivity<ShaderActivity>() }
         btnRecyclerViewPerformance.setOnClickListener { startActivity<RecyclerViewPerformanceActivity>() }
         btnPercentLayout.setOnClickListener { startActivity<PercentActivity>() }
+        btnInterView.setOnClickListener { startActivity<InterViewActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

@@ -8,6 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
+            android:id="@+id/btnInterView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="interview"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btnPercentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
