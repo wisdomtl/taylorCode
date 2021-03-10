@@ -1422,26 +1422,6 @@ inline var View.top_percent: Float
         }
     }
 
-inline var View.center_vertical_percent: Boolean
-    get() {
-        return false
-    }
-    set(value) {
-        updateLayoutParams<PercentLayout.LayoutParam> {
-            centerVertical = true
-        }
-    }
-
-inline var View.center_horizontal_percent: Boolean
-    get() {
-        return false
-    }
-    set(value) {
-        updateLayoutParams<PercentLayout.LayoutParam> {
-            centerHorizontal = true
-        }
-    }
-
 inline var View.start_to_start_of_percent: String
     get() {
         return ""
@@ -1479,6 +1459,66 @@ inline var View.end_to_start_of_percent: String
     set(value) {
         updateLayoutParams<PercentLayout.LayoutParam> {
             endToStartOf = value.toLayoutId()
+        }
+    }
+
+inline var View.top_to_top_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            topToTopOf = value.toLayoutId()
+        }
+    }
+
+inline var View.top_to_bottom_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            topToBottomOf = value.toLayoutId()
+        }
+    }
+
+inline var View.bottom_to_bottom_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            bottomToBottomOf = value.toLayoutId()
+        }
+    }
+
+inline var View.bottom_to_top_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            bottomToTopOf = value.toLayoutId()
+        }
+    }
+
+inline var View.center_vertical_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            centerVerticalOf = value.toLayoutId()
+        }
+    }
+
+inline var View.center_horizontal_of_percent: String
+    get() {
+        return ""
+    }
+    set(value) {
+        updateLayoutParams<PercentLayout.LayoutParam> {
+            centerHorizontalOf = value.toLayoutId()
         }
     }
 

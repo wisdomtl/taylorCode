@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewManager
 import test.taylor.com.taylorcode.kotlin.parent_id
 import test.taylor.com.taylorcode.kotlin.toLayoutId
 
@@ -36,60 +35,64 @@ class PercentLayout
     }
 
     private fun getChildTop(lp: LayoutParam, parentHeight: Int, child: View): Int {
-        if (lp.centerVertical) {
-            return (parentHeight - child.measuredHeight) / 2
-        } else {
-            val parentId = parent_id.toLayoutId()
-            if (lp.topToBottomOf != -1) {
+        val parentId = parent_id.toLayoutId()
+        return when {
+            lp.topPercent != -1f -> (parentHeight * lp.topPercent).toInt()
+            lp.centerVerticalOf != -1 -> {
+                if (lp.centerVerticalOf == parentId) {
+                    (parentHeight - child.measuredHeight) / 2
+                } else {
+                    (childMap.get(lp.centerVerticalOf)?.let { it.top + (it.bottom - it.top) / 2 } ?: 0) - child.measuredHeight / 2
+                }
+            }
+            lp.topToBottomOf != -1 -> {
                 val b = if (lp.topToBottomOf == parentId) bottom else childMap.get(lp.topToBottomOf)?.bottom ?: 0
-                return (b + lp.marginTop).toInt()
+                (b + lp.topMargin)
             }
-
-            if (lp.topToTopOf != -1) {
+            lp.topToTopOf != -1 -> {
                 val t = if (lp.topToTopOf == parentId) top else childMap.get(lp.topToTopOf)?.top ?: 0
-                return (t + lp.marginTop).toInt()
+                (t + lp.topMargin)
             }
-
-            if (lp.bottomToTopOf != -1) {
+            lp.bottomToTopOf != -1 -> {
                 val t = if (lp.bottomToTopOf == parentId) top else childMap.get(lp.bottomToTopOf)?.top ?: 0
-                return (t - lp.marginBottom).toInt() - child.measuredHeight
+                (t - lp.bottomMargin) - child.measuredHeight
             }
-
-            if (lp.bottomToBottomOf != -1) {
+            lp.bottomToBottomOf != -1 -> {
                 val b = if (lp.bottomToBottomOf == parentId) bottom else childMap.get(lp.bottomToBottomOf)?.bottom ?: 0
-                return (b - lp.marginBottom).toInt() - child.measuredHeight
+                (b - lp.bottomMargin) - child.measuredHeight
             }
-
-            return (parentHeight * lp.leftPercent).toInt()
+            else -> 0
         }
     }
 
     private fun getChildLeft(lp: LayoutParam, parentWidth: Int, child: View): Int {
-        if (lp.centerHorizontal) {
-            return (parentWidth - child.measuredWidth) / 2
-        } else {
-            val parentId = parent_id.toLayoutId()
-            if (lp.startToEndOf != -1) {
+        val parentId = parent_id.toLayoutId()
+        return when {
+            lp.leftPercent != -1f -> (parentWidth * lp.leftPercent).toInt()
+            lp.centerHorizontalOf != -1 -> {
+                if (lp.centerHorizontalOf == parentId) {
+                    (parentWidth - child.measuredWidth) / 2
+                } else {
+                    (childMap.get(lp.centerHorizontalOf)?.let { it.left + (it.right - it.left) / 2 } ?: 0) - child.measuredWidth / 2
+                }
+            }
+            lp.startToEndOf != -1 -> {
                 val r = if (lp.startToEndOf == parentId) right else childMap.get(lp.startToEndOf)?.right ?: 0
-                return (r + lp.marginStart).toInt()
+                (r + lp.marginStart)
             }
-
-            if (lp.startToStartOf != -1) {
+            lp.startToStartOf != -1 -> {
                 val l = if (lp.startToStartOf == parentId) left else childMap.get(lp.startToStartOf)?.left ?: 0
-                return (l + lp.marginStart).toInt()
+                (l + lp.marginStart)
             }
-
-            if (lp.endToStartOf != -1) {
+            lp.endToStartOf != -1 -> {
                 val l = if (lp.endToStartOf == parentId) left else childMap.get(lp.endToStartOf)?.left ?: 0
-                return (l - lp.marginEnd).toInt() - child.measuredWidth
+                (l - lp.marginEnd) - child.measuredWidth
             }
-
-            if (lp.endToEndOf != -1) {
+            lp.endToEndOf != -1 -> {
                 val r = if (lp.endToEndOf == parentId) right else childMap.get(lp.endToEndOf)?.right ?: 0
-                return (r - lp.marginEnd).toInt() - child.measuredWidth
+                (r - lp.marginEnd) - child.measuredWidth
             }
-
-            return (parentWidth * lp.leftPercent).toInt()
+            else -> 0
         }
     }
 
@@ -103,11 +106,9 @@ class PercentLayout
         child?.let { childMap.remove(it.id) }
     }
 
-    class LayoutParam(source: ViewGroup.LayoutParams?) : ViewGroup.LayoutParams(source) {
-        var leftPercent: Float = 0f
-        var topPercent: Float = 0f
-        var centerVertical = false
-        var centerHorizontal = false
+    class LayoutParam(source: ViewGroup.LayoutParams?) : MarginLayoutParams(source) {
+        var leftPercent: Float = -1f
+        var topPercent: Float = -1f
         var startToStartOf: Int = -1
         var startToEndOf: Int = -1
         var endToEndOf: Int = -1
@@ -116,10 +117,8 @@ class PercentLayout
         var topToBottomOf: Int = -1
         var bottomToTopOf: Int = -1
         var bottomToBottomOf: Int = -1
-        var marginStart: Float = 0f
-        var marginTop: Float = 0f
-        var marginBottom: Float = 0f
-        var marginEnd: Float = 0f
+        var centerHorizontalOf: Int = -1
+        var centerVerticalOf: Int = -1
     }
 
 

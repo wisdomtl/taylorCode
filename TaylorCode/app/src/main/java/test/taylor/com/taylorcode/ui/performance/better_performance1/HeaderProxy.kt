@@ -92,7 +92,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     textSize = 16f
                     textColor = "#3F4658"
                     textStyle = bold
-                    left_percent = 0.06f
+                    start_to_start_of_percent = parent_id
+                    margin_start = 20
                     top_percent = 0.23f
                 }
 
@@ -122,7 +123,8 @@ class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
                     layout_height = wrap_content
                     textSize = 11f
                     textColor = "#9DA4AD"
-                    left_percent = 0.18f
+                    end_to_end_of_percent = parent_id
+                    margin_end = 20
                     top_percent = 0.78f
                 }
             }
