@@ -33,6 +33,7 @@ class PoorRankProxy : VarietyAdapter2.Proxy<Rank, PoorFansRankViewHolder>() {
         holder.tvRank?.text = data.rank.toString()
         holder.tvName?.text = data.name
         holder.tvLevel?.text = data.level.toString()
+        holder.tvTag?.text = data.tag
     }
 }
 

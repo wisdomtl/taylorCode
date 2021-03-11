@@ -29,8 +29,8 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
-//        addProxy(PoorHeaderProxy())
-//        addProxy(PoorRankProxy())
+        addProxy(PoorHeaderProxy())
+        addProxy(PoorRankProxy())
 
 //        // several item by dsl
 //        addProxy(HeaderProxy())
@@ -69,8 +69,8 @@ class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by M
     override fun onPostResume() {
         super.onPostResume()
         launch(Dispatchers.Main) {
-//           bindData1()
-            bindData2()
+           bindData1()
+//            bindData2()
         }
     }
 
