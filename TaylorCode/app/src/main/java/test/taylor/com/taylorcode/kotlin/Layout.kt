@@ -268,6 +268,24 @@ inline fun ViewGroup.FrameLayout(
 }
 
 /**
+ * create [FrameLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [FrameLayout] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.PercentLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: PercentLayout.() -> Unit
+): PercentLayout {
+    val percentLayout =
+        if (style != null) PercentLayout(
+            ContextThemeWrapper(context, style)
+        ) else PercentLayout(context)
+    return percentLayout.apply(init).also { if (autoAdd) addView(it) }
+}
+
+/**
  * create [ViewFlipper] instance within a [ViewGroup]
  * @param style an style int value defined in xml
  * @param autoAdd whether add [ViewFlipper] into [ViewGroup] automatically
@@ -665,6 +683,20 @@ inline fun Fragment.FrameLayout(
     if (style != null) FrameLayout(
         ContextThemeWrapper(it, style)
     ) else FrameLayout(it)
+}?.apply(init)
+
+/**
+ * create [PercentLayout] instance within [Fragment]
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Fragment.PercentLayout(
+    style: Int? = null,
+    init: PercentLayout.() -> Unit
+): PercentLayout? = context?.let {
+    if (style != null) PercentLayout(
+        ContextThemeWrapper(it, style)
+    ) else PercentLayout(it)
 }?.apply(init)
 
 /**

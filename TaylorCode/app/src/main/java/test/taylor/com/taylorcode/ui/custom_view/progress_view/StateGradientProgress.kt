@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Shader
 
 class StateGradientProgress(var stateMap: Map<IntRange, IntArray>) : Progress {
-    private var currentColors: IntArray? = null
+    private var currentColors: IntArray = intArrayOf()
     private var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }

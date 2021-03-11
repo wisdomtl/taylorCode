@@ -6,36 +6,38 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.FrameMetrics
+import android.view.View
 import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
+import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.performance.better_performance1.HeaderProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.better_performance1.RankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
+import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRankProxy
 import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorHeaderProxy
 import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class RecyclerViewPerformanceActivity : AppCompatActivity() ,CoroutineScope by MainScope(){
+class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
 //        addProxy(PoorHeaderProxy())
 //        addProxy(PoorRankProxy())
 
 //        // several item by dsl
-        addProxy(HeaderProxy())
-        addProxy(RankProxy())
+//        addProxy(HeaderProxy())
+//        addProxy(RankProxy())
 
 //        // one item
-//        addProxy(BetterRankProxy())
+        addProxy(BetterRankProxy())
     }
 
     private val contentView by lazy {
@@ -66,10 +68,10 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() ,CoroutineScope by M
 
     override fun onPostResume() {
         super.onPostResume()
-       launch(Dispatchers.Main) {
-           bindData1()
-//        bindData2()
-       }
+        launch(Dispatchers.Main) {
+//           bindData1()
+            bindData2()
+        }
     }
 
     private fun bindData2() {
@@ -342,13 +344,36 @@ class RecyclerViewPerformanceActivity : AppCompatActivity() ,CoroutineScope by M
 }
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun Activity.detectFrame(){
+fun Activity.detectFrame() {
     window?.addOnFrameMetricsAvailableListener(Window.OnFrameMetricsAvailableListener { window, frameMetrics, dropCountSinceLastInvocation ->
-        Log.v("ttaylor","drop count = ${dropCountSinceLastInvocation}, measure + layout=${frameMetrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION)/1000000}, " +
-                "    delay=${frameMetrics.getMetric(FrameMetrics.UNKNOWN_DELAY_DURATION)/1000000}, " +
-                "    anim=${frameMetrics.getMetric(FrameMetrics.ANIMATION_DURATION)/1000000}," +
-                "    touch=${frameMetrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION)/1000000}, " +
-                "    draw=${frameMetrics.getMetric(FrameMetrics.DRAW_DURATION)/1000000}, " +
-                "    total=${frameMetrics.getMetric(FrameMetrics.TOTAL_DURATION)/1000000}")
+        Log.v(
+            "ttaylor", "drop count = ${dropCountSinceLastInvocation}, measure + layout=${frameMetrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1000000}, " +
+                    "    delay=${frameMetrics.getMetric(FrameMetrics.UNKNOWN_DELAY_DURATION) / 1000000}, " +
+                    "    anim=${frameMetrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1000000}," +
+                    "    touch=${frameMetrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1000000}, " +
+                    "    draw=${frameMetrics.getMetric(FrameMetrics.DRAW_DURATION) / 1000000}, " +
+                    "    total=${frameMetrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1000000}"
+        )
     }, Handler())
 }
+
+val View.viewScope: CoroutineScope
+    get() {
+        val key = "ViewScope".hashCode()
+        var scope = getTag(key) as? CoroutineScope
+        if (scope == null) {
+            scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+            tag = key
+            val listener = object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(v: View?) {
+                }
+
+                override fun onViewDetachedFromWindow(v: View?) {
+                    scope.cancel()
+                }
+
+            }
+            addOnAttachStateChangeListener(listener)
+        }
+        return scope
+    }
