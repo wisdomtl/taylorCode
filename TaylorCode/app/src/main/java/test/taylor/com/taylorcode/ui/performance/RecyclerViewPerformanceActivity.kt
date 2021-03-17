@@ -348,10 +348,12 @@ fun Activity.detectFrame() {
     window?.addOnFrameMetricsAvailableListener(Window.OnFrameMetricsAvailableListener { window, frameMetrics, dropCountSinceLastInvocation ->
         Log.v(
             "ttaylor", "drop count = ${dropCountSinceLastInvocation}, measure + layout=${frameMetrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1000000}, " +
-                    "    delay=${frameMetrics.getMetric(FrameMetrics.UNKNOWN_DELAY_DURATION) / 1000000}, " +
+                    "    unknown delay=${frameMetrics.getMetric(FrameMetrics.UNKNOWN_DELAY_DURATION) / 1000000}, " +
                     "    anim=${frameMetrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1000000}," +
                     "    touch=${frameMetrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1000000}, " +
                     "    draw=${frameMetrics.getMetric(FrameMetrics.DRAW_DURATION) / 1000000}, " +
+                    "   first draw = ${frameMetrics.getMetric(FrameMetrics.FIRST_DRAW_FRAME) != 0L}" +
+                    "   draw delay=${(frameMetrics.getMetric(FrameMetrics.VSYNC_TIMESTAMP) - frameMetrics.getMetric(FrameMetrics.INTENDED_VSYNC_TIMESTAMP) )/ 1000000}" +
                     "    total=${frameMetrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1000000}"
         )
     }, Handler())
