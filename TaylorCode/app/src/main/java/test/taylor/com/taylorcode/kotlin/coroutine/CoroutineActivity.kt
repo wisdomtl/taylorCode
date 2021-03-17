@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.Timer
+import java.lang.IllegalArgumentException
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 
@@ -32,6 +33,15 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             layout_width = match_parent
             layout_height = match_parent
             orientation = vertical
+
+            Button {
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                text = "supervisor Job"
+                textAllCaps = false
+                onClick = supervisorJob
+            }
 
             EditText {
                 layout_width = match_parent
@@ -335,6 +345,35 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 onClick = suspendCoroutine
             }
         }
+    }
+
+    /**
+     * SupervisorJob
+     */
+    private val supervisorJob = { _: View ->
+        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.v("ttaylor", "exception = $throwable")
+        }
+        // if child coroutine is not SupervisorJob ,exception will spread to outer coroutine
+        launch {
+            val job = launch(exceptionHandler) {
+                throw IllegalArgumentException("exception from inner coroutine")
+            }
+            job.join()
+            // it wont print
+            Log.v("ttaylor", "after child coroutine throw exception")
+        }
+
+        // if child coroutine is  SupervisorJob ,exception will not spread to outer coroutine
+        launch {
+            val job = launch(SupervisorJob() + exceptionHandler) {
+                throw IllegalArgumentException("exception from inner coroutine")
+            }
+            job.join()
+            // it will print
+            Log.v("ttaylor", "after child coroutine throw exception")
+        }
+        Unit
     }
 
     /**
