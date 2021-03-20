@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
+import test.taylor.com.taylorcode.ui.performance.load
 import test.taylor.com.taylorcode.ui.performance.viewScope
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
@@ -19,6 +20,7 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             LinearLayout {
+                layout_id = "container"
                 layout_width = match_parent
                 layout_height = wrap_content
                 orientation = vertical
@@ -94,7 +96,7 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
         holder.tvSumColumn?.text = data.countColumn
         holder.tvTitle?.text = data.title
 
-        (holder.itemView as? LinearLayout)?.apply {
+        holder.container?.apply {
             data.ranks.forEachIndexed { index, rank ->
                 // optimize: use PercentLayout is faster
                 PercentLayout {
@@ -120,16 +122,8 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
                         scaleType = scale_center_crop
                         center_vertical_of_percent = parent_id
                         left_percent = 0.15f
-                        Glide.with(this.context).load(rank.avatarUrl).into(this)
                         // optimize: use coroutine is faster
-//                        viewScope.launch {
-//                            val futureTask = Glide.with(this@ImageView.context).asBitmap().load(rank.avatarUrl).submit()
-//                            val bitmap = futureTask.get()
-//                            withContext(Dispatchers.Main) {
-//                                this@ImageView.setImageBitmap(bitmap)
-//                            }
-//                        }
-//                        this.load(rank.avatarUrl)
+                        load(rank.avatarUrl)
                     }
 
                     TextView {
@@ -175,16 +169,8 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
                         center_vertical_of_percent = "tvName"
                         start_to_end_of_percent = "tvName"
                         margin_start = 5
-                        Glide.with(this.context).load(rank.levelUrl).into(this)
                         // optimize: use coroutine is faster
-//                        viewScope.launch {
-//                            val futureTask = Glide.with(this@ImageView.context).asBitmap().load(rank.levelUrl).submit()
-//                            val bitmap = futureTask.get()
-//                            withContext(Dispatchers.Main) {
-//                                this@ImageView.setImageBitmap(bitmap)
-//                            }
-//                        }
-//                        this.load(rank.levelUrl)
+                        load(rank.levelUrl)
                     }
 
                     TextView {
@@ -237,6 +223,7 @@ class BetterRankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tvRankColumn = itemView.find<TextView>("tvRank")
     val tvAnchormanColumn = itemView.find<TextView>("tvName")
     val tvSumColumn = itemView.find<TextView>("tvCount")
+    val container = itemView.find<LinearLayout>("container")
 
 //    val tvTitle = itemView.find<TextView>("tvFansRankTitle")
 //    val tvRankColumn = itemView.find<TextView>("tvRankColumn")

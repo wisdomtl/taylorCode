@@ -8,12 +8,11 @@ import android.util.Log
 import android.view.FrameMetrics
 import android.view.View
 import android.view.Window
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
@@ -22,8 +21,6 @@ import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.better_performance1.RankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRankProxy
-import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorHeaderProxy
-import test.taylor.com.taylorcode.ui.performance.origin_performance.PoorRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by MainScope() {
@@ -353,7 +350,7 @@ fun Activity.detectFrame() {
                     "    touch=${frameMetrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1000000}, " +
                     "    draw=${frameMetrics.getMetric(FrameMetrics.DRAW_DURATION) / 1000000}, " +
                     "   first draw = ${frameMetrics.getMetric(FrameMetrics.FIRST_DRAW_FRAME) != 0L}" +
-                    "   draw delay=${(frameMetrics.getMetric(FrameMetrics.VSYNC_TIMESTAMP) - frameMetrics.getMetric(FrameMetrics.INTENDED_VSYNC_TIMESTAMP) )/ 1000000}" +
+                    "   draw delay=${(frameMetrics.getMetric(FrameMetrics.VSYNC_TIMESTAMP) - frameMetrics.getMetric(FrameMetrics.INTENDED_VSYNC_TIMESTAMP)) / 1000000}" +
                     "    total=${frameMetrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1000000}"
         )
     }, Handler())
@@ -379,3 +376,10 @@ val View.viewScope: CoroutineScope
         }
         return scope
     }
+
+fun ImageView.load(url: String) {
+    viewScope.launch {
+        val bitmap = Glide.with(context).asBitmap().load(url).submit().get()
+        withContext(Dispatchers.Main) { setImageBitmap(bitmap) }
+    }
+}

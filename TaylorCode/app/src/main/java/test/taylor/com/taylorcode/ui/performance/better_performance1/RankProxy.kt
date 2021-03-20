@@ -7,8 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.performance.load
+import test.taylor.com.taylorcode.ui.performance.viewScope
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
@@ -238,12 +243,15 @@ class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
     override fun onBindViewHolder(holder: RankViewHolder, data: Rank, index: Int, action: ((Any?) -> Unit)?) {
         val start = System.currentTimeMillis()
         holder.tvCount?.text = data.count.formatNums()
+
         holder.ivAvatar?.let {
             Glide.with(holder.ivAvatar.context).load(data.avatarUrl).into(it)
         }
         holder.ivLevel?.let {
             Glide.with(holder.ivLevel.context).load(data.levelUrl).into(it)
         }
+//        holder.ivAvatar?.load(data.avatarUrl)
+//        holder.ivLevel?.load(data.levelUrl)
         holder.tvRank?.text = data.rank.toString()
         holder.tvName?.text = data.name
         holder.tvLevel?.text = data.level.toString()
@@ -275,10 +283,10 @@ class RankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class RankViewHolder2(
     itemView: View,
     var tvRank: TextView,
-   var tvName: TextView,
-   var ivAvatar: ImageView,
-   var ivLevel: ImageView,
-   var tvCount: TextView,
-   var tvTag: TextView,
-   var tvLevel: TextView
+    var tvName: TextView,
+    var ivAvatar: ImageView,
+    var ivLevel: ImageView,
+    var tvCount: TextView,
+    var tvTag: TextView,
+    var tvLevel: TextView
 ) : RecyclerView.ViewHolder(itemView)
