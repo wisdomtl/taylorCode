@@ -175,7 +175,7 @@ class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>(
                         center_vertical_of_percent = "tvName"
                         start_to_end_of_percent = "tvName"
                         margin_start = 5
-                        Glide.with(this.context).load(rank.levelUrl).submit()
+                        Glide.with(this.context).load(rank.levelUrl).into(this)
                         // optimize: use coroutine is faster
 //                        viewScope.launch {
 //                            val futureTask = Glide.with(this@ImageView.context).asBitmap().load(rank.levelUrl).submit()
