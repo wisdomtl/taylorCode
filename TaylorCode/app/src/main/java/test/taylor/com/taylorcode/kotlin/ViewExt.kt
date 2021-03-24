@@ -1,5 +1,6 @@
 import android.graphics.*
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
@@ -97,7 +98,7 @@ fun RecyclerView.addTopBottomListener(listener: ((direction: Int) -> Unit)?) {
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (dy ==0) return
+            if (dy == 0) return
             if (!recyclerView.canScrollVertically(1)) {
                 listener?.invoke(2)
             } else if (!recyclerView.canScrollVertically(-1)) {
@@ -105,5 +106,14 @@ fun RecyclerView.addTopBottomListener(listener: ((direction: Int) -> Unit)?) {
             }
         }
     })
+}
+
+fun View.expand(x: Int, y: Int) {
+    fun layoutInAncestor(ancestor: ViewGroup, descendant: View): Rect =
+        Rect().also { ancestor.offsetDescendantRectToMyCoords(descendant, it) }.apply {
+            bottom = top + descendant.measuredHeight
+            right = left + descendant.measuredWidth
+        }
+    val rect = (parent as? ViewGroup)?.let { layoutInAncestor(it, this) }
 }
 

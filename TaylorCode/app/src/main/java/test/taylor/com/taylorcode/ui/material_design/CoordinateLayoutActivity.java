@@ -8,7 +8,7 @@ import android.view.View;
 
 import test.taylor.com.taylorcode.R;
 
-public class CoordinateActivity extends Activity {
+public class CoordinateLayoutActivity extends Activity {
 
     private View tvDependency;
     private int lastX;

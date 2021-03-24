@@ -98,7 +98,7 @@
         <activity android:name=".contact.ContactActivity"></activity>
         <activity android:name=".ui.DialogActivity"></activity>
         <activity android:name=".ui.touch_event.TouchEventActivity"></activity>
-        <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateActivity"></activity>
+        <activity android:name="test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity"></activity>
         <activity android:name=".ui.custom_view.blur.BlurActivity"> </activity>
         <activity android:name=".ui.window.WindowActivity"
             android:theme="@style/DialogActivity"></activity>
@@ -234,6 +234,7 @@
         <activity android:name=".ui.performance.widget.PercentActivity" />
         <activity android:name=".interview.InterViewActivity" />
         <activity android:name=".ui.custom_view.time_picker.TimePickerActivity" />
+        <activity android:name=".ui.TouchDelegateActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

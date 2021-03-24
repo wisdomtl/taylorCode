@@ -7,6 +7,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_coordinate_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CoordinateLayout"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_touch_delegate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="touch delegate"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_coroutine"
             android:layout_width="match_parent"
@@ -559,13 +573,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="RxBinding"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_coordinate_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CoordinateLayout"
             android:textAllCaps="false" />
 
         <Button

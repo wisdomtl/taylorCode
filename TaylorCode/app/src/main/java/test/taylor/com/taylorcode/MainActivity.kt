@@ -58,7 +58,7 @@ import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
-import test.taylor.com.taylorcode.ui.material_design.CoordinateActivity
+import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
@@ -141,7 +141,7 @@ class MainActivity : BaseActivity() {
         btn_constraint_layout.setOnClickListener { startActivity(ConstraintLayoutActivity::class.java) }
         btn_tab_layout.setOnClickListener { startActivity(TableLayoutActivity::class.java) }
         btn_dialog.setOnClickListener { startActivity(DialogActivity::class.java) }
-        btn_coordinate_layout.setOnClickListener { startActivity(CoordinateActivity::class.java) }
+        btn_coordinate_layout.setOnClickListener { startActivity(CoordinateLayoutActivity::class.java) }
         btn_rx_binding.setOnClickListener { startActivity(LoginActivity::class.java) }
         btn_surface_view.setOnClickListener { startActivity(SurfaceViewActivity::class.java) }
         btn_kotlin_activity.setOnClickListener { startActivity<KotlinActivity>() }
@@ -219,6 +219,7 @@ class MainActivity : BaseActivity() {
         btnPercentLayout.setOnClickListener { startActivity<PercentActivity>() }
         btnInterView.setOnClickListener { startActivity<InterViewActivity>() }
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
+        btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
