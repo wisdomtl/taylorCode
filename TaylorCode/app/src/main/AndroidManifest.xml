@@ -235,6 +235,7 @@
         <activity android:name=".interview.InterViewActivity" />
         <activity android:name=".ui.custom_view.time_picker.TimePickerActivity" />
         <activity android:name=".ui.TouchDelegateActivity" />
+        <activity android:name=".ui.material_design.nested.NestedScrollCoordinateLayoutActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

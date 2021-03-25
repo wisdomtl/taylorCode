@@ -59,6 +59,7 @@ import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
+import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
@@ -220,6 +221,7 @@ class MainActivity : BaseActivity() {
         btnInterView.setOnClickListener { startActivity<InterViewActivity>() }
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
+        btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

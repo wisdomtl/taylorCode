@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="title"
+        android:textSize="60sp"
+        android:gravity="center"
+        app:layout_behavior="test.taylor.com.taylorcode.ui.material_design.nested.ScrollBehavior"
+        android:layout_height="80dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        app:layout_behavior="test.taylor.com.taylorcode.ui.material_design.nested.RecyclerViewBehavior"
+        android:layout_height="wrap_content"/>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

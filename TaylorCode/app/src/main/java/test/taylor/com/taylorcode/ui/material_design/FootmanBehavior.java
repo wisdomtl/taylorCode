@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-public class FootmanBehavior extends CoordinatorLayout.Behavior<TextView> {//here is child which depend on dependency
+public class FootmanBehavior extends CoordinatorLayout.Behavior<TextView> {// define a behavior and which View could it belongs to
 
     private int lastDependencyX;
     private int lastDependencyY;
@@ -23,11 +23,25 @@ public class FootmanBehavior extends CoordinatorLayout.Behavior<TextView> {//her
         super(context, attrs);
     }
 
+    /**
+     * determine which view to depend on, if return true, meaning that the child view will be informed when the dependency view's layout changes
+     * @param parent
+     * @param child
+     * @param dependency
+     * @return
+     */
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, TextView child, View dependency) {
         return dependency instanceof TextView;
     }
 
+    /**
+     * what to do when the dependency view's layout is changing
+     * @param parent
+     * @param child
+     * @param dependency
+     * @return
+     */
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, TextView child, View dependency) {
         int dx = ((int) dependency.getX()) - lastDependencyX;
