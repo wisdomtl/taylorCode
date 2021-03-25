@@ -362,7 +362,7 @@ val View.viewScope: CoroutineScope
         var scope = getTag(key) as? CoroutineScope
         if (scope == null) {
             scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-            tag = key
+            setTag(key, scope)
             val listener = object : View.OnAttachStateChangeListener {
                 override fun onViewAttachedToWindow(v: View?) {
                 }
