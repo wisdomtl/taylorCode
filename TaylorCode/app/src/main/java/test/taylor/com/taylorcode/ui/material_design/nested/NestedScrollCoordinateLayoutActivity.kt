@@ -23,6 +23,12 @@ class NestedScrollCoordinateLayoutActivity : Activity() {
             "225",
             "226",
             "227",
+            "228",
+            "229",
+            "239",
+            "249",
+            "259",
+            "269",
         )
     }
     private val varietyAdapter = VarietyAdapter2().apply {
@@ -47,7 +53,7 @@ class TextProxy : VarietyAdapter2.Proxy<String, TextViewHolder>() {
             TextView {
                 layout_id = "tvChange"
                 layout_width = match_parent
-                layout_height = wrap_content
+                layout_height = 70
                 textSize = 30f
                 textColor = "#000000"
                 gravity = gravity_center
