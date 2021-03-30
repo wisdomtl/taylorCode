@@ -66,6 +66,7 @@ import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
+import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
@@ -222,6 +223,7 @@ class MainActivity : BaseActivity() {
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
+        recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>() }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

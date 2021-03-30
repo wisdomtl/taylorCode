@@ -8,6 +8,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <Button
+            android:id="@+id/recyclerview_item_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="recyclerview item anim"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_coordinate_layout2"
             android:layout_width="match_parent"
