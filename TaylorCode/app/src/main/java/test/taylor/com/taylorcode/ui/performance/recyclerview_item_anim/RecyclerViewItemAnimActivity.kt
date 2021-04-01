@@ -25,6 +25,8 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
         }
     }
 
+    private val id by Extras("id","0")
+
     private lateinit var rv: RecyclerView
 
     private val contentView by lazy {
@@ -46,6 +48,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         val texts = mutableListOf<String>()
+        Log.v("ttaylor","id from intent=$id")
         (1..200).forEach {
             texts.add(it.toString())
         }

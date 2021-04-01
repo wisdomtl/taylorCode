@@ -1,11 +1,14 @@
 package test.taylor.com.taylorcode.kotlin
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.constraint_layout_activity.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.data_persistence.Activity
 import test.taylor.com.taylorcode.util.ofMap
 import test.taylor.com.taylorcode.util.print
 import test.taylor.com.taylorcode.util.splitByDigit
@@ -31,52 +34,52 @@ class KotlinActivity : AppCompatActivity() {
         }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
 
 
-        Log.v("ttaylor","10000 = ${10000.format1}")
-        Log.v("ttaylor","19000 = ${19000.format1}")
-        Log.v("ttaylor","19900 = ${19900.format1}")
-        Log.v("ttaylor","19999 = ${19999.format1}")
-        Log.v("ttaylor","199990 = ${199990.format1}")
-        Log.v("ttaylor","100090 = ${100090.format1}")
-        Log.v("ttaylor","109990 = ${109090.format1}")
+        Log.v("ttaylor", "10000 = ${10000.format1}")
+        Log.v("ttaylor", "19000 = ${19000.format1}")
+        Log.v("ttaylor", "19900 = ${19900.format1}")
+        Log.v("ttaylor", "19999 = ${19999.format1}")
+        Log.v("ttaylor", "199990 = ${199990.format1}")
+        Log.v("ttaylor", "100090 = ${100090.format1}")
+        Log.v("ttaylor", "109990 = ${109090.format1}")
 
         /**
          * val and var
          */
-        class ClassA(val list:List<String>){
-            fun print(){
-                list.print { it }.let { Log.v("ttaylor","val list=${it}") }
+        class ClassA(val list: List<String>) {
+            fun print() {
+                list.print { it }.let { Log.v("ttaylor", "val list=${it}") }
             }
         }
 
-        var listA = mutableListOf<String>("a","b","c")
+        var listA = mutableListOf<String>("a", "b", "c")
         val classA = ClassA(listA)
         classA.print()
-        listA = mutableListOf("1","2","3")
+        listA = mutableListOf("1", "2", "3")
         classA.print()
 
 
-        class ClassB(var list:List<String>){
-            fun print(){
-                list.print { it }.let { Log.v("ttaylor","var list=${it}") }
+        class ClassB(var list: List<String>) {
+            fun print() {
+                list.print { it }.let { Log.v("ttaylor", "var list=${it}") }
             }
         }
-        var listB = mutableListOf<String>("a","b","c")
+
+        var listB = mutableListOf<String>("a", "b", "c")
         val classB = ClassB(listB)
         classB.print()
-        listB = mutableListOf("1","2","3")
+        listB = mutableListOf("1", "2", "3")
         classB.print()
 
         /**
          * sub string before and after
          */
         val string2 = "abcccdef"
-        Log.v("ttaylor","sub string before = ${string2.substringBefore("ccc")} sub string after = ${string2.substringAfter("ccc")}")
+        Log.v("ttaylor", "sub string before = ${string2.substringBefore("ccc")} sub string after = ${string2.substringAfter("ccc")}")
 
         data class D1(var string: String) {
             fun copy() = D1(string)
@@ -99,13 +102,13 @@ class KotlinActivity : AppCompatActivity() {
         val d2 = data1.getOrNull(1) as? D2 ?: return
         val target = d2.strings.find { it.string == "bbbb" } ?: return
         val index = d2.strings.indexOf(target)
-        val newTarget = target.copy().apply { string = "changed bbbb"}
+        val newTarget = target.copy().apply { string = "changed bbbb" }
         val newTargetList = d2.strings.toMutableList().apply {
-            set(index,newTarget)
+            set(index, newTarget)
         }
-        d2.ofMap()?.print().let { Log.v("ttaylor","change list, old list = $it") }
+        d2.ofMap()?.print().let { Log.v("ttaylor", "change list, old list = $it") }
         d2.strings = newTargetList
-        d2.ofMap()?.print().let { Log.v("ttaylor","change list, new list = $it") }
+        d2.ofMap()?.print().let { Log.v("ttaylor", "change list, new list = $it") }
 
         /**
          * change of list
@@ -523,4 +526,23 @@ class textCompanionObjec {
     object CC {
         fun doB() {}
     }
+}
+
+interface Accessory {
+    fun name(): String
+    fun cost(): Int
+    fun id(): String = UUID.randomUUID().toString()
+}
+
+class Extras<out T>(private val key: String, private val default: T) {
+    operator fun getValue(thisRef: Any, kProperty: KProperty<*>): T? =
+        when (thisRef) {
+            is android.app.Activity -> {
+                thisRef.intent?.extras?.get(key) as? T ?: default
+            }
+            is Fragment -> {
+                thisRef.arguments?.get(key) as? T ?: default
+            }
+            else -> default
+        }
 }

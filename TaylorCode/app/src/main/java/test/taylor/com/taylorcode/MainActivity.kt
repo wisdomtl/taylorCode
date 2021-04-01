@@ -223,7 +223,7 @@ class MainActivity : BaseActivity() {
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
-        recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>() }
+        recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>{ } }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
@@ -341,8 +341,8 @@ class MainActivity : BaseActivity() {
 /**
  * reified case: type wont be erased
  */
-inline fun <reified T> Context.startActivity() {
-    Intent(this, T::class.java).also { startActivity(it) }
+inline fun <reified T> Context.startActivity(extras: Intent.() ->Unit = {}) {
+    Intent(this, T::class.java).apply(extras).also { startActivity(it) }
 }
 
 fun Float.cutEndZero(): String = this.toString().reversed().let {
