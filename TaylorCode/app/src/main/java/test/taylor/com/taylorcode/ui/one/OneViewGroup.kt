@@ -14,43 +14,21 @@ import androidx.annotation.RequiresApi
 @RequiresApi(Build.VERSION_CODES.M)
 class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    private var textPaint: TextPaint? = null
-    private var staticLayout: StaticLayout? = null
-    var text: CharSequence = ""
-    var textSize: Float = 0f
-    var textColor: Int = Color.parseColor("#ff00ff")
-    var textWidth: Int = 0
-    var spaceAdd: Float = 0f
-    var spcaeMult: Float = 1.0f
+    private val drawables = mutableListOf<Drawable>()
 
-
+    fun addDrawable(drawable: Drawable) {
+        drawables.add(drawable)
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-        if (textPaint == null) {
-            textPaint = TextPaint().apply {
-                isAntiAlias = true
-                textSize = this@OneViewGroup.textSize
-                color = textColor
-            }
-        }
-
-        if (staticLayout == null) {
-            staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, textWidth)
-                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
-                .setLineSpacing(spaceAdd, spcaeMult)
-                .setIncludePad(false)
-                .build()
-        }
+        drawables.forEach { it.measure(widthMeasureSpec, heightMeasureSpec) }
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
         canvas?.save()
-        canvas?.translate(paddingLeft.toFloat(), paddingTop.toFloat())
-        staticLayout?.draw(canvas)
+        drawables.forEach { it.draw(canvas) }
         canvas?.restore()
     }
 
@@ -68,10 +46,30 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         var textWidth: Int = 0
         var spaceAdd: Float = 0f
         var spcaeMult: Float = 1.0f
+        var left = 0f
+        var top = 0f
+
         override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+            if (textPaint == null) {
+                textPaint = TextPaint().apply {
+                    isAntiAlias = true
+                    textSize = this@Text.textSize
+                    color = textColor
+                }
+            }
+
+            if (staticLayout == null) {
+                staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, textWidth)
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(spaceAdd, spcaeMult)
+                    .setIncludePad(false)
+                    .build()
+            }
         }
 
         override fun draw(canvas: Canvas?) {
+            canvas?.translate(left, top)
+            staticLayout?.draw(canvas)
         }
     }
 
@@ -84,3 +82,9 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun OneViewGroup.text(init: OneViewGroup.Text.() -> Unit) = OneViewGroup.Text().apply(init).also { addDrawable(it) }
+
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun OneViewGroup.image(init: OneViewGroup.Image.() -> Unit) = OneViewGroup.Image().apply(init).also { addDrawable(it) }
