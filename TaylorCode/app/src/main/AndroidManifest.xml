@@ -237,6 +237,7 @@
         <activity android:name=".ui.TouchDelegateActivity" />
         <activity android:name=".ui.material_design.nested.NestedScrollCoordinateLayoutActivity" />
         <activity android:name=".ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity" />
+        <activity android:name=".ui.one.OneActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -63,6 +63,8 @@ import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordina
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
+import test.taylor.com.taylorcode.ui.one.OneActivity
+import test.taylor.com.taylorcode.ui.one.OneViewGroup
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
@@ -224,6 +226,7 @@ class MainActivity : BaseActivity() {
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
         recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>{ } }
+        oneViewGroup.setOnClickListener { startActivity<OneActivity>{ } }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
