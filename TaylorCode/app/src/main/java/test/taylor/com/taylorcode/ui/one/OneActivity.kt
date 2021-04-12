@@ -31,15 +31,30 @@ class OneActivity : AppCompatActivity() {
                     textColor = "#ffffff"
                     leftPercent = 0.2f
                     topPercent = 0.2f
+                    paddingStart = 30
+                    paddingEnd = 30
+                    shape = shape {
+                        color = "#ff0000"
+                        radius = 20f
+                    }
                 }
 
                 text {
-                    maxWidth = 60
+                    maxWidth = 80
                     text = "content"
                     textSize = 15f
                     textColor ="#88ffffff"
                     topToBottomOf = "title"
                     startToStartOf = "title"
+                    gravity = gravity_center
+                    paddingStart = 8
+                    paddingTop = 5
+                    paddingBottom = 5
+                    paddingEnd = 8
+                    shape = shape {
+                        color = "#ff0000"
+                        radius = 10f
+                    }
                 }
 
                 text {

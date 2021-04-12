@@ -3,6 +3,7 @@ package test.taylor.com.taylorcode.ui.one
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Build
 import android.text.Layout
 import android.text.StaticLayout
@@ -125,12 +126,6 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         var bottomToBottomOf: String = ""
         var centerHorizontalOf: String = ""
         var centerVerticalOf: String = ""
-        var width = 0
-        internal val _width: Int
-            get() = width.dp
-        var height = 0
-        internal val _height: Int
-            get() = height.dp
         var topMargin = 0
         internal val _topMargin: Int
             get() = topMargin.dp
@@ -144,18 +139,41 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         internal val _rightMargin: Int
             get() = rightMargin.dp
 
+        /**
+         * dimension of [Drawable]
+         */
+        var width = 0
+        internal val _width: Int
+            get() = width.dp
+        var height = 0
+        internal val _height: Int
+            get() = height.dp
+
+        /**
+         * the measured dimension of [Drawable]
+         */
         internal var measuredWidth = 0
         internal var measuredHeight = 0
 
+        /**
+         * the frame rect of [Drawable]
+         */
         var left = 0
         var right = 0
         var top = 0
         var bottom = 0
+        var paddingStart = 0
+        var paddingEnd = 0
+        var paddingTop = 0
+        var paddingBottom = 0
 
 
         abstract fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int)
         abstract fun draw(canvas: Canvas?)
 
+        /**
+         * the the frame rect of [Drawable] is set after this function
+         */
         fun setRect(left: Int, top: Int, right: Int, bottom: Int) {
             this.left = left
             this.right = right
@@ -163,6 +181,9 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
             this.bottom = bottom
         }
 
+        /**
+         * the measured width and height of [Drawable] is set after this function
+         */
         fun setDimension(width: Int, height: Int) {
             this.measuredWidth = width
             this.measuredHeight = height
@@ -182,8 +203,20 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         var spaceMulti: Float = 1.0f
         var maxLines = 1
         var maxWidth = 0
+
+        var gravity: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL
         private val _maxWidth: Int
             get() = maxWidth.dp
+        var shapePaint: Paint? = null
+        var shape: Shape? = null
+            set(value) {
+                field = value
+                shapePaint = Paint().apply {
+                    isAntiAlias = true
+                    style = Paint.Style.FILL
+                    color = Color.parseColor(value?.color)
+                }
+            }
 
         override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
             if (textPaint == null) {
@@ -197,7 +230,7 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
             val measureWidth = if (_width != 0) _width else min(textPaint!!.measureText(text.toString()).toInt(), _maxWidth)
             if (staticLayout == null) {
                 staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, measureWidth)
-                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setAlignment(gravity)
                     .setLineSpacing(spaceAdd, spaceMulti)
                     .setIncludePad(false)
                     .setMaxLines(maxLines)
@@ -205,14 +238,22 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             val measureHeight = staticLayout!!.height
-            setDimension(measureWidth, measureHeight)
+            setDimension(measureWidth + paddingEnd + paddingStart, measureHeight + paddingTop + paddingBottom)
         }
 
         override fun draw(canvas: Canvas?) {
             canvas?.save()
             canvas?.translate(left.toFloat(), top.toFloat())
+            drawBackground(canvas)
+            canvas?.translate(paddingStart.toFloat(), paddingTop.toFloat())
             staticLayout?.draw(canvas)
             canvas?.restore()
+        }
+
+        private fun drawBackground(canvas: Canvas?) {
+            shape?.let { shape ->
+                canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), shape._radius, shape._radius, shapePaint!!)
+            }
         }
     }
 
@@ -224,6 +265,15 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
 
     }
+
+    class Shape {
+        var color: String? = null
+        var colors: List<String>? = null
+        var radius: Float = 0f
+        internal val _radius: Float
+            get() = radius.dp
+        var radii: IntArray? = null
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -234,3 +284,8 @@ inline fun OneViewGroup.image(init: OneViewGroup.Image.() -> Unit) = OneViewGrou
 
 val OneViewGroup.parent_id: String
     get() = "-1"
+
+fun OneViewGroup.shape(init: OneViewGroup.Shape.() -> Unit): OneViewGroup.Shape = OneViewGroup.Shape().apply(init)
+
+val gravity_center = Layout.Alignment.ALIGN_CENTER
+val gravity_left = Layout.Alignment.ALIGN_NORMAL
