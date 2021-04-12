@@ -35,7 +35,10 @@ class OneActivity : AppCompatActivity() {
                     paddingEnd = 30
                     shape = shape {
                         color = "#ff0000"
-                        radius = 20f
+                        corners = corners{
+                            leftBottomRx = 20f
+                            LeftBottomRy = 20f
+                        }
                     }
                 }
 

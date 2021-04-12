@@ -1,9 +1,7 @@
 package test.taylor.com.taylorcode.ui.one
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.os.Build
 import android.text.Layout
 import android.text.StaticLayout
@@ -190,18 +188,6 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-    /**
-     * a round rect shows in background
-     */
-    class Shape {
-        var color: String? = null
-        var colors: List<String>? = null
-        var radius: Float = 0f
-        internal val _radius: Float
-            get() = radius.dp
-        var radii: IntArray? = null
-    }
 }
 
 
@@ -237,7 +223,7 @@ class Text : OneViewGroup.Drawable() {
     private val _maxWidth: Int
         get() = maxWidth.dp
     var shapePaint: Paint? = null
-    var shape: OneViewGroup.Shape? = null
+    var shape: Shape? = null
         set(value) {
             field = value
             shapePaint = Paint().apply {
@@ -263,8 +249,8 @@ class Text : OneViewGroup.Drawable() {
                 .setAlignment(gravity)
                 .setLineSpacing(spaceAdd, spaceMulti)
                 .setIncludePad(false)
-                .setMaxLines(maxLines)
-                .build()
+
+                .setMaxLines(maxLines)            .build()
         }
 
         val measureHeight = staticLayout!!.height
@@ -281,9 +267,51 @@ class Text : OneViewGroup.Drawable() {
     }
 
     private fun drawBackground(canvas: Canvas?) {
-        shape?.let { shape ->
-            canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), shape._radius, shape._radius, shapePaint!!)
+        if (shape == null) return
+        val _shape = shape!!
+        if (_shape.radius != 0f) {
+            canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), _shape._radius, _shape._radius, shapePaint!!)
+        } else if (_shape.corners != null) {
+            _shape.path!!.apply {
+                addRoundRect(
+                    RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat()),
+                    _shape.corners!!.radii,
+                    Path.Direction.CCW
+                )
+            }
+            canvas?.drawPath(_shape.path!!, shapePaint!!)
         }
+    }
+}
+
+/**
+ * a round rect shows in background
+ */
+class Shape {
+    var color: String? = null
+    var colors: List<String>? = null
+    var radius: Float = 0f
+    internal val _radius: Float
+        get() = radius.dp
+    internal var path: Path? = null
+    var corners: Corners? = null
+        set(value) {
+            field = value
+            path = Path()
+        }
+
+    class Corners(
+        var leftTopRx: Float = 0f,
+        var leftTopRy: Float = 0f,
+        var leftBottomRx: Float = 0f,
+        var LeftBottomRy: Float = 0f,
+        var rightTopRx: Float = 0f,
+        var rightTopRy: Float = 0f,
+        var rightBottomRx: Float = 0f,
+        var rightBottomRy: Float = 0f
+    ) {
+        val radii: FloatArray
+            get() = floatArrayOf(leftTopRx, leftTopRy, rightTopRx, rightTopRy, rightBottomRx, rightBottomRy, leftBottomRx, LeftBottomRy)
     }
 }
 
@@ -296,7 +324,9 @@ inline fun OneViewGroup.image(init: Image.() -> Unit) = Image().apply(init).also
 val OneViewGroup.parent_id: String
     get() = "-1"
 
-fun OneViewGroup.shape(init: OneViewGroup.Shape.() -> Unit): OneViewGroup.Shape = OneViewGroup.Shape().apply(init)
+fun OneViewGroup.shape(init: Shape.() -> Unit): Shape = Shape().apply(init)
+
+fun Shape.corners(init: Shape.Corners.() -> Unit): Shape.Corners = Shape.Corners().apply(init)
 
 val gravity_center = Layout.Alignment.ALIGN_CENTER
 val gravity_left = Layout.Alignment.ALIGN_NORMAL

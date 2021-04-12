@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.custom_view.clip_path.Corners
-import test.taylor.com.taylorcode.ui.custom_view.clip_path.crop
 import test.taylor.com.taylorcode.ui.custom_view.clip_path.crop2
 
 class ShaderActivity : AppCompatActivity() {
