@@ -190,82 +190,10 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    class Text : Drawable() {
-        private var textPaint: TextPaint? = null
-        private var staticLayout: StaticLayout? = null
 
-        var text: CharSequence = ""
-        var textSize: Float = 0f
-        private val _textSize: Float
-            get() = textSize.dp
-        var textColor: String = "#ffffff"
-        var spaceAdd: Float = 0f
-        var spaceMulti: Float = 1.0f
-        var maxLines = 1
-        var maxWidth = 0
-
-        var gravity: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL
-        private val _maxWidth: Int
-            get() = maxWidth.dp
-        var shapePaint: Paint? = null
-        var shape: Shape? = null
-            set(value) {
-                field = value
-                shapePaint = Paint().apply {
-                    isAntiAlias = true
-                    style = Paint.Style.FILL
-                    color = Color.parseColor(value?.color)
-                }
-            }
-
-        override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-            if (textPaint == null) {
-                textPaint = TextPaint().apply {
-                    isAntiAlias = true
-                    textSize = this@Text._textSize
-                    color = Color.parseColor(textColor)
-                }
-            }
-
-            val measureWidth = if (_width != 0) _width else min(textPaint!!.measureText(text.toString()).toInt(), _maxWidth)
-            if (staticLayout == null) {
-                staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, measureWidth)
-                    .setAlignment(gravity)
-                    .setLineSpacing(spaceAdd, spaceMulti)
-                    .setIncludePad(false)
-                    .setMaxLines(maxLines)
-                    .build()
-            }
-
-            val measureHeight = staticLayout!!.height
-            setDimension(measureWidth + paddingEnd + paddingStart, measureHeight + paddingTop + paddingBottom)
-        }
-
-        override fun draw(canvas: Canvas?) {
-            canvas?.save()
-            canvas?.translate(left.toFloat(), top.toFloat())
-            drawBackground(canvas)
-            canvas?.translate(paddingStart.toFloat(), paddingTop.toFloat())
-            staticLayout?.draw(canvas)
-            canvas?.restore()
-        }
-
-        private fun drawBackground(canvas: Canvas?) {
-            shape?.let { shape ->
-                canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), shape._radius, shape._radius, shapePaint!!)
-            }
-        }
-    }
-
-    class Image : Drawable() {
-        override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        }
-
-        override fun draw(canvas: Canvas?) {
-        }
-
-    }
-
+    /**
+     * a round rect shows in background
+     */
     class Shape {
         var color: String? = null
         var colors: List<String>? = null
@@ -276,11 +204,94 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
-inline fun OneViewGroup.text(init: OneViewGroup.Text.() -> Unit) = OneViewGroup.Text().apply(init).also { addDrawable(it) }
+
+/**
+ * one kind of drawable shows image
+ */
+class Image : OneViewGroup.Drawable() {
+    override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    }
+
+    override fun draw(canvas: Canvas?) {
+    }
+}
+
+/**
+ *  one kind of drawable shows text
+ */
+class Text : OneViewGroup.Drawable() {
+    private var textPaint: TextPaint? = null
+    private var staticLayout: StaticLayout? = null
+
+    var text: CharSequence = ""
+    var textSize: Float = 0f
+    private val _textSize: Float
+        get() = textSize.dp
+    var textColor: String = "#ffffff"
+    var spaceAdd: Float = 0f
+    var spaceMulti: Float = 1.0f
+    var maxLines = 1
+    var maxWidth = 0
+
+    var gravity: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL
+    private val _maxWidth: Int
+        get() = maxWidth.dp
+    var shapePaint: Paint? = null
+    var shape: OneViewGroup.Shape? = null
+        set(value) {
+            field = value
+            shapePaint = Paint().apply {
+                isAntiAlias = true
+                style = Paint.Style.FILL
+                color = Color.parseColor(value?.color)
+            }
+        }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        if (textPaint == null) {
+            textPaint = TextPaint().apply {
+                isAntiAlias = true
+                textSize = this@Text._textSize
+                color = Color.parseColor(textColor)
+            }
+        }
+
+        val measureWidth = if (_width != 0) _width else min(textPaint!!.measureText(text.toString()).toInt(), _maxWidth)
+        if (staticLayout == null) {
+            staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, measureWidth)
+                .setAlignment(gravity)
+                .setLineSpacing(spaceAdd, spaceMulti)
+                .setIncludePad(false)
+                .setMaxLines(maxLines)
+                .build()
+        }
+
+        val measureHeight = staticLayout!!.height
+        setDimension(measureWidth + paddingEnd + paddingStart, measureHeight + paddingTop + paddingBottom)
+    }
+
+    override fun draw(canvas: Canvas?) {
+        canvas?.save()
+        canvas?.translate(left.toFloat(), top.toFloat())
+        drawBackground(canvas)
+        canvas?.translate(paddingStart.toFloat(), paddingTop.toFloat())
+        staticLayout?.draw(canvas)
+        canvas?.restore()
+    }
+
+    private fun drawBackground(canvas: Canvas?) {
+        shape?.let { shape ->
+            canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), shape._radius, shape._radius, shapePaint!!)
+        }
+    }
+}
 
 @RequiresApi(Build.VERSION_CODES.M)
-inline fun OneViewGroup.image(init: OneViewGroup.Image.() -> Unit) = OneViewGroup.Image().apply(init).also { addDrawable(it) }
+inline fun OneViewGroup.text(init: Text.() -> Unit) = Text().apply(init).also { addDrawable(it) }
+
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun OneViewGroup.image(init: Image.() -> Unit) = Image().apply(init).also { addDrawable(it) }
 
 val OneViewGroup.parent_id: String
     get() = "-1"
