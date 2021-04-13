@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.kotlin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.Indicator
+import test.taylor.com.taylorcode.ui.one.OneViewGroup
 import test.taylor.com.taylorcode.ui.performance.widget.PercentLayout
 import kotlin.math.abs
 
@@ -361,6 +363,25 @@ inline fun ViewGroup.ViewPager2(
 }
 
 /**
+ * create [OneViewGroup] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [OneViewGroup] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun ViewGroup.OneViewGroup(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: OneViewGroup.() -> Unit
+): OneViewGroup {
+    val oneViewGroup =
+        if (style != null) OneViewGroup(
+            ContextThemeWrapper(context, style)
+        ) else OneViewGroup(context)
+    return oneViewGroup.apply(init).also { if (autoAdd) addView(it) }
+}
+
+/**
  * create [Guideline] instance within a [ConstraintLayout]
  * @param style an style int value defined in xml
  * @param autoAdd whether add [Guideline] into [ConstraintLayout] automatically
@@ -488,6 +509,20 @@ inline fun Context.PercentLayout(style: Int? = null, init: PercentLayout.() -> U
             ContextThemeWrapper(this, style)
         ) else PercentLayout(this)
     return percentLayout.apply(init)
+}
+
+/**
+ * create [OneViewGroup] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun Context.OneViewGroup(style: Int? = null, init: OneViewGroup.() -> Unit): OneViewGroup {
+    val oneViewGroup =
+        if (style != null) OneViewGroup(
+            ContextThemeWrapper(this, style)
+        ) else OneViewGroup(this)
+    return oneViewGroup.apply(init)
 }
 
 /**

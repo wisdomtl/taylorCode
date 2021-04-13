@@ -21,6 +21,7 @@ import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.better_performance1.RankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRankProxy
+import test.taylor.com.taylorcode.ui.performance.better_performance3.OneRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by MainScope() {
@@ -34,7 +35,10 @@ class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by M
 //        addProxy(RankProxy())
 
 //        // one item
-        addProxy(BetterRankProxy())
+//        addProxy(BetterRankProxy())
+
+        //OneViewGroup
+        addProxy(OneRankProxy())
     }
 
     private val contentView by lazy {

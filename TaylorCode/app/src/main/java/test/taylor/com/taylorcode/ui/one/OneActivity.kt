@@ -1,10 +1,10 @@
 package test.taylor.com.taylorcode.ui.one
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 
@@ -24,16 +24,16 @@ class OneActivity : AppCompatActivity() {
                 center_vertical = true
 
                 text {
-                    layout_id = "title"
-                    max_width = 100
+                    drawable_layout_id = "title"
+                    drawable_max_width = 100
                     text = "title"
-                    text_size = 40f
-                    text_color = "#ffffff"
+                    drawable_text_size = 40f
+                    drawable_text_color = "#ffffff"
                     leftPercent = 0.2f
                     topPercent = 0.2f
-                    padding_start = 10
-                    padding_end = 10
-                    shape = shape {
+                    drawable_padding_start = 10
+                    drawable_padding_end = 10
+                    drawableShape = drawableShape {
                         color = "#ff0000"
                         corners = corners{
                             leftBottomRx = 20f
@@ -43,50 +43,69 @@ class OneActivity : AppCompatActivity() {
                 }
 
                 text {
-                    max_width = 80
+                    drawable_layout_id = "content"
+                    drawable_max_width = 80
                     text = "content"
-                    text_size = 15f
-                    text_color ="#88ffffff"
-                    top_to_bottom_of = "title"
-                    start_to_start_of = "title"
+                    drawable_text_size = 15f
+                    drawable_text_color ="#88ffffff"
+                    drawable_top_to_bottom_of = "title"
+                    drawable_start_to_start_of = "title"
                     gravity = gravity_center
-                    padding_start = 8
-                    padding_top = 5
-                    padding_bottom = 5
-                    padding_end = 8
-                    shape = shape {
+                    drawable_padding_start = 8
+                    drawable_padding_top = 5
+                    drawable_padding_bottom = 5
+                    drawable_padding_end = 8
+                    drawableShape = drawableShape {
                         color = "#ff0000"
                         radius = 10f
                     }
                 }
 
                 text {
-                    max_width = 70
+                    drawable_max_width = 70
                     text = "subTitle"
-                    text_size = 18f
-                    text_color = "#ffffff"
-                    center_vertical_of = "title"
-                    start_to_end_of = "title"
+                    drawable_text_size = 18f
+                    drawable_text_color = "#ffffff"
+                    drawable_center_vertical_of = "title"
+                    drawable_start_to_end_of = "title"
                 }
 
                 text {
-                    max_width = 70
+                    drawable_max_width = 70
                     text = "left"
-                    text_size = 15f
-                    text_color = "#ffffff"
-                    end_to_start_of = "title"
-                    center_vertical_of = "title"
-                    right_margin = 10
+                    drawable_text_size = 15f
+                    drawable_text_color = "#ffffff"
+                    drawable_end_to_start_of = "title"
+                    drawable_center_vertical_of = "title"
+                    drawable_right_margin = 10
                 }
 
                 text {
                     maxWidth = 70
                     text = "top"
-                    text_size = 15f
-                    text_color = "#ffffff"
-                    bottom_to_top_of = "title"
-                    center_horizontal_of = "title"
-                    bottom_margin = 20
+                    drawable_text_size = 15f
+                    drawable_text_color = "#ffffff"
+                    drawable_bottom_to_top_of = "title"
+                    drawable_center_horizontal_of = "title"
+                    drawable_bottom_margin = 20
+                }
+
+                image {
+                    layout_width = 40
+                    layout_height = 40
+                    scaleType = scale_fit_xy
+                    src = R.drawable.old_man
+                    drawable_top_to_bottom_of = "content"
+                    drawable_start_to_start_of = "content"
+                }
+
+                image {
+                    layout_width = 40
+                    layout_height = 40
+                    scaleType = scale_fit_xy
+                    src = R.drawable.old_man
+                    drawable_start_to_end_of  = "content"
+                    drawable_center_vertical_of = "content"
                 }
 
             }.also { addView(it) }

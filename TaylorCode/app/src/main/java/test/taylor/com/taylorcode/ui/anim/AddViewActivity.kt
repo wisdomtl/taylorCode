@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.ui.anim
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.kotlin.*

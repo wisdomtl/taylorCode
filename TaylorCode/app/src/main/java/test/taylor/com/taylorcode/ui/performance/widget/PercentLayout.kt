@@ -13,7 +13,7 @@ import test.taylor.com.taylorcode.kotlin.toLayoutId
  *
  * [PercentLayout] must have a specific width or height, or the children view of it will have no idea where to locate.
  */
-class PercentLayout
+open class PercentLayout
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
     private val childMap = SparseArray<View>()

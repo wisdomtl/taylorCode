@@ -7,13 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.performance.load
-import test.taylor.com.taylorcode.ui.performance.viewScope
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
