@@ -10,12 +10,14 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.RequiresApi
 import test.taylor.com.taylorcode.kotlin.dp
+import test.taylor.com.taylorcode.kotlin.sp
+import test.taylor.com.taylorcode.kotlin.toLayoutId
 import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.M)
 class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    private val drawableMap = HashMap<String, Drawable>()
+    private val drawableMap = HashMap<Int, Drawable>()
     private val drawables = mutableListOf<Drawable>()
 
     fun addDrawable(drawable: Drawable) {
@@ -44,109 +46,68 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun getChildTop(drawable: Drawable, parentHeight: Int): Int {
+        val parentId = test.taylor.com.taylorcode.kotlin.parent_id.toLayoutId()
         return when {
             drawable.topPercent != -1f -> (parentHeight * drawable.topPercent).toInt()
-            drawable.centerVerticalOf.isNotEmpty() -> {
-                if (drawable.centerVerticalOf == parent_id) {
-                    (parentHeight - drawable._height) / 2
+            drawable.centerVerticalOf != -1 -> {
+                if (drawable.centerVerticalOf == parentId) {
+                    (parentHeight - drawable.height) / 2
                 } else {
                     (drawableMap[drawable.centerVerticalOf]?.let { it.top + (it.bottom - it.top) / 2 } ?: 0) - drawable.measuredHeight / 2
                 }
             }
-            drawable.topToBottomOf.isNotEmpty() -> {
-                val b = if (drawable.topToBottomOf == parent_id) bottom else drawableMap[drawable.topToBottomOf]?.bottom ?: 0
-                (b + drawable._topMargin)
+            drawable.topToBottomOf != -1 -> {
+                val b = if (drawable.topToBottomOf == parentId) bottom else drawableMap[drawable.topToBottomOf]?.bottom ?: 0
+                (b + drawable.topMargin)
             }
-            drawable.topToTopOf.isNotEmpty() -> {
-                val t = if (drawable.topToTopOf == parent_id) top else drawableMap[drawable.topToTopOf]?.top ?: 0
-                (t + drawable._topMargin)
+            drawable.topToTopOf != -1 -> {
+                val t = if (drawable.topToTopOf == parentId) top else drawableMap[drawable.topToTopOf]?.top ?: 0
+                (t + drawable.topMargin)
             }
-            drawable.bottomToTopOf.isNotEmpty() -> {
-                val t = if (drawable.bottomToTopOf == parent_id) top else drawableMap[drawable.bottomToTopOf]?.top ?: 0
-                (t - drawable._bottomMargin) - drawable.measuredHeight
+            drawable.bottomToTopOf != -1 -> {
+                val t = if (drawable.bottomToTopOf == parentId) top else drawableMap[drawable.bottomToTopOf]?.top ?: 0
+                (t - drawable.bottomMargin) - drawable.measuredHeight
             }
-            drawable.bottomToBottomOf.isNotEmpty() -> {
-                val b = if (drawable.bottomToBottomOf == parent_id) bottom else drawableMap[drawable.bottomToBottomOf]?.bottom ?: 0
-                (b - drawable._bottomMargin) - drawable.measuredHeight
+            drawable.bottomToBottomOf != -1 -> {
+                val b = if (drawable.bottomToBottomOf == parentId) bottom else drawableMap[drawable.bottomToBottomOf]?.bottom ?: 0
+                (b - drawable.bottomMargin) - drawable.measuredHeight
             }
             else -> 0
         }
     }
 
     private fun getChildLeft(drawable: Drawable, parentWidth: Int): Int {
+        val parentId = test.taylor.com.taylorcode.kotlin.parent_id.toLayoutId()
         return when {
             drawable.leftPercent != -1f -> (parentWidth * drawable.leftPercent).toInt()
-            drawable.centerHorizontalOf.isNotEmpty() -> {
-                if (drawable.centerHorizontalOf == parent_id) {
-                    (parentWidth - drawable._width) / 2
+            drawable.centerHorizontalOf != -1 -> {
+                if (drawable.centerHorizontalOf == parentId) {
+                    (parentWidth - drawable.width) / 2
                 } else {
                     (drawableMap[drawable.centerHorizontalOf]?.let { it.left + (it.right - it.left) / 2 } ?: 0) - drawable.measuredWidth / 2
                 }
             }
-            drawable.startToEndOf.isNotEmpty() -> {
-                val r = if (drawable.startToEndOf == parent_id) right else drawableMap[drawable.startToEndOf]?.right ?: 0
-                (r + drawable._leftMargin)
+            drawable.startToEndOf != -1 -> {
+                val r = if (drawable.startToEndOf == parentId) right else drawableMap[drawable.startToEndOf]?.right ?: 0
+                (r + drawable.leftMargin)
             }
-            drawable.startToStartOf.isNotEmpty() -> {
-                val l = if (drawable.startToStartOf == parent_id) left else drawableMap[drawable.startToStartOf]?.left ?: 0
-                (l + drawable._leftMargin)
+            drawable.startToStartOf != -1 -> {
+                val l = if (drawable.startToStartOf == parentId) left else drawableMap[drawable.startToStartOf]?.left ?: 0
+                (l + drawable.leftMargin)
             }
-            drawable.endToStartOf.isNotEmpty() -> {
-                val l = if (drawable.endToStartOf == parent_id) left else drawableMap[drawable.endToStartOf]?.left ?: 0
-                (l - drawable._rightMargin) - drawable.measuredWidth
+            drawable.endToStartOf != -1 -> {
+                val l = if (drawable.endToStartOf == parentId) left else drawableMap[drawable.endToStartOf]?.left ?: 0
+                (l - drawable.rightMargin) - drawable.measuredWidth
             }
-            drawable.endToEndOf.isNotEmpty() -> {
-                val r = if (drawable.endToEndOf == parent_id) right else drawableMap[drawable.endToEndOf]?.right ?: 0
-                (r - drawable._rightMargin) - drawable.measuredWidth
+            drawable.endToEndOf != -1 -> {
+                val r = if (drawable.endToEndOf == parentId) right else drawableMap[drawable.endToEndOf]?.right ?: 0
+                (r - drawable.rightMargin) - drawable.measuredWidth
             }
             else -> 0
         }
     }
 
     abstract class Drawable {
-        /**
-         * the unique id of this [Drawable]
-         */
-        var id: String = ""
-
-        /**
-         * the relative position of this [Drawable] to another
-         */
-        var leftPercent: Float = -1f
-        var topPercent: Float = -1f
-        var startToStartOf: String = ""
-        var startToEndOf: String = ""
-        var endToEndOf: String = ""
-        var endToStartOf: String = ""
-        var topToTopOf: String = ""
-        var topToBottomOf: String = ""
-        var bottomToTopOf: String = ""
-        var bottomToBottomOf: String = ""
-        var centerHorizontalOf: String = ""
-        var centerVerticalOf: String = ""
-        var topMargin = 0
-        internal val _topMargin: Int
-            get() = topMargin.dp
-        var bottomMargin = 0
-        internal val _bottomMargin: Int
-            get() = bottomMargin.dp
-        var leftMargin = 0
-        internal val _leftMargin: Int
-            get() = leftMargin.dp
-        var rightMargin = 0
-        internal val _rightMargin: Int
-            get() = rightMargin.dp
-
-        /**
-         * dimension of [Drawable]
-         */
-        var width = 0
-        internal val _width: Int
-            get() = width.dp
-        var height = 0
-        internal val _height: Int
-            get() = height.dp
-
         /**
          * the measured dimension of [Drawable]
          */
@@ -156,18 +117,54 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         /**
          * the frame rect of [Drawable]
          */
-        var left = 0
-        var right = 0
-        var top = 0
-        var bottom = 0
+        internal var left = 0
+        internal var right = 0
+        internal var top = 0
+        internal var bottom = 0
+
+        /**
+         * the unique id of this [Drawable]
+         */
+        var id: Int = -1
+
+        /**
+         * the relative position of this [Drawable] to another
+         */
+        var leftPercent: Float = -1f
+        var topPercent: Float = -1f
+        var startToStartOf: Int = -1
+        var startToEndOf: Int = -1
+        var endToEndOf: Int = -1
+        var endToStartOf: Int = -1
+        var topToTopOf: Int = -1
+        var topToBottomOf: Int = -1
+        var bottomToTopOf: Int = -1
+        var bottomToBottomOf: Int = -1
+        var centerHorizontalOf: Int = -1
+        var centerVerticalOf: Int = -1
+
+        /**
+         * dimension of [Drawable]
+         */
+        var width = 0
+        var height = 0
+
+
+        /**
+         * inner padding of [Drawable]
+         */
         var paddingStart = 0
         var paddingEnd = 0
         var paddingTop = 0
         var paddingBottom = 0
 
-
-        abstract fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int)
-        abstract fun draw(canvas: Canvas?)
+        /**
+         * out margin of [Drawable]
+         */
+        var topMargin = 0
+        var bottomMargin = 0
+        var leftMargin = 0
+        var rightMargin = 0
 
         /**
          * the the frame rect of [Drawable] is set after this function
@@ -186,8 +183,10 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
             this.measuredWidth = width
             this.measuredHeight = height
         }
-    }
 
+        abstract fun measure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+        abstract fun draw(canvas: Canvas?)
+    }
 }
 
 
@@ -211,17 +210,12 @@ class Text : OneViewGroup.Drawable() {
 
     var text: CharSequence = ""
     var textSize: Float = 0f
-    private val _textSize: Float
-        get() = textSize.dp
-    var textColor: String = "#ffffff"
+    var textColor: Int = Color.parseColor("#ffffff")
     var spaceAdd: Float = 0f
     var spaceMulti: Float = 1.0f
     var maxLines = 1
     var maxWidth = 0
-
     var gravity: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL
-    private val _maxWidth: Int
-        get() = maxWidth.dp
     var shapePaint: Paint? = null
     var shape: Shape? = null
         set(value) {
@@ -238,19 +232,19 @@ class Text : OneViewGroup.Drawable() {
         if (textPaint == null) {
             textPaint = TextPaint().apply {
                 isAntiAlias = true
-                textSize = this@Text._textSize
-                color = Color.parseColor(textColor)
+                textSize = this@Text.textSize
+                color = textColor
             }
         }
 
-        val measureWidth = if (_width != 0) _width else min(textPaint!!.measureText(text.toString()).toInt(), _maxWidth)
+        val measureWidth = if (width != 0) width else min(textPaint!!.measureText(text.toString()).toInt(), maxWidth)
         if (staticLayout == null) {
             staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint!!, measureWidth)
                 .setAlignment(gravity)
                 .setLineSpacing(spaceAdd, spaceMulti)
                 .setIncludePad(false)
 
-                .setMaxLines(maxLines)            .build()
+                .setMaxLines(maxLines).build()
         }
 
         val measureHeight = staticLayout!!.height
@@ -270,7 +264,7 @@ class Text : OneViewGroup.Drawable() {
         if (shape == null) return
         val _shape = shape!!
         if (_shape.radius != 0f) {
-            canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), _shape._radius, _shape._radius, shapePaint!!)
+            canvas?.drawRoundRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), _shape.radius, _shape.radius, shapePaint!!)
         } else if (_shape.corners != null) {
             _shape.path!!.apply {
                 addRoundRect(
@@ -291,8 +285,6 @@ class Shape {
     var color: String? = null
     var colors: List<String>? = null
     var radius: Float = 0f
-    internal val _radius: Float
-        get() = radius.dp
     internal var path: Path? = null
     var corners: Corners? = null
         set(value) {
@@ -321,12 +313,209 @@ inline fun OneViewGroup.text(init: Text.() -> Unit) = Text().apply(init).also { 
 @RequiresApi(Build.VERSION_CODES.M)
 inline fun OneViewGroup.image(init: Image.() -> Unit) = Image().apply(init).also { addDrawable(it) }
 
-val OneViewGroup.parent_id: String
-    get() = "-1"
-
 fun OneViewGroup.shape(init: Shape.() -> Unit): Shape = Shape().apply(init)
 
 fun Shape.corners(init: Shape.Corners.() -> Unit): Shape.Corners = Shape.Corners().apply(init)
 
 val gravity_center = Layout.Alignment.ALIGN_CENTER
 val gravity_left = Layout.Alignment.ALIGN_NORMAL
+
+inline var OneViewGroup.Drawable.top_margin: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        topMargin = value.dp
+    }
+
+inline var OneViewGroup.Drawable.bottom_margin: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        bottomMargin = value.dp
+    }
+
+inline var OneViewGroup.Drawable.left_margin: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        leftMargin = value.dp
+    }
+
+inline var OneViewGroup.Drawable.right_margin: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        rightMargin = value.dp
+    }
+
+inline var OneViewGroup.Drawable.padding_start: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        paddingStart = value.dp
+    }
+
+inline var OneViewGroup.Drawable.padding_end: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        paddingEnd = value.dp
+    }
+
+inline var OneViewGroup.Drawable.padding_top: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        paddingTop = value.dp
+    }
+
+inline var OneViewGroup.Drawable.padding_bottom: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        paddingBottom = value.dp
+    }
+
+inline var OneViewGroup.Drawable.layout_id: String
+    get() {
+        return ""
+    }
+    set(value) {
+        id = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.start_to_start_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        startToStartOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.start_to_end_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        startToEndOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.end_to_start_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        endToStartOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.end_to_end_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        endToEndOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.top_to_top_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        topToTopOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.top_to_bottom_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        topToBottomOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.bottom_to_top_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        bottomToTopOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.bottom_to_bottom_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        bottomToBottomOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.center_horizontal_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        centerHorizontalOf = value.toLayoutId()
+    }
+
+inline var OneViewGroup.Drawable.center_vertical_of: String
+    get() {
+        return ""
+    }
+    set(value) {
+        centerVerticalOf = value.toLayoutId()
+    }
+
+inline var Text.text_size: Float
+    get() {
+        return 0f
+    }
+    set(value) {
+        textSize = value.sp
+    }
+
+inline var Text.max_width: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        maxWidth = value.dp
+    }
+
+inline var Text.layout_width: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        width = value.dp
+    }
+
+inline var Text.layout_height: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        height = value.dp
+    }
+
+inline var Text.text_color: String
+    get() {
+        return ""
+    }
+    set(value) {
+        textColor = Color.parseColor(value)
+    }
+
+inline var Shape.radius: Float
+    get() {
+        return 0f
+    }
+    set(value) {
+        radius = value.dp
+    }

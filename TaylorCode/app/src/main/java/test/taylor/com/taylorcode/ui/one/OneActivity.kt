@@ -24,15 +24,15 @@ class OneActivity : AppCompatActivity() {
                 center_vertical = true
 
                 text {
-                    id = "title"
-                    maxWidth = 100
+                    layout_id = "title"
+                    max_width = 100
                     text = "title"
-                    textSize = 40f
-                    textColor = "#ffffff"
+                    text_size = 40f
+                    text_color = "#ffffff"
                     leftPercent = 0.2f
                     topPercent = 0.2f
-                    paddingStart = 30
-                    paddingEnd = 30
+                    padding_start = 10
+                    padding_end = 10
                     shape = shape {
                         color = "#ff0000"
                         corners = corners{
@@ -43,17 +43,17 @@ class OneActivity : AppCompatActivity() {
                 }
 
                 text {
-                    maxWidth = 80
+                    max_width = 80
                     text = "content"
-                    textSize = 15f
-                    textColor ="#88ffffff"
-                    topToBottomOf = "title"
-                    startToStartOf = "title"
+                    text_size = 15f
+                    text_color ="#88ffffff"
+                    top_to_bottom_of = "title"
+                    start_to_start_of = "title"
                     gravity = gravity_center
-                    paddingStart = 8
-                    paddingTop = 5
-                    paddingBottom = 5
-                    paddingEnd = 8
+                    padding_start = 8
+                    padding_top = 5
+                    padding_bottom = 5
+                    padding_end = 8
                     shape = shape {
                         color = "#ff0000"
                         radius = 10f
@@ -61,32 +61,32 @@ class OneActivity : AppCompatActivity() {
                 }
 
                 text {
-                    maxWidth = 70
+                    max_width = 70
                     text = "subTitle"
-                    textSize = 18f
-                    textColor = "#ffffff"
-                    centerVerticalOf = "title"
-                    startToEndOf = "title"
+                    text_size = 18f
+                    text_color = "#ffffff"
+                    center_vertical_of = "title"
+                    start_to_end_of = "title"
                 }
 
                 text {
-                    maxWidth = 70
+                    max_width = 70
                     text = "left"
-                    textSize = 15f
-                    textColor = "#ffffff"
-                    endToStartOf = "title"
-                    centerVerticalOf = "title"
-                    rightMargin = 10
+                    text_size = 15f
+                    text_color = "#ffffff"
+                    end_to_start_of = "title"
+                    center_vertical_of = "title"
+                    right_margin = 10
                 }
 
                 text {
                     maxWidth = 70
                     text = "top"
-                    textSize = 15f
-                    textColor = "#ffffff"
-                    bottomToTopOf = "title"
-                    centerHorizontalOf = "title"
-                    bottomMargin = 20
+                    text_size = 15f
+                    text_color = "#ffffff"
+                    bottom_to_top_of = "title"
+                    center_horizontal_of = "title"
+                    bottom_margin = 20
                 }
 
             }.also { addView(it) }
