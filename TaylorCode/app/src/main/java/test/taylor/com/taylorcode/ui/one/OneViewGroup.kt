@@ -15,7 +15,7 @@ import test.taylor.com.taylorcode.ui.performance.widget.PercentLayout
 import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.M)
-class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : PercentLayout(context, attrs, defStyleAttr) {
+class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ViewGroup(context, attrs, defStyleAttr) {
 
     private val drawableMap = HashMap<Int, Drawable>()
     private val drawables = mutableListOf<Drawable>()
@@ -28,6 +28,7 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
     fun <T> findDrawable(id: String):T? = drawableMap[id.toLayoutId()] as? T
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        measureChildren(widthMeasureSpec,heightMeasureSpec)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         drawables.forEach { it.doMeasure(widthMeasureSpec, heightMeasureSpec) }
     }
