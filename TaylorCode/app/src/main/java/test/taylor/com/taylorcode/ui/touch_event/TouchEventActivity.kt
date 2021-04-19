@@ -39,6 +39,13 @@ class TouchEventActivity : Activity() {
 
     private fun initView() {
 //        v_te.setOnClickListener({})
+        v_te.setOnClickListener {
+            Log.v("ttaylor3","on view clicked")
+        }
+
+        tvg.setOnClickListener {
+            Log.v("ttaylor3"," view group is clicked")
+        }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {

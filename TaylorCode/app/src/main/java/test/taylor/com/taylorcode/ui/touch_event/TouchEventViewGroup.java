@@ -40,6 +40,9 @@ public class TouchEventViewGroup extends RelativeLayout {
 //            b = true;
 //        }
 //        Log.v("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + "  return " + b);
+        if (ev.getAction() == MotionEvent.ACTION_DOWN){
+            return  true;
+        }
         Log.w("ttaylor", "TouchEventViewGroup.onInterceptTouchEvent()" + " event=" + ev.getAction());
         return super.onInterceptTouchEvent(ev);
     }

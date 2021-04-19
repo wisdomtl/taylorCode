@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <test.taylor.com.taylorcode.ui.touch_event.TouchEventViewGroup
+        android:id="@+id/tvg"
         android:layout_width="200dp"
         android:layout_height="900dp"
         android:background="#00ff00"

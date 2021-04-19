@@ -8,6 +8,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+
+        <Button
+            android:id="@+id/btn_touch_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="touch event"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/oneViewGroup"
             android:layout_width="match_parent"
@@ -149,13 +158,6 @@
             android:text="live comment activity"
             android:textAllCaps="false" />
 
-
-        <Button
-            android:id="@+id/btn_touch_event"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="touch event"
-            android:textAllCaps="false" />
 
 
         <Button
