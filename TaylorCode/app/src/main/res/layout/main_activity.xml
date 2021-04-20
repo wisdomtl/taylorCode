@@ -8,7 +8,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/goodDialogFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="good dialog frament"
+            android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/poorDialogFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="poor dialog frament"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_touch_event"

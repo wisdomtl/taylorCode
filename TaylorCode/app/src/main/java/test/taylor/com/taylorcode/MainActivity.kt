@@ -68,6 +68,7 @@ import test.taylor.com.taylorcode.ui.one.OneViewGroup
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
+import test.taylor.com.taylorcode.ui.performance.detectFrame
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
@@ -90,6 +91,7 @@ class MainActivity : BaseActivity() {
         initView()
         readPhoneInfo()
         testValueDiliver();
+        detectFrame()
     }
 
     private fun testValueDiliver() {
@@ -227,6 +229,8 @@ class MainActivity : BaseActivity() {
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
         recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>{ } }
         oneViewGroup.setOnClickListener { startActivity<OneActivity>{ } }
+        poorDialogFragment.setOnClickListener { PoorDialogFragment.show(this@MainActivity) }
+        goodDialogFragment.setOnClickListener { GoodDialogFragment.show(this@MainActivity) }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
