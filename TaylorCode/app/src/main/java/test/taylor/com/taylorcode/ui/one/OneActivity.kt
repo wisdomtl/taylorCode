@@ -2,6 +2,8 @@ package test.taylor.com.taylorcode.ui.one
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.R
@@ -91,6 +93,7 @@ class OneActivity : AppCompatActivity() {
                 }
 
                 image {
+                    drawable_layout_id = "image1"
                     layout_width = 40
                     layout_height = 40
                     scaleType = scale_fit_xy
@@ -100,12 +103,17 @@ class OneActivity : AppCompatActivity() {
                 }
 
                 image {
+                    drawable_layout_id = "image2"
                     layout_width = 40
                     layout_height = 40
                     scaleType = scale_fit_xy
                     src = R.drawable.old_man
                     drawable_start_to_end_of  = "content"
                     drawable_center_vertical_of = "content"
+                }
+
+                setOnItemClickListener {
+                    Log.v("ttaylor","id ($it) is clicked")
                 }
 
             }.also { addView(it) }
@@ -136,6 +144,16 @@ class OneActivity : AppCompatActivity() {
 //                background_color = "#ffff00"
 //            }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Log.v("ttaylor","activity ontouch action=${event?.action}")
+        return super.onTouchEvent(event)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        Log.v("ttaylor","activity dispatch  action=${ev?.action}")
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
