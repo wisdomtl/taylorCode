@@ -43,10 +43,13 @@ val View.inScreen: Boolean
         val screenWidth = context?.resources?.displayMetrics?.widthPixels ?: 0
         val screenHeight = context?.resources?.displayMetrics?.heightPixels ?: 0
         val screenRect = Rect(0, 0, screenWidth, screenHeight)
-        val array = IntArray(2)
-        getLocationOnScreen(array)
-        val viewRect = Rect(array[0], array[1], array[0] + width, array[1] + height)
-        return screenRect.intersect(viewRect)
+        return Rect().let {
+            if (getGlobalVisibleRect(it)) {
+                it.intersect(screenRect)
+            } else {
+                false
+            }
+        }
     }
 
 /**
@@ -61,8 +64,8 @@ fun RecyclerView.addItemInOutListener(listener: ((childView: View?, adapterIndex
         val isInvalid = index < 0
     }
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
-        private var preTopItem = Item(-1, null)
-        private var preBottomItem = Item(-1, null)
+        private var preTopItem = Item(- 1, null)
+        private var preBottomItem = Item(- 1, null)
         private var curTopItem = Item(0, null)
         private var curBottomItem = Item(Int.MAX_VALUE, null)
 
