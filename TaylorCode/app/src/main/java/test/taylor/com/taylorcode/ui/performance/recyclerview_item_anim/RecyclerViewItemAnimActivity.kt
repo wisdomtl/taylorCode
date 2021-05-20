@@ -21,7 +21,6 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewItemAnimActivity : AppCompatActivity() {
 
-
     private val myAdapter by lazy {
         VarietyAdapter2().apply {
             addProxy(TextProxy2())
@@ -42,6 +41,24 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
                 layout_height = match_parent
                 layoutManager = LinearLayoutManager(this@RecyclerViewItemAnimActivity)
                 adapter = myAdapter
+            }
+
+            TextView {
+                layout_id = "tvScroll"
+                layout_width = 100
+                layout_height = 50
+                textSize = 12f
+                textColor = "#ffffff"
+                text = "scrollTo"
+                gravity = gravity_center
+                bottom_toBottomOf = parent_id
+                shape = shape {
+                    corner_radius = 20
+                    solid_color = "#080808"
+                }
+                onClick = {
+                    myAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
