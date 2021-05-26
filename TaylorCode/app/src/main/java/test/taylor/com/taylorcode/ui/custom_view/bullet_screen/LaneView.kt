@@ -213,6 +213,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
     fun show(data: Any) {
         post {
+            if (measuredWidth == 0 || measuredHeight == 0) return@post
             val child = obtain()
 
             bindView(data, child)
