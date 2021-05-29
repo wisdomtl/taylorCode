@@ -77,6 +77,7 @@ import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
+import test.taylor.com.taylorcode.ui.touch_event.touch_delegate.MultiTouchDelegate
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
@@ -229,6 +230,7 @@ class MainActivity : BaseActivity() {
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
         recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>{ } }
         oneViewGroup.setOnClickListener { startActivity<OneActivity>{ } }
+        btnMultiTouchDelegate.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.touch_event.touch_delegate.TouchDelegateActivity>{ } }
         poorDialogFragment.setOnClickListener { PoorDialogFragment.show(this@MainActivity) }
         goodDialogFragment.setOnClickListener { GoodDialogFragment.show(this@MainActivity) }
 
