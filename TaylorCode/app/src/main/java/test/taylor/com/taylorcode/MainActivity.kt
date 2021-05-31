@@ -83,6 +83,7 @@ import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
+import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity() {
 
@@ -228,9 +229,9 @@ class MainActivity : BaseActivity() {
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
-        recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity>{ } }
-        oneViewGroup.setOnClickListener { startActivity<OneActivity>{ } }
-        btnMultiTouchDelegate.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.touch_event.touch_delegate.TouchDelegateActivity>{ } }
+        recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity> { } }
+        oneViewGroup.setOnClickListener { startActivity<OneActivity> { } }
+        btnMultiTouchDelegate.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.touch_event.touch_delegate.TouchDelegateActivity> { } }
         poorDialogFragment.setOnClickListener { PoorDialogFragment.show(this@MainActivity) }
         goodDialogFragment.setOnClickListener { GoodDialogFragment.show(this@MainActivity) }
 
@@ -267,12 +268,13 @@ class MainActivity : BaseActivity() {
             { string, highlight ->
                 sb.append("$string($highlight)")
             }, {
-              sb.append("//")
+                sb.append("//")
             }, {
                 sb.append("：")
             }
         )
-        Log.v("ttaylor","tag=, MainActivity.initView()   splitAtString=${sb.toString()}")
+        Log.v("ttaylor", "tag=, MainActivity.initView()   splitAtString=${sb.toString()}")
+
     }
 
     fun String.splitAtString(onEach: (String, Boolean) -> Unit, onEntryEnd: () -> Unit, onSubEntryEnd: () -> Unit) {
@@ -350,7 +352,7 @@ class MainActivity : BaseActivity() {
 /**
  * reified case: type wont be erased
  */
-inline fun <reified T> Context.startActivity(extras: Intent.() ->Unit = {}) {
+inline fun <reified T> Context.startActivity(extras: Intent.() -> Unit = {}) {
     Intent(this, T::class.java).apply(extras).also { startActivity(it) }
 }
 
@@ -359,8 +361,39 @@ fun Float.cutEndZero(): String = this.toString().reversed().let {
     var zeroCount = 0
     for (i in 0 until dotIndex) {
         if (it[i] != '0') break
-        zeroCount++
+        zeroCount ++
     }
     val ret = it.takeLast(it.length - zeroCount).reversed()
     if (ret.endsWith('.')) ret.dropLast(1) else ret
+}
+
+open class Message(val id: String = "", val content: String = "")
+interface MessageHandler<T : Message> {
+    fun handleMessage(message: T)
+}
+
+class VoiceMessage(id: String = "", content: String = "", val voiceData: String = "") : Message(id, content)
+class VideoMessage(id: String = "", content: String = "", val videoData: String = "") : Message(id, content)
+class VoiceMessageHandler : MessageHandler<VoiceMessage> {
+    override fun handleMessage(message: VoiceMessage) {
+        Log.v("ttaylor", "voice message is handled id = ${message.id} data=${message.voiceData}")
+    }
+}
+
+class VideoMessageHandler : MessageHandler<VideoMessage> {
+    override fun handleMessage(message: VideoMessage) {
+        Log.v("ttaylor", "video message is handled id = ${message.id} data=${message.videoData}")
+    }
+}
+
+class MessageReceiver {
+    val messageHandlerMap = mutableMapOf<KClass<*>, MessageHandler<*>>()
+
+    inline fun <reified T : Message> addMessageHandler(handler: MessageHandler<T>) {
+        messageHandlerMap[T::class] = handler
+    }
+
+    fun onReceiveMessage(message: Message) {
+        (messageHandlerMap[message::class] as? MessageHandler<Message>)?.handleMessage(message)
+    }
 }
