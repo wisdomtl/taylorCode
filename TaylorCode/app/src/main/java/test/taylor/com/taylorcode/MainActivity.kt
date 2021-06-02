@@ -63,6 +63,7 @@ import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordina
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
+import test.taylor.com.taylorcode.ui.notification.NotificationActivity
 import test.taylor.com.taylorcode.ui.one.OneActivity
 import test.taylor.com.taylorcode.ui.one.OneViewGroup
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
@@ -233,7 +234,7 @@ class MainActivity : BaseActivity() {
         oneViewGroup.setOnClickListener { startActivity<OneActivity> { } }
         btnMultiTouchDelegate.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.touch_event.touch_delegate.TouchDelegateActivity> { } }
         poorDialogFragment.setOnClickListener { PoorDialogFragment.show(this@MainActivity) }
-        goodDialogFragment.setOnClickListener { GoodDialogFragment.show(this@MainActivity) }
+        btnNotificationActivity.setOnClickListener { startActivity<NotificationActivity> { } }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
