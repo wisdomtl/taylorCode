@@ -29,30 +29,25 @@ class AudioManager(val context: Context, val type: String = AAC) :
         const val PCM = "pcm"
     }
 
-    private val ACTION_START_RECORD = 1
-    private val ACTION_STOP_RECORD = 2
-
-    private val RECORD_FAILED = 1
-    private val RECORD_READY = 2
-    private val RECORD_START = 3
-    private val RECORD_SUCCESS = 4
-    private val RECORD_CANCELED = 5
-    private val RECORD_REACH_MAX_TIME = 6
+    private val STATE_FAILED = 1
+    private val STATE_READY = 2
+    private val STATE_START = 3
+    private val STATE_SUCCESS = 4
+    private val STATE_CANCELED = 5
+    private val STATE_REACH_MAX_TIME = 6
 
     /**
      * the recording state
      */
-    internal val STATE_REACH_MAX_TIME = 1
-    internal val STATE_ERROR = - 1
+    internal val STATE_INTERNAL_REACH_MAX_TIME = 1
+    internal val STATE_INTERNAL_ERROR = - 1
 
     /**
      * the callback business layer cares about
      */
     var onRecordReady: (() -> Unit)? = null
     var onRecordStart: ((File) -> Unit)? = null
-
-    // deliver audio file and duration to business layer
-    var onRecordSuccess: ((File, Long) -> Unit)? = null
+    var onRecordSuccess: ((File, Long) -> Unit)? = null// deliver audio file and duration to business layer
     var onRecordFail: (() -> Unit)? = null
     var onRecordCancel: (() -> Unit)? = null
     var onRecordReachedMaxTime: ((Int) -> Unit)? = null
@@ -69,11 +64,11 @@ class AudioManager(val context: Context, val type: String = AAC) :
     private var listener = object : InfoListener {
         override fun onInfo(state: Int, extra: Int) {
             when (state) {
-                STATE_REACH_MAX_TIME -> {
+                STATE_INTERNAL_REACH_MAX_TIME -> {
                     recorder.stop()
                     handleRecordEnd(true, maxDuration.toLong(), true)// is this right
                 }
-                STATE_ERROR -> {
+                STATE_INTERNAL_ERROR -> {
                     handleRecordEnd(false, 0, false)
                 }
             }
@@ -104,25 +99,25 @@ class AudioManager(val context: Context, val type: String = AAC) :
         audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
 
         if (recorder.isRecording()) {
-            setState(RECORD_FAILED)
+            setState(STATE_FAILED)
             return
         }
 
         if (getAudioFreeSpace() <= 0) {
-            setState(RECORD_FAILED)
+            setState(STATE_FAILED)
             return
         }
 
         audioFile = getAudioFile()
-        if (audioFile == null) setState(RECORD_FAILED)
+        if (audioFile == null) setState(STATE_FAILED)
 
         cancelRecord.set(false)
         try {
             if (! cancelRecord.get()) {
-                setState(RECORD_READY)
+                setState(STATE_READY)
                 if (hasPermission()) {
                     launch { recorder.start(audioFile !!, maxDuration) }
-                    setState(RECORD_START)
+                    setState(STATE_START)
                 } else {
                     stopRecord(false)
                 }
@@ -133,7 +128,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
         }
 
         if (! recorder.isRecording()) {
-            setState(RECORD_FAILED)
+            setState(STATE_FAILED)
         }
     }
 
@@ -162,33 +157,36 @@ class AudioManager(val context: Context, val type: String = AAC) :
         this.duration = duration
         if (cancelRecord.get()) {
             audioFile?.deleteOnExit()
-            setState(RECORD_CANCELED)
+            setState(STATE_CANCELED)
         } else if (! isSuccess) {
             audioFile?.deleteOnExit()
-            setState(RECORD_FAILED)
+            setState(STATE_FAILED)
         } else {
             if (isAudioFileInvalid()) {
-                setState(RECORD_FAILED)
+                setState(STATE_FAILED)
                 if (isReachMaxTime) {
-                    setState(RECORD_REACH_MAX_TIME)
+                    setState(STATE_REACH_MAX_TIME)
                 }
             } else {
-                setState(RECORD_SUCCESS)
+                setState(STATE_SUCCESS)
             }
         }
     }
 
     private fun isAudioFileInvalid() = audioFile == null || ! audioFile !!.exists() || audioFile !!.length() <= 0
 
+    /**
+     * change recording state and invoke according callback to main thread
+     */
     private fun setState(state: Int) {
         callbackHandler.post {
             when (state) {
-                RECORD_FAILED -> onRecordFail?.invoke()
-                RECORD_READY -> onRecordReady?.invoke()
-                RECORD_START -> audioFile?.let { onRecordStart?.invoke(it) }
-                RECORD_CANCELED -> onRecordCancel?.invoke()
-                RECORD_SUCCESS -> audioFile?.let { onRecordSuccess?.invoke(it, duration) }
-                RECORD_REACH_MAX_TIME -> onRecordReachedMaxTime?.invoke(maxDuration)
+                STATE_FAILED -> onRecordFail?.invoke()
+                STATE_READY -> onRecordReady?.invoke()
+                STATE_START -> audioFile?.let { onRecordStart?.invoke(it) }
+                STATE_CANCELED -> onRecordCancel?.invoke()
+                STATE_SUCCESS -> audioFile?.let { onRecordSuccess?.invoke(it, duration) }
+                STATE_REACH_MAX_TIME -> onRecordReachedMaxTime?.invoke(maxDuration)
             }
         }
     }
@@ -264,13 +262,13 @@ class AudioManager(val context: Context, val type: String = AAC) :
         private var starTime: Long = 0L
         private val listener = MediaRecorder.OnInfoListener { _, what, extra ->
             val state = when (what) {
-                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> STATE_REACH_MAX_TIME
-                else -> STATE_ERROR
+                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> STATE_INTERNAL_REACH_MAX_TIME
+                else -> STATE_INTERNAL_ERROR
             }
             infoListener.onInfo(state, extra)
         }
         private val errorListener = MediaRecorder.OnErrorListener { _, _, extra ->
-            infoListener.onInfo(STATE_ERROR, extra)
+            infoListener.onInfo(STATE_INTERNAL_ERROR, extra)
         }
         private val recorder = MediaRecorder()
         private var isRecording = AtomicBoolean(false)
