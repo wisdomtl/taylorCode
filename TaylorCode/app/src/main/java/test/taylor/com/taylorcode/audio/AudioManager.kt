@@ -5,8 +5,13 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.MediaRecorder
 import android.os.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -16,7 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 2. control the state of recording and invoke according callbacks in main thread.
  * 3. provide interface for the business layer to control audio recording
  */
-class AudioManager(val context: Context, val type: String = AAC) {
+class AudioManager(val context: Context, val type: String = AAC) :
+    CoroutineScope by CoroutineScope(SupervisorJob() + Executors.newFixedThreadPool(1).asCoroutineDispatcher()) {
     companion object {
         const val AAC = "aac"
         const val AMR = "amr"
@@ -81,41 +87,17 @@ class AudioManager(val context: Context, val type: String = AAC) {
     private var cancelRecord: AtomicBoolean = AtomicBoolean(false)
     private val audioManager: AudioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-    /**
-     * do audio record action in [HandlerThread]
-     */
-    private val recordThread by lazy { HandlerThread("audio-recorder-thread").apply { start() } }
-    private val actionHandler by lazy {
-        Handler(recordThread.looper) { message ->
-            when (message.what) {
-                ACTION_START_RECORD -> {
-                    startRecord()
-                }
-                ACTION_STOP_RECORD -> {
-                    stopRecord(message.obj as Boolean)
-                }
-            }
-            false
-        }
-    }
-
     fun start(maxDuration: Int = 120) {
         this.maxDuration = maxDuration * 1000
-        actionHandler.removeCallbacksAndMessages(null)
-        actionHandler.obtainMessage(ACTION_START_RECORD).sendToTarget()
+        startRecord()
     }
 
     fun stop(cancel: Boolean = false) {
-        actionHandler.obtainMessage(ACTION_STOP_RECORD).apply { obj = cancel }.sendToTarget()
+        stopRecord(cancel)
     }
 
     fun release() {
-        actionHandler.removeCallbacksAndMessages(null)
-        if (recordThread.isAlive) {
-            recordThread.looper.quit()
-        }
-
-        recorder.release()
+        launch { recorder.release() }
     }
 
     fun isRecording() = isRecording.get()
@@ -141,7 +123,7 @@ class AudioManager(val context: Context, val type: String = AAC) {
             if (! cancelRecord.get()) {
                 setState(RECORD_READY)
                 if (hasPermission()) {
-                    recorder.start(audioFile !!, maxDuration)
+                    launch { recorder.start(audioFile !!, maxDuration) }
                     isRecording.set(true)
                     setState(RECORD_START)
                 } else {
@@ -251,9 +233,9 @@ class AudioManager(val context: Context, val type: String = AAC) {
         var infoListener: InfoListener
 
         /**
-         * start audio recording
+         * start audio recording, it is time-consuming
          */
-        fun start(outputFile: File, maxDuration: Int)
+        suspend fun start(outputFile: File, maxDuration: Int)
 
         /**
          * stop audio recording
@@ -291,8 +273,7 @@ class AudioManager(val context: Context, val type: String = AAC) {
         }
         private val recorder = MediaRecorder()
 
-        @Synchronized
-        override fun start(outputFile: File, maxDuration: Int) {
+        override suspend fun start(outputFile: File, maxDuration: Int) {
             val format = when (outputFormat) {
                 AMR -> MediaRecorder.OutputFormat.AMR_NB
                 else -> MediaRecorder.OutputFormat.AAC_ADTS
@@ -321,7 +302,6 @@ class AudioManager(val context: Context, val type: String = AAC) {
             }
         }
 
-        @Synchronized
         override fun stop(): Long {
             recorder.stop()
             return SystemClock.elapsedRealtime() - starTime

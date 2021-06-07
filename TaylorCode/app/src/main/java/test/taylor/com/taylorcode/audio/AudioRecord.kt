@@ -5,6 +5,7 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.SystemClock
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 
 class AudioRecord(override var infoListener: AudioManager.InfoListener, override var outputFormat: String) : AudioManager.Recorder {
 
@@ -13,7 +14,7 @@ class AudioRecord(override var infoListener: AudioManager.InfoListener, override
     private val CHANNEL = AudioFormat.CHANNEL_IN_MONO
 
     private var bufferSize: Int = 0
-    private var isRecording = false
+    private var isRecording: AtomicBoolean = AtomicBoolean(false)
     private var startTime: Long = 0L
 
     val audioRecord by lazy {
@@ -26,15 +27,15 @@ class AudioRecord(override var infoListener: AudioManager.InfoListener, override
         AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, format, bufferSize)
     }
 
-    override fun start(outputFile: File, maxDuration: Int) {
+    override suspend fun start(outputFile: File, maxDuration: Int) {
         if (audioRecord.state == AudioRecord.STATE_UNINITIALIZED) return
 
-        isRecording = true
+        isRecording.set(true)
         startTime = SystemClock.elapsedRealtime()
         outputFile.outputStream().use { outputStream ->
             audioRecord.startRecording()
             val audioData = ByteArray(bufferSize)
-            while (isRecording && audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+            while (isRecording.get() && audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
                 audioRecord.read(audioData, 0, audioData.size)
                 outputStream.write(audioData)
             }
@@ -42,7 +43,7 @@ class AudioRecord(override var infoListener: AudioManager.InfoListener, override
     }
 
     override fun stop(): Long {
-        isRecording = false
+        isRecording.set(false)
         audioRecord.stop()
         return SystemClock.elapsedRealtime() - startTime
     }
