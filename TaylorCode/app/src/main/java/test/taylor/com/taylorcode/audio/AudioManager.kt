@@ -9,74 +9,116 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AudioManager(
-    val context: Context,
-    val type: String = AAC
-) {
-
+/**
+ * provide the ability to record audio in file.
+ * [AudioManager] exists for the sake of the following:
+ * 1. launch a thread to record audio in file.
+ * 2. control the state of recording and invoke according callbacks in main thread.
+ * 3. provide interface for the business layer to control audio recording
+ */
+class AudioManager(val context: Context, val type: String = AAC) {
     companion object {
         const val AAC = "aac"
         const val AMR = "amr"
+        const val PCM = "pcm"
     }
 
-    private val MSG_START_RECORD = 1
-    private val MSG_STOP_RECORD = 2
-    private val MSG_ERROR = 3
+    private val ACTION_START_RECORD = 1
+    private val ACTION_STOP_RECORD = 2
 
     private val RECORD_FAILED = 1
     private val RECORD_READY = 2
     private val RECORD_START = 3
     private val RECORD_SUCCESS = 4
     private val RECORD_CANCELED = 5
+    private val RECORD_REACH_MAX_TIME = 6
 
+    /**
+     * the recording state
+     */
+    internal val STATE_REACH_MAX_TIME = 1
+    internal val STATE_ERROR = - 1
+
+    /**
+     * the callback business layer cares about
+     */
     var onRecordReady: (() -> Unit)? = null
     var onRecordStart: ((File) -> Unit)? = null
+
+    // deliver audio file and duration to business layer
     var onRecordSuccess: ((File, Long) -> Unit)? = null
     var onRecordFail: (() -> Unit)? = null
     var onRecordCancel: (() -> Unit)? = null
     var onRecordReachedMaxTime: ((Int) -> Unit)? = null
 
+    /**
+     * deliver recording state to business layer
+     */
+    private val callbackHandler = Handler(Looper.getMainLooper())
+
     var maxDuration = 120 * 1000
 
-    private var listener = object : AudioInfoListener {
-        override fun onInfo(what: Int, extra: Int) {
-            when (what) {
-                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
-                    audioRecord.stop()
-                    handler.post { isRecording.set(false) }
-                    onRecordReachedMaxTime?.invoke(maxDuration)
-                    onHandleEndRecord(true, maxDuration.toLong())// is this right
+    private var duration = 0L
+
+    private var listener = object : InfoListener {
+        override fun onInfo(state: Int, extra: Int) {
+            when (state) {
+                STATE_REACH_MAX_TIME -> {
+                    recorder.stop()
+                    handleRecordEnd(true, maxDuration.toLong(), true)// is this right
                 }
-                MediaRecorder.MEDIA_RECORDER_ERROR_UNKNOWN, MediaRecorder.MEDIA_ERROR_SERVER_DIED -> {
-                    error()
+                STATE_ERROR -> {
+                    handleRecordEnd(false, 0, false)
                 }
             }
         }
     }
-    private val audioRecord: AudioRecord = DefaultAudioRecord().apply { this.audioInfoListener = listener }
 
+    //    var recorder: Recorder = MediaRecord(listener, type)
+    private var recorder: Recorder = AudioRecord(listener, type)
     private var audioFile: File? = null
     private var isRecording: AtomicBoolean = AtomicBoolean(false)
     private var cancelRecord: AtomicBoolean = AtomicBoolean(false)
     private val audioManager: AudioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private val handlerThread: HandlerThread = HandlerThread("audio-recorder-thread").apply {
-        start()
-    }
-    private val eventHandler = Handler(Looper.getMainLooper())
-    private val handler: Handler = Handler(handlerThread.looper) { message ->
-        when (message.what) {
-            MSG_START_RECORD -> {
-                startRecord()
+
+    /**
+     * do audio record action in [HandlerThread]
+     */
+    private val recordThread by lazy { HandlerThread("audio-recorder-thread").apply { start() } }
+    private val actionHandler by lazy {
+        Handler(recordThread.looper) { message ->
+            when (message.what) {
+                ACTION_START_RECORD -> {
+                    startRecord()
+                }
+                ACTION_STOP_RECORD -> {
+                    stopRecord(message.obj as Boolean)
+                }
             }
-            MSG_STOP_RECORD -> {
-                onCompleteRecord(message.obj as Boolean)
-            }
-            MSG_ERROR -> {
-                onHandleEndRecord(message.obj as Boolean, message.arg1.toLong())
-            }
+            false
         }
-        false
     }
+
+    fun start(maxDuration: Int = 120) {
+        this.maxDuration = maxDuration * 1000
+        actionHandler.removeCallbacksAndMessages(null)
+        actionHandler.obtainMessage(ACTION_START_RECORD).sendToTarget()
+    }
+
+    fun stop(cancel: Boolean = false) {
+        actionHandler.obtainMessage(ACTION_STOP_RECORD).apply { obj = cancel }.sendToTarget()
+    }
+
+    fun release() {
+        actionHandler.removeCallbacksAndMessages(null)
+        if (recordThread.isAlive) {
+            recordThread.looper.quit()
+        }
+
+        recorder.release()
+    }
+
+    fun isRecording() = isRecording.get()
 
     private fun startRecord() {
         audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
@@ -92,32 +134,28 @@ class AudioManager(
         }
 
         audioFile = getAudioFile()
+        if (audioFile == null) setState(RECORD_FAILED)
 
-        audioFile?.let { file ->
-            cancelRecord.set(false)
-            try {
-                if (!cancelRecord.get()) {
-                    setState(RECORD_READY)
-                    if (hasPermission()) {
-                        audioRecord.start(type, file.absolutePath, maxDuration)
-                        isRecording.set(true)
-                        setState(RECORD_START)
-                    } else {
-                        onCompleteRecord(false)
-                    }
+        cancelRecord.set(false)
+        try {
+            if (! cancelRecord.get()) {
+                setState(RECORD_READY)
+                if (hasPermission()) {
+                    recorder.start(audioFile !!, maxDuration)
+                    isRecording.set(true)
+                    setState(RECORD_START)
+                } else {
+                    stopRecord(false)
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                onCompleteRecord(false)
             }
-        } ?: kotlin.run {
-            setState(RECORD_FAILED)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            stopRecord(false)
         }
 
-        if (!isRecording.get()) {
+        if (! isRecording.get()) {
             setState(RECORD_FAILED)
         }
-
     }
 
     private fun hasPermission(): Boolean {
@@ -125,80 +163,54 @@ class AudioManager(
                 && context.checkCallingOrSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun onCompleteRecord(cancel: Boolean) {
-        if (!isRecording.get()) {
+    private fun stopRecord(cancel: Boolean) {
+        if (! isRecording.get()) {
             return
         }
         cancelRecord.set(cancel)
         audioManager.abandonAudioFocus(null)
         var duration = 0L
         try {
-            duration = audioRecord.stop()
+            duration = recorder.stop()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            onHandleEndRecord(true, duration)
+            handleRecordEnd(true, duration, false)
         }
     }
 
-    private fun onHandleEndRecord(isSuccess: Boolean, duration: Long) {
+    private fun handleRecordEnd(isSuccess: Boolean, duration: Long, isReachMaxTime: Boolean) {
+        this.duration = duration
         if (cancelRecord.get()) {
             audioFile?.deleteOnExit()
             setState(RECORD_CANCELED)
-        } else if (!isSuccess) {
+        } else if (! isSuccess) {
             audioFile?.deleteOnExit()
             setState(RECORD_FAILED)
         } else {
             if (isAudioFileInvalid()) {
                 setState(RECORD_FAILED)
-            } else {
-                eventHandler.post {
-                    audioFile?.let {
-                        onRecordSuccess?.invoke(it, duration)
-                    }
+                if (isReachMaxTime) {
+                    setState(RECORD_REACH_MAX_TIME)
                 }
+            } else {
+                setState(RECORD_SUCCESS)
             }
         }
         isRecording.set(false)
     }
 
-    private fun isAudioFileInvalid() = audioFile == null || !audioFile!!.exists() || audioFile!!.length() <= 0
-
-    fun start(maxDuration: Int = 120) {
-        this.maxDuration = maxDuration * 1000
-        handler.removeCallbacksAndMessages(null)
-        handler.obtainMessage(MSG_START_RECORD).sendToTarget()
-    }
-
-    fun stop(cancel: Boolean = false) {
-        handler.obtainMessage(MSG_STOP_RECORD).apply { obj = cancel }.sendToTarget()
-    }
-
-    fun release() {
-        handler.removeCallbacksAndMessages(null)
-        if (handlerThread.isAlive) {
-            handlerThread.looper.quit()
-        }
-
-        audioRecord.release()
-    }
-
-    fun isRecording() = isRecording.get()
-
-    private fun error() {
-        handler.obtainMessage(MSG_ERROR).apply {
-            obj = false
-            arg1 = 0
-        }.also { it.sendToTarget() }
-    }
+    private fun isAudioFileInvalid() = audioFile == null || ! audioFile !!.exists() || audioFile !!.length() <= 0
 
     private fun setState(state: Int) {
-        eventHandler.post {
+        callbackHandler.post {
             when (state) {
                 RECORD_FAILED -> onRecordFail?.invoke()
                 RECORD_READY -> onRecordReady?.invoke()
                 RECORD_START -> audioFile?.let { onRecordStart?.invoke(it) }
                 RECORD_CANCELED -> onRecordCancel?.invoke()
+                RECORD_SUCCESS -> audioFile?.let { onRecordSuccess?.invoke(it, duration) }
+                RECORD_REACH_MAX_TIME -> onRecordReachedMaxTime?.invoke(maxDuration)
             }
         }
     }
@@ -209,7 +221,7 @@ class AudioManager(
         }
 
         return try {
-        val stat = StatFs(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath)
+            val stat = StatFs(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath)
             stat.run { blockSizeLong * availableBlocksLong }
         } catch (e: Exception) {
             0L
@@ -223,13 +235,25 @@ class AudioManager(
     }
 
     /**
-     * the detail of how to record audio.
+     * the implementation of [Recorder] define the detail of how to record audio.
+     * [AudioManager] works with [Recorder] and dont care about the that details
      */
-    interface AudioRecord {
+    interface Recorder {
+
+        /**
+         * audio output format
+         */
+        var outputFormat: String
+
+        /**
+         * deliver the information of audio to [AudioManager]
+         */
+        var infoListener: InfoListener
+
         /**
          * start audio recording
          */
-        fun start(outputFormat: String, outputFile: String, maxDuration: Int)
+        fun start(outputFile: File, maxDuration: Int)
 
         /**
          * stop audio recording
@@ -237,29 +261,38 @@ class AudioManager(
          */
         fun stop(): Long
 
+        /**
+         * release the resource of audio recording
+         */
         fun release()
     }
 
-    interface AudioInfoListener {
-        fun onInfo(what: Int, extra: Int)
+    /**
+     * deliver the information of audio to [AudioManager]
+     */
+    interface InfoListener {
+        fun onInfo(state: Int, extra: Int)
     }
 
     /**
      * record audio by [android.media.MediaRecorder]
      */
-    class DefaultAudioRecord : AudioRecord {
+    inner class MediaRecord(override var infoListener: InfoListener, override var outputFormat: String) : Recorder {
         private var starTime: Long = 0L
-        var audioInfoListener: AudioInfoListener? = null
-        private val listener = MediaRecorder.OnInfoListener { mr, what, extra ->
-            audioInfoListener?.onInfo(what, extra)
+        private val listener = MediaRecorder.OnInfoListener { _, what, extra ->
+            val state = when (what) {
+                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> STATE_REACH_MAX_TIME
+                else -> STATE_ERROR
+            }
+            infoListener.onInfo(state, extra)
         }
-        private val errorListener = MediaRecorder.OnErrorListener { mr, what, extra ->
-            audioInfoListener?.onInfo(what, extra)
+        private val errorListener = MediaRecorder.OnErrorListener { _, _, extra ->
+            infoListener.onInfo(STATE_ERROR, extra)
         }
         private val recorder = MediaRecorder()
 
         @Synchronized
-        override fun start(outputFormat: String, outputFile: String, maxDuration: Int) {
+        override fun start(outputFile: File, maxDuration: Int) {
             val format = when (outputFormat) {
                 AMR -> MediaRecorder.OutputFormat.AMR_NB
                 else -> MediaRecorder.OutputFormat.AAC_ADTS
@@ -269,12 +302,12 @@ class AudioManager(
                 else -> MediaRecorder.AudioEncoder.AAC
             }
 
-            starTime = System.currentTimeMillis()
+            starTime = SystemClock.elapsedRealtime()
             recorder.apply {
                 reset()
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(format)
-                setOutputFile(outputFile)
+                setOutputFile(outputFile.absolutePath)
                 setAudioEncoder(encoder)
                 if (outputFormat == AAC) {
                     setAudioSamplingRate(22050)
@@ -290,10 +323,8 @@ class AudioManager(
 
         @Synchronized
         override fun stop(): Long {
-            recorder.apply {
-                stop()
-            }
-            return System.currentTimeMillis() - starTime
+            recorder.stop()
+            return SystemClock.elapsedRealtime() - starTime
         }
 
         override fun release() {
