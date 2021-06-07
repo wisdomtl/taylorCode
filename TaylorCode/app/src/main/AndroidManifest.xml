@@ -241,6 +241,7 @@
         <activity android:name=".ui.one.OneActivity" />
         <activity android:name=".ui.touch_event.touch_delegate.TouchDelegateActivity" />
         <activity android:name=".desin.abstract_handler.AbstractHandlerActivity" />
+        <activity android:name=".audio.AudioRecorderActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

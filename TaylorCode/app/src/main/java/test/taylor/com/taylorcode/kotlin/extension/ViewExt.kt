@@ -3,9 +3,6 @@ package test.taylor.com.taylorcode.kotlin.extension
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.*
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
@@ -14,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 import android.graphics.*
-import android.view.TouchDelegate
+import android.view.*
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
@@ -256,6 +253,3 @@ fun View.expand(dx: Int, dy: Int) {
         (parentView.touchDelegate as? MultiTouchDelegate)?.delegateViewMap?.put(this, rect)
     }
 }
-
-
-

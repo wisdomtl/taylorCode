@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
+import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
 import test.taylor.com.taylorcode.aysnc.priority.SplashActivity
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
@@ -235,6 +236,7 @@ class MainActivity : BaseActivity() {
         btnMultiTouchDelegate.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.touch_event.touch_delegate.TouchDelegateActivity> { } }
         poorDialogFragment.setOnClickListener { PoorDialogFragment.show(this@MainActivity) }
         btnNotificationActivity.setOnClickListener { startActivity<NotificationActivity> { } }
+        btnAudioRecorder.setOnClickListener { startActivity<AudioRecorderActivity> { } }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

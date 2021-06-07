@@ -36,13 +36,16 @@ class AudioManager(
     var onRecordCancel: (() -> Unit)? = null
     var onRecordReachedMaxTime: ((Int) -> Unit)? = null
 
+    var maxDuration = 120 * 1000
+
     private var listener = object : AudioInfoListener {
         override fun onInfo(what: Int, extra: Int) {
             when (what) {
                 MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
+                    audioRecord.stop()
                     handler.post { isRecording.set(false) }
-                    onRecordReachedMaxTime?.invoke(extra)
-                    onHandleEndRecord(false, extra.toLong())// is this right
+                    onRecordReachedMaxTime?.invoke(maxDuration)
+                    onHandleEndRecord(true, maxDuration.toLong())// is this right
                 }
                 MediaRecorder.MEDIA_RECORDER_ERROR_UNKNOWN, MediaRecorder.MEDIA_ERROR_SERVER_DIED -> {
                     error()
@@ -50,7 +53,7 @@ class AudioManager(
             }
         }
     }
-    private var audioRecord: AudioRecord = DefaultAudioRecord().apply { this.audioInfoListener = listener }
+    private val audioRecord: AudioRecord = DefaultAudioRecord().apply { this.audioInfoListener = listener }
 
     private var audioFile: File? = null
     private var isRecording: AtomicBoolean = AtomicBoolean(false)
@@ -69,7 +72,7 @@ class AudioManager(
                 onCompleteRecord(message.obj as Boolean)
             }
             MSG_ERROR -> {
-                onHandleEndRecord(message.obj as Boolean, message.arg1 as Long)
+                onHandleEndRecord(message.obj as Boolean, message.arg1.toLong())
             }
         }
         false
@@ -96,7 +99,7 @@ class AudioManager(
                 if (!cancelRecord.get()) {
                     setState(RECORD_READY)
                     if (hasPermission()) {
-                        audioRecord.start(type, file.absolutePath)
+                        audioRecord.start(type, file.absolutePath, maxDuration)
                         isRecording.set(true)
                         setState(RECORD_START)
                     } else {
@@ -128,13 +131,14 @@ class AudioManager(
         }
         cancelRecord.set(cancel)
         audioManager.abandonAudioFocus(null)
+        var duration = 0L
         try {
-            val duration = audioRecord.stop()
-            onHandleEndRecord(true, duration)
+            duration = audioRecord.stop()
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            onHandleEndRecord(true, duration)
         }
-
     }
 
     private fun onHandleEndRecord(isSuccess: Boolean, duration: Long) {
@@ -160,7 +164,8 @@ class AudioManager(
 
     private fun isAudioFileInvalid() = audioFile == null || !audioFile!!.exists() || audioFile!!.length() <= 0
 
-    fun start() {
+    fun start(maxDuration: Int = 120) {
+        this.maxDuration = maxDuration * 1000
         handler.removeCallbacksAndMessages(null)
         handler.obtainMessage(MSG_START_RECORD).sendToTarget()
     }
@@ -203,8 +208,12 @@ class AudioManager(
             return 0L
         }
 
+        return try {
         val stat = StatFs(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath)
-        return stat.run { blockSizeLong * availableBlocksLong }
+            stat.run { blockSizeLong * availableBlocksLong }
+        } catch (e: Exception) {
+            0L
+        }
     }
 
     private fun getAudioFile(): File? {
@@ -220,7 +229,7 @@ class AudioManager(
         /**
          * start audio recording
          */
-        fun start(outputFormat: String, outputFile: String)
+        fun start(outputFormat: String, outputFile: String, maxDuration: Int)
 
         /**
          * stop audio recording
@@ -250,7 +259,7 @@ class AudioManager(
         private val recorder = MediaRecorder()
 
         @Synchronized
-        override fun start(outputFormat: String, outputFile: String) {
+        override fun start(outputFormat: String, outputFile: String, maxDuration: Int) {
             val format = when (outputFormat) {
                 AMR -> MediaRecorder.OutputFormat.AMR_NB
                 else -> MediaRecorder.OutputFormat.AAC_ADTS
@@ -262,13 +271,18 @@ class AudioManager(
 
             starTime = System.currentTimeMillis()
             recorder.apply {
+                reset()
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(format)
                 setOutputFile(outputFile)
                 setAudioEncoder(encoder)
+                if (outputFormat == AAC) {
+                    setAudioSamplingRate(22050)
+                    setAudioEncodingBitRate(32000)
+                }
                 setOnInfoListener(listener)
                 setOnErrorListener(errorListener)
-                setMaxDuration(120 * 1000)
+                setMaxDuration(maxDuration)
                 prepare()
                 start()
             }
