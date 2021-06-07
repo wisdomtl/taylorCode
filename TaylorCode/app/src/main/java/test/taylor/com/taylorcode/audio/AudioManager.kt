@@ -2,7 +2,9 @@ package test.taylor.com.taylorcode.audio
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioFormat
 import android.media.AudioManager
+import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.*
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +15,7 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * provide the ability to record audio in file.
@@ -37,12 +40,6 @@ class AudioManager(val context: Context, val type: String = AAC) :
     private val STATE_REACH_MAX_TIME = 6
 
     /**
-     * the recording state
-     */
-    internal val STATE_INTERNAL_REACH_MAX_TIME = 1
-    internal val STATE_INTERNAL_ERROR = - 1
-
-    /**
      * the callback business layer cares about
      */
     var onRecordReady: (() -> Unit)? = null
@@ -59,23 +56,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
 
     var maxDuration = 120 * 1000
 
-    private var duration = 0L
-
-    private var listener = object : InfoListener {
-        override fun onInfo(state: Int, extra: Int) {
-            when (state) {
-                STATE_INTERNAL_REACH_MAX_TIME -> {
-                    recorder.stop()
-                    handleRecordEnd(true, maxDuration.toLong(), true)// is this right
-                }
-                STATE_INTERNAL_ERROR -> {
-                    handleRecordEnd(false, 0, false)
-                }
-            }
-        }
-    }
-
-    private var recorder: Recorder = AudioRecorder(listener, type)
+    private var recorder: Recorder = AudioRecorder(type)
     private var audioFile: File? = null
     private var cancelRecord: AtomicBoolean = AtomicBoolean(false)
     private val audioManager: AudioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -90,7 +71,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
     }
 
     fun release() {
-        launch { recorder.release() }
+        recorder.release()
     }
 
     fun isRecording() = recorder.isRecording()
@@ -103,7 +84,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
             return
         }
 
-        if (getAudioFreeSpace() <= 0) {
+        if (getFreeSpace() <= 0) {
             setState(STATE_FAILED)
             return
         }
@@ -143,18 +124,16 @@ class AudioManager(val context: Context, val type: String = AAC) :
         }
         cancelRecord.set(cancel)
         audioManager.abandonAudioFocus(null)
-        var duration = 0L
         try {
-            duration = recorder.stop()
+            recorder.stop()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            handleRecordEnd(true, duration, false)
+            handleRecordEnd(isSuccess = true, isReachMaxTime = false)
         }
     }
 
-    private fun handleRecordEnd(isSuccess: Boolean, duration: Long, isReachMaxTime: Boolean) {
-        this.duration = duration
+    private fun handleRecordEnd(isSuccess: Boolean, isReachMaxTime: Boolean) {
         if (cancelRecord.get()) {
             audioFile?.deleteOnExit()
             setState(STATE_CANCELED)
@@ -185,13 +164,13 @@ class AudioManager(val context: Context, val type: String = AAC) :
                 STATE_READY -> onRecordReady?.invoke()
                 STATE_START -> audioFile?.let { onRecordStart?.invoke(it) }
                 STATE_CANCELED -> onRecordCancel?.invoke()
-                STATE_SUCCESS -> audioFile?.let { onRecordSuccess?.invoke(it, duration) }
+                STATE_SUCCESS -> audioFile?.let { onRecordSuccess?.invoke(it, recorder.getDuration()) }
                 STATE_REACH_MAX_TIME -> onRecordReachedMaxTime?.invoke(maxDuration)
             }
         }
     }
 
-    private fun getAudioFreeSpace(): Long {
+    private fun getFreeSpace(): Long {
         if (Environment.MEDIA_MOUNTED != Environment.getExternalStorageState()) {
             return 0L
         }
@@ -222,14 +201,14 @@ class AudioManager(val context: Context, val type: String = AAC) :
         var outputFormat: String
 
         /**
-         * deliver the information of audio to [AudioManager]
-         */
-        var infoListener: InfoListener
-
-        /**
          * whether audio is recording
          */
         fun isRecording(): Boolean
+
+        /**
+         * the length of audio
+         */
+        fun getDuration(): Long
 
         /**
          * start audio recording, it is time-consuming
@@ -238,9 +217,8 @@ class AudioManager(val context: Context, val type: String = AAC) :
 
         /**
          * stop audio recording
-         * @return the duration of audio
          */
-        fun stop(): Long
+        fun stop()
 
         /**
          * release the resource of audio recording
@@ -249,30 +227,31 @@ class AudioManager(val context: Context, val type: String = AAC) :
     }
 
     /**
-     * deliver the information of audio to [AudioManager]
-     */
-    interface InfoListener {
-        fun onInfo(state: Int, extra: Int)
-    }
-
-    /**
      * record audio by [android.media.MediaRecorder]
      */
-    inner class MediaRecord(override var infoListener: InfoListener, override var outputFormat: String) : Recorder {
-        private var starTime: Long = 0L
-        private val listener = MediaRecorder.OnInfoListener { _, what, extra ->
-            val state = when (what) {
-                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> STATE_INTERNAL_REACH_MAX_TIME
-                else -> STATE_INTERNAL_ERROR
+    inner class MediaRecord(override var outputFormat: String) : Recorder {
+        private var starTime = AtomicLong()
+        private val listener = MediaRecorder.OnInfoListener { _, what, _ ->
+            when (what) {
+                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
+                    stop()
+                    handleRecordEnd(isSuccess = true, isReachMaxTime = true)
+                }
+                else -> {
+                    handleRecordEnd(isSuccess = false, isReachMaxTime = false)
+                }
             }
-            infoListener.onInfo(state, extra)
         }
-        private val errorListener = MediaRecorder.OnErrorListener { _, _, extra ->
-            infoListener.onInfo(STATE_INTERNAL_ERROR, extra)
+        private val errorListener = MediaRecorder.OnErrorListener { _, _, _ ->
+            handleRecordEnd(isSuccess = false, isReachMaxTime = false)
         }
         private val recorder = MediaRecorder()
         private var isRecording = AtomicBoolean(false)
+        private var duration = 0L
+
         override fun isRecording(): Boolean = isRecording.get()
+
+        override fun getDuration(): Long = duration
 
         override suspend fun start(outputFile: File, maxDuration: Int) {
             val format = when (outputFormat) {
@@ -284,7 +263,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
                 else -> MediaRecorder.AudioEncoder.AAC
             }
 
-            starTime = SystemClock.elapsedRealtime()
+            starTime.set(SystemClock.elapsedRealtime())
             isRecording.set(true)
             recorder.apply {
                 reset()
@@ -304,14 +283,71 @@ class AudioManager(val context: Context, val type: String = AAC) :
             }
         }
 
-        override fun stop(): Long {
+        override fun stop() {
             recorder.stop()
             isRecording.set(false)
-            return SystemClock.elapsedRealtime() - starTime
+            duration = SystemClock.elapsedRealtime() - starTime.get()
         }
 
         override fun release() {
             recorder.release()
+        }
+    }
+
+    /**
+     * record audio by [android.media.AudioRecord]
+     */
+    inner class AudioRecorder(override var outputFormat: String) : Recorder {
+        private val SOURCE = MediaRecorder.AudioSource.MIC
+        private val SAMPLE_RATE = 44100
+        private val CHANNEL = AudioFormat.CHANNEL_IN_MONO
+
+        private var bufferSize: Int = 0
+        private var isRecording = AtomicBoolean(false)
+        private var startTime = AtomicLong()
+        private var duration = 0L
+        private val audioRecord by lazy {
+            val format = when (outputFormat) {
+                PCM -> AudioFormat.ENCODING_PCM_16BIT
+                else -> AudioFormat.ENCODING_AAC_HE_V1
+            }
+            //todo: handle ERROR_BAD_VALUE for bufferSize
+            bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, format)
+            AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, format, bufferSize)
+        }
+
+        override fun isRecording(): Boolean = isRecording.get()
+
+        override fun getDuration(): Long = duration
+
+        override suspend fun start(outputFile: File, maxDuration: Int) {
+            if (audioRecord.state == AudioRecord.STATE_UNINITIALIZED) return
+
+            isRecording.set(true)
+            startTime.set(SystemClock.elapsedRealtime())
+            outputFile.outputStream().use { outputStream ->
+                audioRecord.startRecording()
+                val audioData = ByteArray(bufferSize)
+                while (continueRecord(maxDuration)) {
+                    audioRecord.read(audioData, 0, audioData.size)
+                    outputStream.write(audioData)
+                }
+                audioRecord.stop()
+                if (duration >= maxDuration) handleRecordEnd(isSuccess = true, isReachMaxTime = true)
+            }
+        }
+
+        private fun continueRecord(maxDuration: Int): Boolean {
+            duration = SystemClock.elapsedRealtime() - startTime.get()
+            return isRecording.get() && audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING && duration < maxDuration
+        }
+
+        override fun stop() {
+            isRecording.set(false)
+        }
+
+        override fun release() {
+            audioRecord.release()
         }
     }
 }
