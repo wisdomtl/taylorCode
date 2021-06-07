@@ -7,7 +7,7 @@ import android.os.SystemClock
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AudioRecord(override var infoListener: AudioManager.InfoListener, override var outputFormat: String) : AudioManager.Recorder {
+class AudioRecorder(override var infoListener: AudioManager.InfoListener, override var outputFormat: String) : AudioManager.Recorder {
 
     private val SOURCE = MediaRecorder.AudioSource.MIC
     private val SAMPLE_RATE = 44100
@@ -27,6 +27,8 @@ class AudioRecord(override var infoListener: AudioManager.InfoListener, override
         AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, format, bufferSize)
     }
 
+    override fun isRecording(): Boolean = isRecording.get()
+
     override suspend fun start(outputFile: File, maxDuration: Int) {
         if (audioRecord.state == AudioRecord.STATE_UNINITIALIZED) return
 
@@ -43,8 +45,8 @@ class AudioRecord(override var infoListener: AudioManager.InfoListener, override
     }
 
     override fun stop(): Long {
-        isRecording.set(false)
         audioRecord.stop()
+        isRecording.set(false)
         return SystemClock.elapsedRealtime() - startTime
     }
 

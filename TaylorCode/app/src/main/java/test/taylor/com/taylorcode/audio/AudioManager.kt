@@ -80,10 +80,8 @@ class AudioManager(val context: Context, val type: String = AAC) :
         }
     }
 
-    //    var recorder: Recorder = MediaRecord(listener, type)
-    private var recorder: Recorder = AudioRecord(listener, type)
+    private var recorder: Recorder = AudioRecorder(listener, type)
     private var audioFile: File? = null
-    private var isRecording: AtomicBoolean = AtomicBoolean(false)
     private var cancelRecord: AtomicBoolean = AtomicBoolean(false)
     private val audioManager: AudioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -100,12 +98,12 @@ class AudioManager(val context: Context, val type: String = AAC) :
         launch { recorder.release() }
     }
 
-    fun isRecording() = isRecording.get()
+    fun isRecording() = recorder.isRecording()
 
     private fun startRecord() {
         audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
 
-        if (isRecording.get()) {
+        if (recorder.isRecording()) {
             setState(RECORD_FAILED)
             return
         }
@@ -124,7 +122,6 @@ class AudioManager(val context: Context, val type: String = AAC) :
                 setState(RECORD_READY)
                 if (hasPermission()) {
                     launch { recorder.start(audioFile !!, maxDuration) }
-                    isRecording.set(true)
                     setState(RECORD_START)
                 } else {
                     stopRecord(false)
@@ -135,7 +132,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
             stopRecord(false)
         }
 
-        if (! isRecording.get()) {
+        if (! recorder.isRecording()) {
             setState(RECORD_FAILED)
         }
     }
@@ -146,7 +143,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
     }
 
     private fun stopRecord(cancel: Boolean) {
-        if (! isRecording.get()) {
+        if (! recorder.isRecording()) {
             return
         }
         cancelRecord.set(cancel)
@@ -179,7 +176,6 @@ class AudioManager(val context: Context, val type: String = AAC) :
                 setState(RECORD_SUCCESS)
             }
         }
-        isRecording.set(false)
     }
 
     private fun isAudioFileInvalid() = audioFile == null || ! audioFile !!.exists() || audioFile !!.length() <= 0
@@ -218,7 +214,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
 
     /**
      * the implementation of [Recorder] define the detail of how to record audio.
-     * [AudioManager] works with [Recorder] and dont care about the that details
+     * [AudioManager] works with [Recorder] and dont care about the recording details
      */
     interface Recorder {
 
@@ -231,6 +227,11 @@ class AudioManager(val context: Context, val type: String = AAC) :
          * deliver the information of audio to [AudioManager]
          */
         var infoListener: InfoListener
+
+        /**
+         * whether audio is recording
+         */
+        fun isRecording(): Boolean
 
         /**
          * start audio recording, it is time-consuming
@@ -272,6 +273,8 @@ class AudioManager(val context: Context, val type: String = AAC) :
             infoListener.onInfo(STATE_ERROR, extra)
         }
         private val recorder = MediaRecorder()
+        private var isRecording = AtomicBoolean(false)
+        override fun isRecording(): Boolean = isRecording.get()
 
         override suspend fun start(outputFile: File, maxDuration: Int) {
             val format = when (outputFormat) {
@@ -284,6 +287,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
             }
 
             starTime = SystemClock.elapsedRealtime()
+            isRecording.set(true)
             recorder.apply {
                 reset()
                 setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -304,6 +308,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
 
         override fun stop(): Long {
             recorder.stop()
+            isRecording.set(false)
             return SystemClock.elapsedRealtime() - starTime
         }
 
