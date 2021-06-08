@@ -54,9 +54,8 @@ class AudioManager(val context: Context, val type: String = AAC) :
      */
     private val callbackHandler = Handler(Looper.getMainLooper())
 
-    var maxDuration = 120 * 1000
-
-    private var recorder: Recorder = AudioRecorder(type)
+    private var maxDuration = 120 * 1000
+    private var recorder: Recorder = if (type == PCM) AudioRecorder(type) else MediaRecord(type)
     private var audioFile: File? = null
     private var cancelRecord: AtomicBoolean = AtomicBoolean(false)
     private val audioManager: AudioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -300,7 +299,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
     inner class AudioRecorder(override var outputFormat: String) : Recorder {
         private val SOURCE = MediaRecorder.AudioSource.MIC
         private val SAMPLE_RATE = 44100
-        private val CHANNEL = AudioFormat.CHANNEL_IN_MONO
+        private val CHANNEL = AudioFormat.CHANNEL_IN_STEREO
 
         private var bufferSize: Int = 0
         private var isRecording = AtomicBoolean(false)

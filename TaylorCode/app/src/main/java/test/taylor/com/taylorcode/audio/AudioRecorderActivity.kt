@@ -2,10 +2,11 @@ package test.taylor.com.taylorcode.audio
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.MediaStore
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,10 +18,19 @@ import java.io.File
 class AudioRecorderActivity : AppCompatActivity() {
 
     private var audioFile: File? = null
+    private var mediaFile: File? = null
     private val audioManager by lazy {
         AudioManager(this, AudioManager.PCM).apply {
             onRecordSuccess = { file: File, l: Long ->
                 audioFile = file
+            }
+        }
+    }
+
+    private val mediaManager by lazy {
+        AudioManager(this, AudioManager.AAC).apply {
+            onRecordSuccess = { file: File, l: Long ->
+                mediaFile = file
             }
         }
     }
@@ -132,6 +142,41 @@ class AudioRecorderActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            TextView {
+                layout_id = "tvPlayMediaRecord"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                textColor = "#ffffff"
+                text = "play"
+                gravity = gravity_center
+                padding = 10
+                align_horizontal_to = "tvMediaRecorder"
+                top_toBottomOf = "tvMediaRecorder"
+                shape = shape {
+                    corner_radius = 20
+                    solid_color = "#0000ff"
+                }
+                onClick = {
+                    mediaFile?.absolutePath?.let {
+                    }
+                }
+            }
+
+            TextView {
+                layout_id = "monitor"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 30f
+                textColor = "#ffffff"
+                text = "monitor"
+                gravity = gravity_center
+                bottom_toBottomOf = parent_id
+                onClick = {
+                    startActivity(Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION))
+                }
+            }
         }
     }
 
@@ -139,30 +184,29 @@ class AudioRecorderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-                ActivityCompat.requestPermissions(this, listOf(Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(), 1)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, listOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(), 1)
             }
         }
     }
 
     private fun startAudioRecord() {
-        Log.v("ttaylor", "startAudioRecord()")
         audioManager.start()
     }
 
     private fun startMediaRecord() {
-        Log.v("ttaylor", "startMediaRecord()")
-
+        mediaManager.start()
     }
 
     private fun stopAudioRecord() {
-        Log.v("ttaylor", "stopAudioRecord()")
         audioManager.stop()
     }
 
     private fun stopMediaRecord() {
-        Log.v("ttaylor", "stopMediaRecord()")
-
+        mediaManager.stop()
     }
 }
 
