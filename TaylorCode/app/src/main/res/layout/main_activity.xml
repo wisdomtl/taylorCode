@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btnAudioEncoder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="audio encoder"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnAudioRecorder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

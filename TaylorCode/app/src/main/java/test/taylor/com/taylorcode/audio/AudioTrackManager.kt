@@ -158,7 +158,7 @@ class AudioTrackManager {
         private const val mSampleRateInHz = 44100
 
         //指定捕获音频的声道数目。在AudioFormat类中指定用于此的常量
-        private const val mChannelConfig =  AudioFormat.CHANNEL_OUT_STEREO //单声道
+        private const val mChannelConfig =  AudioFormat.CHANNEL_OUT_MONO //单声道
 
         //指定音频量化位数 ,在AudioFormaat类中指定了以下各种可能的常量。通常我们选择ENCODING_PCM_16BIT和ENCODING_PCM_8BIT PCM代表的是脉冲编码调制，它实际上是原始音频样本。
         //因此可以设置每个样本的分辨率为16位或者8位，16位将占用更多的空间和处理能力,表示的音频也更加接近真实。

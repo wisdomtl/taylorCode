@@ -299,20 +299,15 @@ class AudioManager(val context: Context, val type: String = AAC) :
     inner class AudioRecorder(override var outputFormat: String) : Recorder {
         private val SOURCE = MediaRecorder.AudioSource.MIC
         private val SAMPLE_RATE = 44100
-        private val CHANNEL = AudioFormat.CHANNEL_IN_STEREO
+        private val CHANNEL = AudioFormat.CHANNEL_IN_MONO
 
         private var bufferSize: Int = 0
         private var isRecording = AtomicBoolean(false)
         private var startTime = AtomicLong()
         private var duration = 0L
         private val audioRecord by lazy {
-            val format = when (outputFormat) {
-                PCM -> AudioFormat.ENCODING_PCM_16BIT
-                else -> AudioFormat.ENCODING_AAC_HE_V1
-            }
-            //todo: handle ERROR_BAD_VALUE for bufferSize
-            bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, format)
-            AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, format, bufferSize)
+            bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, AudioFormat.ENCODING_PCM_16BIT)
+            AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, AudioFormat.ENCODING_PCM_16BIT, bufferSize)
         }
 
         override fun isRecording(): Boolean = isRecording.get()
@@ -331,7 +326,9 @@ class AudioManager(val context: Context, val type: String = AAC) :
                     audioRecord.read(audioData, 0, audioData.size)
                     outputStream.write(audioData)
                 }
+                if (audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
                 audioRecord.stop()
+                }
                 if (duration >= maxDuration) handleRecordEnd(isSuccess = true, isReachMaxTime = true)
             }
         }

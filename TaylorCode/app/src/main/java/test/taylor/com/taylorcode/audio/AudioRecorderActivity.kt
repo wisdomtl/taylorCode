@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import test.taylor.com.taylorcode.audio.encoder2.AacPcmCoder
 import test.taylor.com.taylorcode.kotlin.*
 import java.io.File
 
@@ -160,6 +161,7 @@ class AudioRecorderActivity : AppCompatActivity() {
                 }
                 onClick = {
                     mediaFile?.absolutePath?.let {
+
                     }
                 }
             }
@@ -169,12 +171,16 @@ class AudioRecorderActivity : AppCompatActivity() {
                 layout_width = wrap_content
                 layout_height = wrap_content
                 textSize = 30f
-                textColor = "#ffffff"
-                text = "monitor"
+                textColor = "#000000"
+                text = "pcm to aac"
                 gravity = gravity_center
                 bottom_toBottomOf = parent_id
+                center_horizontal = true
                 onClick = {
-                    startActivity(Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION))
+                    audioFile?.let {
+                        val aacFile = File(it.absolutePath.dropLast(4) + ".aac")
+                        AacPcmCoder.encodePcmToAac(audioFile,aacFile)
+                    }
                 }
             }
         }
