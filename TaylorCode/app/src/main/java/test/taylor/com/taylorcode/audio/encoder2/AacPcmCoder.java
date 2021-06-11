@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.audio.encoder2;
 
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.util.Log;
@@ -112,8 +113,8 @@ public class AacPcmCoder {
                         // out buffer 定位
                         outBuffer.position(outBufferInfo.offset);
                         outBuffer.limit(outBufferInfo.offset + outBufferInfo.size);
-                        if (lastAudioPresentationTimeUs <= outBufferInfo.presentationTimeUs) { // 有新数据
-                            lastAudioPresentationTimeUs = outBufferInfo.presentationTimeUs;
+//                        if (lastAudioPresentationTimeUs <= outBufferInfo.presentationTimeUs) { // 有新数据
+//                            lastAudioPresentationTimeUs = outBufferInfo.presentationTimeUs;
                             int outBufSize = outBufferInfo.size;
                             int outPacketSize = outBufSize + 7;
                             outBuffer.position(outBufferInfo.offset);
@@ -123,9 +124,9 @@ public class AacPcmCoder {
                             outBuffer.get(outData, 7, outBufSize);
                             fosAccAudio.write(outData, 0, outData.length);//形成 aac文件
                             //Log.v(TAG, outData.length + " bytes written.");
-                        } else {
-                            Log.e(TAG, "error sample! its presentationTimeUs should not lower than before.");
-                        }
+//                        } else {
+//                            Log.e(TAG, "error sample! its presentationTimeUs should not lower than before.");
+//                        }
                     }
                     //释放 buffer 归还给 codec
                     audioEncoder.releaseOutputBuffer(outputBufIndex, false);
@@ -256,15 +257,30 @@ public class AacPcmCoder {
      * @throws IOException
      */
     private static MediaCodec createAudioEncoder() throws IOException {
-        MediaCodec codec = MediaCodec.createEncoderByType(AUDIO_MIME);
+//        MediaCodec codec = MediaCodec.createEncoderByType(AUDIO_MIME);
+//        MediaFormat format = new MediaFormat();
+//        format.setString(MediaFormat.KEY_MIME, AUDIO_MIME);
+//        format.setInteger(MediaFormat.KEY_BIT_RATE, 64000);
+//        format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, 1);
+//        format.setInteger(MediaFormat.KEY_SAMPLE_RATE, 44100);
+//        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
+//        codec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+//        return codec;
+
+        /**
+         * more recommend way to create [MediaCodec]
+         */
         MediaFormat format = new MediaFormat();
         format.setString(MediaFormat.KEY_MIME, AUDIO_MIME);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, 64000);
+        format.setInteger(MediaFormat.KEY_BIT_RATE, 64000);// must be one of 64000 or 128000
         format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, 1);
         format.setInteger(MediaFormat.KEY_SAMPLE_RATE, 44100);
         format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
-        codec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
-        return codec;
+        MediaCodecList mediaCodecList = new MediaCodecList(MediaCodecList.ALL_CODECS);
+        String name = mediaCodecList.findEncoderForFormat(format);
+        MediaCodec mediaCodec = MediaCodec.createByCodecName(name);
+        mediaCodec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+        return mediaCodec;
     }
 
     /**

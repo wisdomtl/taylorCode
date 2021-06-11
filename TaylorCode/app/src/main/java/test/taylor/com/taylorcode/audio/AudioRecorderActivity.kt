@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.audio.encoder2.AacPcmCoder
 import test.taylor.com.taylorcode.kotlin.*
 import java.io.File
@@ -27,6 +29,7 @@ class AudioRecorderActivity : AppCompatActivity() {
             }
         }
     }
+    private val mainScope = MainScope()
 
     private val mediaManager by lazy {
         AudioManager(this, AudioManager.AAC).apply {
@@ -179,7 +182,8 @@ class AudioRecorderActivity : AppCompatActivity() {
                 onClick = {
                     audioFile?.let {
                         val aacFile = File(it.absolutePath.dropLast(4) + ".aac")
-                        AacPcmCoder.encodePcmToAac(audioFile,aacFile)
+//                        AacPcmCoder.encodePcmToAac(audioFile,aacFile)
+                        mainScope.launch { PcmEncoder.toAac(audioFile, aacFile) }
                     }
                 }
             }

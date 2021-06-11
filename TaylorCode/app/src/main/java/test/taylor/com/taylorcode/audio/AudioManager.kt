@@ -3,6 +3,8 @@ package test.taylor.com.taylorcode.audio
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioFormat
+import android.media.AudioFormat.CHANNEL_IN_MONO
+import android.media.AudioFormat.ENCODING_PCM_16BIT
 import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -30,6 +32,10 @@ class AudioManager(val context: Context, val type: String = AAC) :
         const val AAC = "aac"
         const val AMR = "amr"
         const val PCM = "pcm"
+
+        const val SOURCE = MediaRecorder.AudioSource.MIC
+        const val SAMPLE_RATE = 44100
+        const val CHANNEL = 1
     }
 
     private val STATE_FAILED = 1
@@ -212,7 +218,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
         /**
          * start audio recording, it is time-consuming
          */
-        suspend fun start(outputFile: File, maxDuration: Int)
+        fun start(outputFile: File, maxDuration: Int)
 
         /**
          * stop audio recording
@@ -252,7 +258,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
 
         override fun getDuration(): Long = duration
 
-        override suspend fun start(outputFile: File, maxDuration: Int) {
+        override fun start(outputFile: File, maxDuration: Int) {
             val format = when (outputFormat) {
                 AMR -> MediaRecorder.OutputFormat.AMR_NB
                 else -> MediaRecorder.OutputFormat.AAC_ADTS
@@ -297,24 +303,20 @@ class AudioManager(val context: Context, val type: String = AAC) :
      * record audio by [android.media.AudioRecord]
      */
     inner class AudioRecorder(override var outputFormat: String) : Recorder {
-        private val SOURCE = MediaRecorder.AudioSource.MIC
-        private val SAMPLE_RATE = 44100
-        private val CHANNEL = AudioFormat.CHANNEL_IN_MONO
-
         private var bufferSize: Int = 0
         private var isRecording = AtomicBoolean(false)
         private var startTime = AtomicLong()
         private var duration = 0L
         private val audioRecord by lazy {
-            bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, AudioFormat.ENCODING_PCM_16BIT)
-            AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL, AudioFormat.ENCODING_PCM_16BIT, bufferSize)
+            bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_IN_MONO, ENCODING_PCM_16BIT)
+            AudioRecord(SOURCE, SAMPLE_RATE, CHANNEL_IN_MONO, ENCODING_PCM_16BIT, bufferSize)
         }
 
         override fun isRecording(): Boolean = isRecording.get()
 
         override fun getDuration(): Long = duration
 
-        override suspend fun start(outputFile: File, maxDuration: Int) {
+        override fun start(outputFile: File, maxDuration: Int) {
             if (audioRecord.state == AudioRecord.STATE_UNINITIALIZED) return
 
             isRecording.set(true)
@@ -327,7 +329,7 @@ class AudioManager(val context: Context, val type: String = AAC) :
                     outputStream.write(audioData)
                 }
                 if (audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-                audioRecord.stop()
+                    audioRecord.stop()
                 }
                 if (duration >= maxDuration) handleRecordEnd(isSuccess = true, isReachMaxTime = true)
             }
