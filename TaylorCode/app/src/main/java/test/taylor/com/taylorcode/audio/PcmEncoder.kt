@@ -113,6 +113,6 @@ object PcmEncoder {
         it.setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate)
         it.setInteger(MediaFormat.KEY_AAC_PROFILE, AACObjectLC)
         val encoderName = MediaCodecList(REGULAR_CODECS).findEncoderForFormat(it)
-        MediaCodec.createByCodecName(encoderName).apply { configure(it, null, null, CONFIGURE_FLAG_ENCODE) }
+        createByCodecName(encoderName).apply { configure(it, null, null, CONFIGURE_FLAG_ENCODE) }
     }
 }
