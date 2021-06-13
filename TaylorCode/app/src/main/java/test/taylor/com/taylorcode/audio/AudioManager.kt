@@ -112,10 +112,6 @@ class AudioManager(val context: Context, val type: String = AAC) :
             e.printStackTrace()
             stopRecord(false)
         }
-
-        if (! recorder.isRecording()) {
-            setState(STATE_FAILED)
-        }
     }
 
     private fun hasPermission(): Boolean {
