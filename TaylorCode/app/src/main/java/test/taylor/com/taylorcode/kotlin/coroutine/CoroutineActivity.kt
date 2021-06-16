@@ -11,7 +11,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.Timer
 import java.lang.IllegalArgumentException
 import java.util.concurrent.Executors
-import kotlin.coroutines.resume
+import kotlin.coroutines.*
 
 class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var jobs = mutableListOf<Job>()
@@ -345,6 +345,21 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 onClick = suspendCoroutine
             }
         }
+    }
+
+    private fun createCoroutine() {
+        val continuation = suspend {
+            Log.v("ttaylor","coroutine body is started")
+            "done"
+        }.createCoroutine(object :Continuation<String>{
+            override val context: CoroutineContext = EmptyCoroutineContext
+
+            override fun resumeWith(result: Result<String>) {
+                Log.v("ttaylor","resumeWith() coroutine result=${result.getOrNull()} ")
+            }
+        })
+
+        continuation.resume(Unit)
     }
 
     /**
