@@ -230,70 +230,70 @@ class AudioManager(val context: Context, val type: String = AAC) :
     /**
      * record audio by [android.media.MediaRecorder]
      */
-    inner class MediaRecord(override var outputFormat: String) : Recorder {
-        private var starTime = AtomicLong()
-        private val listener = MediaRecorder.OnInfoListener { _, what, _ ->
-            when (what) {
-                MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
-                    stop()
-                    handleRecordEnd(isSuccess = true, isReachMaxTime = true)
-                }
-                else -> {
-                    handleRecordEnd(isSuccess = false, isReachMaxTime = false)
-                }
+inner class MediaRecord(override var outputFormat: String) : Recorder {
+    private var starTime = AtomicLong()
+    private val listener = MediaRecorder.OnInfoListener { _, what, _ ->
+        when (what) {
+            MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
+                stop()
+                handleRecordEnd(isSuccess = true, isReachMaxTime = true)
             }
-        }
-        private val errorListener = MediaRecorder.OnErrorListener { _, _, _ ->
-            handleRecordEnd(isSuccess = false, isReachMaxTime = false)
-        }
-        private val recorder = MediaRecorder()
-        private var isRecording = AtomicBoolean(false)
-        private var duration = 0L
-
-        override fun isRecording(): Boolean = isRecording.get()
-
-        override fun getDuration(): Long = duration
-
-        override fun start(outputFile: File, maxDuration: Int) {
-            val format = when (outputFormat) {
-                AMR -> MediaRecorder.OutputFormat.AMR_NB
-                else -> MediaRecorder.OutputFormat.AAC_ADTS
+            else -> {
+                handleRecordEnd(isSuccess = false, isReachMaxTime = false)
             }
-            val encoder = when (outputFormat) {
-                AMR -> MediaRecorder.AudioEncoder.AMR_NB
-                else -> MediaRecorder.AudioEncoder.AAC
-            }
-
-            starTime.set(SystemClock.elapsedRealtime())
-            isRecording.set(true)
-            recorder.apply {
-                reset()
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(format)
-                setOutputFile(outputFile.absolutePath)
-                setAudioEncoder(encoder)
-                if (outputFormat == AAC) {
-                    setAudioSamplingRate(22050)
-                    setAudioEncodingBitRate(32000)
-                }
-                setOnInfoListener(listener)
-                setOnErrorListener(errorListener)
-                setMaxDuration(maxDuration)
-                prepare()
-                start()
-            }
-        }
-
-        override fun stop() {
-            recorder.stop()
-            isRecording.set(false)
-            duration = SystemClock.elapsedRealtime() - starTime.get()
-        }
-
-        override fun release() {
-            recorder.release()
         }
     }
+    private val errorListener = MediaRecorder.OnErrorListener { _, _, _ ->
+        handleRecordEnd(isSuccess = false, isReachMaxTime = false)
+    }
+    private val recorder = MediaRecorder()
+    private var isRecording = AtomicBoolean(false)
+    private var duration = 0L
+
+    override fun isRecording(): Boolean = isRecording.get()
+
+    override fun getDuration(): Long = duration
+
+    override fun start(outputFile: File, maxDuration: Int) {
+        val format = when (outputFormat) {
+            AMR -> MediaRecorder.OutputFormat.AMR_NB
+            else -> MediaRecorder.OutputFormat.AAC_ADTS
+        }
+        val encoder = when (outputFormat) {
+            AMR -> MediaRecorder.AudioEncoder.AMR_NB
+            else -> MediaRecorder.AudioEncoder.AAC
+        }
+
+        starTime.set(SystemClock.elapsedRealtime())
+        isRecording.set(true)
+        recorder.apply {
+            reset()
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(format)
+            setOutputFile(outputFile.absolutePath)
+            setAudioEncoder(encoder)
+            if (outputFormat == AAC) {
+                setAudioSamplingRate(22050)
+                setAudioEncodingBitRate(32000)
+            }
+            setOnInfoListener(listener)
+            setOnErrorListener(errorListener)
+            setMaxDuration(maxDuration)
+            prepare()
+            start()
+        }
+    }
+
+    override fun stop() {
+        recorder.stop()
+        isRecording.set(false)
+        duration = SystemClock.elapsedRealtime() - starTime.get()
+    }
+
+    override fun release() {
+        recorder.release()
+    }
+}
 
     /**
      * record audio by [android.media.AudioRecord]
