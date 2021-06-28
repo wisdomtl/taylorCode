@@ -244,6 +244,7 @@
         <activity android:name=".desin.abstract_handler.AbstractHandlerActivity" />
         <activity android:name=".audio.AudioRecorderActivity" />
         <activity android:name=".audio.encoder.HWRecorderActivity" />
+        <activity android:name=".kotlin.coroutine.CoroutineActivity2" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

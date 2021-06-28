@@ -23,6 +23,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity2
 import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineCancelActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.SuspendCoroutineActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
@@ -96,7 +97,7 @@ class MainActivity : BaseActivity() {
         initView()
         readPhoneInfo()
         testValueDiliver();
-        detectFrame()
+//        detectFrame()
     }
 
     private fun testValueDiliver() {
@@ -142,6 +143,7 @@ class MainActivity : BaseActivity() {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
+        val list = listOf<String>()
         btn_window.setOnClickListener { startActivity<WindowActivity>() }
         btn_touch_event.setOnClickListener { startActivity<TouchEventActivity>() }
         btn_selector.setOnClickListener { startActivity(SelectorDemoActivity::class.java) }
@@ -239,6 +241,7 @@ class MainActivity : BaseActivity() {
         btnNotificationActivity.setOnClickListener { startActivity<NotificationActivity> { } }
         btnAudioRecorder.setOnClickListener { startActivity<AudioRecorderActivity> { } }
         btnAudioEncoder.setOnClickListener { startActivity<HWRecorderActivity> { } }
+        btnCoroutine.setOnClickListener { startActivity<CoroutineActivity2> { } }
 
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }

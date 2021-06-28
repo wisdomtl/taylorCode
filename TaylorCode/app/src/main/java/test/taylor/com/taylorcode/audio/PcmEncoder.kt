@@ -106,13 +106,13 @@ object PcmEncoder {
         return this
     }
 
-    private fun createEncoder(channel: Int, sampleRate: Int) = MediaFormat().let {
-        it.setString(MediaFormat.KEY_MIME, MIMETYPE_AUDIO_AAC)
-        it.setInteger(MediaFormat.KEY_BIT_RATE, 64000) // must be one of 64000 or 128000
-        it.setInteger(MediaFormat.KEY_CHANNEL_COUNT, channel)
-        it.setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate)
-        it.setInteger(MediaFormat.KEY_AAC_PROFILE, AACObjectLC)
-        val encoderName = MediaCodecList(REGULAR_CODECS).findEncoderForFormat(it)
-        createByCodecName(encoderName).apply { configure(it, null, null, CONFIGURE_FLAG_ENCODE) }
-    }
+private fun createEncoder(channel: Int, sampleRate: Int) = MediaFormat().let {
+    it.setString(MediaFormat.KEY_MIME, MIMETYPE_AUDIO_AAC)
+    it.setInteger(MediaFormat.KEY_BIT_RATE, 64000) // must be one of 64000 or 128000
+    it.setInteger(MediaFormat.KEY_CHANNEL_COUNT, channel)
+    it.setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate)
+    it.setInteger(MediaFormat.KEY_AAC_PROFILE, AACObjectLC)
+    val encoderName = MediaCodecList(REGULAR_CODECS).findEncoderForFormat(it)
+    createByCodecName(encoderName).apply { configure(it, null, null, CONFIGURE_FLAG_ENCODE) }
+}
 }

@@ -347,20 +347,6 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun createCoroutine() {
-        val continuation = suspend {
-            Log.v("ttaylor","coroutine body is started")
-            "done"
-        }.createCoroutine(object :Continuation<String>{
-            override val context: CoroutineContext = EmptyCoroutineContext
-
-            override fun resumeWith(result: Result<String>) {
-                Log.v("ttaylor","resumeWith() coroutine result=${result.getOrNull()} ")
-            }
-        })
-
-        continuation.resume(Unit)
-    }
 
     /**
      * SupervisorJob
