@@ -3,6 +3,7 @@ package test.taylor.com.taylorcode
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
@@ -87,6 +88,8 @@ import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
+import java.io.File
+import java.util.*
 import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity() {
@@ -243,6 +246,7 @@ class MainActivity : BaseActivity() {
         btnAudioEncoder.setOnClickListener { startActivity<HWRecorderActivity> { } }
         btnCoroutine.setOnClickListener { startActivity<CoroutineActivity2> { } }
 
+
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
 
@@ -369,7 +373,7 @@ fun Float.cutEndZero(): String = this.toString().reversed().let {
     var zeroCount = 0
     for (i in 0 until dotIndex) {
         if (it[i] != '0') break
-        zeroCount ++
+        zeroCount++
     }
     val ret = it.takeLast(it.length - zeroCount).reversed()
     if (ret.endsWith('.')) ret.dropLast(1) else ret
