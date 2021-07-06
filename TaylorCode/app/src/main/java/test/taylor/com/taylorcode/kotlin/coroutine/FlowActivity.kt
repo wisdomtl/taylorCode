@@ -50,19 +50,38 @@ class FlowActivity : AppCompatActivity() {
         setContentView(contentView)
 
         /**
-         * case : countdown
+         * case: StateFlow
          */
-//        countdown(200000, 100, contentView()) {
-//           Log.e("ttaylor","cout down by flow ")
-//            true
-//        }
-
-
         GlobalScope.launch {
             stateFlow.buffer()?.collect {
-                Log.v("ttaylor","collect() string=${it}")
+                Log.v("ttaylor", "collect() string=${it}")
+            }
+        }
+
+        /**
+         * case
+         * flow() to create a flow
+         * collect() to collect a flow
+         */
+        GlobalScope.launch {
+            flow {
+                // define the logic invoked when collect() invoked
+                (1 .. 3).forEach {
+                    delay(1000)
+                    emit(it)
+                }
+            }.map { }.collect {
+                // define the logic invoked when emit() invoked
+                Log.v("ttaylor", "print() num=${it}")
             }
         }
 
     }
+}
+
+/**
+ * case: customize operator of Flow
+ */
+fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -> R): Flow<R> = transform { value ->
+    if (predicate(value)) emit(transform(value))
 }
