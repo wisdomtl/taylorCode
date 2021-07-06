@@ -9,6 +9,12 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btnCoroutine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -401,12 +407,7 @@
             android:layout_height="wrap_content"
             android:text="dynamically add view to constraintlayou"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_flow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="flow"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_vp2"
             android:layout_width="match_parent"
