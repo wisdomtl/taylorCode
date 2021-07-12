@@ -245,6 +245,7 @@
         <activity android:name=".audio.AudioRecorderActivity" />
         <activity android:name=".audio.encoder.HWRecorderActivity" />
         <activity android:name=".kotlin.coroutine.CoroutineActivity2" />
+        <activity android:name=".concurrent.countdownlatch.CountDownLatchActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

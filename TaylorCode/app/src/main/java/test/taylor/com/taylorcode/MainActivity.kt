@@ -15,6 +15,7 @@ import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
+import test.taylor.com.taylorcode.concurrent.countdownlatch.CountDownLatchActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
@@ -245,6 +246,7 @@ class MainActivity : BaseActivity() {
         btnAudioRecorder.setOnClickListener { startActivity<AudioRecorderActivity> { } }
         btnAudioEncoder.setOnClickListener { startActivity<HWRecorderActivity> { } }
         btnCoroutine.setOnClickListener { startActivity<CoroutineActivity2> { } }
+        count_down_latch.setOnClickListener { startActivity<CountDownLatchActivity> { } }
 
 
         //SAM case:
