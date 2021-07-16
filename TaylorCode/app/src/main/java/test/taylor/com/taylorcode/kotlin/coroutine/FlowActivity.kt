@@ -14,10 +14,8 @@ import test.taylor.com.taylorcode.kotlin.*
 
 class FlowActivity : AppCompatActivity() {
     var count = 0
-
     var flow: Flow<Int>? = null
     var job: Job? = null
-
     val mainScope = MainScope()
 
     private lateinit var tv: TextView
@@ -85,7 +83,7 @@ class FlowActivity : AppCompatActivity() {
                     delay(1000)
                     emit(it)
                 }
-            }.map { }.collect {
+            }.collect {
                 // define the logic invoked when emit() invoked
                 Log.v("ttaylor", "print() num=${it}")
             }
@@ -128,7 +126,7 @@ class FlowActivity : AppCompatActivity() {
         }
 
         /**
-         * case: launchIn(), a shorthand for scope.launch { flow.collect() }
+         * case: launchIn() + onEach() + onCompletion(), a shorthand for scope.launch { flow.collect() }
          */
         flow {
             (1 .. 10).forEach {
@@ -138,6 +136,13 @@ class FlowActivity : AppCompatActivity() {
         }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
             .onCompletion { if (it == null) Log.v("ttaylor", "onEach() + onCompletion() + launchIn() completion= successful") }
             .launchIn(mainScope)
+
+
+        /**
+         * case: flatMap()
+         */
+
+
     }
 }
 
@@ -149,13 +154,14 @@ fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -
 }
 
 
+@ExperimentalCoroutinesApi
 fun View.clicks() = callbackFlow {
     setOnClickListener { offer(Unit) }
     awaitClose { setOnClickListener(null) }
 }
 
 /**
- * take the first data in every [windowDuration] and drop
+ * take the first data in every [windowDuration] and drop the rest
  */
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
     var lastEmissionTime = 0L
