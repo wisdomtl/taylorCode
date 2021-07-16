@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/dutyChain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="duty chain"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/count_down_latch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
