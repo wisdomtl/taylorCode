@@ -133,16 +133,47 @@ class FlowActivity : AppCompatActivity() {
                 delay(10)
                 emit(it)
             }
-        }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
+        }.onStart { }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
             .onCompletion { if (it == null) Log.v("ttaylor", "onEach() + onCompletion() + launchIn() completion= successful") }
             .launchIn(mainScope)
 
-
         /**
-         * case: flatMap()
+         * case: flatMapConcat(), turn one emitted value into several values as Flow, and concat all values as sequence into one flow
          */
+        val names = listOf(
+            "taylor",
+            "evian",
+            "linda"
+        )
+
+        GlobalScope.launch {
+            names.asFlow()
+                .flatMapConcat { name -> flow { getPhoneNumber(name).forEach { emit(it) } } }
+                .filter { number -> number.startsWith("1350") }
+                .catch {  }
+                .collect { Log.v("ttaylor", "1350 numbers = $it thread id=${Thread.currentThread().id}") }
+        }
+
+        // do this in non-flow way, logs will print together, it means
+        GlobalScope.launch {
+            val ret = mutableListOf<String>()
+            names.forEach { name ->
+                ret.addAll(getPhoneNumber(name).filter { number -> number.startsWith("1350") })
+            }
+            ret.forEach { Log.v("ttaylor", "1350 numbers in non-flow way=$it") }
+        }
+    }
 
 
+    suspend fun getPhoneNumber(name: String): List<String> {
+        delay(1000) // as if it is return from server
+        Log.v("ttaylor", "getPhoneNumber() thread id=${Thread.currentThread().id}")
+        return when (name) {
+            "taylor" -> listOf("13508963547", "1409875645", "12298475439")
+            "evian" -> listOf("13508376547", "18932749283", "12983783927")
+            "linda" -> listOf("135038746388", "1898321732984", "13988475439")
+            else -> emptyList()
+        }
     }
 }
 
@@ -168,8 +199,7 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
     collect { upstream ->
         val currentTime = System.currentTimeMillis()
         val mayEmit = currentTime - lastEmissionTime > windowDuration
-        if (mayEmit)
-        {
+        if (mayEmit) {
             lastEmissionTime = currentTime
             emit(upstream)
         }

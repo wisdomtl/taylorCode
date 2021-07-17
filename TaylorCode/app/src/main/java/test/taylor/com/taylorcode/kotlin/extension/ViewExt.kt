@@ -10,15 +10,15 @@ import androidx.core.view.doOnAttach
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
-import android.graphics.*
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
+import android.widget.EditText
 import androidx.coordinatorlayout.widget.ViewGroupUtils
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.doOnAttach
-import test.taylor.com.taylorcode.kotlin.dp
-import kotlin.math.max
+
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
     setOnTouchListener { v, event ->
@@ -252,4 +252,20 @@ fun View.expand(dx: Int, dy: Int) {
         rect.inset(- dx, - dy)
         (parentView.touchDelegate as? MultiTouchDelegate)?.delegateViewMap?.put(this, rect)
     }
+}
+
+
+fun EditText.afterTextChangedFlow(): Flow<Editable?>
+        = callbackFlow {
+    val watcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            offer(s)
+        }
+        override fun beforeTextChanged(s: CharSequence?,
+                                       start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?,
+                                   start: Int, before: Int, count: Int) {}
+    }
+    addTextChangedListener(watcher)
+    awaitClose { removeTextChangedListener(watcher) }
 }
