@@ -180,10 +180,25 @@ class FlowActivity : AppCompatActivity() {
             val ret = countdown2(10_000, 1_000) { io(it) }
                 .onStart { Log.w("ttaylor", "on countdown start----------") }
                 .onEach { Log.v("ttaylor", "on countdown ${it}") }
-                .onStart { Log.v("ttaylor","on countdown start again") }
+                .onStart { Log.v("ttaylor", "on countdown start again") }
                 .onCompletion { Log.w("ttaylor", "on countdown end--------") }
                 .reduce { acc, value -> acc + value }
             Log.e("ttaylor", "countdown acc ret = $ret")
+        }
+
+        /**
+         * case: conflate() : emitter never stop due to a slow collector, but the collector always get the recent emitter value
+         */
+        mainScope.launch {
+            flow {
+                (1 .. 10).forEach {
+                    delay(100)
+                    emit(it)
+                }
+            }.conflate().collect {
+                delay(200)
+                Log.v("ttaylor", "conflate = $it")
+            }
         }
     }
 
