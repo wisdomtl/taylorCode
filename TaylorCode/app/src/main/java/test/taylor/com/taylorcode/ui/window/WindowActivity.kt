@@ -60,7 +60,7 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
 //        FloatWindow.INSTANCE.setView(generateWindowView(), TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setWidth(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
 //        FloatWindow.INSTANCE.setHeight(DimensionUtil.dp2px(54), WindowActivity.TAG_WINDOW_A);
-        findViewById<View>(R.id.ivArrow).setOnClickListener { v->
+        findViewById<View>(R.id.ivArrow).setOnClickListener { v ->
             v.isSelected = !v.isSelected
         }
         FloatWindow.setClickListener(object : WindowClickListener {
@@ -76,11 +76,11 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             windowInfo = WindowInfo(generateWindowView())
             windowInfo!!.width = DimensionUtil.dp2px(54.0)
             windowInfo!!.height = DimensionUtil.dp2px(54.0)
-            FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0,true)
+            FloatWindow.show(this, TAG_WINDOW_A, windowInfo, 0, 0, true)
         }
-        FloatWindow.show(this, TAG_WINDOW_A,dragEnable = true)
-        FloatWindow.setOutsideTouchable(true,{
-            Log.v("ttaylor","tag=touch outside, WindowActivity.onResume()  ")
+        FloatWindow.show(this, TAG_WINDOW_A, dragEnable = true)
+        FloatWindow.setOutsideTouchable(true, {
+            Log.v("ttaylor", "tag=touch outside, WindowActivity.onResume()  ")
         })
     }
 
@@ -167,9 +167,11 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
     fun showBottomPopupWindow2(context: Context, layoutId: Int) {
         if (popupWindow == null) {
             val windowView = getWindowView(context, layoutId)
-            popupWindow = CustomPopupWindow(windowView as ViewGroup,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    500, this)
+            popupWindow = CustomPopupWindow(
+                windowView as ViewGroup,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                500, this
+            )
             popupWindow!!.setOnItemClickListener(this)
         }
         if (popupWindow!!.isShowing) {
@@ -178,10 +180,10 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
             popupWindow!!.showAtLocation(this.window.decorView, Gravity.BOTTOM, 0, 0)
         }
 
-        val classWindow2:Class<*>? = popupWindow?.javaClass
+        val classWindow2: Class<*>? = popupWindow?.javaClass
         val father = classWindow2?.superclass
         val popupDecorView = father?.getDeclaredField("mDecorView")
-        popupDecorView?.isAccessible  = true
+        popupDecorView?.isAccessible = true
         val mask = View {
             layout_id = "mask"
             layout_width = match_parent
@@ -270,14 +272,16 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
         progressRing = ProgressRing(this)
         animationDrawable = createAnimationDrawable(this)
         progressRing!!.setImageDrawable(animationDrawable)
-        timer = Timer(TimerListener { pastMillisecond ->
-            val mod = pastMillisecond % FULL_TIME_MILLISECOND
-            Log.v("ttaylor", "CustomViewActivity.onTick() mod=$mod,past=$pastMillisecond")
-            val progress = getProgress(mod, FULL_TIME_MILLISECOND)
-            progressRing!!.setProgress(progress)
-            if (mod == 0f) {
-                doFrameAnimation(animationDrawable)
-                doValueAnimator(10f, 62f, progressRing!!, VALUE_ANIM_DURATION)
+        timer = Timer(object : TimerListener {
+            override fun onTick(pastMillisecond: Long) {
+                val mod = pastMillisecond % FULL_TIME_MILLISECOND
+                Log.v("ttaylor", "CustomViewActivity.onTick() mod=$mod,past=$pastMillisecond")
+                val progress = getProgress(mod, FULL_TIME_MILLISECOND)
+                progressRing!!.setProgress(progress)
+                if (mod == 0f) {
+                    doFrameAnimation(animationDrawable)
+                    doValueAnimator(10f, 62f, progressRing!!, VALUE_ANIM_DURATION)
+                }
             }
         })
         timer!!.start(0, 100)
@@ -408,7 +412,7 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
     private fun showFloatWindowPartner(context: Context) {
         Log.v("ttaylor", "WindowActivity.showFloatWindowPartner()" + "  ")
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                ?: return
+            ?: return
         if (floatWindowPartnerView == null) {
             floatWindowPartnerView = LayoutInflater.from(context).inflate(R.layout.float_window_partner, null)
         }
@@ -421,7 +425,11 @@ class WindowActivity : Activity(), View.OnClickListener, CustomPopupWindow.OnIte
         }
     }
 
-    private inner class OnWindowStatusListener(private val windowManager: WindowManager?, private val partnerView: View, private val layoutParams: WindowManager.LayoutParams) : FloatWindow.WindowStateListener {
+    private inner class OnWindowStatusListener(
+        private val windowManager: WindowManager?,
+        private val partnerView: View,
+        private val layoutParams: WindowManager.LayoutParams
+    ) : FloatWindow.WindowStateListener {
         override fun onWindowShow() {}
         override fun onWindowDismiss() {}
         override fun onWindowMove(dx: Float, dy: Float, screenWidth: Int, screenHeight: Int, layoutParams: WindowManager.LayoutParams?): WindowManager.LayoutParams {

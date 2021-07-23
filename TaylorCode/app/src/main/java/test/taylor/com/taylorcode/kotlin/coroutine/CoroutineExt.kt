@@ -4,41 +4,19 @@ import android.os.Build
 import android.view.View
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 /**
  * start counting down from [duration] to 0 in a background thread and invoking the [onCountdown] every [interval] in main thread
  */
-fun countdown(
-    duration: Long,
-    interval: Long,
-    view: View?,
-    producerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    consumerDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    onCountdown: () -> Boolean
-): Job {
-    return GlobalScope.launch(consumerDispatcher) {
-        var d = duration
-        val flow = flow {
-            while (isActive) {
-                if (d <= 0) cancel()
-                emit(Unit)
-                delay(interval)
-                d -= interval
-            }
-        }.flowOn(producerDispatcher)
-
-        try {
-            flow.collect {
-                if (onCountdown()) cancel()
-            }
-        } catch (t: Throwable) {
-            t.printStackTrace()
-        }
-    }.autoDispose(view)
-}
+fun <T> countdown2(duration: Long, interval: Long, onCountdown: suspend (Long) -> T): Flow<T> =
+    flow { (duration - interval downTo 0 step interval).forEach { emit(it) } }
+        .onEach { delay(interval) }
+        .onStart { emit(duration) }
+        .map { onCountdown(it) }
+        .flowOn(Dispatchers.Default)
 
 
 /**

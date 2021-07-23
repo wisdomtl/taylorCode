@@ -932,10 +932,12 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine() 0 ,thread id=${Thread.currentThread().id}")
         kotlin.coroutines.suspendCoroutine<String> { continuation ->
             Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  1,thread id=${Thread.currentThread().id}")
-            Timer(Timer.TimerListener { pastMillisecond ->
-                //visiting the outer class's fun cause memory leak
-                Log.w("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  ${inttt()}  ${pastMillisecond} past")
-                if (pastMillisecond == 100000L) continuation.resume("done")
+            Timer(object : Timer.TimerListener {
+                override fun onTick(pastMillisecond: Long) {
+                    //visiting the outer class's fun cause memory leak
+                    Log.w("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  ${inttt()}  ${pastMillisecond} past")
+                    if (pastMillisecond == 100000L) continuation.resume("done")
+                }
 
             }).apply { start(0, 1000) }
             Log.v("ttaylor", "tag=suspend coroutine, CoroutineActivity.suspendCoroutine()  2,thread id=${Thread.currentThread().id}")

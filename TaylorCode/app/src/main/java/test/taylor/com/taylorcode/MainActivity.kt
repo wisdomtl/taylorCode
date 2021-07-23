@@ -88,6 +88,7 @@ import test.taylor.com.taylorcode.ui.touch_event.touch_delegate.MultiTouchDelega
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
+import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import java.io.File
@@ -259,6 +260,12 @@ class MainActivity : BaseActivity() {
 
         val str: String = (java.lang.String("0").bytes.sum() - 48).toString()
         Log.v("ttaylor", "tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
+
+        Countdown(10000, 1000) { it }.apply {
+            onStart = { Log.v("ttaylor", "countdown start---------") }
+            onEnd = { ret -> Log.v("ttaylor", "countdown end--------- ret=${ret}") }
+            accumulator = { acc, value -> acc + value }
+        }.start()
 
 
         /**

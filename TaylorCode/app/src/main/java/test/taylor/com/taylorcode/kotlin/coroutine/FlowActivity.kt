@@ -18,6 +18,8 @@ class FlowActivity : AppCompatActivity() {
     var job: Job? = null
     val mainScope = MainScope()
 
+    private var nameCount = 0
+
     private lateinit var tv: TextView
 
     val stateFlow = MutableStateFlow("")
@@ -133,7 +135,7 @@ class FlowActivity : AppCompatActivity() {
                 delay(10)
                 emit(it)
             }
-        }.onStart { }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
+        }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
             .onCompletion { if (it == null) Log.v("ttaylor", "onEach() + onCompletion() + launchIn() completion= successful") }
             .launchIn(mainScope)
 
@@ -150,7 +152,7 @@ class FlowActivity : AppCompatActivity() {
             names.asFlow()
                 .flatMapConcat { name -> flow { getPhoneNumber(name).forEach { emit(it) } } }
                 .filter { number -> number.startsWith("1350") }
-                .catch {  }
+                .catch { }
                 .collect { Log.v("ttaylor", "1350 numbers = $it thread id=${Thread.currentThread().id}") }
         }
 
@@ -162,7 +164,42 @@ class FlowActivity : AppCompatActivity() {
             }
             ret.forEach { Log.v("ttaylor", "1350 numbers in non-flow way=$it") }
         }
+
+        /**
+         * case: sample(duration) which will take the last emitter in the time window of duration
+         */
+        generateUserId().filter { !it.isInShadow }
+            .sample(1000)
+            .onEach { Log.v("ttaylor", "user getting in room is ${it.id}") }
+            .launchIn(mainScope)
+
+        /**
+         * case: flow countdown on background and collect on main thread
+         */
+        mainScope.launch {
+            val ret = countdown2(10_000, 1_000) { io(it) }
+                .onStart { Log.w("ttaylor", "on countdown start----------") }
+                .onEach { Log.v("ttaylor", "on countdown ${it}") }
+                .onStart { Log.v("ttaylor","on countdown start again") }
+                .onCompletion { Log.w("ttaylor", "on countdown end--------") }
+                .reduce { acc, value -> acc + value }
+            Log.e("ttaylor", "countdown acc ret = $ret")
+        }
     }
+
+    private suspend fun io(time: Long): Long {
+        delay(1000)
+        return time
+    }
+
+    private fun generateUserId() = flow {
+        (1 .. 100).forEach {
+            delay(300)
+            emit(User(it, it.rem(2) != 0))
+        }
+    }
+
+    data class User(val id: Int, val isInShadow: Boolean = false)
 
 
     suspend fun getPhoneNumber(name: String): List<String> {
