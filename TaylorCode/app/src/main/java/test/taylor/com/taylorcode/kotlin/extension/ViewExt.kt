@@ -12,7 +12,6 @@ import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.coordinatorlayout.widget.ViewGroupUtils
@@ -276,4 +275,11 @@ fun EditText.textChangeFlow(): Flow<CharSequence> = callbackFlow {
     }
     addTextChangedListener(watcher)
     awaitClose { removeTextChangedListener(watcher) }
+}
+
+
+@ExperimentalCoroutinesApi
+fun View.clickFlow() = callbackFlow {
+    setOnClickListener { offer(Unit) }
+    awaitClose { setOnClickListener(null) }
 }

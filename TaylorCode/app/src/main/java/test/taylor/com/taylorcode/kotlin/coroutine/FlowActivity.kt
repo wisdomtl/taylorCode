@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.*
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.clickFlow
 import test.taylor.com.taylorcode.kotlin.extension.textChangeFlow
 import test.taylor.com.taylorcode.kotlin.extension.throttleFirst
 
@@ -93,7 +94,7 @@ class FlowActivity : AppCompatActivity() {
         /**
          * case : throttle first of click
          */
-        tv.clicks().throttleFirst(1000).onEach {
+        tv.clickFlow().throttleFirst(1000).onEach {
             Log.v("ttaylor", "click debounce ")
         }.launchIn(mainScope)
 
@@ -269,9 +270,3 @@ fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -
     if (predicate(value)) emit(transform(value))
 }
 
-
-@ExperimentalCoroutinesApi
-fun View.clicks() = callbackFlow {
-    setOnClickListener { offer(Unit) }
-    awaitClose { setOnClickListener(null) }
-}
