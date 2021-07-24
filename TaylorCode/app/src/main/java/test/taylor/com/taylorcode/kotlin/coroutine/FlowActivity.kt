@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.*
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.textChangeFlow
+import test.taylor.com.taylorcode.kotlin.extension.throttleFirst
 
 class FlowActivity : AppCompatActivity() {
     var count = 0
@@ -49,7 +51,38 @@ class FlowActivity : AppCompatActivity() {
 
                 }
             }
+
+            EditText {
+                layout_id = "etContent"
+                layout_width = match_parent
+                layout_height = 50
+                top_toTopOf = parent_id
+                start_toStartOf = parent_id
+                /**
+                 *  case: debounce on EditText input
+                 */
+                this.textChangeFlow()
+                    .filter { it.isNotEmpty() }
+                    .debounce(300)
+                    .flatMapLatest { searchFlow(it.toString()) }
+                    .flowOn(Dispatchers.IO)
+                    .onEach { updateUi(it) }
+                    .launchIn(mainScope)
+            }
         }
+    }
+
+    private fun updateUi(it: List<String>) {
+
+    }
+
+    private suspend fun search(key: String): List<String> {
+        delay(200)
+        return listOf("a", "b")
+    }
+
+    private fun searchFlow(key: String) = flow {
+        emit(search(key))
     }
 
     @InternalCoroutinesApi
@@ -60,7 +93,7 @@ class FlowActivity : AppCompatActivity() {
         /**
          * case : throttle first of click
          */
-        tv.clicks().throttleFirst2(1000).onEach {
+        tv.clicks().throttleFirst(1000).onEach {
             Log.v("ttaylor", "click debounce ")
         }.launchIn(mainScope)
 
@@ -241,18 +274,4 @@ fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -
 fun View.clicks() = callbackFlow {
     setOnClickListener { offer(Unit) }
     awaitClose { setOnClickListener(null) }
-}
-
-/**
- * take the first data in every [periodMillis] and drop the rest
- */
-fun <T> Flow<T>.throttleFirst2(periodMillis: Long): Flow<T> {
-    var lastTime = 0L
-    return transform { upstream ->
-        val currentTime = System.currentTimeMillis()
-        if (currentTime - lastTime > periodMillis) {
-            lastTime = currentTime
-            emit(upstream)
-        }
-    }
 }

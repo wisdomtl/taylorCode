@@ -12,9 +12,11 @@ import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.coordinatorlayout.widget.ViewGroupUtils
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -78,8 +80,8 @@ fun RecyclerView.addItemInOutListener(listener: ((childView: View?, adapterIndex
         val isInvalid = index < 0
     }
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
-        private var preTopItem = Item(- 1, null)
-        private var preBottomItem = Item(- 1, null)
+        private var preTopItem = Item(-1, null)
+        private var preBottomItem = Item(-1, null)
         private var curTopItem = Item(0, null)
         private var curBottomItem = Item(Int.MAX_VALUE, null)
 
@@ -202,9 +204,9 @@ fun RecyclerView.addTopBottomListener(listener: ((direction: Int) -> Unit)?) {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (dy == 0) return
-            if (! recyclerView.canScrollVertically(1)) {
+            if (!recyclerView.canScrollVertically(1)) {
                 listener?.invoke(2)
-            } else if (! recyclerView.canScrollVertically(- 1)) {
+            } else if (!recyclerView.canScrollVertically(-1)) {
                 listener?.invoke(1)
             }
         }
@@ -249,22 +251,28 @@ fun View.expand(dx: Int, dy: Int) {
     post {
         val rect = Rect()
         ViewGroupUtils.getDescendantRect(parentView, this, rect)
-        rect.inset(- dx, - dy)
+        rect.inset(-dx, -dy)
         (parentView.touchDelegate as? MultiTouchDelegate)?.delegateViewMap?.put(this, rect)
     }
 }
 
 
-fun EditText.afterTextChangedFlow(): Flow<Editable?>
-        = callbackFlow {
+@ExperimentalCoroutinesApi
+fun EditText.textChangeFlow(): Flow<CharSequence> = callbackFlow {
     val watcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            offer(s)
         }
-        override fun beforeTextChanged(s: CharSequence?,
-                                       start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?,
-                                   start: Int, before: Int, count: Int) {}
+
+        override fun beforeTextChanged(
+            s: CharSequence?, start: Int, count: Int, after: Int
+        ) {
+        }
+
+        override fun onTextChanged(
+            s: CharSequence?, start: Int, before: Int, count: Int
+        ) {
+            s?.let { offer(it) }
+        }
     }
     addTextChangedListener(watcher)
     awaitClose { removeTextChangedListener(watcher) }
