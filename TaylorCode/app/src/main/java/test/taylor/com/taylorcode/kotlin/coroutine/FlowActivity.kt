@@ -60,7 +60,7 @@ class FlowActivity : AppCompatActivity() {
         /**
          * case : throttle first of click
          */
-        tv.clicks().throttleFirst(1000).onEach {
+        tv.clicks().throttleFirst2(1000).onEach {
             Log.v("ttaylor", "click debounce ")
         }.launchIn(mainScope)
 
@@ -244,15 +244,14 @@ fun View.clicks() = callbackFlow {
 }
 
 /**
- * take the first data in every [windowDuration] and drop the rest
+ * take the first data in every [periodMillis] and drop the rest
  */
-fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
-    var lastEmissionTime = 0L
-    collect { upstream ->
+fun <T> Flow<T>.throttleFirst2(periodMillis: Long): Flow<T> {
+    var lastTime = 0L
+    return transform { upstream ->
         val currentTime = System.currentTimeMillis()
-        val mayEmit = currentTime - lastEmissionTime > windowDuration
-        if (mayEmit) {
-            lastEmissionTime = currentTime
+        if (currentTime - lastTime > periodMillis) {
+            lastTime = currentTime
             emit(upstream)
         }
     }
