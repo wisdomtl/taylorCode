@@ -15,7 +15,7 @@ fun <T> countdown2(duration: Long, interval: Long, onCountdown: suspend (Long) -
     flow { (duration - interval downTo 0 step interval).forEach { emit(it) } }
         .onEach { delay(interval) }
         .onStart { emit(duration) }
-        .map { onCountdown(it) }
+        .flatMapMerge { flow { emit(onCountdown(it)) } }
         .flowOn(Dispatchers.Default)
 
 

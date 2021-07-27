@@ -212,12 +212,12 @@ class FlowActivity : AppCompatActivity() {
          */
         mainScope.launch {
             val ret = countdown2(10_000, 1_000) { io(it) }
-                .onStart { Log.w("ttaylor", "on countdown start----------") }
-                .onEach { Log.v("ttaylor", "on countdown ${it}") }
-                .onStart { Log.v("ttaylor", "on countdown start again") }
-                .onCompletion { Log.w("ttaylor", "on countdown end--------") }
+                .onStart { Log.w("ttaylor", "on countdown2 start----------") }
+                .onEach { Log.v("ttaylor", "on countdown2 ${it} thread id = ${Thread.currentThread().id}") }
+                .onStart { Log.v("ttaylor", "on countdown2 start again") }
+                .onCompletion { Log.w("ttaylor", "on countdown2 end--------") }
                 .reduce { acc, value -> acc + value }
-            Log.e("ttaylor", "countdown acc ret = $ret")
+            Log.e("ttaylor", "countdown2 acc ret = $ret")
         }
 
         /**
@@ -237,7 +237,9 @@ class FlowActivity : AppCompatActivity() {
     }
 
     private suspend fun io(time: Long): Long {
-        delay(1000)
+        Log.v("ttaylor", "countdown2 io task($time) is started thread id=${Thread.currentThread().id}")
+        delay(3_000)
+        Log.v("ttaylor", "countdown2 io task($time) is end thread id=${Thread.currentThread().id}")
         return time
     }
 
