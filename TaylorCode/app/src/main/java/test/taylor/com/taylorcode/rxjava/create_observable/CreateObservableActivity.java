@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Single;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.AsyncOnSubscribe;
@@ -49,6 +50,10 @@ public class CreateObservableActivity extends Activity {
 
         //Observable.just()
         just();
+
+        /**
+         *
+         */
 
     }
 

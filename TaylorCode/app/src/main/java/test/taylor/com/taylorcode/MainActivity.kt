@@ -42,6 +42,7 @@ import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
+import test.taylor.com.taylorcode.rxjava.SingleActivity
 import test.taylor.com.taylorcode.sp.SharedPreferenceActivity
 import test.taylor.com.taylorcode.type_parameter.TypeParameterActivity
 import test.taylor.com.taylorcode.ui.*
@@ -250,6 +251,7 @@ class MainActivity : BaseActivity() {
         btnCoroutine.setOnClickListener { startActivity<CoroutineActivity2> { } }
         count_down_latch.setOnClickListener { startActivity<CountDownLatchActivity> { } }
         dutyChain.setOnClickListener { startActivity<ResponsibilityChainActivity> { } }
+        RxSingle.setOnClickListener { startActivity<SingleActivity> { } }
 
 
         //SAM case:

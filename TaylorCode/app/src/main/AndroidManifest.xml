@@ -247,6 +247,7 @@
         <activity android:name=".kotlin.coroutine.CoroutineActivity2" />
         <activity android:name=".concurrent.countdownlatch.CountDownLatchActivity" />
         <activity android:name=".design_mode.responsible_chain.ResponsibilityChainActivity" />
+        <activity android:name=".rxjava.SingleActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
