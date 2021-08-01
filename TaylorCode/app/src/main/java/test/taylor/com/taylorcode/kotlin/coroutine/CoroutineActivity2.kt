@@ -40,7 +40,7 @@ class CoroutineActivity2 : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     /**
-     * case: start coroutine by startCourtine()
+     * case: start coroutine by startCoroutine()
      */
     private fun startCoroutine() {
         val coroutine = suspend {
