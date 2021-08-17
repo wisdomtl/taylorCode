@@ -8,12 +8,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/LaneLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="lane layout manager"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/RxSingle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="duty chain"
+            android:text="rx single"
             android:textAllCaps="false" />
 
         <Button

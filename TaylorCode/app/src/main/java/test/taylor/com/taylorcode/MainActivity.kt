@@ -53,6 +53,7 @@ import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity2
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.sample.LaneLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.crop_view.CropActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
@@ -252,6 +253,7 @@ class MainActivity : BaseActivity() {
         count_down_latch.setOnClickListener { startActivity<CountDownLatchActivity> { } }
         dutyChain.setOnClickListener { startActivity<ResponsibilityChainActivity> { } }
         RxSingle.setOnClickListener { startActivity<SingleActivity> { } }
+        LaneLayoutManager.setOnClickListener { startActivity<LaneLayoutManagerActivity> { } }
 
 
         //SAM case:
