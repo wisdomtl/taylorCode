@@ -249,6 +249,7 @@
         <activity android:name=".design_mode.responsible_chain.ResponsibilityChainActivity" />
         <activity android:name=".rxjava.SingleActivity" />
         <activity android:name=".ui.custom_view.bullet_screen.sample.LaneLayoutManagerActivity" />
+        <activity android:name=".ui.recyclerview.grid_layout.GridLayoutActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

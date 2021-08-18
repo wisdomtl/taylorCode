@@ -80,6 +80,7 @@ import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
 import test.taylor.com.taylorcode.ui.performance.detectFrame
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
+import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridLayoutActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
@@ -254,6 +255,7 @@ class MainActivity : BaseActivity() {
         dutyChain.setOnClickListener { startActivity<ResponsibilityChainActivity> { } }
         RxSingle.setOnClickListener { startActivity<SingleActivity> { } }
         LaneLayoutManager.setOnClickListener { startActivity<LaneLayoutManagerActivity> { } }
+        gridlayout.setOnClickListener { startActivity<GridLayoutActivity> { } }
 
 
         //SAM case:
