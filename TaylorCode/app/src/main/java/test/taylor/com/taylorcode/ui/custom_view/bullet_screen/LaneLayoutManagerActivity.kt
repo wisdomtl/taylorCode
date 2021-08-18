@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui.custom_view.bullet_screen.sample
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,7 +18,7 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class LaneLayoutManagerActivity : AppCompatActivity() {
 
-    private lateinit var rv:RecyclerView
+    private lateinit var rv: RecyclerView
 
     private val laneAdapter by lazy {
         VarietyAdapter2().apply {
@@ -36,6 +37,7 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
                 layoutManager = LaneLayoutManager()
                 adapter = laneAdapter
                 background_color = "#eeeeee"
+                makeUnTouchable()
                 center_horizontal = true
             }
         }
@@ -65,8 +67,8 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             LaneBean("uuu"),
         )
 
-        countdown2(100000,50){
-           rv.smoothScrollBy(10,0)
+        countdown2(100000, 50) {
+            rv.smoothScrollBy(10, 0)
         }.launchIn(MainScope())
     }
 }
@@ -101,7 +103,7 @@ class LaneProxy : VarietyAdapter2.Proxy<LaneBean, LaneViewHolder>() {
 
     override fun onBindViewHolder(holder: LaneViewHolder, data: LaneBean, index: Int, action: ((Any?) -> Unit)?) {
         holder.tvText?.text = data.text
-        Log.v("ttaylor","onBindViewHolder() data=${data.text}")
+        Log.v("ttaylor", "onBindViewHolder() data=${data.text}")
     }
 
 }
@@ -110,4 +112,8 @@ data class LaneBean(var text: String)
 
 class LaneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tvText = itemView.find<TextView>("tvText")
+}
+
+fun RecyclerView.makeUnTouchable() {
+    setOnTouchListener { v, event -> true }
 }
