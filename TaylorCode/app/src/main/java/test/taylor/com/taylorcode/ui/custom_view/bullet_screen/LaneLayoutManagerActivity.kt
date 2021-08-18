@@ -42,7 +42,10 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
         laneAdapter.dataList = listOf(
             LaneBean("aaa"),
             LaneBean("bbb"),
-            LaneBean("ccc")
+            LaneBean("ccc"),
+            LaneBean("ddd"),
+            LaneBean("eee"),
+            LaneBean("fff"),
         )
     }
 }
