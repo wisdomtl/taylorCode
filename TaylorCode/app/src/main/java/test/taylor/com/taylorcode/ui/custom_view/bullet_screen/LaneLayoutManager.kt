@@ -10,7 +10,7 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
 
     private val PRELOAD_COLUMN_COUNT = 2 // preload 2 columns in advance
     private var adapterIndex = 0
-    private var minRight = Int.MIN_VALUE
+    private var minRight = Int.MAX_VALUE
     private var firstExposedLayoutIndex = Int.MIN_VALUE
     private var lanes = mutableListOf<Lane>()
 
@@ -67,7 +67,7 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         updateLanesEnd(lanes)
         val firstExposedView = getChildAt(firstExposedLayoutIndex)
         if (firstExposedView != null && exposeInRecyclerView(firstExposedView, abs(dx))) {
-//            fillLanes(recycler, lanes)
+            fillLanes(recycler, lanes)
         }
 
         offsetChildrenHorizontal(-dx)

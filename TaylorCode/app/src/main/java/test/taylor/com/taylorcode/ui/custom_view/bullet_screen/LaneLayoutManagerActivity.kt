@@ -65,9 +65,9 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             LaneBean("uuu"),
         )
 
-//        countdown2(100000,50){
-//           rv.smoothScrollBy(10,0)
-//        }.launchIn(MainScope())
+        countdown2(100000,50){
+           rv.smoothScrollBy(10,0)
+        }.launchIn(MainScope())
     }
 }
 
