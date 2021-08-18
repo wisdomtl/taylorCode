@@ -6,12 +6,35 @@ import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.abs
 
 class LaneLayoutManager : RecyclerView.LayoutManager() {
+    /**
+     * the return value of [layoutView], it means filling view into lane should be over
+     */
     private val LAYOUT_FINISH = -1
 
-    private val PRELOAD_COLUMN_COUNT = 2 // preload 2 columns in advance
+    /**
+     * we do preload view into lanes before it is scrolling
+     */
+    private val PRELOAD_COLUMN_COUNT = 2
+
+    /**
+     * the index related to data in adapter
+     */
     private var adapterIndex = 0
-    private var minRight = Int.MAX_VALUE
-    private var firstExposedLayoutIndex = Int.MIN_VALUE
+
+    /**
+     * the min right most pixel according to RecyclerView of lane view,
+     * it means that lane will drain out first when scrolling
+     */
+    private var minEnd = Int.MAX_VALUE
+
+    /**
+     * the lane index which will drain out first
+     */
+    private var firstDrainLaneIndex = 0
+
+    /**
+     * all the [Lane] in the RecyclerView
+     */
     private var lanes = mutableListOf<Lane>()
 
     /**
@@ -26,46 +49,47 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     var horizontalGap = 3
         get() = field.dp
 
+    /**
+     * define the layout params for child view in RecyclerView
+     * override this is a must for customized [RecyclerView.LayoutManager]
+     */
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
         return RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT)
     }
 
+    /**
+     * define how to layout child view in RecyclerView
+     * override this is a must for customized [RecyclerView.LayoutManager]
+     */
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         repeat(PRELOAD_COLUMN_COUNT) { fillLanes(recycler, lanes) }
         lanes.forEach { it.reset() }
     }
 
+    /**
+     * define how to scroll views in RecyclerView
+     * override this is a must for customized [RecyclerView.LayoutManager]
+     */
     override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
         return scrollBy(dx, recycler)
     }
 
+    /**
+     * define whether scrolling horizontally is allowed
+     * override this is a must for customized [RecyclerView.LayoutManager]
+     */
     override fun canScrollHorizontally(): Boolean {
         return true
     }
 
     /**
-     * fill children into [RecyclerView]
+     * scroll the all the [Lane]s in RecyclerView by [dx]
      */
-    private fun fillLanes(recycler: RecyclerView.Recycler?, lanes: MutableList<Lane>) {
-        val totalSpace = height - paddingTop - paddingBottom
-        var remainSpace = totalSpace
-        while (hasMoreLane(remainSpace)) {
-            val consumeSpace = layoutView(recycler, totalSpace,remainSpace, lanes)
-            if (consumeSpace == LAYOUT_FINISH) break
-            remainSpace -= consumeSpace
-        }
-    }
-
-    /**
-     * whether [view] will be exposed in RecyclerView if scrolled [dx] to the left
-     */
-    private fun exposeInRecyclerView(view: View, dx: Int): Boolean = getEnd(view) - dx < width
-
     private fun scrollBy(dx: Int, recycler: RecyclerView.Recycler?): Int {
         if (childCount == 0 || dx == 0) return 0
 
         updateLanesEnd(lanes)
-        val firstExposedView = getChildAt(firstExposedLayoutIndex)
+        val firstExposedView = lanes.getOrNull(firstDrainLaneIndex)?.getEndView()
         if (firstExposedView != null && exposeInRecyclerView(firstExposedView, abs(dx))) {
             fillLanes(recycler, lanes)
         }
@@ -75,26 +99,20 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     }
 
     /**
-     * update every [Lane]'s end, which is the most right pixel of Lane according to the RecyclerView
+     * fill children into [RecyclerView]
      */
-    private fun updateLanesEnd(lanes: MutableList<Lane>) {
-        lanes.forEach { lane ->
-            lane.getEndView()?.let { lane.end = getEnd(it) }
+    private fun fillLanes(recycler: RecyclerView.Recycler?, lanes: MutableList<Lane>) {
+        val totalSpace = height - paddingTop - paddingBottom
+        var remainSpace = totalSpace
+        while (hasMoreLane(remainSpace)) {
+            val consumeSpace = layoutView(recycler, totalSpace, remainSpace, lanes)
+            if (consumeSpace == LAYOUT_FINISH) break
+            remainSpace -= consumeSpace
         }
     }
 
     /**
-     * get the right most pixel according to RecyclerView of [view], take decoration and margin into consideration
-     */
-    private fun getEnd(view: View) = getDecoratedRight(view) + (view.layoutParams as RecyclerView.LayoutParams).rightMargin
-
-    /**
-     * whether continue to layout child
-     */
-    private fun hasMoreLane(remainSpace: Int) = remainSpace > 0 && adapterIndex in 0 until itemCount
-
-    /**
-     * layout a single view
+     * layout a single view in the one [Lane]
      */
     private fun layoutView(recycler: RecyclerView.Recycler?, totalSpace: Int, remainSpace: Int, lanes: MutableList<Lane>): Int {
         val view = recycler?.getViewForPosition(adapterIndex)
@@ -116,16 +134,44 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         layoutDecorated(view, left, top, right, bottom)
 
         updateLane(laneIndex, right, lane, lanes)
-        findFirstExposedLayoutIndex(right, adapterIndex)
+        findFirstDrainLane(right, laneIndex)
 
         adapterIndex++
         return consumed
     }
 
-    private fun findFirstExposedLayoutIndex(right: Int, adapterIndex: Int) {
-        if (right < minRight) {
-            minRight = right
-            firstExposedLayoutIndex = getLayoutIndex(adapterIndex)
+    /**
+     * whether [view] will be exposed in RecyclerView if scrolled [dx] to the left
+     */
+    private fun exposeInRecyclerView(view: View, dx: Int): Boolean = getEnd(view) - dx < width
+
+    /**
+     * update every [Lane]'s end to the newest position by next scroll starts,
+     * which is the most right pixel of last view in Lane according to the RecyclerView
+     */
+    private fun updateLanesEnd(lanes: MutableList<Lane>) {
+        lanes.forEach { lane ->
+            lane.getEndView()?.let { lane.end = getEnd(it) }
+        }
+    }
+
+    /**
+     * get the right most pixel according to RecyclerView of [view], take decoration and margin into consideration
+     */
+    private fun getEnd(view: View) = getDecoratedRight(view) + (view.layoutParams as RecyclerView.LayoutParams).rightMargin
+
+    /**
+     * whether continue to layout child
+     */
+    private fun hasMoreLane(remainSpace: Int) = remainSpace > 0 && adapterIndex in 0 until itemCount
+
+    /**
+     * find the lane which will drain out first
+     */
+    private fun findFirstDrainLane(right: Int, laneIndex: Int) {
+        if (right < minEnd) {
+            minEnd = right
+            firstDrainLaneIndex = laneIndex
         }
     }
 
@@ -148,9 +194,9 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     }
 
     /**
-     * live comment is composed of several [Lane], keep layout info of each [Lane] after last layout in it.
-     * @param end pixel offset according to the left of RecyclerView, where the layout of follow-up view in next column should start
-     * @param layoutIndex the layout index of lane view according to the
+     * live comment is composed of several [Lane]
+     * @param end pixel offset according to the left of RecyclerView, where the layout of follow-up view in the lane should start
+     * @param layoutIndex the  layout index of the last view in lane
      */
     data class Lane(var end: Int, var layoutIndex: Int) {
         fun reset() {
