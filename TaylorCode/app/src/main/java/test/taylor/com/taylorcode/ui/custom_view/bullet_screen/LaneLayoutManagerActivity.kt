@@ -7,12 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.launchIn
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.coroutine.countdown2
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManager
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class LaneLayoutManagerActivity : AppCompatActivity() {
+
+    private lateinit var rv:RecyclerView
 
     private val laneAdapter by lazy {
         VarietyAdapter2().apply {
@@ -25,8 +30,8 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-            RecyclerView {
-                layout_width = 300
+            rv = RecyclerView {
+                layout_width = 50
                 layout_height = 200
                 layoutManager = LaneLayoutManager()
                 adapter = laneAdapter
@@ -46,7 +51,23 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             LaneBean("ddd"),
             LaneBean("eee"),
             LaneBean("fff"),
+            LaneBean("ggg"),
+            LaneBean("hhh"),
+            LaneBean("iii"),
+            LaneBean("jjj"),
+            LaneBean("kkk"),
+            LaneBean("lll"),
+            LaneBean("mmm"),
+            LaneBean("nnn"),
+            LaneBean("ooo"),
+            LaneBean("ppp"),
+            LaneBean("qqq"),
+            LaneBean("uuu"),
         )
+
+//        countdown2(100000,50){
+//           rv.smoothScrollBy(10,0)
+//        }.launchIn(MainScope())
     }
 }
 
