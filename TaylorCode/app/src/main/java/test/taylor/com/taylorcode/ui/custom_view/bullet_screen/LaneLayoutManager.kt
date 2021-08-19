@@ -12,11 +12,6 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     private val LAYOUT_FINISH = -1
 
     /**
-     * we do preload view into lanes before it is scrolling
-     */
-    private val PRELOAD_COLUMN_COUNT = 2
-
-    /**
      * the index related to data in adapter
      */
     private var adapterIndex = 0
@@ -62,7 +57,7 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
      * override this is a must for customized [RecyclerView.LayoutManager]
      */
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        repeat(PRELOAD_COLUMN_COUNT) { fillLanes(recycler, lanes) }
+        fillLanes(recycler, lanes)
         lanes.forEach { it.reset() }
     }
 
@@ -89,17 +84,21 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         if (childCount == 0 || dx == 0) return 0
 
         updateLanesEnd(lanes)
-        val firstExposedView = lanes.getOrNull(firstDrainLaneIndex)?.getEndView()
-        if (firstExposedView != null && exposeInRecyclerView(firstExposedView, abs(dx))) {
-            fillLanes(recycler, lanes)
+        val absDx = abs(dx)
+        // fill new views into lanes after scrolled
+        val endView = lanes.getOrNull(firstDrainLaneIndex)?.getEndView()
+        if (endView != null && isVisibleByScroll(endView, absDx)) {
+            fillLanes(recycler, lanes) //todo refactor: just preload the drain out lane
         }
-
-        offsetChildrenHorizontal(-dx)
+        // recycle views in lanes after scrolled
+        recycleGoneView(lanes, absDx, recycler)
+        // make lane move left
+        offsetChildrenHorizontal(-absDx)
         return dx
     }
 
     /**
-     * fill children into [RecyclerView]
+     * fill children into [Lane]
      */
     private fun fillLanes(recycler: RecyclerView.Recycler?, lanes: MutableList<Lane>) {
         val totalSpace = height - paddingTop - paddingBottom
@@ -108,6 +107,29 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
             val consumeSpace = layoutView(recycler, totalSpace, remainSpace, lanes)
             if (consumeSpace == LAYOUT_FINISH) break
             remainSpace -= consumeSpace
+        }
+    }
+
+    private fun recycleGoneView(lanes: List<Lane>, dx: Int, recycler: RecyclerView.Recycler?) {
+        recycler ?: return
+        lanes.forEach { lane ->
+            getChildAt(lane.startLayoutIndex)?.let { startView ->
+                if (isGoneByScroll(startView, dx)) {
+                    removeAndRecycleView(startView, recycler)
+                    updateLaneIndexAfterRecycle(lanes, lane.startLayoutIndex)
+                    lane.startLayoutIndex += lanes.size - 1
+                }
+            }
+        }
+    }
+
+    /**
+     * after view is recycled and remove from RecyclerView, the layout index in lane should be minus 1
+     */
+    private fun updateLaneIndexAfterRecycle(lanes: List<Lane>, recycleIndex: Int) {
+        lanes.forEach { lane ->
+            if (lane.startLayoutIndex > recycleIndex) lane.startLayoutIndex--
+            if (lane.endLayoutIndex > recycleIndex) lane.endLayoutIndex--
         }
     }
 
@@ -126,7 +148,7 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         // layout even
         val laneCount = (totalSpace + verticalGap) / (view.measuredHeight + verticalGap)
         val laneIndex = adapterIndex % laneCount
-        val lane = lanes.getOrElse(laneIndex) { emptyLane() }.apply { layoutIndex = getLayoutIndex(adapterIndex) }
+        val lane = lanes.getOrElse(laneIndex) { emptyLane(adapterIndex) }.apply { endLayoutIndex = getLayoutIndex(adapterIndex) }
         val left = lane.end + horizontalGap
         val top = laneIndex * (view.measuredHeight + verticalGap)
         val right = left + view.measuredWidth
@@ -143,7 +165,12 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     /**
      * whether [view] will be exposed in RecyclerView if scrolled [dx] to the left
      */
-    private fun exposeInRecyclerView(view: View, dx: Int): Boolean = getEnd(view) - dx < width
+    private fun isVisibleByScroll(view: View, dx: Int): Boolean = getEnd(view) - dx < width
+
+    /**
+     * whether [view] will be invisible in RecyclerView if scrolled [dx] to the left
+     */
+    private fun isGoneByScroll(view: View, dx: Int): Boolean = getEnd(view) - dx < 0
 
     /**
      * update every [Lane]'s end to the newest position by next scroll starts,
@@ -196,16 +223,23 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
     /**
      * live comment is composed of several [Lane]
      * @param end pixel offset according to the left of RecyclerView, where the layout of follow-up view in the lane should start
-     * @param layoutIndex the  layout index of the last view in lane
+     * @param endLayoutIndex the  layout index of the last view in lane
      */
-    data class Lane(var end: Int, var layoutIndex: Int) {
+    data class Lane(var end: Int, var endLayoutIndex: Int, var startLayoutIndex: Int) {
         fun reset() {
             end = 0
-            layoutIndex = 0
+            endLayoutIndex = 0
+            startLayoutIndex = 0
         }
     }
 
-    private fun Lane.getEndView(): View? = getChildAt(layoutIndex)
+    /**
+     * get the right most view in the lane
+     */
+    private fun Lane.getEndView(): View? = getChildAt(endLayoutIndex)
 
-    private fun emptyLane() = Lane(-horizontalGap, 0)
+    /**
+     * create an empty [Lane] object
+     */
+    private fun emptyLane(adapterIndex: Int) = Lane(-horizontalGap, 0, getLayoutIndex(adapterIndex))
 }

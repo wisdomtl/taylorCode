@@ -39,6 +39,10 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
                 background_color = "#eeeeee"
                 makeUnTouchable()
                 center_horizontal = true
+                setRecyclerListener { viewHolder->
+                    val tv = (viewHolder as? LaneViewHolder)?.tvText
+                    Log.v("ttaylor","view(${tv?.text}) is recycled")
+                }
             }
         }
     }
@@ -68,7 +72,7 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
         )
 
         countdown2(100000, 50) {
-            rv.smoothScrollBy(10, 0)
+            rv.smoothScrollBy(5, 0)
         }.launchIn(MainScope())
     }
 }
