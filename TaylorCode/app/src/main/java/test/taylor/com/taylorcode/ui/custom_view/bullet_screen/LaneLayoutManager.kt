@@ -153,7 +153,7 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         val laneIndex = adapterIndex % laneCount
         val lane = lanes.getOrElse(laneIndex) { emptyLane(adapterIndex) }.apply { endLayoutIndex = childCount - 1 }
         val left = lane.end + horizontalGap
-        val top = laneIndex * (view.measuredHeight + verticalGap)
+        val top = paddingTop + laneIndex * (view.measuredHeight + verticalGap)
         val right = left + view.measuredWidth
         val bottom = top + view.measuredHeight
         layoutDecorated(view, left, top, right, bottom)

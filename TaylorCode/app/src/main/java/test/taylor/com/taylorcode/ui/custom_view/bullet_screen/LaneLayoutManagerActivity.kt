@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
@@ -18,9 +19,11 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
 
     private lateinit var rv: RecyclerView
 
-    private val laneAdapter by lazy {
-        LaneAdapter().apply {
-            addProxy(LaneProxy())
+
+    private val contentViewAdapter by lazy {
+        VarietyAdapter2().apply {
+            addProxy(LanesProxy())
+            addProxy(StringProxy())
         }
     }
 
@@ -29,18 +32,11 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-            rv = RecyclerView {
-                layout_width = 400
-                layout_height = 200
-                layoutManager = LaneLayoutManager()
-                adapter = laneAdapter
-                background_color = "#eeeeee"
-                makeUnTouchable()
-                center_horizontal = true
-                setRecyclerListener { viewHolder->
-                    val tv = (viewHolder as? LaneViewHolder)?.tvText
-                    Log.v("ttaylor","view(${tv?.text}) is recycled")
-                }
+            RecyclerView {
+                layout_width = match_parent
+                layout_height = match_parent
+                adapter = contentViewAdapter
+                layoutManager = LinearLayoutManager(this@LaneLayoutManagerActivity)
             }
         }
     }
@@ -48,41 +44,82 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
-        laneAdapter.dataList = listOf(
-            LaneBean("aaa0"),
-            LaneBean("bbb1"),
-            LaneBean("ccc2"),
-            LaneBean("ddd3"),
-            LaneBean("111111111cccdkfjsdlfjdslkfjlsdkfjlkdsfjksdl"),
-            LaneBean("dddidddddddddddddddddddd"),
-            LaneBean("eee4"),
-            LaneBean("fff5"),
-            LaneBean("ggg6"),
-            LaneBean("hhh7"),
-            LaneBean("iii8"),
-            LaneBean("22222222222iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
-            LaneBean("jjj9"),
-            LaneBean("kkk10"),
-            LaneBean("lll11"),
-            LaneBean("mmm12"),
-            LaneBean("333333333mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
-            LaneBean("nnn13"),
-            LaneBean("ooo14"),
-            LaneBean("ppp15"),
-            LaneBean("qqqq16"),
-            LaneBean("rrr17"),
-            LaneBean("ssss18"),
-            LaneBean("ttt19"),
-            LaneBean("44444444444qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
-            LaneBean("uuu20"),
-            LaneBean("666666666666iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
-            LaneBean("7777777777mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
-            LaneBean("88888888888qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
-        )
 
-        countdown2(Long.MAX_VALUE, 50) {
-            rv.smoothScrollBy(10, 0)
-        }.launchIn(MainScope())
+        contentViewAdapter.dataList = listOf(
+            LaneBeans(
+
+                listOf(
+                    LaneBean("aaa0"),
+                    LaneBean("bbb1"),
+                    LaneBean("ccc2"),
+                    LaneBean("ddd3"),
+                    LaneBean("111111111cccdkfjsdlfjdslkfjlsdkfjlkdsfjksdl"),
+                    LaneBean("dddidddddddddddddddddddd"),
+                    LaneBean("eee4"),
+                    LaneBean("fff5"),
+                    LaneBean("ggg6"),
+                    LaneBean("hhh7"),
+                    LaneBean("iii8"),
+                    LaneBean("22222222222iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
+                    LaneBean("jjj9"),
+                    LaneBean("kkk10"),
+                    LaneBean("lll11"),
+                    LaneBean("mmm12"),
+                    LaneBean("333333333mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
+                    LaneBean("nnn13"),
+                    LaneBean("ooo14"),
+                    LaneBean("ppp15"),
+                    LaneBean("qqqq16"),
+                    LaneBean("rrr17"),
+                    LaneBean("ssss18"),
+                    LaneBean("ttt19"),
+                    LaneBean("44444444444qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
+                    LaneBean("uuu20"),
+                    LaneBean("666666666666iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
+                    LaneBean("7777777777mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
+                    LaneBean("88888888888qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
+                )
+            ),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            Text("dfadff"),
+            )
+
     }
 }
 
@@ -138,4 +175,87 @@ class LaneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 fun RecyclerView.makeUnTouchable() {
     setOnTouchListener { v, event -> true }
+}
+
+data class LaneBeans(
+    var laneList: List<LaneBean>,
+)
+
+class LanesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val rv = itemView.find<RecyclerView>("rv")
+}
+
+class LanesProxy : VarietyAdapter2.Proxy<LaneBeans, LanesViewHolder>() {
+    private val laneAdapter by lazy {
+        LaneAdapter().apply {
+            addProxy(LaneProxy())
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemView = parent.context.run {
+            ConstraintLayout {
+                layout_width = match_parent
+                layout_height = 200
+
+                RecyclerView {
+                    layout_id = "rv"
+                    layout_width = 400
+                    layout_height = 200
+                    padding_top =30
+                    padding_bottom = 30
+                    layoutManager = LaneLayoutManager().apply { horizontalGap = 10
+                    verticalGap = 10}
+                    adapter = laneAdapter
+                    background_color = "#eeeeee"
+                    makeUnTouchable()
+                    center_horizontal = true
+                }
+            }
+        }
+        return LanesViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: LanesViewHolder, data: LaneBeans, index: Int, action: ((Any?) -> Unit)?) {
+        laneAdapter.dataList = data.laneList
+
+        holder.rv?.let { rv ->
+            countdown2(Long.MAX_VALUE, 50) {
+                rv.smoothScrollBy(10, 0)
+            }.launchIn(MainScope())
+        }
+    }
+}
+
+data class Text(val string: String)
+
+class StringViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val tv = itemView.find<TextView>("tvChange")
+}
+
+class StringProxy : VarietyAdapter2.Proxy<Text, StringViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemView = parent.context.run {
+            ConstraintLayout {
+                layout_width = match_parent
+                layout_height = 50
+
+                TextView {
+                    layout_id = "tvChange"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 12f
+                    textColor = "#000000"
+                    text = "save"
+                    gravity = gravity_center
+                }
+            }
+        }
+        return StringViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: StringViewHolder, data: Text, index: Int, action: ((Any?) -> Unit)?) {
+        holder.tv?.text = data.string
+    }
+
 }
