@@ -40,7 +40,7 @@ import kotlin.math.max
  * recyclerView.adapter = varietyAdapter
  * recyclerView.layoutManager = LinearLayoutManager(context)
  */
-class VarietyAdapter2(
+open class VarietyAdapter2(
     /**
      * the list of [Proxy]
      */
@@ -66,6 +66,11 @@ class VarietyAdapter2(
      * preload threshold. [onPreload] will be called if there is [preloadItemCount] items remain in the list
      */
     var preloadItemCount = 0
+
+    /**
+     * to avoid preload action when there is not enough item to fill the screen
+     */
+    var minPrelaodItemCount = 0
 
     /**
      * an lambda will be invoked in [onBindViewHolder] when preload threshold is satisfied
@@ -104,26 +109,31 @@ class VarietyAdapter2(
     var onViewDetachedFromWindow: ((holder: ViewHolder) -> Unit)? = null
     var onViewRecycled: ((holder: ViewHolder) -> Unit)? = null
 
+    open fun getIndex(position: Int):Int = position
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return proxyList[viewType].onCreateViewHolder(parent, viewType)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[position], position, action)
+        val index = getIndex(position)
+        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action)
         checkPreload(position)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[position], position, action, payloads)
+        val index = getIndex(position)
+        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action, payloads)
         checkPreload(position)
     }
 
     override fun getItemCount(): Int = dataList.size
 
     override fun getItemViewType(position: Int): Int {
-        return getProxyIndex(dataList[position])
+        val index = getIndex(position)
+        return getProxyIndex(dataList[index])
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -166,6 +176,7 @@ class VarietyAdapter2(
     private fun checkPreload(position: Int) {
         if (onPreload != null
             && position == max(itemCount - 1 - preloadItemCount, 0)// reach the preload threshold position
+            && itemCount > minPrelaodItemCount // to avoid preload when there is not enough items to fill the screen
             && scrollState != SCROLL_STATE_IDLE // the list is scrolling
         ) {
             onPreload?.invoke()
