@@ -3,7 +3,6 @@ package test.taylor.com.taylorcode
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
@@ -53,7 +52,7 @@ import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity2
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.sample.LaneLayoutManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.crop_view.CropActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
@@ -73,11 +72,9 @@ import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
 import test.taylor.com.taylorcode.ui.notification.NotificationActivity
 import test.taylor.com.taylorcode.ui.one.OneActivity
-import test.taylor.com.taylorcode.ui.one.OneViewGroup
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
-import test.taylor.com.taylorcode.ui.performance.detectFrame
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridLayoutActivity
@@ -87,14 +84,12 @@ import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
-import test.taylor.com.taylorcode.ui.touch_event.touch_delegate.MultiTouchDelegate
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
-import java.io.File
 import java.util.*
 import kotlin.reflect.KClass
 

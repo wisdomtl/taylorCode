@@ -1,8 +1,7 @@
-package test.taylor.com.taylorcode.ui.custom_view.bullet_screen.sample
+package test.taylor.com.taylorcode.ui.custom_view.bullet_screen
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.launchIn
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.countdown2
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManager
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class LaneLayoutManagerActivity : AppCompatActivity() {
@@ -21,7 +19,7 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
     private lateinit var rv: RecyclerView
 
     private val laneAdapter by lazy {
-        VarietyAdapter2().apply {
+        LaneAdapter().apply {
             addProxy(LaneProxy())
         }
     }
@@ -32,7 +30,7 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
             layout_height = match_parent
 
             rv = RecyclerView {
-                layout_width = 50
+                layout_width = 400
                 layout_height = 200
                 layoutManager = LaneLayoutManager()
                 adapter = laneAdapter
@@ -51,30 +49,50 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         laneAdapter.dataList = listOf(
-            LaneBean("aaa"),
-            LaneBean("bbb"),
-            LaneBean("ccc"),
-            LaneBean("ddd"),
-            LaneBean("eee"),
-            LaneBean("fff"),
-            LaneBean("ggg"),
-            LaneBean("hhh"),
-            LaneBean("iii"),
-            LaneBean("jjj"),
-            LaneBean("kkk"),
-            LaneBean("lll"),
-            LaneBean("mmm"),
-            LaneBean("nnn"),
-            LaneBean("ooo"),
-            LaneBean("ppp"),
-            LaneBean("qqq"),
-            LaneBean("uuu"),
+            LaneBean("aaa0"),
+            LaneBean("bbb1"),
+            LaneBean("ccc2"),
+            LaneBean("ddd3"),
+            LaneBean("111111111cccdkfjsdlfjdslkfjlsdkfjlkdsfjksdl"),
+            LaneBean("dddidddddddddddddddddddd"),
+            LaneBean("eee4"),
+            LaneBean("fff5"),
+            LaneBean("ggg6"),
+            LaneBean("hhh7"),
+            LaneBean("iii8"),
+            LaneBean("22222222222iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
+            LaneBean("jjj9"),
+            LaneBean("kkk10"),
+            LaneBean("lll11"),
+            LaneBean("mmm12"),
+            LaneBean("333333333mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
+            LaneBean("nnn13"),
+            LaneBean("ooo14"),
+            LaneBean("ppp15"),
+            LaneBean("qqqq16"),
+            LaneBean("rrr17"),
+            LaneBean("ssss18"),
+            LaneBean("ttt19"),
+            LaneBean("44444444444qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
+            LaneBean("uuu20"),
+            LaneBean("666666666666iiiklsdjflksdjflkjsdlkfjlskdfjlksdjflksdfs"),
+            LaneBean("7777777777mmmdkslfslkdfjlksdjlksdjfsldkjfkdfsdfsdfsdf"),
+            LaneBean("88888888888qqsdjklfjlsdkfjlsdkfjlsdkfjlsdkfjlsdkfjsldkfjsldkfq"),
         )
 
-        countdown2(100000, 50) {
-            rv.smoothScrollBy(5, 0)
+        countdown2(Long.MAX_VALUE, 50) {
+            rv.smoothScrollBy(10, 0)
         }.launchIn(MainScope())
     }
+}
+
+class LaneAdapter : VarietyAdapter2() {
+
+    override fun getItemCount(): Int {
+        return Int.MAX_VALUE
+    }
+
+    override fun getIndex(position: Int): Int = position % dataList.size
 }
 
 class LaneProxy : VarietyAdapter2.Proxy<LaneBean, LaneViewHolder>() {
