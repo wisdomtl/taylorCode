@@ -59,6 +59,7 @@ class SuspendCoroutineActivity : AppCompatActivity() {
 
     /**
      * convert callback into suspend function
+     * suspendCoroutine() obtain the current
      */
     suspend fun fetchNew2() = suspendCoroutine<List<News>> { continuation ->
         newsApi.fetchNews(mapOf("page" to "1", "count" to "4")).enqueue(object : Callback<NewsBean> {
