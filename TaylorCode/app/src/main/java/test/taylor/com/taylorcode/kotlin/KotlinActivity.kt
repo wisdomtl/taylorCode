@@ -277,7 +277,7 @@ class KotlinActivity : AppCompatActivity() {
         val ret3 = sequenceOf("above", "busy", "in", "ok")
             .withIndex()
             .filter { it.value.first() in listOf('a', 'e', 'i', 'o', 'u') }
-            .map { "${it.index}${it.value}"  }
+            .map { "${it.index}${it.value}" }
             .toList()
         Log.v("ttaylor", "onCreate() sequence withIndex()+map()+joinToString()=${ret3}")
 
