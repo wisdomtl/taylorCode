@@ -218,7 +218,7 @@ class KotlinActivity : AppCompatActivity() {
             }
 
         /**
-         * sequence case: always put data-reducing operations befor data-transforming operations
+         * sequence case: always put data-reducing operations before data-transforming operations
          */
         //poor performance
         sequenceOf("a", "b", "c", "d")
@@ -269,6 +269,23 @@ class KotlinActivity : AppCompatActivity() {
             .toList()
 
         print(result2)   // [a, c]
+
+
+        /**
+         * sequence case: performance mise with collection
+         */
+        val ret3 = sequenceOf("above", "busy", "in", "ok")
+            .withIndex()
+            .filter { it.value.first() in listOf('a', 'e', 'i', 'o', 'u') }
+            .map { "${it.index}${it.value}"  }
+            .toList()
+        Log.v("ttaylor", "onCreate() sequence withIndex()+map()+joinToString()=${ret3}")
+
+        val ret4 = listOf("above", "busy", "in", "ok")
+            .mapIndexed { index, value -> index to value }
+            .filter { it.second.first() in listOf('a', 'e', 'i', 'o', 'u') }
+            .map { "${it.first}${it.second}" }
+        Log.v("ttaylor", "onCreate() collection withIndex()+map()+joinToString()=${ret4}")
 
         /**
          * sequence case: joinToString()
@@ -480,7 +497,7 @@ class KotlinActivity : AppCompatActivity() {
             it.timeInMillis
         }
 
-        return timestamp in beginningOfToday..endingOfToday
+        return timestamp in beginningOfToday .. endingOfToday
 
     }
 
