@@ -127,12 +127,13 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
      * after view is recycled and remove from RecyclerView, the layout index in lane should be minus 1
      */
     private fun updateLaneIndexAfterRecycle(lanes: List<Lane>, recycleIndex: Int) {
-        lanes.forEachIndexed {index, lane ->
+        lanes.forEachIndexed { index, lane ->
             if (lane.startLayoutIndex > recycleIndex) {
                 lane.startLayoutIndex--
             }
-            if (lane.endLayoutIndex > recycleIndex){
-                lane.endLayoutIndex--}
+            if (lane.endLayoutIndex > recycleIndex) {
+                lane.endLayoutIndex--
+            }
         }
     }
 
@@ -144,13 +145,15 @@ class LaneLayoutManager : RecyclerView.LayoutManager() {
         view ?: return LAYOUT_FINISH
         measureChildWithMargins(view, 0, 0)
         val verticalMargin = (view.layoutParams as? RecyclerView.LayoutParams)?.let { it.topMargin + it.bottomMargin } ?: 0
-        val consumed = getDecoratedMeasuredHeight(view) + verticalMargin + verticalGap
-        if (remainSpace - consumed < 0) return LAYOUT_FINISH
+        val laneCount = (totalSpace + verticalGap) / (view.measuredHeight + verticalGap)
+        val laneIndex = adapterIndex % laneCount
+        val consumed = getDecoratedMeasuredHeight(view) + if (laneIndex == laneCount - 1) 0 else verticalGap + verticalMargin
+        if (remainSpace - consumed < 0) {
+            return LAYOUT_FINISH
+        }
 
         addView(view)
         // layout even
-        val laneCount = (totalSpace + verticalGap) / (view.measuredHeight + verticalGap)
-        val laneIndex = adapterIndex % laneCount
         val lane = lanes.getOrElse(laneIndex) { emptyLane(adapterIndex) }.apply { endLayoutIndex = childCount - 1 }
         val left = lane.end + horizontalGap
         val top = paddingTop + laneIndex * (view.measuredHeight + verticalGap)
