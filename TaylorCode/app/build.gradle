@@ -97,7 +97,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
     //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.31"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutine}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinCoroutine}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha03"
