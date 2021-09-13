@@ -251,6 +251,7 @@ class MainActivity : BaseActivity() {
         RxSingle.setOnClickListener { startActivity<SingleActivity> { } }
         LaneLayoutManager.setOnClickListener { startActivity<LaneLayoutManagerActivity> { } }
         gridlayout.setOnClickListener { startActivity<GridLayoutActivity> { } }
+        kotlinActivity2.setOnClickListener { startActivity<KotlinActivity2> { } }
 
 
         //SAM case:

@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/kotlinActivity2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin activity2"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/gridlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
