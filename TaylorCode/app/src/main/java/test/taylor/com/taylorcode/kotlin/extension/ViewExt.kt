@@ -198,6 +198,9 @@ fun View.shadow(
     }
 }
 
+/**
+ * add listener to [RecyclerView] which listens whether it's scrolling is touch the top(return 1) or bottom(return 2)
+ */
 fun RecyclerView.addTopBottomListener(listener: ((direction: Int) -> Unit)?) {
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
