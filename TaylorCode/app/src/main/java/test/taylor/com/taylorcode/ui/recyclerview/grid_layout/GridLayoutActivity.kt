@@ -27,7 +27,20 @@ class GridLayoutActivity : AppCompatActivity() {
             RecyclerView {
                 layout_width = match_parent
                 layout_height = match_parent
-                layoutManager  = GridLayoutManager(this@GridLayoutActivity,3)
+                layoutManager = GridLayoutManager(this@GridLayoutActivity, 2, GridLayoutManager.VERTICAL, false).apply {
+                    /**
+                     * GridLayoutManager case: SpanSizeLookup
+                     */
+                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return if (position == 0) {
+                                return 2;
+                            } else {
+                                return 1;
+                            }
+                        }
+                    }
+                }
                 adapter = gridAdapter
             }
         }
