@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.viewpager2_activity.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,9 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.recyclerview.variety.Diff
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
+/**
+ * ViewPager2 with views
+ */
 class ViewPager2Activity : AppCompatActivity() {
 
     private val imgUrls = mutableListOf(
@@ -39,27 +43,20 @@ class ViewPager2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.viewpager2_activity)
         /**
-         * case: ViewPager2 with fragments and TabLayout
-         */
-//        vp2.adapter = ViewPager2Adapter(supportFragmentManager, lifecycle)
-//        TabLayoutMediator(tablayout, vp2) { tab, position ->
-//            tab.text = position.toString()
-//            tab.badge
-//        }.attach()
-
-        /**
          * case: ViewPager2 with views
          */
         val viewPagerAdapter = VarietyAdapter2().apply {
             addProxy(ViewPagerProxy())
             addProxy(ViewPagerEmptyProxy())
-//            dataList = listOf(
-//                "djflksdjfljsfjladskfl",
-//                "23223432423543454356346534",
-//                "eioroeiwurieurioweuroiuweruwoiruworui"
-//            )
         }
         vp2.adapter = viewPagerAdapter
+        /**
+         * case: ViewPager2 with Tab
+         */
+        TabLayoutMediator(tablayout, vp2) { tab, position ->
+            tab.text = position.toString()
+            tab.badge
+        }.attach()
         vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 Log.v("ttaylor", "onPageSelected() position = $position")

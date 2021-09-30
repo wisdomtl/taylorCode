@@ -8,21 +8,22 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ViewPager2Adapter @JvmOverloads constructor(
     fragmentManager: FragmentManager,
-    lifecycle: Lifecycle
+    lifecycle: Lifecycle,
+    var count: Int
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     private val fragments: SparseArray<Fragment> = SparseArray()
 
-    init {
-        fragments.put(0, VpFragment1.newInstance())
-        fragments.put(1, VpFragment2.newInstance())
-    }
-
     override fun getItemCount(): Int {
-        return 2
+        return count
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragments.get(position)
+        var fragment = fragments.get(position)
+        if (fragment == null) {
+            fragment = ViewPagerFragment()
+            fragments.put(position, fragment)
+        }
+        return fragment
     }
 }

@@ -251,6 +251,7 @@
         <activity android:name=".ui.custom_view.bullet_screen.LaneLayoutManagerActivity" />
         <activity android:name=".ui.recyclerview.grid_layout.GridLayoutActivity" />
         <activity android:name=".kotlin.KotlinActivity2" />
+        <activity android:name=".ui.pagers.ViewPager2Activity2" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

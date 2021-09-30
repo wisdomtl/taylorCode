@@ -73,6 +73,7 @@ import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
 import test.taylor.com.taylorcode.ui.notification.NotificationActivity
 import test.taylor.com.taylorcode.ui.one.OneActivity
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity
+import test.taylor.com.taylorcode.ui.pagers.ViewPager2Activity2
 import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
@@ -252,6 +253,7 @@ class MainActivity : BaseActivity() {
         LaneLayoutManager.setOnClickListener { startActivity<LaneLayoutManagerActivity> { } }
         gridlayout.setOnClickListener { startActivity<GridLayoutActivity> { } }
         kotlinActivity2.setOnClickListener { startActivity<KotlinActivity2> { } }
+        btn_vp3.setOnClickListener { startActivity<ViewPager2Activity2> { } }
 
 
         //SAM case:
