@@ -33,23 +33,24 @@ class AsyncListDiffer(
      * when the diff is completed, the result will be dispatched to [ListUpdateCallback]
      */
     fun submitList(newList: List<Any>) {
+        val newListCopy = newList.toList()
         val submitGeneration = ++maxSubmitGeneration
 
         // fast return: old list is empty, just add all new list
         if (this.oldList.isEmpty()) {
-            oldList = newList.toList()
+            oldList = newListCopy
             listUpdateCallback.onInserted(0, newList.size)
             return
         }
 
         // begin diffing in a new coroutine
         launch {
-            val diffResult = DiffUtil.calculateDiff(DiffCallback(oldList, newList))
+            val diffResult = DiffUtil.calculateDiff(DiffCallback(oldList, newListCopy))
             // dispatch the diff result to main thread
             withContext(Dispatchers.Main) {
                 // just apply the last diffResult, discard the others
                 if (submitGeneration == maxSubmitGeneration) {
-                    oldList = newList.toList()
+                    oldList = newListCopy
                     diffResult.dispatchUpdatesTo(listUpdateCallback)
                 }
             }
@@ -64,15 +65,19 @@ class AsyncListDiffer(
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldList[oldItemPosition]
             val newItem = newList[newItemPosition]
-            // using existing hashCode() to make sure whether new and old items are one object
-            return oldItem.hashCode() == newItem.hashCode()
+            val oldDiff = oldItem as? Diff
+            val newDiff = newItem as? Diff
+            return if (oldDiff == null || newDiff == null) oldItem.hashCode() == newItem.hashCode()
+            else oldDiff sameAs newItem
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldList[oldItemPosition]
             val newItem = newList[newItemPosition]
-            // using existing hashCode() to make sure whether new and old items have the same content
-            return oldItem == newItem
+            val oldDiff = oldItem as? Diff
+            val newDiff = newItem as? Diff
+            return if (oldDiff == null || newDiff == null) oldItem == newItem
+            else oldDiff contentSameAs newDiff
         }
 
         override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
@@ -94,4 +99,14 @@ interface Diff {
      * @return the detail of difference defined by yourself
      */
     infix fun diff(other: Any?): Any?
+
+    /**
+     * whether this object and [other] is the same object
+     */
+    infix fun sameAs(other: Any?): Boolean
+
+    /**
+     * whether this object has the same content with [other]
+     */
+    infix fun contentSameAs(other: Any?): Boolean
 }

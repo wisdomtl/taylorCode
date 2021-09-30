@@ -9,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.viewpager2_activity.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.TextView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.recyclerview.variety.Diff
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class ViewPager2Activity : AppCompatActivity() {
@@ -23,6 +30,8 @@ class ViewPager2Activity : AppCompatActivity() {
         "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2571315283,182922750&fm=26&gp=0.jpg",
         "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591790054139&di=627d2e1d16d93f1f2fdcac074a623d39&imgtype=0&src=http%3A%2F%2Fpngimg.com%2Fuploads%2Fdonald_trump%2Fdonald_trump_PNG56.png"
     )
+
+    private val viewPagerFlow = MutableStateFlow<List<BaseBean>?>(null)
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -41,23 +50,62 @@ class ViewPager2Activity : AppCompatActivity() {
         /**
          * case: ViewPager2 with views
          */
-        vp2.adapter  = VarietyAdapter2().apply {
+        val viewPagerAdapter = VarietyAdapter2().apply {
             addProxy(ViewPagerProxy())
-            dataList = listOf(
-                "djflksdjfljsfjladskfl",
-                "23223432423543454356346534",
-                "eioroeiwurieurioweuroiuweruwoiruworui"
+            addProxy(ViewPagerEmptyProxy())
+//            dataList = listOf(
+//                "djflksdjfljsfjladskfl",
+//                "23223432423543454356346534",
+//                "eioroeiwurieurioweuroiuweruwoiruworui"
+//            )
+        }
+        vp2.adapter = viewPagerAdapter
+        vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                Log.v("ttaylor", "onPageSelected() position = $position")
+                lifecycleScope.launch { fetch(position) }
+            }
+        })
+//        bannerViewPager()
+//
+//        fl.dispatchEvent = { ev ->
+//            if (ev?.action == MotionEvent.ACTION_MOVE) {
+//                handler.removeCallbacksAndMessages(null)
+//            } else if (ev?.action == MotionEvent.ACTION_UP) {
+//                handler.postDelayed(showNext, 1000)
+//            }
+//        }
+
+        //load data
+        lifecycleScope.launch {
+            delay(500)
+            viewPagerFlow.value = listOf(
+                // it must be 0 ,1,2,3 which is according to the real index in adapter,or DiffUtil will consider it as remove and insert, then ViewPager will scroll automatically
+                EmptyString(0, "null"),
+                EmptyString(1, "null"),
+                EmptyString(2, "null"),
+                EmptyString(3, "null"),
             )
         }
-//        bannerViewPager()
 
-        fl.dispatchEvent = { ev ->
-            if (ev?.action == MotionEvent.ACTION_MOVE) {
-                handler.removeCallbacksAndMessages(null)
-            } else if (ev?.action == MotionEvent.ACTION_UP) {
-                handler.postDelayed(showNext, 1000)
+        // observe data
+        lifecycleScope.launch {
+            viewPagerFlow.collect { list ->
+                list ?: return@collect
+                val oldData = viewPagerAdapter.dataList.toMutableList()
+                if (oldData.isEmpty()) {
+                    viewPagerAdapter.dataList = list
+                } else {
+                    list.forEach { item -> oldData.set(item.id, item) }
+                    viewPagerAdapter.dataList = oldData
+                }
             }
         }
+    }
+
+    private suspend fun fetch(id: Int) {
+        delay(1500)
+        viewPagerFlow.value = listOf(EmptyString(id, "wisdomtl${id}"))
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -82,7 +130,7 @@ class ViewPager2Activity : AppCompatActivity() {
     }
 }
 
-class ViewPagerProxy : VarietyAdapter2.Proxy<String, ViewPagerViewHolder2>() {
+class ViewPagerProxy : VarietyAdapter2.Proxy<DataText, ViewPagerViewHolder2>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {
@@ -90,7 +138,7 @@ class ViewPagerProxy : VarietyAdapter2.Proxy<String, ViewPagerViewHolder2>() {
                 layout_width = match_parent
                 layout_height = match_parent
                 textSize = 50f
-                textColor = "#ffffff"
+                textColor = "#888888"
                 fontFamily = R.font.pingfang
                 gravity = gravity_center
             }
@@ -100,15 +148,72 @@ class ViewPagerProxy : VarietyAdapter2.Proxy<String, ViewPagerViewHolder2>() {
 
     override fun onBindViewHolder(
         holder: ViewPagerViewHolder2,
-        data: String,
+        data: DataText,
         index: Int,
         action: ((Any?) -> Unit)?
     ) {
-        holder.tv?.text = data
+        holder.tv?.text = data.str
     }
 
 }
 
+class DataText(idd: Int, var str: String) : BaseBean(idd)
+
 class ViewPagerViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tv = itemView.find<TextView>("tvChange")
 }
+
+
+class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemView = parent.context.run {
+            TextView {
+                layout_id = "tvChange"
+                layout_width = match_parent
+                layout_height = match_parent
+                textSize = 40f
+                textColor = "#00ff00"
+                fontFamily = R.font.pingfang
+                gravity = gravity_center
+            }
+        }
+        return ViewPagerEmptyViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewPagerEmptyViewHolder,
+        data: EmptyString,
+        index: Int,
+        action: ((Any?) -> Unit)?
+    ) {
+        holder.tvChange?.text = data.str
+    }
+}
+
+class EmptyString(var idd: Int, var str: String) : BaseBean(idd), Diff {
+    override fun diff(other: Any?): Any? {
+        return null
+    }
+
+    override fun sameAs(other: Any?): Boolean {
+        return when {
+            other !is EmptyString -> false
+            other.idd == this.idd -> true
+            else -> false
+        }
+    }
+
+    override fun contentSameAs(other: Any?): Boolean {
+        return when {
+            other !is EmptyString -> false
+            other.str == this.str -> true
+            else -> false
+        }
+    }
+}
+
+class ViewPagerEmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val tvChange = itemView.find<TextView>("tvChange")
+}
+
+open class BaseBean(var id: Int)
