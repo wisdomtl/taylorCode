@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
@@ -27,7 +28,7 @@ class RecyclerViewAnimActivity : AppCompatActivity() {
                 center_horizontal = true
                 center_vertical = true
                 adapter = overlapAdapter
-                layoutManager = OverlapLayoutManager(0.1f)
+                layoutManager = LinearLayoutManager(this@RecyclerViewAnimActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
                 background_color = "#00ff00"
             }
         }
@@ -72,6 +73,10 @@ class ImageProxy : VarietyAdapter2.Proxy<Image, ImageViewHolder>() {
 
     override fun onBindViewHolder(holder: ImageViewHolder, data: Image, index: Int, action: ((Any?) -> Unit)?) {
         holder.tv?.text = data.url
+        /**
+         * make item overlap
+         */
+        holder.itemView.margin_start = if (index ==0) 0 else -20
     }
 
 }
