@@ -78,6 +78,7 @@ import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
+import test.taylor.com.taylorcode.ui.recyclerview.anim.RecyclerViewAnimActivity
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridLayoutActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
@@ -254,6 +255,7 @@ class MainActivity : BaseActivity() {
         gridlayout.setOnClickListener { startActivity<GridLayoutActivity> { } }
         kotlinActivity2.setOnClickListener { startActivity<KotlinActivity2> { } }
         btn_vp3.setOnClickListener { startActivity<ViewPager2Activity2> { } }
+        btn_overlap.setOnClickListener { startActivity<RecyclerViewAnimActivity> { } }
 
 
         //SAM case:

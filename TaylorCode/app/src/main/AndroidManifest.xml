@@ -252,6 +252,7 @@
         <activity android:name=".ui.recyclerview.grid_layout.GridLayoutActivity" />
         <activity android:name=".kotlin.KotlinActivity2" />
         <activity android:name=".ui.pagers.ViewPager2Activity2" />
+        <activity android:name=".ui.recyclerview.anim.RecyclerViewAnimActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
