@@ -7,16 +7,17 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlin.coroutines.CoroutineContext
 
 /**
  * start counting down from [duration] to 0 in a background thread and invoking the [onCountdown] every [interval] in main thread
  */
-fun <T> countdown2(duration: Long, interval: Long, onCountdown: suspend (Long) -> T): Flow<T> =
+fun <T> countdown2(duration: Long, interval: Long, context: CoroutineContext = Dispatchers.Default,onCountdown: suspend (Long) -> T): Flow<T> =
     flow { (duration - interval downTo 0 step interval).forEach { emit(it) } }
         .onEach { delay(interval) }
         .onStart { emit(duration) }
         .flatMapMerge { flow { emit(onCountdown(it)) } }
-        .flowOn(Dispatchers.Default)
+        .flowOn(context)
 
 
 /**
