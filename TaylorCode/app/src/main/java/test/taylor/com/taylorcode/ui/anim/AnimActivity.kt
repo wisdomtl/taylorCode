@@ -21,9 +21,7 @@ import kotlinx.android.synthetic.main.anim_activity.*
 
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.extension.extraAnimClickListener
-import test.taylor.com.taylorcode.kotlin.AnimSet
-import test.taylor.com.taylorcode.kotlin.addListener
-import test.taylor.com.taylorcode.kotlin.animSet
+import test.taylor.com.taylorcode.ui.animation_dsl.AnimSet
 import test.taylor.com.taylorcode.util.BitmapUtil
 import test.taylor.com.taylorcode.util.DimensionUtil
 
@@ -47,34 +45,6 @@ class AnimActivity : Activity(), View.OnClickListener {
     private lateinit var animator: ValueAnimator
     private var clickedDsl: Boolean = false
     private var clickedWithoutDSL: Boolean = false
-    private val animatorSet: AnimSet by lazy {
-        //        animSet {
-//            anim {
-//                action = { value -> tvValueAnim.translationX = (value as Float) }
-//                values = floatArrayOf(0f, 200.0f)
-//            }
-//            anim {
-//                action = { value -> tvValueAnim.alpha = (value as Float) }
-//                values = floatArrayOf(1.0f, 0.3f)
-//            }
-//            anim {
-//                action = { value -> tvValueAnim.scaleX = (value as Float) }
-//                values = floatArrayOf(1.0f, 1.3f)
-//            }
-//            interpolator = AccelerateDecelerateInterpolator()
-//            duration = 100L
-//        }
-        animSet {
-            animObject {
-                target = tvValueAnim
-                translationX = floatArrayOf(0f, 200f)
-                alpha = floatArrayOf(1.0f, 0.3f)
-                scaleX = floatArrayOf(1.0f, 1.3f)
-            }
-            duration = 100L
-            interpolator = AccelerateDecelerateInterpolator()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,10 +56,10 @@ class AnimActivity : Activity(), View.OnClickListener {
         btnReverseAnimator.setOnClickListener { animator.reverse() }
         btnValueAnim.setOnClickListener {
             if (clickedDsl) {
-                animatorSet.reverse()
+//                animatorSet.reverse()
                 clickedDsl = false
             } else {
-                animatorSet.start()
+//                animatorSet.start()
                 clickedDsl = true
             }
         }
@@ -365,14 +335,6 @@ class AnimActivity : Activity(), View.OnClickListener {
             )
             startDelay = BOMB_ANIM_DURATION_IN_MILLISECOND.toLong()
             //kotlin DSL case1:implement interface method as you desire
-            addListener {
-                onEnd = {
-                    Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  end")
-                }
-                onStart = {
-                    Log.v("ttaylor", "tag=anim-callback, AnimActivity.doAnimatorSet()  start")
-                }
-            }
             start()
         }
     }

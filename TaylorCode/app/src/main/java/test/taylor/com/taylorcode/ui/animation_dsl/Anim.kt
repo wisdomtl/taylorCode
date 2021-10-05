@@ -17,6 +17,7 @@ abstract class Anim {
      */
     abstract var animator: Animator
     var builder: AnimatorSet.Builder? = null
+
     /**
      * the duration of Animator
      */
@@ -25,6 +26,7 @@ abstract class Anim {
         set(value) {
             animator.duration = value
         }
+
     /**
      * the interpolator of Animator
      */
@@ -33,6 +35,7 @@ abstract class Anim {
         set(value) {
             animator.interpolator = value
         }
+
     /**
      * start delay of Animator
      */
@@ -45,10 +48,10 @@ abstract class Anim {
     /**
      * the callbacks describe the status of animation
      */
-    var onRepeat: ((Animator) -> Unit)? = null
-    var onEnd: ((Animator) -> Unit)? = null
-    var onCancel: ((Animator) -> Unit)? = null
-    var onStart: ((Animator) -> Unit)? = null
+    var onRepeat: ((Animator, Anim) -> Unit)? = null
+    var onEnd: ((Animator, Anim) -> Unit)? = null
+    var onCancel: ((Animator, Anim) -> Unit)? = null
+    var onStart: ((Animator, Anim) -> Unit)? = null
 
     /**
      * reverse the value of [ValueAnimator]
@@ -60,22 +63,22 @@ abstract class Anim {
      */
     abstract fun toBeginning()
 
-    internal fun addListener() {
+    fun addListener() {
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
-                animation?.let { onRepeat?.invoke(it) }
+                animation?.let { onRepeat?.invoke(it, this@Anim) }
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                animation?.let { onEnd?.invoke(it) }
+                animation?.let { onEnd?.invoke(it, this@Anim) }
             }
 
             override fun onAnimationCancel(animation: Animator?) {
-                animation?.let { onCancel?.invoke(it) }
+                animation?.let { onCancel?.invoke(it, this@Anim) }
             }
 
             override fun onAnimationStart(animation: Animator?) {
-                animation?.let { onStart?.invoke(it) }
+                animation?.let { onStart?.invoke(it, this@Anim) }
             }
         })
     }
