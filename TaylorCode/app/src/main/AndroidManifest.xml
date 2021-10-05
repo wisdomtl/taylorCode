@@ -254,6 +254,7 @@
         <activity android:name=".ui.pagers.ViewPager2Activity2" />
         <activity android:name=".ui.recyclerview.anim.RecyclerViewAnimActivity" />
         <activity android:name=".ui.recyclerview.anim2.RecyclerViewItemAnimatorActivity" />
+        <activity android:name=".ui.custom_view.overlap_anim.OverlapAnimActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

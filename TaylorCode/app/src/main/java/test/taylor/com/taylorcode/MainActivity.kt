@@ -54,6 +54,7 @@ import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.crop_view.CropActivity
+import test.taylor.com.taylorcode.ui.custom_view.overlap_anim.OverlapAnimActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
 import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBarActivity
 import test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator.IndicatorActivity
@@ -258,6 +259,7 @@ class MainActivity : BaseActivity() {
         btn_vp3.setOnClickListener { startActivity<ViewPager2Activity2> { } }
         btn_overlap.setOnClickListener { startActivity<RecyclerViewAnimActivity> { } }
         btn_item_animator.setOnClickListener { startActivity<RecyclerViewItemAnimatorActivity> { } }
+        btn_overlap_anim.setOnClickListener { startActivity<OverlapAnimActivity> { } }
 
 
         //SAM case:
