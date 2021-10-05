@@ -17,7 +17,7 @@ class ValueAnim : Anim() {
 
     /**
      * the animation value
-     */
+    */
     var values: Any? = null
         set(value) {
             field = value
