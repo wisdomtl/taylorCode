@@ -17,6 +17,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.countdown2
 import test.taylor.com.taylorcode.ui.StrokeImageView
 import test.taylor.com.taylorcode.ui.animation_dsl.animSet
+import test.taylor.com.taylorcode.ui.animation_dsl.valueAnim
 import test.taylor.com.taylorcode.ui.performance.load
 import java.util.*
 
@@ -202,53 +203,72 @@ class OverlapAnimActivity : AppCompatActivity() {
 
     private fun startCarousel() {
         countdown2(Long.MAX_VALUE, ANIM_DURATION * 2, Dispatchers.Main) {
-        oneRound()
+            anim.start()
         }.launchIn(MainScope())
     }
 
     private val anim by lazy {
-        animSet {
-            anim {
-                values = floatArrayOf(0f, 1f)
-                action = { value ->
-                    val degree = value as Float
-                    val size = carouselViews.size
-                    carouselViews.forEachIndexed { index, view ->
-                        when (index) {
-                            0 -> view.apply {
-                                alpha = degree
-                                scaleX = degree
-                                scaleY = degree
-                            }
-                            size - 1 -> view.apply {
-                                alpha = 1 - degree
-                                scaleX = 1 - degree
-                                scaleY = 1 - degree
-                            }
-                            else -> view.translationX = view.lastTranslationX + OVERLAP_GAP.dp * degree
+        valueAnim {
+            values = floatArrayOf(0f, 1f)
+            action = { value ->
+                val degree = value as Float
+                val size = carouselViews.size
+                carouselViews.forEachIndexed { index, view ->
+                    when (index) {
+                        0 -> view.apply {
+                            alpha = degree
+                            scaleX = degree
+                            scaleY = degree
                         }
+                        size - 1 -> view.apply {
+                            alpha = 1 - degree
+                            scaleX = 1 - degree
+                            scaleY = 1 - degree
+                        }
+                        else -> view.translationX = view.lastTranslationX + OVERLAP_GAP.dp * degree
                     }
                 }
-                duration = ANIM_DURATION
-                repeatCount = INFINITE
-                repeatMode = RESTART
-                delay = 1000
+            }
+            duration = ANIM_DURATION
 
-                onRepeat = { _, anim ->
-                    (1..carouselViews.size - 2).forEach { index ->
-                        carouselViews[index].also { it.lastTranslationX = it.translationX }
+            onEnd = { _, anim ->
+                (1..carouselViews.size - 2).forEach { index ->
+                    carouselViews[index].also { it.lastTranslationX = it.translationX }
+                }
+                val lastView = carouselViews.pollLast()
+                carouselViews.addFirst(lastView)
+                container.removeView(lastView)
+                container.addView(
+                    lastView?.apply {
+                        start_toStartOf = parent_id
+                        margin_start = 0
+                        translationX = 0f
+                        lastTranslationX = 0f
+                    }, 0
+                )
+
+                (anim as ValueAnim).apply {
+                    values = floatArrayOf(0f, 1f)
+                    action = { value ->
+                        val degree = value as Float
+                        val size = carouselViews.size
+                        carouselViews.forEachIndexed { index, view ->
+                            when (index) {
+                                0 -> view.apply {
+                                    alpha = degree
+                                    scaleX = degree
+                                    scaleY = degree
+                                }
+                                size - 1 -> view.apply {
+                                    alpha = 1 - degree
+                                    scaleX = 1 - degree
+                                    scaleY = 1 - degree
+                                }
+                                else -> view.translationX = view.lastTranslationX + OVERLAP_GAP.dp * degree
+                            }
+                        }
+
                     }
-                    val lastView = carouselViews.pollLast()
-                    carouselViews.addFirst(lastView)
-                    container.removeView(lastView)
-                    container.addView(
-                        lastView?.apply {
-                            start_toStartOf = parent_id
-                            margin_start = 0
-                            translationX = 0f
-                            lastTranslationX = 0f
-                        }, 0
-                    )
                 }
             }
         }
@@ -278,9 +298,6 @@ class OverlapAnimActivity : AppCompatActivity() {
                     }
                 }
                 duration = ANIM_DURATION
-//                repeatCount = INFINITE
-//                repeatMode = RESTART
-//                delay = 1000
 
                 onEnd = { _, anim ->
                     (1..carouselViews.size - 2).forEach { index ->
@@ -300,45 +317,6 @@ class OverlapAnimActivity : AppCompatActivity() {
                 }
             }
         }.start()
-
-//        (anim.getAnim(0) as ValueAnim).apply {
-//            action = { value ->
-//                val degree = value as Float
-//                val size = carouselViews.size
-//                carouselViews.forEachIndexed { index, view ->
-//                    when (index) {
-//                        0 -> view.apply {
-//                            alpha = degree
-//                            scaleX = degree
-//                            scaleY = degree
-//                        }
-//                        size - 1 -> view.apply {
-//                            alpha = 1 - degree
-//                            scaleX = 1 - degree
-//                            scaleY = 1 - degree
-//                        }
-//                        else -> view.translationX = view.lastTranslationX + OVERLAP_GAP.dp * degree
-//                    }
-//                }
-//            }
-//
-//            onEnd = { _, _ ->
-//                (1..carouselViews.size - 2).forEach { index ->
-//                    carouselViews[index].also { it.lastTranslationX = it.translationX }
-//                }
-//                val lastView = carouselViews.pollLast()
-//                carouselViews.addFirst(lastView)
-//                container.removeView(lastView)
-//                container.addView(
-//                    lastView?.apply {
-//                        start_toStartOf = parent_id
-//                        margin_start = 0
-//                        translationX = 0f
-//                        lastTranslationX = 0f
-//                    }, 0
-//                )
-//            }
-//        }
     }
 }
 

@@ -66,7 +66,7 @@ class AnimSet : Anim() {
     /**
      * start the [AnimSet]
      */
-    fun start() {
+    override fun start() {
         if (animatorSet.isRunning) return
         anims.takeIf { hasReverse }?.forEach { anim -> anim.reverse() }.also { hasReverse = false }
         if (anims.size == 1) animatorSet.play(anims.first().animator)
@@ -101,7 +101,7 @@ class AnimSet : Anim() {
     /**
      * cancel the [AnimatorSet]
      */
-    fun cancel() {
+    override fun cancel() {
         animatorSet.cancel()
     }
 
@@ -156,3 +156,5 @@ class AnimSet : Anim() {
  * build a set of animation with a much shorter and readable code by DSL
  */
 fun animSet(creation: AnimSet.() -> Unit) = AnimSet().apply { creation() }.also { it.addListener() }
+
+fun valueAnim(init: ValueAnim.()->Unit) = ValueAnim().apply(init).also { it.addListener() }

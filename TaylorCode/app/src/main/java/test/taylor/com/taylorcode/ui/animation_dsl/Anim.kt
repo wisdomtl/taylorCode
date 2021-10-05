@@ -63,6 +63,15 @@ abstract class Anim {
      */
     abstract fun toBeginning()
 
+    open fun cancel() {
+        animator.cancel()
+    }
+
+    open fun start() {
+        animator.start()
+    }
+
+
     fun addListener() {
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
