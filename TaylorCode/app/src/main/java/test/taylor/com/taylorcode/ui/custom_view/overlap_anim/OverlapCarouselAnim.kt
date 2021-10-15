@@ -2,7 +2,6 @@ package test.taylor.com.taylorcode.ui.custom_view.overlap_anim
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -13,6 +12,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.countdown2
 import test.taylor.com.taylorcode.ui.animation_dsl.valueAnim
 import java.util.*
+import kotlin.math.min
 
 /**
  * a helper class to layout views overlap with each other in horizontal style,
@@ -26,9 +26,14 @@ class OverlapCarouselAnim(val container: ConstraintLayout) {
     private val carouselViews = LinkedList<View>()
 
     /**
+     * define how to bind data to view
+     */
+    var onBindItemView: ((View, Int, String?) -> Unit)? = null
+
+    /**
      * define how to create view
      */
-    var onBindItemView: ((Context, Int, String) -> View?)? = null
+    var onCreateItemView: ((Context) -> View)? = null
 
     /**
      * how long is the animation
@@ -50,6 +55,10 @@ class OverlapCarouselAnim(val container: ConstraintLayout) {
      */
     var dimensionDp: Int = 50
 
+    private var datas: List<String> = emptyList()
+
+    private var index: Int = 0
+
     /**
      * a [ValueAnim] generate value from 0% to 100%
      */
@@ -68,13 +77,15 @@ class OverlapCarouselAnim(val container: ConstraintLayout) {
     /**
      * start carousel animation according to the [urls] which will be turned into image showing in [ImageView]
      */
-    fun start(urls: List<String>, autoScroll: Boolean = true) {
+    fun start(urls: List<String>, autoScroll: Boolean = true, maxSize: Int = 5) {
         if (container.childCount > 0) return
-        val showCount = if (autoScroll) urls.size - 1 else urls.size
+        this.datas = urls
+        val max = min(urls.size, maxSize)
+        val showCount = if (autoScroll) max else urls.size
         container.layout_width = showCount * dimensionDp - (showCount - 1) * (overlapDp)
-        urls.forEachIndexed { index, url ->
+        urls.take(max).forEachIndexed { index, url ->
             container.apply {
-                onBindItemView?.invoke(context, index, url)?.apply {
+                onCreateItemView?.invoke(context)?.apply {
                     layout_id = "carousel$index"
                     layout_width = dimensionDp
                     layout_height = dimensionDp
@@ -92,10 +103,12 @@ class OverlapCarouselAnim(val container: ConstraintLayout) {
                         if (index != 0) margin_start = dimensionDp - overlapDp
                     }
                 }?.also {
+                    onBindItemView?.invoke(it, index, url)
                     addView(it)
                     carouselViews.add(it)
                 }
             }
+            this@OverlapCarouselAnim.index = index
         }
 
         if (autoScroll) {
@@ -119,14 +132,22 @@ class OverlapCarouselAnim(val container: ConstraintLayout) {
         val lastView = carouselViews.pollLast()
         carouselViews.addFirst(lastView)
         container.removeView(lastView)
-        container.addView(
-            lastView?.apply {
-                start_toStartOf = parent_id
-                margin_start = 0
-                translationX = 0f
-                lastTranslationX = 0f
-            }, 0
-        )
+        lastView?.apply {
+            start_toStartOf = parent_id
+            margin_start = 0
+            translationX = 0f
+            lastTranslationX = 0f
+            onBindItemView?.invoke(this, index, datas.getOrNull(index))
+            index = (index+1) % datas.size
+        }.also { container.addView(it, 0) }
+//        container.addView(
+//            lastView?.apply {
+//                start_toStartOf = parent_id
+//                margin_start = 0
+//                translationX = 0f
+//                lastTranslationX = 0f
+//            }, 0
+//        )
     }
 
     private fun updateValue(value: Any, marginStart: Int) {

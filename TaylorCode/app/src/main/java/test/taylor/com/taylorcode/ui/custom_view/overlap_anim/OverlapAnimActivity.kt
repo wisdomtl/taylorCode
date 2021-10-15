@@ -2,7 +2,9 @@ package test.taylor.com.taylorcode.ui.custom_view.overlap_anim
 
 import android.animation.ValueAnimator.INFINITE
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +20,7 @@ class OverlapAnimActivity : AppCompatActivity() {
 
     private val ITEM_DIMENSION = 50
 
-    private val OVERLAP_GAP = 35
+    private val OVERLAP_GAP = 10
     private val ANIM_DURATION = 1000L
 
     private var carouselViews = LinkedList<View>()
@@ -34,7 +36,8 @@ class OverlapAnimActivity : AppCompatActivity() {
             "http://xiaoredpic.neoclub.cn/miaohong/user/custom/avatar/image/test/15209233/e845424c-4778-48a3-b699-6bc5bdc30f52.jpg",
             "http://xiaoredpic.neoclub.cn/miaohong/user/custom/avatar/image/test/15233023/120f44fb-849c-4112-b8db-259331f2fc17.jpg",
             "http://xiaoredpic.neoclub.cn/backend/appearance/default/avatar/male001.png",
-            "https://xiaored.oss-cn-hangzhou.aliyuncs.com/backend/party/01111111111_1625363250143_0_w1000h1000.png"
+            "https://xiaored.oss-cn-hangzhou.aliyuncs.com/backend/party/01111111111_1625363250143_0_w1000h1000.png",
+            "http://xiaoredpic.neoclub.cn/backend/appearance/default/avatar/male001.png"
         )
 
     val contentView by lazy {
@@ -53,14 +56,17 @@ class OverlapAnimActivity : AppCompatActivity() {
                     overlapDp = OVERLAP_GAP
                     dimensionDp = ITEM_DIMENSION
                     interval = 2000
-                    onBindItemView = { context,index, url ->
+                    onCreateItemView = { context ->
                         StrokeImageView(context).apply {
                             scaleType = scale_center_crop
                             roundedAsCircle = true
-                            load(url)
                         }
                     }
-                }.start(urls)
+                    onBindItemView = { view, index, url ->
+                        Log.v("ttaylor","index=$index,url=${url}")
+                        url?.let { (view as? ImageView)?.load(url) }
+                    }
+                }.start(urls, urls.size > 4, 4)
             }
 
             tv = TextView {
