@@ -260,6 +260,7 @@ class MainActivity : BaseActivity() {
         btn_overlap.setOnClickListener { startActivity<RecyclerViewAnimActivity> { } }
         btn_item_animator.setOnClickListener { startActivity<RecyclerViewItemAnimatorActivity> { } }
         btn_overlap_anim.setOnClickListener { startActivity<OverlapAnimActivity> { } }
+        btn_imageView_scaleType.setOnClickListener { startActivity<ImageViewScaleTypeActivity> { } }
 
 
         //SAM case:
