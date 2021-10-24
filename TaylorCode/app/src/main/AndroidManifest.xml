@@ -256,6 +256,7 @@
         <activity android:name=".ui.recyclerview.anim2.RecyclerViewItemAnimatorActivity" />
         <activity android:name=".ui.custom_view.overlap_anim.OverlapAnimActivity" />
         <activity android:name=".ui.ImageViewScaleTypeActivity" />
+        <activity android:name=".ui.zoom.ZoomActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

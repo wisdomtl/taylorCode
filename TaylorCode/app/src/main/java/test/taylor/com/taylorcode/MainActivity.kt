@@ -91,6 +91,7 @@ import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
+import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
@@ -261,6 +262,7 @@ class MainActivity : BaseActivity() {
         btn_item_animator.setOnClickListener { startActivity<RecyclerViewItemAnimatorActivity> { } }
         btn_overlap_anim.setOnClickListener { startActivity<OverlapAnimActivity> { } }
         btn_imageView_scaleType.setOnClickListener { startActivity<ImageViewScaleTypeActivity> { } }
+        btn_zoom.setOnClickListener { startActivity<ZoomActivity> { } }
 
 
         //SAM case:
