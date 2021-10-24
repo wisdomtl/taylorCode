@@ -2,6 +2,8 @@ package test.taylor.com.taylorcode.ui.zoom
 
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -10,11 +12,12 @@ import androidx.core.graphics.scaleMatrix
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import kotlin.math.min
 
 class ZoomActivity : AppCompatActivity() {
 
-    private val HEIGHT = 200
-    private val WIDTH = 300
+    private val HEIGHT = 200f
+    private val WIDTH = 300f
 
     private lateinit var iv: ImageView
     private lateinit var iv2: ImageView
@@ -26,27 +29,27 @@ class ZoomActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-            iv = TouchImageView(context).apply {
+//            iv = TouchImageView(context).apply {
+//                layout_width = match_parent
+//                layout_height = match_parent
+//                center_horizontal = true
+//                center_vertical = true
+//                src = imgRes
+//                background_color = "#ff00ff"
+////                initWidth = WIDTH.dp.toInt()
+////                initHeight = HEIGHT.dp.toInt()
+//            }.also { addView(it) }
+
+            iv2 = ImageView {
                 layout_width = match_parent
                 layout_height = match_parent
                 center_horizontal = true
                 center_vertical = true
-//                src = R.drawable.landscape
                 src = imgRes
-                background_color = "#ff00ff"
-                initWidth = WIDTH.dp
-                initHeight = HEIGHT.dp
-            }.also { addView(it) }
-
-//            iv2 = ImageView {
-//                layout_width = WIDTH
-//                layout_height = HEIGHT
-//                center_horizontal = true
-//                center_vertical = true
-//                src = R.drawable.portrait
-//                scaleType = scale_matrix
-//                background_color = "#ff0000"
-//            }
+                scaleType = scale_matrix
+                background_color = "#ff0000"
+                fitIntoRect(RectF(0.17f,0.38f,0.83f,0.62f))
+            }
         }
     }
 
@@ -61,29 +64,38 @@ class ZoomActivity : AppCompatActivity() {
         /**
          * case: scale ImageView with matrix
          */
-//        iv.post {
-//            iv.imageMatrix = Matrix().apply {
-//                val (width, height) = BitmapFactory.Options().let { option ->
-//                    option.inJustDecodeBounds = true
-//                    BitmapFactory.decodeResource(resources, imgRes, option)
-//                    option.outWidth to option.outHeight
-//                }
-//                val widthScale = WIDTH.dp / width
-//                val heightScale = HEIGHT.dp / height
-//                Log.v("ttaylor", "setMatrix() width=$width,height=$height,wScale=$widthScale,hScale=$heightScale, height.dp=${HEIGHT.dp}")
-//                postScale(heightScale, heightScale)
-//            }
-//        }
+//        fitIntoRect()
+    }
 
-//        iv.post {
-//            iv.imageMatrix = Matrix().apply {
-//                val sx = 0.5f
-//                val sy = 0.5f
-//                postScale(sx,sy)
-////                val tx = iv.measuredWidth/2f - (iv.measuredWidth/2f * sx)
-////                val ty = iv.measuredHeight/2f -(iv.measuredHeight/2f *sy)
-////                postTranslate(tx,ty)
+//    private fun fitIntoRect() {
+//        iv2.post {
+//            iv2.imageMatrix = Matrix().apply {
+//                val (width, height) = iv2.drawable?.let { it.intrinsicWidth to it.intrinsicHeight } ?: return@post
+//                val widthScale = iv2.measuredWidth / width.toFloat()
+//                val heightScale = iv2.measuredHeight / height.toFloat()
+//                val scale = min(widthScale, heightScale)
+//                postScale(scale, scale)
+//                val translateX = (iv2.measuredWidth - scale * width) / 2
+//                val translateY = (iv2.measuredHeight - scale * height) / 2
+//                postTranslate(translateX, translateY)
 //            }
 //        }
+//    }
+}
+
+fun ImageView.fitIntoRect(rect: RectF? = null) {
+    post {
+        val r = rect ?: RectF(0f, 0f, 1f, 1f)
+        scaleType = ImageView.ScaleType.MATRIX
+        imageMatrix = imageMatrix.apply {
+            val (imgWidth, imgHeight) = drawable?.let { it.minimumWidth to it.intrinsicHeight } ?: return@post
+            val scaleX = r.width() * measuredWidth / imgWidth.toFloat()
+            val scaleY = r.height() * measuredHeight / imgHeight.toFloat()
+            val scale = min(scaleX, scaleY)
+            postScale(scale, scale)
+            val dx = r.centerX() * measuredWidth - scale * imgWidth / 2
+            val dy = r.centerY() * measuredHeight - scale * imgHeight / 2
+            postTranslate(dx, dy)
+        }
     }
 }

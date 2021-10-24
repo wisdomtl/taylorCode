@@ -168,6 +168,7 @@ class TouchImageView : AppCompatImageView {
             val scaleY = initHeight.toFloat() / bmHeight.toFloat()
             scale = Math.min(scaleX, scaleY)
             mMatrix!!.setScale(scale, scale)
+            Log.v("ttaylor","onMeasure() mw=${viewWidth}, mh=${viewHeight}, bmpWidth=$bmWidth, bmpHeight=$bmHeight, scaleX=$scaleX, scaleY=$scaleY")
             // Center the image
             var redundantYSpace = viewHeight.toFloat() - scale * bmHeight.toFloat()
             var redundantXSpace = viewWidth.toFloat() - scale * bmWidth.toFloat()
