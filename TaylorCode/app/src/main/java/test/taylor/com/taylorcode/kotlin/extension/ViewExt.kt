@@ -14,12 +14,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.math.min
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
     setOnTouchListener { v, event ->
@@ -285,4 +287,25 @@ fun EditText.textChangeFlow(): Flow<CharSequence> = callbackFlow {
 fun View.clickFlow() = callbackFlow {
     setOnClickListener { offer(Unit) }
     awaitClose { setOnClickListener(null) }
+}
+
+/**
+ * fit image into a [rect]
+ * @param rect a position relative to [ImageView] in percentage
+ */
+fun ImageView.fitIntoRect(rect: RectF? = null) {
+    post {
+        val r = rect ?: RectF(0f, 0f, 1f, 1f)
+        scaleType = ImageView.ScaleType.MATRIX
+        imageMatrix = imageMatrix.apply {
+            val (imgWidth, imgHeight) = drawable?.let { it.minimumWidth to it.intrinsicHeight } ?: return@post
+            val scaleX = r.width() * measuredWidth / imgWidth.toFloat()
+            val scaleY = r.height() * measuredHeight / imgHeight.toFloat()
+            val scale = min(scaleX, scaleY)
+            postScale(scale, scale)
+            val dx = r.centerX() * measuredWidth - scale * imgWidth / 2
+            val dy = r.centerY() * measuredHeight - scale * imgHeight / 2
+            postTranslate(dx, dy)
+        }
+    }
 }
