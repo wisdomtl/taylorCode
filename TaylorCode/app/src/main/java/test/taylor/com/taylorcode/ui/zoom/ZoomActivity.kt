@@ -29,27 +29,27 @@ class ZoomActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-//            iv = TouchImageView(context).apply {
-//                layout_width = match_parent
-//                layout_height = match_parent
-//                center_horizontal = true
-//                center_vertical = true
-//                src = imgRes
-//                background_color = "#ff00ff"
-////                initWidth = WIDTH.dp.toInt()
-////                initHeight = HEIGHT.dp.toInt()
-//            }.also { addView(it) }
-
-            iv2 = ImageView {
+            iv = TouchImageView(context).apply {
                 layout_width = match_parent
                 layout_height = match_parent
                 center_horizontal = true
                 center_vertical = true
                 src = imgRes
-                scaleType = scale_matrix
-                background_color = "#ff0000"
-                fitIntoRect(RectF(0.17f,0.38f,0.83f,0.62f))
-            }
+                background_color = "#ff00ff"
+                initWidth = WIDTH.dp.toInt()
+                initHeight = HEIGHT.dp.toInt()
+            }.also { addView(it) }
+
+//            iv2 = ImageView {
+//                layout_width = match_parent
+//                layout_height = match_parent
+//                center_horizontal = true
+//                center_vertical = true
+//                src = imgRes
+//                scaleType = scale_matrix
+//                background_color = "#ff0000"
+//                fitIntoRect(RectF(0.17f,0.38f,0.83f,0.62f))
+//            }
         }
     }
 

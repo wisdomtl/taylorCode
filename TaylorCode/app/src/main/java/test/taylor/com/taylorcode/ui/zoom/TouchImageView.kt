@@ -18,7 +18,6 @@ class TouchImageView : AppCompatImageView {
     var start = PointF()
     var minScale = 1f
     var maxScale = 3f
-    var m: FloatArray = floatArrayOf()
     var viewWidth = 0
     var viewHeight = 0
     var saveScale = 1f
@@ -43,44 +42,43 @@ class TouchImageView : AppCompatImageView {
         super.setClickable(true)
         mScaleDetector = ScaleGestureDetector(context, ScaleListener())
         mMatrix = Matrix()
-        m = FloatArray(9)
         imageMatrix = mMatrix
         scaleType = ScaleType.MATRIX
         setOnTouchListener { v, event ->
             mScaleDetector!!.onTouchEvent(event)
-            val curr = PointF(event.x, event.y)
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    last.set(curr)
-                    start.set(last)
-                    mode = DRAG
-                }
-                MotionEvent.ACTION_MOVE -> if (mode == DRAG) {
-                    val deltaX = curr.x - last.x
-                    val deltaY = curr.y - last.y
-                    val fixTransX = getFixDragTrans(deltaX, viewWidth.toFloat(), origWidth * saveScale)
-                    val fixTransY = getFixDragTrans(deltaY, viewHeight.toFloat(), origHeight * saveScale)
-                    mMatrix!!.postTranslate(fixTransX, fixTransY)
-                    fixTrans()
-                    last[curr.x] = curr.y
-                }
-                MotionEvent.ACTION_UP -> {
-                    mode = NONE
-                    val xDiff = Math.abs(curr.x - start.x).toInt()
-                    val yDiff = Math.abs(curr.y - start.y).toInt()
-                    if (xDiff < CLICK && yDiff < CLICK) performClick()
-                }
-                MotionEvent.ACTION_POINTER_UP -> mode = NONE
-            }
+//            val curr = PointF(event.x, event.y)
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    last.set(curr)
+//                    start.set(last)
+//                    mode = DRAG
+//                }
+//                MotionEvent.ACTION_MOVE -> if (mode == DRAG) {
+//                    val deltaX = curr.x - last.x
+//                    val deltaY = curr.y - last.y
+//                    val fixTransX = getFixDragTrans(deltaX, viewWidth.toFloat(), origWidth * saveScale)
+//                    val fixTransY = getFixDragTrans(deltaY, viewHeight.toFloat(), origHeight * saveScale)
+//                    mMatrix!!.postTranslate(fixTransX, fixTransY)
+//                    fixTrans()
+//                    last[curr.x] = curr.y
+//                }
+//                MotionEvent.ACTION_UP -> {
+//                    mode = NONE
+//                    val xDiff = Math.abs(curr.x - start.x).toInt()
+//                    val yDiff = Math.abs(curr.y - start.y).toInt()
+//                    if (xDiff < CLICK && yDiff < CLICK) performClick()
+//                }
+//                MotionEvent.ACTION_POINTER_UP -> mode = NONE
+//            }
             imageMatrix = mMatrix
-            invalidate()
+//            invalidate()
             true // indicate event was handled
         }
     }
-
-    fun setMaxZoom(x: Float) {
-        maxScale = x
-    }
+//
+//    fun setMaxZoom(x: Float) {
+//        maxScale = x
+//    }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
@@ -111,39 +109,39 @@ class TouchImageView : AppCompatImageView {
                 mMatrix!!.postScale(mScaleFactor, mScaleFactor, detector.focusX, detector.focusY)
                 Log.v("ttaylor", "onScale2() scale=$mScaleFactor, px=${detector.focusX},py=${detector.focusY}")
             }
-            fixTrans()
+//            fixTrans()
             return true
         }
     }
 
-    fun fixTrans() {
-        mMatrix!!.getValues(m)
-        val transX = m[Matrix.MTRANS_X]
-        val transY = m[Matrix.MTRANS_Y]
-        val fixTransX = getFixTrans(transX, viewWidth.toFloat(), origWidth * saveScale)
-        val fixTransY = getFixTrans(transY, viewHeight.toFloat(), origHeight * saveScale)
-        if (fixTransX != 0f || fixTransY != 0f) mMatrix!!.postTranslate(fixTransX, fixTransY)
-    }
-
-    fun getFixTrans(trans: Float, viewSize: Float, contentSize: Float): Float {
-        val minTrans: Float
-        val maxTrans: Float
-        if (contentSize <= viewSize) {
-            minTrans = 0f
-            maxTrans = viewSize - contentSize
-        } else {
-            minTrans = viewSize - contentSize
-            maxTrans = 0f
-        }
-        if (trans < minTrans) return -trans + minTrans
-        return if (trans > maxTrans) -trans + maxTrans else 0f
-    }
-
-    fun getFixDragTrans(delta: Float, viewSize: Float, contentSize: Float): Float {
-        return if (contentSize <= viewSize) {
-            0f
-        } else delta
-    }
+//    fun fixTrans() {
+//        mMatrix!!.getValues(m)
+//        val transX = m[Matrix.MTRANS_X]
+//        val transY = m[Matrix.MTRANS_Y]
+//        val fixTransX = getFixTrans(transX, viewWidth.toFloat(), origWidth * saveScale)
+//        val fixTransY = getFixTrans(transY, viewHeight.toFloat(), origHeight * saveScale)
+//        if (fixTransX != 0f || fixTransY != 0f) mMatrix!!.postTranslate(fixTransX, fixTransY)
+//    }
+//
+//    fun getFixTrans(trans: Float, viewSize: Float, contentSize: Float): Float {
+//        val minTrans: Float
+//        val maxTrans: Float
+//        if (contentSize <= viewSize) {
+//            minTrans = 0f
+//            maxTrans = viewSize - contentSize
+//        } else {
+//            minTrans = viewSize - contentSize
+//            maxTrans = 0f
+//        }
+//        if (trans < minTrans) return -trans + minTrans
+//        return if (trans > maxTrans) -trans + maxTrans else 0f
+//    }
+//
+//    fun getFixDragTrans(delta: Float, viewSize: Float, contentSize: Float): Float {
+//        return if (contentSize <= viewSize) {
+//            0f
+//        } else delta
+//    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -179,7 +177,7 @@ class TouchImageView : AppCompatImageView {
             origHeight = viewHeight - 2 * redundantYSpace
             imageMatrix = mMatrix
         }
-        fixTrans()
+//        fixTrans()
     }
 
     companion object {
