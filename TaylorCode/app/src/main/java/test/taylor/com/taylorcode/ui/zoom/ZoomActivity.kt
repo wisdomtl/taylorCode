@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
@@ -27,27 +28,28 @@ class ZoomActivity : AppCompatActivity() {
             layout_width = match_parent
             layout_height = match_parent
 
-            iv = TouchImageView(context).apply {
-                layout_width = match_parent
-                layout_height = match_parent
-                center_horizontal = true
-                center_vertical = true
-                src = imgRes
-                background_color = "#ff00ff"
-                initWidth = WIDTH.dp.toInt()
-                initHeight = HEIGHT.dp.toInt()
-            }.also { addView(it) }
-
-//            iv2 = ImageView {
+//            iv = TouchImageView(context).apply {
 //                layout_width = match_parent
 //                layout_height = match_parent
 //                center_horizontal = true
 //                center_vertical = true
 //                src = imgRes
-//                scaleType = scale_matrix
-//                background_color = "#ff0000"
+//                background_color = "#ff00ff"
+//                initWidth = WIDTH.dp.toInt()
+//                initHeight = HEIGHT.dp.toInt()
+//
+//            }.also { addView(it) }
+
+            iv2 = ImageView {
+                layout_width = 300
+                layout_height = 500
+                center_horizontal = true
+                center_vertical = true
+                src = R.drawable.dkfdjsdk
+                background_color = "#ff0000"
 //                fitIntoRect(RectF(0.17f,0.38f,0.83f,0.62f))
-//            }
+
+            }
         }
     }
 
@@ -55,7 +57,7 @@ class ZoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
-        setMatrix()
+//        setMatrix()
     }
 
     private fun setMatrix() {
@@ -86,7 +88,7 @@ fun ImageView.fitIntoRect(rect: RectF? = null) {
         val r = rect ?: RectF(0f, 0f, 1f, 1f)
         scaleType = ImageView.ScaleType.MATRIX
         imageMatrix = imageMatrix.apply {
-            val (imgWidth, imgHeight) = drawable?.let { it.minimumWidth to it.intrinsicHeight } ?: return@post
+            val (imgWidth, imgHeight) = drawable?.let { it.intrinsicWidth to it.intrinsicHeight } ?: return@post
             val scaleX = r.width() * measuredWidth / imgWidth.toFloat()
             val scaleY = r.height() * measuredHeight / imgHeight.toFloat()
             val scale = min(scaleX, scaleY)
@@ -94,6 +96,20 @@ fun ImageView.fitIntoRect(rect: RectF? = null) {
             val dx = r.centerX() * measuredWidth - scale * imgWidth / 2
             val dy = r.centerY() * measuredHeight - scale * imgHeight / 2
             postTranslate(dx, dy)
+        }
+    }
+}
+
+fun ImageView.fitTop() {
+    post {
+        scaleType = ImageView.ScaleType.MATRIX
+        imageMatrix = imageMatrix.apply {
+            val (imgWidth, imgHeight) = drawable?.let { it.intrinsicWidth to it.intrinsicHeight } ?: return@post
+            val widgetHeight = layoutParams.height
+            if (imgHeight < widgetHeight) {
+                val dy = (widgetHeight - imgHeight) / 2
+                setTranslate(0f,dy.toFloat())
+            }
         }
     }
 }

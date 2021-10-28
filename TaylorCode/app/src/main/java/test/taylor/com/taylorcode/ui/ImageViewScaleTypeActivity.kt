@@ -1,8 +1,11 @@
 package test.taylor.com.taylorcode.ui
 
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 
 class ImageViewScaleTypeActivity : AppCompatActivity() {
@@ -25,6 +28,14 @@ class ImageViewScaleTypeActivity : AppCompatActivity() {
                 center_horizontal = true
                 background_color = "#00ff00"
                 Glide.with(this).load("https://images0.cnblogs.com/blog2015/448960/201507/012312257345289.jpg").into(this)
+                onClick = {
+                    val toast = Toast(applicationContext)
+                    val view = layoutInflater.inflate(R.layout.toast_view,null)
+                    toast.view = view
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.setGravity(Gravity.CENTER,0,0)
+                    toast.show()
+                }
             }
 
             ImageView {

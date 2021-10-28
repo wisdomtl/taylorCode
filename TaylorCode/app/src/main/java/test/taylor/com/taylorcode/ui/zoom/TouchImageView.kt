@@ -70,7 +70,7 @@ class TouchImageView : AppCompatImageView {
 //                }
 //                MotionEvent.ACTION_POINTER_UP -> mode = NONE
 //            }
-            imageMatrix = mMatrix
+//            imageMatrix = mMatrix
 //            invalidate()
             true // indicate event was handled
         }
@@ -98,12 +98,14 @@ class TouchImageView : AppCompatImageView {
                 mScaleFactor = minScale / origScale
             }
             if (origWidth * saveScale <= viewWidth || origHeight * saveScale <= viewHeight) {
-                mMatrix!!.postScale(
-                    mScaleFactor,
-                    mScaleFactor,
-                    (viewWidth / 2).toFloat(),
-                    (viewHeight / 2).toFloat()
-                )
+                imageMatrix = Matrix(imageMatrix).apply {
+                    postScale(
+                        mScaleFactor,
+                        mScaleFactor,
+                        (viewWidth / 2).toFloat(),
+                        (viewHeight / 2).toFloat()
+                    )
+                }
                 Log.v("ttaylor", "onScale1() scale=$mScaleFactor, px=${(viewWidth / 2).toFloat()},py=${(viewHeight / 2).toFloat()}")
             } else {
                 mMatrix!!.postScale(mScaleFactor, mScaleFactor, detector.focusX, detector.focusY)
@@ -143,42 +145,42 @@ class TouchImageView : AppCompatImageView {
 //        } else delta
 //    }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        viewWidth = MeasureSpec.getSize(widthMeasureSpec)
-        viewHeight = MeasureSpec.getSize(heightMeasureSpec)
-        if (initWidth == 0) initWidth = viewWidth
-        if (initHeight == 0) initHeight = viewHeight
-        //
-        // Rescales image on rotation
-        //
-        if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight || viewWidth == 0 || viewHeight == 0) return
-        oldMeasuredHeight = viewHeight
-        oldMeasuredWidth = viewWidth
-        if (saveScale == 1f) {
-            //Fit to screen.
-            val scale: Float
-            val drawable = drawable
-            if (drawable == null || drawable.intrinsicWidth == 0 || drawable.intrinsicHeight == 0) return
-            val bmWidth = drawable.intrinsicWidth
-            val bmHeight = drawable.intrinsicHeight
-            val scaleX = initWidth.toFloat() / bmWidth.toFloat()
-            val scaleY = initHeight.toFloat() / bmHeight.toFloat()
-            scale = Math.min(scaleX, scaleY)
-            mMatrix!!.setScale(scale, scale)
-            Log.v("ttaylor","onMeasure() mw=${viewWidth}, mh=${viewHeight}, bmpWidth=$bmWidth, bmpHeight=$bmHeight, scaleX=$scaleX, scaleY=$scaleY")
-            // Center the image
-            var redundantYSpace = viewHeight.toFloat() - scale * bmHeight.toFloat()
-            var redundantXSpace = viewWidth.toFloat() - scale * bmWidth.toFloat()
-            redundantYSpace /= 2.toFloat()
-            redundantXSpace /= 2.toFloat()
-            mMatrix!!.postTranslate(redundantXSpace, redundantYSpace)
-            origWidth = viewWidth - 2 * redundantXSpace
-            origHeight = viewHeight - 2 * redundantYSpace
-            imageMatrix = mMatrix
-        }
-//        fixTrans()
-    }
+//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+//        viewWidth = MeasureSpec.getSize(widthMeasureSpec)
+//        viewHeight = MeasureSpec.getSize(heightMeasureSpec)
+//        if (initWidth == 0) initWidth = viewWidth
+//        if (initHeight == 0) initHeight = viewHeight
+//        //
+//        // Rescales image on rotation
+//        //
+//        if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight || viewWidth == 0 || viewHeight == 0) return
+//        oldMeasuredHeight = viewHeight
+//        oldMeasuredWidth = viewWidth
+//        if (saveScale == 1f) {
+//            //Fit to screen.
+//            val scale: Float
+//            val drawable = drawable
+//            if (drawable == null || drawable.intrinsicWidth == 0 || drawable.intrinsicHeight == 0) return
+//            val bmWidth = drawable.intrinsicWidth
+//            val bmHeight = drawable.intrinsicHeight
+//            val scaleX = initWidth.toFloat() / bmWidth.toFloat()
+//            val scaleY = initHeight.toFloat() / bmHeight.toFloat()
+//            scale = Math.min(scaleX, scaleY)
+//            mMatrix!!.setScale(scale, scale)
+//            Log.v("ttaylor","onMeasure() mw=${viewWidth}, mh=${viewHeight}, bmpWidth=$bmWidth, bmpHeight=$bmHeight, scaleX=$scaleX, scaleY=$scaleY")
+//            // Center the image
+//            var redundantYSpace = viewHeight.toFloat() - scale * bmHeight.toFloat()
+//            var redundantXSpace = viewWidth.toFloat() - scale * bmWidth.toFloat()
+//            redundantYSpace /= 2.toFloat()
+//            redundantXSpace /= 2.toFloat()
+//            mMatrix!!.postTranslate(redundantXSpace, redundantYSpace)
+//            origWidth = viewWidth - 2 * redundantXSpace
+//            origHeight = viewHeight - 2 * redundantYSpace
+//            imageMatrix = mMatrix
+//        }
+////        fixTrans()
+//    }
 
     companion object {
         // We can be in one of these 3 states
