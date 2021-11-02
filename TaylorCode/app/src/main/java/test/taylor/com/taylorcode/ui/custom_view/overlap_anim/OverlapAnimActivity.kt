@@ -51,22 +51,22 @@ class OverlapAnimActivity : AppCompatActivity() {
                 top_toTopOf = parent_id
                 start_toStartOf = parent_id
 
-                OverlapCarouselAnim(this).apply {
-                    duration = ANIM_DURATION
-                    overlapDp = OVERLAP_GAP
-                    dimensionDp = ITEM_DIMENSION
-                    interval = 2000
-                    onCreateItemView = { context ->
-                        StrokeImageView(context).apply {
-                            scaleType = scale_center_crop
-                            roundedAsCircle = true
-                        }
-                    }
-                    onBindItemView = { view, index, url ->
-                        Log.v("ttaylor","index=$index,url=${url}")
-                        url?.let { (view as? ImageView)?.load(url) }
-                    }
-                }.start(urls, urls.size > 4, 4)
+//                OverlapCarouselAnim(this).apply {
+//                    duration = ANIM_DURATION
+//                    overlapDp = OVERLAP_GAP
+//                    dimensionDp = ITEM_DIMENSION
+//                    interval = 2000
+////                    onCreateItemView = { context ->
+////                        StrokeImageView(context).apply {
+////                            scaleType = scale_center_crop
+////                            roundedAsCircle = true
+////                        }
+////                    }
+////                    onBindItemView = { view, index, url ->
+////                        Log.v("ttaylor","index=$index,url=${url}")
+////                        url?.let { (view as? ImageView)?.load(url) }
+////                    }
+//                }.start(urls, urls.size > 4, 4)
             }
 
             tv = TextView {
@@ -101,7 +101,7 @@ class OverlapAnimActivity : AppCompatActivity() {
                 text = "one shot"
                 gravity = gravity_center
                 onClick = {
-                    repeatAnim.start()
+//                    repeatAnim.start()
                 }
                 top_toBottomOf = "tvChange"
                 margin_top = 20
