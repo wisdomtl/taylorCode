@@ -31,6 +31,7 @@ dependencies:
   path_provider: ^2.0.8
   flutter_cache_manager: ^3.3.0
   inview_notifier_list: ^3.0.0
+  debounce_throttle: ^2.0.0
 
 dev_dependencies:
   flutter_test:
