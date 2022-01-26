@@ -1,5 +1,7 @@
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_module2/widget/drop_down_menu.dart';
+import 'package:flutter_module2/widget/easy_popup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -78,7 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('You have pushed the button this many times:'),
             GestureDetector(
               onTap: () {
-                throttle.setValue(0);
+                // throttle.setValue(0);
+                EasyPopup.show(context, DropDownMenu());
               },
               child: Text(
                 '$_counter',
