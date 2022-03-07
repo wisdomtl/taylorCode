@@ -1,8 +1,2 @@
 include ':app', ':app-monitor'
-setBinding(new Binding([gradle: this]))
-evaluate(new File(
-  settingsDir,
-  'flutter_module2/.android/include_flutter.groovy'
-))
 
-include ':flutter_module2'
