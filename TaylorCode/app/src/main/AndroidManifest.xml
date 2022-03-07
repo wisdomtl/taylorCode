@@ -257,6 +257,7 @@
         <activity android:name=".ui.custom_view.overlap_anim.OverlapAnimActivity" />
         <activity android:name=".ui.ImageViewScaleTypeActivity" />
         <activity android:name=".ui.zoom.ZoomActivity" />
+        <activity android:name=".data_persistence.okio.OkioActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

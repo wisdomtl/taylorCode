@@ -16,6 +16,7 @@ import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.concurrent.countdownlatch.CountDownLatchActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
+import test.taylor.com.taylorcode.data_persistence.okio.OkioActivity
 import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityChainActivity
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
@@ -263,6 +264,7 @@ class MainActivity : BaseActivity() {
         btn_overlap_anim.setOnClickListener { startActivity<OverlapAnimActivity> { } }
         btn_imageView_scaleType.setOnClickListener { startActivity<ImageViewScaleTypeActivity> { } }
         btn_zoom.setOnClickListener { startActivity<ZoomActivity> { } }
+        btn_okio.setOnClickListener { startActivity<OkioActivity> { } }
 
 
         //SAM case:

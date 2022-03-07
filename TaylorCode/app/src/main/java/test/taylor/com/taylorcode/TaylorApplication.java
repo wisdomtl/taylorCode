@@ -29,7 +29,7 @@ public class TaylorApplication extends Application {
 //        ClipboardHook.getInstance().init(this);
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
 
-        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+//        BlockCanary.install(this, new AppBlockCanaryContext()).start();
         long time = 0;
         try {
             time = utcToTimestamp("2019-01-16T15:13:56Z");
