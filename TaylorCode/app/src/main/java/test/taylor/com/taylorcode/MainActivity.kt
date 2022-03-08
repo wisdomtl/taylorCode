@@ -36,6 +36,7 @@ import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActiv
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
 import test.taylor.com.taylorcode.lifecycle.LifecycleActivity
 import test.taylor.com.taylorcode.list.ListActivity
+import test.taylor.com.taylorcode.log.LogActivity
 import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
@@ -265,6 +266,7 @@ class MainActivity : BaseActivity() {
         btn_imageView_scaleType.setOnClickListener { startActivity<ImageViewScaleTypeActivity> { } }
         btn_zoom.setOnClickListener { startActivity<ZoomActivity> { } }
         btn_okio.setOnClickListener { startActivity<OkioActivity> { } }
+        btn_log.setOnClickListener { startActivity<LogActivity> { } }
 
 
         //SAM case:

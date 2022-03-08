@@ -258,6 +258,7 @@
         <activity android:name=".ui.ImageViewScaleTypeActivity" />
         <activity android:name=".ui.zoom.ZoomActivity" />
         <activity android:name=".data_persistence.okio.OkioActivity" />
+        <activity android:name=".log.LogActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
