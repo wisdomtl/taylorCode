@@ -44,7 +44,7 @@ object EasyLog {
         log(DEBUG, message, *args)
     }
 
-    fun e(message: String, vararg args: Any, throwable: Throwable?) {
+    fun e(message: String, vararg args: Any, throwable: Throwable?= null) {
         log(ERROR, message, *args, throwable = throwable)
     }
 

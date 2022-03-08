@@ -8,25 +8,27 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import okio.buffer
+import okio.sink
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DailyFileWriterLogInterceptor private constructor(private var dir: String) : LogInterceptor {
+class DailyOkioLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")
     private val handler: Handler
     private val dispatcher: CoroutineDispatcher
 
-    private var startTime = System.currentTimeMillis()
+    var startTime = System.currentTimeMillis()
 
     companion object {
         @Volatile
-        private var INSTANCE: DailyFileWriterLogInterceptor? = null
+        private var INSTANCE: DailyOkioLogInterceptor? = null
 
-        fun getInstance(dir: String): DailyFileWriterLogInterceptor =
+        fun getInstance(dir: String): DailyOkioLogInterceptor =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DailyFileWriterLogInterceptor(dir)
+                INSTANCE ?: DailyOkioLogInterceptor(dir)
             }
     }
 
@@ -38,12 +40,12 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
 
     override fun log(priority: Int, tag: String, message: String): Boolean {
         GlobalScope.launch(dispatcher) {
-            FileWriter(getFileName(), true).use {
-                it.append(message)
-                it.append("\n")
-                it.flush()
+            val file = File(getFileName())
+            file.sink(true).buffer().use {
+                it.writeUtf8(message)
+                it.writeUtf8("\n")
             }
-            if (message == "work done") Log.v("ttaylor","log() work is done=${System.currentTimeMillis() - startTime}")
+            if (message == "work done") Log.v("ttaylor","log() work is ok done=${System.currentTimeMillis() - startTime}")
         }
         return false
     }
