@@ -36,14 +36,14 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
         dispatcher = handler.asCoroutineDispatcher("log_to_file_dispatcher")
     }
 
-    override fun log(priority: Int, tag: String, message: String): Boolean {
+    override fun log(priority: Int, tag: String, log: String): Boolean {
         GlobalScope.launch(dispatcher) {
             FileWriter(getFileName(), true).use {
-                it.append(message)
+                it.append(log)
                 it.append("\n")
                 it.flush()
             }
-            if (message == "work done") Log.v("ttaylor","log() work is done=${System.currentTimeMillis() - startTime}")
+            if (log == "work done") Log.v("ttaylor1","log() work is done=${System.currentTimeMillis() - startTime}")
         }
         return false
     }

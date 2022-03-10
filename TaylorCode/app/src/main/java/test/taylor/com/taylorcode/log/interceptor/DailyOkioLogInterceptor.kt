@@ -3,26 +3,46 @@ package test.taylor.com.taylorcode.log.interceptor
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Message
 import android.util.Log
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.android.asCoroutineDispatcher
-import kotlinx.coroutines.launch
+import okio.BufferedSink
+import okio.appendingSink
 import okio.buffer
-import okio.sink
 import java.io.File
-import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DailyOkioLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")
     private val handler: Handler
-    private val dispatcher: CoroutineDispatcher
+    private var startTime = System.currentTimeMillis()
+    private var bufferedSink: BufferedSink? = null
+    private var logFile = File(getFileName())
 
-    var startTime = System.currentTimeMillis()
+    val callback = Handler.Callback { message ->
+        val sink = checkSink()
+        when (message.what) {
+            TYPE_FLUSH -> {
+                sink.flush()
+            }
+            TYPE_LOG -> {
+                val log = message.obj as String
+                sink.writeUtf8(log)
+                sink.writeUtf8("\n")
+            }
+        }
+        if (message.obj as? String == "work done") Log.v(
+            "ttaylor1",
+            "log() work is ok done=${System.currentTimeMillis() - startTime}"
+        )
+        false
+    }
 
     companion object {
+        private const val TYPE_FLUSH = -1
+        private const val TYPE_LOG = 1
+        private const val FLUSH_LOG_DELAY_MILLIS = 3000L
+
         @Volatile
         private var INSTANCE: DailyOkioLogInterceptor? = null
 
@@ -34,18 +54,15 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
 
     init {
         handlerThread.start()
-        handler = Handler(handlerThread.looper)
-        dispatcher = handler.asCoroutineDispatcher("log_to_file_dispatcher")
+        handler = Handler(handlerThread.looper, callback)
     }
 
-    override fun log(priority: Int, tag: String, message: String): Boolean {
-        GlobalScope.launch(dispatcher) {
-            val file = File(getFileName())
-            file.sink(true).buffer().use {
-                it.writeUtf8(message)
-                it.writeUtf8("\n")
-            }
-            if (message == "work done") Log.v("ttaylor","log() work is ok done=${System.currentTimeMillis() - startTime}")
+    override fun log(priority: Int, tag: String, log: String): Boolean {
+        handler.run {
+            removeMessages(TYPE_FLUSH)
+            obtainMessage(TYPE_LOG, log).sendToTarget()
+            val flushMessage = handler.obtainMessage(TYPE_FLUSH)
+            sendMessageDelayed(flushMessage, FLUSH_LOG_DELAY_MILLIS)
         }
         return false
     }
@@ -55,4 +72,11 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
         SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
 
     private fun getFileName() = "$dir${File.separator}${getToday()}.log"
+
+    private fun checkSink(): BufferedSink {
+        if (bufferedSink == null) {
+            bufferedSink = logFile.appendingSink().buffer()
+        }
+        return bufferedSink!!
+    }
 }

@@ -5,5 +5,5 @@ interface LogInterceptor {
      * print the log
      * @return whether terminate the responsibility chain
      */
-    fun log(priority: Int, tag: String, message: String): Boolean
+    fun log(priority: Int, tag: String, log: String): Boolean
 }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.log.interceptor.DailyFileWriterLogInterceptor
+import test.taylor.com.taylorcode.log.interceptor.DailyOkioFlushLogInterceptor
 import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor
 import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor
 
@@ -143,10 +144,213 @@ class LogActivity : AppCompatActivity() {
                 "2022-03-08 19:50:32.321 29943-29960/? E/OpenID: com.nearme.statistics.rom:OUID_STATUS:ret:T"
 
 
-    var count = 0
+    val str4 = "2022-03-09 19:12:47.647 9373-9373/test.taylor.com.taylorcode V/ttaylor: countdown end--------- ret=45000\n" +
+            "2022-03-09 19:12:47.758 21090-21305/? I/SocketReaderNewtrue: SocketReader(3456) continue\n" +
+            "2022-03-09 19:12:47.759 21090-21305/? D/MSF.C.NetConnTag.true: MsfCoreSocketReaderNew closeConn readError\n" +
+            "2022-03-09 19:12:47.759 21090-21305/? D/MSF.C.NetConnTag.true: conn is already closed on readError\n" +
+            "2022-03-09 19:12:47.760 21090-21305/? W/System.err: java.net.SocketException: Socket is closed\n" +
+            "2022-03-09 19:12:47.760 21090-21305/? W/System.err:     at java.net.Socket.getSoTimeout(Socket.java:1196)\n" +
+            "2022-03-09 19:12:47.760 21090-21305/? W/System.err:     at com.tencent.qphone.base.util.MsfSocketInputBuffer.isDataAvailable(P:71)\n" +
+            "2022-03-09 19:12:47.760 21090-21305/? I/SocketReaderNewtrue: SocketReader(3456) wait\n" +
+            "2022-03-09 19:12:48.499 32254-32254/? W/DetectPable: type=1400 audit(0.0:616394): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:48.503 32254-32254/? W/DetectPable: type=1400 audit(0.0:616395): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:48.503 32254-32254/? W/DetectPable: type=1400 audit(0.0:616396): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:48.503 32254-32254/? W/DetectPable: type=1400 audit(0.0:616397): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:48.503 32254-32254/? W/DetectPable: type=1400 audit(0.0:616398): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:48.576 21090-21206/? D/MemoryCeilingMonitor: [handleMemoryCalculate]\n" +
+            "2022-03-09 19:12:48.576 21090-21206/? D/MemoryCeilingMonitor: [calculate] tot: 7300200, max: 402653184, free: 3154848, heap: 4145352, per: 0.010295093059539795\n" +
+            "2022-03-09 19:12:49.571 32254-32254/? W/DetectPable: type=1400 audit(0.0:616458): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:49.571 32254-32254/? W/DetectPable: type=1400 audit(0.0:616459): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:49.571 32254-32254/? W/DetectPable: type=1400 audit(0.0:616460): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:49.571 32254-32254/? W/DetectPable: type=1400 audit(0.0:616461): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:49.571 32254-32254/? W/DetectPable: type=1400 audit(0.0:616462): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "    \n" +
+            "    --------- beginning of system\n" +
+            "2022-03-09 19:12:49.618 2218-2218/? D/OppoBaseBatteryService: send broadcast : oppo.intent.action.BATTERY_DATA_UPDATE\n" +
+            "2022-03-09 19:12:49.619 2218-2218/? W/ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1087 com.android.server.OppoBaseBatteryService\$2.run:192 android.os.Handler.handleCallback:883 android.os.Handler.dispatchMessage:100 android.os.Looper.loop:227 \n" +
+            "2022-03-09 19:12:49.625 2218-2218/? D/OppoPowerMonitor: Receive broadcast android.intent.action.BATTERY_CHANGED\n" +
+            "2022-03-09 19:12:49.633 3236-3236/? E/BatteryStatusService: readIntFromFile io exception:/sys/class/power_supply/battery/chip_soc: open failed: ENOENT (No such file or directory)\n" +
+            "2022-03-09 19:12:49.636 3236-3236/? D/BatteryStatusService: real-ui is abnormal...\n" +
+            "2022-03-09 19:12:50.635 32254-32254/? W/DetectPable: type=1400 audit(0.0:616522): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:50.635 32254-32254/? W/DetectPable: type=1400 audit(0.0:616523): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:50.635 32254-32254/? W/DetectPable: type=1400 audit(0.0:616524): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:50.635 32254-32254/? W/DetectPable: type=1400 audit(0.0:616525): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:50.635 32254-32254/? W/DetectPable: type=1400 audit(0.0:616526): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:51.123 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:51.123 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:51.123 867-867/? D/ThermalHAL-UTIL: Entering get_temperature_for_all\n" +
+            "2022-03-09 19:12:51.123 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:51.125 867-867/? I/chatty: uid=1000(system) thermal@1.0-ser identical 9 lines\n" +
+            "2022-03-09 19:12:51.125 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:51.127 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:51.127 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:51.127 867-867/? D/ThermalHAL-UTIL: Entering get_temperature_for_all\n" +
+            "2022-03-09 19:12:51.127 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:51.128 867-867/? I/chatty: uid=1000(system) thermal@1.0-ser identical 9 lines\n" +
+            "2022-03-09 19:12:51.128 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:51.695 32254-32254/? W/DetectPable: type=1400 audit(0.0:616586): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:51.695 32254-32254/? W/DetectPable: type=1400 audit(0.0:616587): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:51.695 32254-32254/? W/DetectPable: type=1400 audit(0.0:616588): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:52.180 1752-1752/? E/TLOC: [TLOCChannel]\"Can't receive message due to timeout\"\n" +
+            "2022-03-09 19:12:52.180 1752-1752/? V/LocSvc_api_v02: validateRequest:1254]: reqId = 59\n" +
+            "2022-03-09 19:12:52.180 1752-1752/? V/LocSvc_api_v02: validateRequest:1853]: reqId=59, len = 0\n" +
+            "2022-03-09 19:12:52.180 1752-1752/? V/LocSvc_api_v02: locClientSendReq:2319] sending reqId= 59, len = 0\n" +
+            "2022-03-09 19:12:52.180 1752-1752/? I/LocSvc_api_v02: ---> locClientSendReq line 2325 QMI_LOC_GET_ENGINE_LOCK_REQ_V02\n" +
+            "2022-03-09 19:12:52.183 1752-1752/? V/LocSvc_api_v02: locClientSendReq:2336] qmi_client_send_msg_sync returned 0\n" +
+            "2022-03-09 19:12:52.184 1752-1752/? V/LocSvc_api_v02: convertQmiResponseToLocStatus:938]: result = 0, error = 0, status = 0\n" +
+            "2022-03-09 19:12:52.184 1752-1752/? I/TLOC: [ModemComm  ]\"Request succeeded for gps engine lock\"\n" +
+            "2022-03-09 19:12:52.184 1752-1752/? D/TLOC: [TLOCChannel] \"Going to receive message for TLOCD\"\n" +
+            "2022-03-09 19:12:52.184 1752-1752/? D/TLOC: [TLOCChannel] \"wait for message for user TLOCD\"\n" +
+            "2022-03-09 19:12:52.184 1752-1770/? V/LocSvc_api_v02: locClientIndCb:1052]: Indication: msg_id=59 buf_len=14 pCallbackData = 0x7025240000\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? V/LocSvc_api_v02: locClientGetSizeByRespIndId:2521]: resp ind Id 59 size = 32\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? V/LocSvc_api_v02: locClientGetSizeAndTypeByIndId:835]: indId 59 is a resp size = 32\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? I/TLOC: [Modem      ]\"Sending location turned on status to the daemon\"\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? D/TLOC: [TLOCChannel] \"TLOCChannel is already initialized\"\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? D/TLOC: [TLOCChannel] \"Going to send message to TLOCD\"\n" +
+            "2022-03-09 19:12:52.185 1752-1770/? D/TLOC: [TLOCChannel]\" --- message(id:14, size:0) ---> TLOCD\"\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? D/TLOC: [TLOCChannel]\" TLOCD <--- message(id:14, size:0) ---\"\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? I/TLOC: [TLOCDaemon ]\"timeout passed - start periodic warm-up\"\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? V/LocSvc_api_v02: validateRequest:1254]: reqId = 34\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? V/LocSvc_api_v02: validateRequest:1853]: reqId=34, len = 140\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? V/LocSvc_api_v02: locClientSendReq:2319] sending reqId= 34, len = 140\n" +
+            "2022-03-09 19:12:52.185 1752-1752/? I/LocSvc_api_v02: ---> locClientSendReq line 2325 QMI_LOC_START_REQ_V02\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? V/LocSvc_api_v02: locClientSendReq:2336] qmi_client_send_msg_sync returned 0\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? V/LocSvc_api_v02: convertQmiResponseToLocStatus:938]: result = 0, error = 0, status = 0\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? I/TLOC: [ModemComm  ]\"Start a session successfully\"\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? D/TLOC: [TLOCDaemon ]\"The command finished successfully\"\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? D/TLOC: [TLOCDaemon ]\"waiting for command\"\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? D/TLOC: [TLOCChannel] \"Going to receive message for TLOCD\"\n" +
+            "2022-03-09 19:12:52.187 1752-1752/? D/TLOC: [TLOCChannel] \"wait for message for user TLOCD\"\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_api_v02: locClientIndCb:1052]: Indication: msg_id=45 buf_len=16 pCallbackData = 0x7345420c40\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_api_v02: locClientGetSizeByEventIndId:2561]: event ind Id 45 size = 12\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_api_v02: locClientGetSizeAndTypeByIndId:825]: indId 45 is an event size = 12\n" +
+            "2022-03-09 19:12:52.189 859-2235/? I/LocSvc_ApiV02: <--- globalEventCb line 170 QMI_LOC_EVENT_WIFI_REQ_IND_V02\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_ApiV02: globalEventCb:175] client = 0x7345420c40, event id = 0x2D, client cookie ptr = 0x7346a41180\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_LBSApiV02: eventCb:58] client = 0x7345420c40, event id = 45, event name = QMI_LOC_EVENT_WIFI_REQ_IND_V02 payload = 0x733dc68a80\n" +
+            "2022-03-09 19:12:52.189 859-2235/? D/LocSvc_ApiV02: eventCb:6001] event id = 0x2D\n" +
+            "2022-03-09 19:12:52.189 859-2235/? D/LocSvc_ApiV02: eventCb:6098] WIFI Req Ind\n" +
+            "2022-03-09 19:12:52.189 859-2235/? V/LocSvc_ApiV02: requestOdcpi:5267] ODCPI Request: requestType 0\n" +
+            "2022-03-09 19:12:52.190 859-2235/? D/LocSvc_LocAdapterBase: requestOdcpiEvent: default implementation invoked\n" +
+            "2022-03-09 19:12:52.190 859-969/? D/LocSvc_GnssAdapter: requestOdcpi:3974] request: type 0, tbf 1000, isEmergency 0 requestActive: 0 timerActive: 0\n" +
+            "2022-03-09 19:12:52.190 859-969/? I/LocSvc_GnssInterface: ===> odcpiRequestCb line 529 \n" +
+            "2022-03-09 19:12:52.190 859-969/? D/LocSvc_GnssInterface: odcpiRequestCb:535] gnssRequestLocationCb_2_0 isUserEmergency = 0\n" +
+            "2022-03-09 19:12:52.196 2218-2630/? I/GnssLocationProvider: GNSS HAL Requesting location updates from network provider for 10000 millis.\n" +
+            "2022-03-09 19:12:52.200 2218-2630/? D/LocationManagerService: request 3af0e86 network Request[POWER_LOW network requested=+1s0ms fastest=+1s0ms] from android(1000 foreground [whitelisted])\n" +
+            "2022-03-09 19:12:52.202 4522-27245/? I/TencentNLP: TencentLocationProviderImpl -> onSetRequest -> geolocation.geolocation.nlp receive location request,req:ProviderRequest[ON interval=+1s0ms] ws:WorkSource{1000 android}\n" +
+            "2022-03-09 19:12:52.203 4522-4522/? I/TencentNLP: TencentLocationProviderImpl -> requestLocationUpdatesBySdk -> time: 1646824371234\n" +
+            "2022-03-09 19:12:52.227 2218-11718/? W/DevicePolicyManager: Package com.tencent.android.location (uid=10652, pid=4522) cannot access Device IDs\n" +
+            "2022-03-09 19:12:52.228 3170-3708/? W/TelephonyPermissions: reportAccessDeniedToReadIdentifiers:com.tencent.android.location:getSubscriberId:isPreinstalled=true:isPrivApp=false\n" +
+            "2022-03-09 19:12:52.229 4522-6891/? E/TencentNLP: java.lang.SecurityException: getSubscriberId: The user 10652 does not meet the requirements to access device identifiers.\n" +
+            "2022-03-09 19:12:52.304 4522-9439/? W/SSLCertificateSocketFactory: Bypassing SSL security checks at caller's request\n" +
+            "2022-03-09 19:12:52.360 4522-6891/? I/TencentNLP: TencentLocationProviderImpl -> locationSame -> report location to system\n" +
+            "2022-03-09 19:12:52.362 4522-6891/? I/TencentNLP: TencentLocationProviderImpl -> onLocationChanged -> report location to system\n" +
+            "2022-03-09 19:12:52.373 859-859/? I/LocSvc_GnssInterface: ===> injectLocation line 319 \n" +
+            "2022-03-09 19:12:52.373 859-859/? D/LocSvc_GnssAdapter: injectLocationCommand]: latitude  31.1661 longitude 121.3865 accuracy 220.0000\n" +
+            "2022-03-09 19:12:52.375 859-971/? V/LocSvc_ApiV02: operator():1005] Lat=31.166104, Lon=121.386472, Acc=1000.00 rawAcc=220.00 horConfidence=68rawHorConfidence=68 onDemandCpi=0\n" +
+            "2022-03-09 19:12:52.375 859-971/? V/LocSvc_api_v02: validateRequest:1254]: reqId = 57\n" +
+            "2022-03-09 19:12:52.375 859-971/? V/LocSvc_api_v02: validateRequest:1853]: reqId=57, len = 568\n" +
+            "2022-03-09 19:12:52.375 859-971/? V/LocSvc_api_v02: locClientSendReq:2319] sending reqId= 57, len = 568\n" +
+            "2022-03-09 19:12:52.375 859-971/? I/LocSvc_api_v02: ---> locClientSendReq line 2325 QMI_LOC_INJECT_POSITION_REQ_V02\n" +
+            "2022-03-09 19:12:52.376 859-859/? I/LocSvc_GnssInterface: ===> injectLocation line 319 \n" +
+            "2022-03-09 19:12:52.376 859-859/? D/LocSvc_GnssAdapter: injectLocationCommand]: latitude  31.1661 longitude 121.3865 accuracy 220.0000\n" +
+            "2022-03-09 19:12:52.377 859-2235/? V/LocSvc_api_v02: locClientIndCb:1052]: Indication: msg_id=57 buf_len=7 pCallbackData = 0x7345420c40\n" +
+            "2022-03-09 19:12:52.377 859-2235/? V/LocSvc_api_v02: locClientGetSizeByRespIndId:2521]: resp ind Id 57 size = 4\n" +
+            "2022-03-09 19:12:52.377 859-2235/? V/LocSvc_api_v02: locClientGetSizeAndTypeByIndId:835]: indId 57 is a resp size = 4\n" +
+            "2022-03-09 19:12:52.377 859-2235/? I/LocSvc_ApiV02: <--- globalRespCb line 196 QMI_LOC_INJECT_POSITION_REQ_V02\n" +
+            "2022-03-09 19:12:52.377 859-2235/? V/LocSvc_ApiV02: globalRespCb:201] client = 0x7345420c40, resp id = 57, client cookie ptr = 0x7346a41180\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_api_v02: locClientSendReq:2336] qmi_client_send_msg_sync returned 0\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_api_v02: convertQmiResponseToLocStatus:938]: result = 0, error = 0, status = 0\n" +
+            "2022-03-09 19:12:52.377 859-971/? D/LocSvc_api_v02: loc_free_slot:300]: freeing slot 0\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_ApiV02: operator():1005] Lat=31.166104, Lon=121.386472, Acc=1000.00 rawAcc=220.00 horConfidence=68rawHorConfidence=68 onDemandCpi=0\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_api_v02: validateRequest:1254]: reqId = 57\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_api_v02: validateRequest:1853]: reqId=57, len = 568\n" +
+            "2022-03-09 19:12:52.377 859-971/? V/LocSvc_api_v02: locClientSendReq:2319] sending reqId= 57, len = 568\n" +
+            "2022-03-09 19:12:52.377 859-971/? I/LocSvc_api_v02: ---> locClientSendReq line 2325 QMI_LOC_INJECT_POSITION_REQ_V02\n" +
+            "2022-03-09 19:12:52.378 859-2235/? V/LocSvc_api_v02: locClientIndCb:1052]: Indication: msg_id=57 buf_len=7 pCallbackData = 0x7345420c40\n" +
+            "2022-03-09 19:12:52.378 859-2235/? V/LocSvc_api_v02: locClientGetSizeByRespIndId:2521]: resp ind Id 57 size = 4\n" +
+            "2022-03-09 19:12:52.378 859-2235/? V/LocSvc_api_v02: locClientGetSizeAndTypeByIndId:835]: indId 57 is a resp size = 4\n" +
+            "2022-03-09 19:12:52.378 859-971/? V/LocSvc_api_v02: locClientSendReq:2336] qmi_client_send_msg_sync returned 0\n" +
+            "2022-03-09 19:12:52.378 859-2235/? I/LocSvc_ApiV02: <--- globalRespCb line 196 QMI_LOC_INJECT_POSITION_REQ_V02\n" +
+            "2022-03-09 19:12:52.378 859-2235/? V/LocSvc_ApiV02: globalRespCb:201] client = 0x7345420c40, resp id = 57, client cookie ptr = 0x7346a41180\n" +
+            "2022-03-09 19:12:52.378 859-971/? V/LocSvc_api_v02: convertQmiResponseToLocStatus:938]: result = 0, error = 0, status = 0\n" +
+            "2022-03-09 19:12:52.378 859-971/? D/LocSvc_api_v02: loc_free_slot:300]: freeing slot 0\n" +
+            "2022-03-09 19:12:52.392 19742-19768/? I/PAS41b8df5220104.ScheduleTaskManager: addAlarmTask task size=7\n" +
+            "2022-03-09 19:12:52.428 19742-19768/? I/PAS41b8df5220104.UserProfileDao: WeakReference have info\n" +
+            "2022-03-09 19:12:52.430 19742-19768/? I/PAS41b8df5220104.PhoneStateInfoCollector: checkDistance, hc'd =7978.452393728141\n" +
+            "2022-03-09 19:12:52.431 19742-19768/? I/PAS41b8df5220104.PhoneStateInfoCollector: checkDistance, hc'd =130.82387289579077\n" +
+            "2022-03-09 19:12:52.527 19742-19768/? I/PAS41b8df5220104.ColorNetworkUtil: isNetworkConnected, network is available\n" +
+            "2022-03-09 19:12:52.528 19742-9440/? I/PAS41b8df5220104.ResourceTrigger: resourceOnChange, resourceId is 10009\n" +
+            "2022-03-09 19:12:52.528 19742-9440/? I/PAS41b8df5220104.ResourceTrigger: startAlign\n" +
+            "2022-03-09 19:12:52.659 884-937/? E/ANDR-PERF-RESOURCEQS: Failed to reset optimization [3, 0]\n" +
+            "2022-03-09 19:12:52.763 32254-32254/? W/DetectPable: type=1400 audit(0.0:616650): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:52.763 32254-32254/? W/DetectPable: type=1400 audit(0.0:616651): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:52.763 32254-32254/? W/DetectPable: type=1400 audit(0.0:616652): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:52.763 32254-32254/? W/DetectPable: type=1400 audit(0.0:616653): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:52.763 32254-32254/? W/DetectPable: type=1400 audit(0.0:616654): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.600 16847-24616/? D/MCS2.0_CIPHER_ALGO: riv native_AES_decrypt flag 0\n" +
+            "2022-03-09 19:12:53.712 16847-16859/? W/com.heytap.mcs: Reducing the number of considered missed Gc histogram windows from 556 to 100\n" +
+            "2022-03-09 19:12:53.827 32254-32254/? W/DetectPable: type=1400 audit(0.0:616714): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.827 32254-32254/? W/DetectPable: type=1400 audit(0.0:616715): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.827 32254-32254/? W/DetectPable: type=1400 audit(0.0:616716): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.827 32254-32254/? W/DetectPable: type=1400 audit(0.0:616717): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.827 32254-32254/? W/DetectPable: type=1400 audit(0.0:616718): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:53.839 2218-11702/? E/OppoNotificationManager: Notification--call isOpush error: Attempt to invoke virtual method 'java.lang.Class java.lang.Object.getClass()' on a null object reference--Notification(channel=weibo_news_push_channel pri=0 contentView=null vibrate=null sound=null tick defaults=0x0 flags=0x18 color=0x00000000 vis=PUBLIC)\n" +
+            "2022-03-09 19:12:53.974 2218-2218/? D/AS.AudioService: getStreamVolume: mIsMuted == true\n" +
+            "2022-03-09 19:12:53.974 2218-2218/? D/AudioManager: getStreamVolume packageName=android, index=0, streamType=5\n" +
+            "2022-03-09 19:12:54.026 17021-17103/? W/DCS: Record event failed. DCS reject event: [appId=20082,logTag=20082,eventId=notice_add_mcs_notification] . Pls check server config.\n" +
+            "2022-03-09 19:12:54.090 17421-17421/? W/HeadsUpManagerPhone: updateRegionForNotch cutout is null return\n" +
+            "2022-03-09 19:12:54.506 2218-9443/? W/AppOps: Bad call: specified package android under uid 10780 but it is really 1000\n" +
+            "    java.lang.RuntimeException: here\n" +
+            "        at com.android.server.appop.AppOpsService.getOpsRawLocked(AppOpsService.java:2647)\n" +
+            "        at com.android.server.appop.AppOpsService.startOperation(AppOpsService.java:2247)\n" +
+            "        at android.app.AppOpsManager.startOpNoThrow(AppOpsManager.java:5431)\n" +
+            "        at android.app.AppOpsManager.startOpNoThrow(AppOpsManager.java:5412)\n" +
+            "        at com.android.server.VibratorService.getAppOpMode(VibratorService.java:1073)\n" +
+            "        at com.android.server.VibratorService.startVibrationLocked(VibratorService.java:857)\n" +
+            "        at com.android.server.VibratorService.vibrate(VibratorService.java:731)\n" +
+            "        at android.os.SystemVibrator.vibrate(SystemVibrator.java:98)\n" +
+            "        at java.lang.Thread.run(Thread.java:919)\n" +
+            "2022-03-09 19:12:54.506 2218-9443/? W/VibratorService: Would be an error: vibrate from uid 10780\n" +
+            "2022-03-09 19:12:54.859 32254-32254/? W/DetectPable: type=1400 audit(0.0:616778): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:54.859 32254-32254/? W/DetectPable: type=1400 audit(0.0:616779): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:54.859 32254-32254/? W/DetectPable: type=1400 audit(0.0:616780): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:54.859 32254-32254/? W/DetectPable: type=1400 audit(0.0:616781): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:54.859 32254-32254/? W/DetectPable: type=1400 audit(0.0:616782): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:55.602 2218-2218/? D/OppoPowerMonitor: Receive broadcast android.intent.action.BATTERY_CHANGED\n" +
+            "2022-03-09 19:12:55.609 3236-3236/? E/BatteryStatusService: readIntFromFile io exception:/sys/class/power_supply/battery/chip_soc: open failed: ENOENT (No such file or directory)\n" +
+            "2022-03-09 19:12:55.611 3236-3236/? D/BatteryStatusService: real-ui is abnormal...\n" +
+            "2022-03-09 19:12:55.919 32254-32254/? W/DetectPable: type=1400 audit(0.0:616842): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:56.045 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.045 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.045 867-867/? D/ThermalHAL-UTIL: Entering get_temperature_for_all\n" +
+            "2022-03-09 19:12:56.045 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.047 867-867/? I/chatty: uid=1000(system) thermal@1.0-ser identical 9 lines\n" +
+            "2022-03-09 19:12:56.047 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.049 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.049 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.050 867-867/? D/ThermalHAL-UTIL: Entering get_temperature_for_all\n" +
+            "2022-03-09 19:12:56.050 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.051 867-867/? I/chatty: uid=1000(system) thermal@1.0-ser identical 9 lines\n" +
+            "2022-03-09 19:12:56.051 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.053 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.053 867-867/? D/ThermalHAL-845: Entering get_temperatures\n" +
+            "2022-03-09 19:12:56.053 867-867/? D/ThermalHAL-UTIL: Entering get_temperature_for_all\n" +
+            "2022-03-09 19:12:56.053 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.054 867-867/? I/chatty: uid=1000(system) thermal@1.0-ser identical 9 lines\n" +
+            "2022-03-09 19:12:56.054 867-867/? D/ThermalHAL-UTIL: Entering read_temperature\n" +
+            "2022-03-09 19:12:56.979 32254-32254/? W/DetectPable: type=1400 audit(0.0:616906): avc: denied { getattr } for path=\"/proc/fb\" dev=\"proc\" ino=4026531991 scontext=u:r:shell:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:56.979 32254-32254/? W/DetectPable: type=1400 audit(0.0:616907): avc: denied { getattr } for path=\"/proc/keys\" dev=\"proc\" ino=4026532181 scontext=u:r:shell:s0 tcontext=u:object_r:proc_keys:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:56.979 32254-32254/? W/DetectPable: type=1400 audit(0.0:616908): avc: denied { getattr } for path=\"/proc/kmsg\" dev=\"proc\" ino=4026532126 scontext=u:r:shell:s0 tcontext=u:object_r:proc_kmsg:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:56.979 32254-32254/? W/DetectPable: type=1400 audit(0.0:616909): avc: denied { getattr } for path=\"/proc/misc\" dev=\"proc\" ino=4026531992 scontext=u:r:shell:s0 tcontext=u:object_r:proc_misc:s0 tclass=file permissive=0\n" +
+            "2022-03-09 19:12:56.979 32254-32254/? W/DetectPable: type=1400 audit(0.0:616910): avc: denied { getattr } for path=\"/proc/iomem\" dev=\"proc\" ino=4026532155 scontext=u:r:shell:s0 tcontext=u:object_r:proc_iomem:s0 tclass=file permissive=0"
 
-    val str3 = "tangtang dkfdlkfjlds ${count++}"
-    val strs = listOf(str1,str2,str3)
+    var str3 = "tangtang dkfdlkfjlds "
+
+    val str5 = "                \"        at android.app.ActivityThread.installProvider(ActivityThread.java:7446)\\n\" +\n" +
+            "                \"        at android.app.ActivityThread.installContentProviders(ActivityThread.java:6952)\\n\" +\n" +
+            "                \"        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:6847)\\n\" +\n" +
+            "                \"        at android.app.ActivityThread.access\\\$1800(ActivityThread.java:243)\\n\" +"
+    val strs = listOf(str1,str2,str3,str4,str5)
     private lateinit var tv:TextView
     private val contentView by lazy {
         ConstraintLayout {
@@ -169,15 +373,18 @@ class LogActivity : AppCompatActivity() {
         setContentView(contentView)
 //        EasyLog.addInterceptor(DailyFileWriterLogInterceptor.getInstance(this.filesDir.absolutePath))
         EasyLog.addInterceptor(DailyOkioLogInterceptor.getInstance(this.filesDir.absolutePath))
+//        EasyLog.addInterceptor(DailyOkioFlushLogInterceptor.getInstance(this.filesDir.absolutePath))
         EasyLog.addInterceptor(LogcatInterceptor())
 
         MainScope().launch(Dispatchers.Default) {
-            repeat(8000){
-                strs.forEach {
-                    EasyLog.v(it)
-                }
+            repeat(50000){
+//                strs.forEach {
+//                    EasyLog.v(it)
+//                }
+                EasyLog.v(str3+"$it")
             }
             EasyLog.v("work done")
+            Log.v("ttaylor1","onCreate() work done ")
         }
 
         /**
