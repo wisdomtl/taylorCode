@@ -44,7 +44,7 @@ object EasyLog {
         log(DEBUG, message, *args)
     }
 
-    fun e(message: String, vararg args: Any, throwable: Throwable?= null) {
+    fun e(message: String, vararg args: Any, throwable: Throwable? = null) {
         log(ERROR, message, *args, throwable = throwable)
     }
 
@@ -80,7 +80,7 @@ object EasyLog {
         }
         logInterceptors.forEach { interceptor ->
             // TODO: tag logic
-            if (interceptor.log(priority, "", logMessage)) return
+            if (interceptor.enable()) interceptor.log(priority, "", logMessage)
         }
     }
 

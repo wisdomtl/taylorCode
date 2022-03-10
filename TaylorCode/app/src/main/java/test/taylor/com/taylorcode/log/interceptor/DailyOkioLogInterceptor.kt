@@ -57,14 +57,17 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
         handler = Handler(handlerThread.looper, callback)
     }
 
-    override fun log(priority: Int, tag: String, log: String): Boolean {
+    override fun log(priority: Int, tag: String, log: String) {
         handler.run {
             removeMessages(TYPE_FLUSH)
             obtainMessage(TYPE_LOG, log).sendToTarget()
             val flushMessage = handler.obtainMessage(TYPE_FLUSH)
             sendMessageDelayed(flushMessage, FLUSH_LOG_DELAY_MILLIS)
         }
-        return false
+    }
+
+    override fun enable(): Boolean {
+        return true
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -13,20 +13,22 @@ import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DailyFileWriterLogInterceptor private constructor(private var dir: String) : LogInterceptor {
+class DailyFileWriterNotFlushLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")
     private val handler: Handler
     private val dispatcher: CoroutineDispatcher
+    private var fileWriter: FileWriter? = null
+    private var logFile = File(getFileName())
 
     private var startTime = System.currentTimeMillis()
 
     companion object {
         @Volatile
-        private var INSTANCE: DailyFileWriterLogInterceptor? = null
+        private var INSTANCE: DailyFileWriterNotFlushLogInterceptor? = null
 
-        fun getInstance(dir: String): DailyFileWriterLogInterceptor =
+        fun getInstance(dir: String): DailyFileWriterNotFlushLogInterceptor =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DailyFileWriterLogInterceptor(dir)
+                INSTANCE ?: DailyFileWriterNotFlushLogInterceptor(dir)
             }
     }
 
@@ -38,15 +40,12 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
 
     override fun log(priority: Int, tag: String, log: String) {
         GlobalScope.launch(dispatcher) {
-            FileWriter(getFileName(), true).use {
-                it.append(log)
-                it.append("\n")
-                it.flush()
+            val fileWriter = checkSink()
+            fileWriter.run {
+                append(log)
+                append("\n")
             }
-            if (log == "work done") Log.v(
-                "ttaylor1",
-                "log() work is done=${System.currentTimeMillis() - startTime}"
-            )
+            if (log == "work done") Log.v("ttaylor1","log() work is FileWriter not flush done=${System.currentTimeMillis() - startTime}")
         }
     }
 
@@ -59,4 +58,11 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
         SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
 
     private fun getFileName() = "$dir${File.separator}${getToday()}.log"
+
+    private fun checkSink(): FileWriter {
+        if (fileWriter == null) {
+            fileWriter = FileWriter(logFile,true)
+        }
+        return fileWriter!!
+    }
 }

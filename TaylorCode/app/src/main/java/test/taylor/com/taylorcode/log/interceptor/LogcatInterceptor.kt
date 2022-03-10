@@ -2,9 +2,12 @@ package test.taylor.com.taylorcode.log.interceptor
 
 import android.util.Log
 
-class LogcatInterceptor : LogInterceptor {
-    override fun log(priority: Int, tag: String, log: String): Boolean {
+open class LogcatInterceptor : LogInterceptor {
+    override fun log(priority: Int, tag: String, log: String){
         Log.println(priority, tag, log)
-        return true
+    }
+
+    override fun enable(): Boolean {
+       return true
     }
 }
