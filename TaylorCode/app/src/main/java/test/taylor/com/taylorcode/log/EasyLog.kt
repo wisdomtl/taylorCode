@@ -68,6 +68,7 @@ object EasyLog {
         logInterceptors.add(interceptor)
     }
 
+    @Synchronized
     private fun log(
         priority: Int,
         message: String,
