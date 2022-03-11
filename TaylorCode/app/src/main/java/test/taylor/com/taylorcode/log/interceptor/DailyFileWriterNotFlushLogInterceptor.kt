@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.log.Chain
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
@@ -38,7 +39,7 @@ class DailyFileWriterNotFlushLogInterceptor private constructor(private var dir:
         dispatcher = handler.asCoroutineDispatcher("log_to_file_dispatcher")
     }
 
-    override fun log(priority: Int, tag: String, log: String) {
+    override fun log(priority: Int, tag: String, log: String, chain: Chain) {
         GlobalScope.launch(dispatcher) {
             val fileWriter = checkSink()
             fileWriter.run {
@@ -47,6 +48,7 @@ class DailyFileWriterNotFlushLogInterceptor private constructor(private var dir:
             }
             if (log == "work done") Log.v("ttaylor1","log() work is FileWriter not flush done=${System.currentTimeMillis() - startTime}")
         }
+        chain.proceed(priority, tag, log)
     }
 
     override fun enable(): Boolean {

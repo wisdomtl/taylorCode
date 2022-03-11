@@ -8,6 +8,7 @@ import android.util.Log
 import okio.BufferedSink
 import okio.appendingSink
 import okio.buffer
+import test.taylor.com.taylorcode.log.Chain
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,10 +50,11 @@ class DailyOkioFlushLogInterceptor private constructor(private var dir: String) 
         handler = Handler(handlerThread.looper, callback)
     }
 
-    override fun log(priority: Int, tag: String, log: String) {
+    override fun log(priority: Int, tag: String, log: String, chain: Chain) {
         val message = handler.obtainMessage()
         message.obj = "[$tag] $log"
         message.sendToTarget()
+        chain.proceed(priority, tag, log)
     }
 
     override fun enable(): Boolean {

@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.log.Chain
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
@@ -36,7 +37,7 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
         dispatcher = handler.asCoroutineDispatcher("log_to_file_dispatcher")
     }
 
-    override fun log(priority: Int, tag: String, log: String) {
+    override fun log(priority: Int, tag: String, log: String, chain: Chain) {
         GlobalScope.launch(dispatcher) {
             FileWriter(getFileName(), true).use {
                 it.append(log)
@@ -48,6 +49,7 @@ class DailyFileWriterLogInterceptor private constructor(private var dir: String)
                 "log() work is done=${System.currentTimeMillis() - startTime}"
             )
         }
+        chain.proceed(priority, tag, log)
     }
 
     override fun enable(): Boolean {
