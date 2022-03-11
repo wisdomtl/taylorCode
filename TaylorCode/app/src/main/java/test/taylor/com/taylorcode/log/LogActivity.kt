@@ -8,6 +8,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.BuildConfig
 import test.taylor.com.taylorcode.log.interceptor.DailyFileWriterNotFlushLogInterceptor
+import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor
 import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor
 
 class LogActivity : AppCompatActivity() {
@@ -350,17 +351,7 @@ class LogActivity : AppCompatActivity() {
                 "                \"        at android.app.ActivityThread.access\\\$1800(ActivityThread.java:243)\\n\" +"
     val strs = listOf(str1, str2, str3, str4, str5)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        EasyLog.addInterceptor(DailyFileWriterNotFlushLogInterceptor.getInstance(this.filesDir.absolutePath))
-//        EasyLog.addInterceptor(DailyFileWriterLogInterceptor.getInstance(this.filesDir.absolutePath))
-//        EasyLog.addInterceptor(DailyOkioLogInterceptor.getInstance(this.filesDir.absolutePath))
-//        EasyLog.addInterceptor(DailyOkioFlushLogInterceptor.getInstance(this.filesDir.absolutePath))
-        EasyLog.addInterceptor(object : LogcatInterceptor() {
-            override fun enable(): Boolean {
-                return BuildConfig.DEBUG
-            }
-        })
 
         MainScope().launch(Dispatchers.Default) {
             repeat(10000) {

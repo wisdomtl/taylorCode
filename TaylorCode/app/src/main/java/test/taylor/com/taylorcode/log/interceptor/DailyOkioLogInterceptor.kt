@@ -23,7 +23,10 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
         val sink = checkSink()
         when (message.what) {
             TYPE_FLUSH -> {
-                sink.flush()
+                sink.use {
+                    it.flush()
+                    bufferedSink = null
+                }
             }
             TYPE_LOG -> {
                 val log = message.obj as String
@@ -48,7 +51,7 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
 
         fun getInstance(dir: String): DailyOkioLogInterceptor =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DailyOkioLogInterceptor(dir)
+                INSTANCE ?: DailyOkioLogInterceptor(dir).apply { INSTANCE = this }
             }
     }
 
@@ -58,6 +61,8 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
     }
 
     override fun log(priority: Int, tag: String, log: String) {
+        // prevent HandlerThread being killed
+        if (!handlerThread.isAlive) handlerThread.start()
         handler.run {
             removeMessages(TYPE_FLUSH)
             obtainMessage(TYPE_LOG, log).sendToTarget()

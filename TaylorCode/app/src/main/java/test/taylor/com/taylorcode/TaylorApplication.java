@@ -15,6 +15,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import test.taylor.com.taylorcode.block_canary.AppBlockCanaryContext;
+import test.taylor.com.taylorcode.log.EasyLog;
+import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor;
+import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor;
 import test.taylor.com.taylorcode.util.DateUtil;
 
 
@@ -30,14 +33,15 @@ public class TaylorApplication extends Application {
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
 
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+        initEasyLog();
         long time = 0;
         try {
             time = utcToTimestamp("2019-01-16T15:13:56Z");
         } catch (ParseException e) {
-            Log.v("ttaylor", "TaylorApplication.onCreate()" + "  e="+e);
+            Log.v("ttaylor", "TaylorApplication.onCreate()" + "  e=" + e);
             e.printStackTrace();
         }
-        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  time="+time);
+        Log.v("ttaylor", "TaylorApplication.onCreate()" + "  time=" + time);
 
 
         //java quote case1:
@@ -90,13 +94,19 @@ public class TaylorApplication extends Application {
 //        str.toCharArray();
     }
 
+    private void initEasyLog() {
+        EasyLog.INSTANCE.addInterceptor(DailyOkioLogInterceptor.Companion.getInstance(this.getFilesDir().getAbsolutePath()));
+        EasyLog.INSTANCE.addInterceptor(new LogcatInterceptor());
+    }
+
     /**
      * time case: convert utc to timestamp
+     *
      * @param time
      * @return
      * @throws ParseException
      */
-    public  long utcToTimestamp(String time) throws ParseException {
+    public long utcToTimestamp(String time) throws ParseException {
         SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df2.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = df2.parse(time);
