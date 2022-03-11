@@ -358,7 +358,7 @@ class LogActivity : AppCompatActivity() {
 //                strs.forEach {
 //                    EasyLog.v(it)
 //                }
-                EasyLog.v(str3 + "$it")
+                EasyLog.v(str3 + "$it","ttaylor")
             }
             EasyLog.v("work done")
             Log.v("ttaylor1", "onCreate() work done ")

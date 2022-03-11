@@ -40,28 +40,28 @@ object EasyLog {
     private val logInterceptors = mutableListOf<LogInterceptor>()
 
 
-    fun d(message: String, vararg args: Any) {
-        log(DEBUG, message, *args)
+    fun d(message: String, tag: String = "", vararg args: Any) {
+        log(DEBUG, message, tag, *args)
     }
 
-    fun e(message: String, vararg args: Any, throwable: Throwable? = null) {
-        log(ERROR, message, *args, throwable = throwable)
+    fun e(message: String, tag: String = "", vararg args: Any, throwable: Throwable? = null) {
+        log(ERROR, message, tag, *args, throwable = throwable)
     }
 
-    fun w(message: String, vararg args: Any) {
-        log(WARN, message, *args)
+    fun w(message: String, tag: String = "", vararg args: Any) {
+        log(WARN, message, tag, *args)
     }
 
-    fun i(message: String, vararg args: Any) {
-        log(INFO, message, *args)
+    fun i(message: String, tag: String = "", vararg args: Any) {
+        log(INFO, message, tag, *args)
     }
 
-    fun v(message: String, vararg args: Any) {
-        log(VERBOSE, message, *args)
+    fun v(message: String, tag: String = "", vararg args: Any) {
+        log(VERBOSE, message, tag, *args)
     }
 
-    fun wtf(message: String, vararg args: Any) {
-        log(ASSERT, message, *args)
+    fun wtf(message: String, tag: String = "", vararg args: Any) {
+        log(ASSERT, message, tag, *args)
     }
 
     fun addInterceptor(interceptor: LogInterceptor) {
@@ -72,6 +72,7 @@ object EasyLog {
     private fun log(
         priority: Int,
         message: String,
+        tag: String,
         vararg args: Any,
         throwable: Throwable? = null
     ) {
@@ -81,7 +82,7 @@ object EasyLog {
         }
         logInterceptors.forEach { interceptor ->
             // TODO: tag logic
-            if (interceptor.enable()) interceptor.log(priority, "", logMessage)
+            if (interceptor.enable()) interceptor.log(priority, tag, logMessage)
         }
     }
 

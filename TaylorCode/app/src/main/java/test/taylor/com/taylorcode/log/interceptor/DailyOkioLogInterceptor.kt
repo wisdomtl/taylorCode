@@ -65,7 +65,7 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
         if (!handlerThread.isAlive) handlerThread.start()
         handler.run {
             removeMessages(TYPE_FLUSH)
-            obtainMessage(TYPE_LOG, log).sendToTarget()
+            obtainMessage(TYPE_LOG, "[$tag] $log").sendToTarget()
             val flushMessage = handler.obtainMessage(TYPE_FLUSH)
             sendMessageDelayed(flushMessage, FLUSH_LOG_DELAY_MILLIS)
         }

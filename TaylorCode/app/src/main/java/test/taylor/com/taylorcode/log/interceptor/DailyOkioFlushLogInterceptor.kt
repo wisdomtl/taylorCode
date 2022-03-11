@@ -51,7 +51,7 @@ class DailyOkioFlushLogInterceptor private constructor(private var dir: String) 
 
     override fun log(priority: Int, tag: String, log: String) {
         val message = handler.obtainMessage()
-        message.obj = log
+        message.obj = "[$tag] $log"
         message.sendToTarget()
     }
 
