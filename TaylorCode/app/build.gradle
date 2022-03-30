@@ -76,7 +76,7 @@ dependencies {
     //Stetho:app debug tool
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     //WorkManager
 //    implementation 'androidx.work:work-runtime:2.3.1'
     implementation "androidx.work:work-runtime-ktx:2.3.1"
@@ -143,4 +143,8 @@ dependencies {
     implementation  "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 
     implementation("com.squareup.okio:okio:3.0.0")
+
+    implementation 'com.vk.knet:core:1.0'
+    implementation 'com.vk.knet:cronet:1.0'
+    implementation 'com.vk.knet:okcronet:1.0'
 }
