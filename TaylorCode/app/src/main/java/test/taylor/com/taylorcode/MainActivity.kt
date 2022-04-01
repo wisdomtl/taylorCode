@@ -267,6 +267,8 @@ class MainActivity : BaseActivity() {
         btn_zoom.setOnClickListener { startActivity<ZoomActivity> { } }
         btn_okio.setOnClickListener { startActivity<OkioActivity> { } }
         btn_log.setOnClickListener { startActivity<LogActivity> { } }
+        btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
+        btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
 
 
         //SAM case:

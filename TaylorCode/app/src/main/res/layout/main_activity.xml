@@ -9,6 +9,19 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_concurrent_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="concurrent List"
+            android:textAllCaps="false" />
+        <Button
             android:id="@+id/btn_coordinate_layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
