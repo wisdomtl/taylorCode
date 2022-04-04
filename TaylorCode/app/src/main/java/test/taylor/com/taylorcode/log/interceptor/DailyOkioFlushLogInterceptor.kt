@@ -3,16 +3,13 @@ package test.taylor.com.taylorcode.log.interceptor
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Message
 import android.util.Log
-import okio.BufferedSink
+import test.taylor.com.taylorcode.log.easylog.Chain
 import okio.appendingSink
 import okio.buffer
-import test.taylor.com.taylorcode.log.Chain
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.sin
 
 class DailyOkioFlushLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")

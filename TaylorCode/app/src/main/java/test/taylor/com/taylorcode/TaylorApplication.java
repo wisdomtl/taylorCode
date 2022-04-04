@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.github.moduth.blockcanary.BlockCanary;
+import com.taylor.easylog.EasyLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,8 +16,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import test.taylor.com.taylorcode.block_canary.AppBlockCanaryContext;
-import test.taylor.com.taylorcode.log.CallStackLogInterceptor;
-import test.taylor.com.taylorcode.log.EasyLog;
 import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor;
 import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor;
 import test.taylor.com.taylorcode.util.DateUtil;
@@ -34,7 +33,6 @@ public class TaylorApplication extends Application {
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
 
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
-        initEasyLog();
         long time = 0;
         try {
             time = utcToTimestamp("2019-01-16T15:13:56Z");
@@ -93,12 +91,6 @@ public class TaylorApplication extends Application {
 //
 //        String str = null;
 //        str.toCharArray();
-    }
-
-    private void initEasyLog() {
-        EasyLog.INSTANCE.addInterceptor(new CallStackLogInterceptor(10));
-        EasyLog.INSTANCE.addInterceptor(DailyOkioLogInterceptor.Companion.getInstance(this.getFilesDir().getAbsolutePath()));
-        EasyLog.INSTANCE.addInterceptor(new LogcatInterceptor());
     }
 
     /**

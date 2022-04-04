@@ -17,7 +17,7 @@ class OkioActivity : AppCompatActivity() {
         Log.v("ttaylor", "onCreate() dir=$dir")
         dir?.let {
             MainScope().launch {
-                repeat(100000) {
+                repeat(10_000) {
                     writeText(File("$dir/taylor"))
                 }
             }

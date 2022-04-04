@@ -1,32 +1,41 @@
-package test.taylor.com.taylorcode.log.interceptor
+package com.taylor.easylog
 
 import android.annotation.SuppressLint
+import android.os.Debug
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import test.taylor.com.taylorcode.log.easylog.Chain
 import okio.BufferedSink
 import okio.appendingSink
 import okio.buffer
+import test.taylor.com.taylorcode.log.easylog.Chain
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DailyOkioLogInterceptor private constructor(private var dir: String) : LogInterceptor {
+class OkioLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")
     private val handler: Handler
     private var startTime = System.currentTimeMillis()
     private var bufferedSink: BufferedSink? = null
     private var logFile = File(getFileName())
+    private var avgUsed = mutableListOf<Long>()
 
     val callback = Handler.Callback { message ->
         val sink = checkSink()
+        val use = Debug.getNativeHeapSize()/(1024*1204) - Debug.getNativeHeapFreeSize()/(1024*1204)
+        avgUsed.add(use)
         when (message.what) {
             TYPE_FLUSH -> {
                 sink.use {
                     it.flush()
                     bufferedSink = null
                 }
+                Log.v(
+                    "ttaylor1",
+                    "log() Okio work is ok done=${System.currentTimeMillis() - startTime} , memory avg=${avgUsed.average()}"
+                )
+
             }
             TYPE_LOG -> {
                 val log = message.obj as String
@@ -34,24 +43,20 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
                 sink.writeUtf8("\n")
             }
         }
-        if (message.obj as? String == "work done") Log.v(
-            "ttaylor1",
-            "log() work is ok done=${System.currentTimeMillis() - startTime}"
-        )
         false
     }
 
     companion object {
         private const val TYPE_FLUSH = -1
         private const val TYPE_LOG = 1
-        private const val FLUSH_LOG_DELAY_MILLIS = 3000L
+        private const val FLUSH_LOG_DELAY_MILLIS = 1000L
 
         @Volatile
-        private var INSTANCE: DailyOkioLogInterceptor? = null
+        private var INSTANCE: OkioLogInterceptor? = null
 
-        fun getInstance(dir: String): DailyOkioLogInterceptor =
+        fun getInstance(dir: String): OkioLogInterceptor =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DailyOkioLogInterceptor(dir).apply { INSTANCE = this }
+                INSTANCE ?: OkioLogInterceptor(dir).apply { INSTANCE = this }
             }
     }
 
@@ -59,6 +64,7 @@ class DailyOkioLogInterceptor private constructor(private var dir: String) : Log
         handlerThread.start()
         handler = Handler(handlerThread.looper, callback)
     }
+
     override fun log(priority: Int, tag: String, log: String, chain: Chain) {
         // prevent HandlerThread being killed
         if (!handlerThread.isAlive) handlerThread.start()

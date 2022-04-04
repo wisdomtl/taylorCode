@@ -1,6 +1,6 @@
-package test.taylor.com.taylorcode.log
+package com.taylor.easylog
 
-import test.taylor.com.taylorcode.log.interceptor.LogInterceptor
+import test.taylor.com.taylorcode.log.easylog.Chain
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.UnknownHostException

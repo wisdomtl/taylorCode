@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
+import test.taylor.com.taylorcode.log.easylog.Chain
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import test.taylor.com.taylorcode.log.Chain
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat

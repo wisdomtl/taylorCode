@@ -1,15 +1,23 @@
 package test.taylor.com.taylorcode.log
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.taylor.easylog.EasyLog
+import com.taylor.easylog.OkioLogInterceptor
+import test.taylor.com.taylorcode.log.interceptor.FileWriterLogInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import test.taylor.com.taylorcode.BuildConfig
-import test.taylor.com.taylorcode.log.interceptor.DailyFileWriterNotFlushLogInterceptor
-import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor
-import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor
+import okio.*
+import okio.ByteString.Companion.encodeUtf8
+import java.io.File
+import java.nio.file.Files
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 class LogActivity : AppCompatActivity() {
 
@@ -350,15 +358,31 @@ class LogActivity : AppCompatActivity() {
                 "                \"        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:6847)\\n\" +\n" +
                 "                \"        at android.app.ActivityThread.access\\\$1800(ActivityThread.java:243)\\n\" +"
     val strs = listOf(str1, str2, str3, str4, str5)
+
+    private lateinit var sink :BufferedSink
+
+    private val mainScope = MainScope()
+
+    private val writer by lazy {
+        File(this.filesDir.absolutePath).writer().buffered()
+    }
+
+    private fun getFileName() = "${this.filesDir.absolutePath}${File.separator}${getToday()}.log"
+    @SuppressLint("SimpleDateFormat")
+    private fun getToday(): String =
+        SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        sink = File(getFileName()).sink(true).buffer()
+//        EasyLog.addInterceptor(FileWriterLogInterceptor.getInstance(this.filesDir.absolutePath))
+        EasyLog.addInterceptor(OkioLogInterceptor.getInstance(this.filesDir.absolutePath))
+
 
         MainScope().launch(Dispatchers.Default) {
-            repeat(10000) {
-//                strs.forEach {
-//                    EasyLog.v(it)
-//                }
-                EasyLog.v(str3 + "$it","ttaylor")
+            repeat(10_000) {
+                EasyLog.v(str4 + "$it","ttaylor00")
+                EasyLog.v(str3 + "$it","ttaylor00")
             }
             EasyLog.v("work done")
             Log.v("ttaylor1", "onCreate() work done ")

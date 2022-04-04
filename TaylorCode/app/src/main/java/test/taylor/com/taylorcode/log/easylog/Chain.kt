@@ -1,6 +1,6 @@
-package test.taylor.com.taylorcode.log
+package test.taylor.com.taylorcode.log.easylog
 
-import test.taylor.com.taylorcode.log.interceptor.LogInterceptor
+import com.taylor.easylog.LogInterceptor
 
 class Chain(
     private val interceptors: List<LogInterceptor>,

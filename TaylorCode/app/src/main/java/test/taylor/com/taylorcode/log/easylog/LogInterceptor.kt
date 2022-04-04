@@ -1,4 +1,4 @@
-package test.taylor.com.taylorcode.log.interceptor
+package com.taylor.easylog
 
 import test.taylor.com.taylorcode.log.easylog.Chain
 
