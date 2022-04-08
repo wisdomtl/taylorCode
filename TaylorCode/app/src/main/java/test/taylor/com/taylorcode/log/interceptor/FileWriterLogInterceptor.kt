@@ -7,12 +7,11 @@ import android.os.HandlerThread
 import android.util.Log
 import test.taylor.com.taylorcode.log.easylog.Chain
 import com.taylor.easylog.LogInterceptor
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import java.io.Writer
+import java.io.*
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.zip.GZIPOutputStream
 
 class FileWriterLogInterceptor private constructor(private var dir: String) : LogInterceptor {
     private val handlerThread = HandlerThread("log_to_file_thread")
@@ -20,12 +19,13 @@ class FileWriterLogInterceptor private constructor(private var dir: String) : Lo
     private var startTime = System.currentTimeMillis()
     private var fileWriter: Writer? = null
     private var logFile = File(getFileName())
-    private var avgUsed = mutableListOf<Long>()
+    private var avg = mutableListOf<Long>()
 
     val callback = Handler.Callback { message ->
         val sink = checkFileWriter()
-        val use = Debug.getNativeHeapSize()/(1024*1204) - Debug.getNativeHeapFreeSize()/(1024*1204)
-        avgUsed.add(use)
+        val memoryInfo = Debug.MemoryInfo()
+        Debug.getMemoryInfo(memoryInfo)
+        avg.add(Runtime.getRuntime().totalMemory()/(1024*1024))
         when (message.what) {
             TYPE_FLUSH -> {
                 sink.use {
@@ -34,7 +34,7 @@ class FileWriterLogInterceptor private constructor(private var dir: String) : Lo
                 }
                 Log.v(
                     "ttaylor1",
-                    "log() fileWriter work is ok done=${System.currentTimeMillis() - startTime} , memory avg=${avgUsed.average()}"
+                    "log() fileWriter work is ok done=${System.currentTimeMillis() - startTime}, memory=${avg.average()}"
                 )
             }
             TYPE_LOG -> {
@@ -43,14 +43,13 @@ class FileWriterLogInterceptor private constructor(private var dir: String) : Lo
                 sink.write("\n")
             }
         }
-//        if ((message.obj as? String)?.contains("work done") == true)
         false
     }
 
     companion object {
         private const val TYPE_FLUSH = -1
         private const val TYPE_LOG = 1
-        private const val FLUSH_LOG_DELAY_MILLIS = 1000L
+        private const val FLUSH_LOG_DELAY_MILLIS = 300L
 
         @Volatile
         private var INSTANCE: FileWriterLogInterceptor? = null
@@ -90,8 +89,12 @@ class FileWriterLogInterceptor private constructor(private var dir: String) : Lo
 
     private fun checkFileWriter(): Writer {
         if (fileWriter == null) {
-            fileWriter = FileWriter(logFile,true).buffered()
+            fileWriter = logFile.outputStream().gzip().writer().buffered()
         }
         return fileWriter!!
     }
+
+    private fun OutputStream.gzip() = GZIPOutputStream(this)
+
+    private fun OutputStream.writer(charset: Charset = Charsets.UTF_8) = OutputStreamWriter(this, charset)
 }

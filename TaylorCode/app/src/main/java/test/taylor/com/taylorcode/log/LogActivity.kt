@@ -375,14 +375,13 @@ class LogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        sink = File(getFileName()).sink(true).buffer()
-//        EasyLog.addInterceptor(FileWriterLogInterceptor.getInstance(this.filesDir.absolutePath))
-        EasyLog.addInterceptor(OkioLogInterceptor.getInstance(this.filesDir.absolutePath))
-
+        EasyLog.addInterceptor(FileWriterLogInterceptor.getInstance(this.filesDir.absolutePath))
+//        EasyLog.addInterceptor(OkioLogInterceptor.getInstance(this.filesDir.absolutePath))
+//
 
         MainScope().launch(Dispatchers.Default) {
             repeat(10_000) {
                 EasyLog.v(str4 + "$it","ttaylor00")
-                EasyLog.v(str3 + "$it","ttaylor00")
             }
             EasyLog.v("work done")
             Log.v("ttaylor1", "onCreate() work done ")

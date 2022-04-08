@@ -98,6 +98,7 @@ import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import java.util.*
+import kotlin.jvm.internal.Intrinsics
 import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity() {

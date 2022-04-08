@@ -8,6 +8,7 @@ import android.util.Log
 import okio.BufferedSink
 import okio.appendingSink
 import okio.buffer
+import okio.gzip
 import test.taylor.com.taylorcode.log.easylog.Chain
 import java.io.File
 import java.text.SimpleDateFormat
@@ -19,12 +20,11 @@ class OkioLogInterceptor private constructor(private var dir: String) : LogInter
     private var startTime = System.currentTimeMillis()
     private var bufferedSink: BufferedSink? = null
     private var logFile = File(getFileName())
-    private var avgUsed = mutableListOf<Long>()
+    private var avg = mutableListOf<Long>()
 
     val callback = Handler.Callback { message ->
         val sink = checkSink()
-        val use = Debug.getNativeHeapSize()/(1024*1204) - Debug.getNativeHeapFreeSize()/(1024*1204)
-        avgUsed.add(use)
+        avg.add(Runtime.getRuntime().totalMemory()/(1024*1024))
         when (message.what) {
             TYPE_FLUSH -> {
                 sink.use {
@@ -33,7 +33,7 @@ class OkioLogInterceptor private constructor(private var dir: String) : LogInter
                 }
                 Log.v(
                     "ttaylor1",
-                    "log() Okio work is ok done=${System.currentTimeMillis() - startTime} , memory avg=${avgUsed.average()}"
+                    "log() Okio work is ok done=${System.currentTimeMillis() - startTime} ,memory=${avg.average()}}"
                 )
 
             }
@@ -49,7 +49,7 @@ class OkioLogInterceptor private constructor(private var dir: String) : LogInter
     companion object {
         private const val TYPE_FLUSH = -1
         private const val TYPE_LOG = 1
-        private const val FLUSH_LOG_DELAY_MILLIS = 1000L
+        private const val FLUSH_LOG_DELAY_MILLIS = 300L
 
         @Volatile
         private var INSTANCE: OkioLogInterceptor? = null
@@ -85,11 +85,11 @@ class OkioLogInterceptor private constructor(private var dir: String) : LogInter
     private fun getToday(): String =
         SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
 
-    private fun getFileName() = "$dir${File.separator}${getToday()}.log"
+    private fun getFileName() = "$dir${File.separator}${getToday()}.gz"
 
     private fun checkSink(): BufferedSink {
         if (bufferedSink == null) {
-            bufferedSink = logFile.appendingSink().buffer()
+            bufferedSink = logFile.appendingSink().gzip().buffer()
         }
         return bufferedSink!!
     }
