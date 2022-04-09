@@ -260,6 +260,7 @@
         <activity android:name=".data_persistence.okio.OkioActivity" />
         <activity android:name=".log.LogActivity" />
         <activity android:name=".aysnc.concurrent.ConcurrentActivity" />
+        <activity android:name=".architecture.LiveDataActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

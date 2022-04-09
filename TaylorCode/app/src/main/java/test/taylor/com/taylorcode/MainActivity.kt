@@ -270,6 +270,7 @@ class MainActivity : BaseActivity() {
         btn_log.setOnClickListener { startActivity<LogActivity> { } }
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
+        btnLiveData.setOnClickListener { startActivity<test.taylor.com.taylorcode.architecture.LiveDataActivity> { } }
 
 
         //SAM case:
