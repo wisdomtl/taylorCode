@@ -261,6 +261,7 @@
         <activity android:name=".log.LogActivity" />
         <activity android:name=".aysnc.concurrent.ConcurrentActivity" />
         <activity android:name=".architecture.LiveDataActivity" />
+        <activity android:name=".architecture.StickyLiveDataActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

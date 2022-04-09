@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.main_activity.*
+import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.audio.encoder.HWRecorderActivity
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
@@ -97,8 +98,6 @@ import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
-import java.util.*
-import kotlin.jvm.internal.Intrinsics
 import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity() {
@@ -270,7 +269,7 @@ class MainActivity : BaseActivity() {
         btn_log.setOnClickListener { startActivity<LogActivity> { } }
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
-        btnLiveData.setOnClickListener { startActivity<test.taylor.com.taylorcode.architecture.LiveDataActivity> { } }
+        btnStickyFragment.setOnClickListener { startActivity<StickyLiveDataActivity> { } }
 
 
         //SAM case:
