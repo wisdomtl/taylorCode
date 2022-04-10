@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.my_activity.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.setOnItemClickListener
 
 class OverridePropertyActivity : AppCompatActivity() {
-    private val viewModel by lazy { ViewModelProviders.of(this).get(MyViewModel::class.java) }
+    private val viewModel by lazy { ViewModelProvider(this)[MyViewModel::class.java] }
     private var myAdapter: MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

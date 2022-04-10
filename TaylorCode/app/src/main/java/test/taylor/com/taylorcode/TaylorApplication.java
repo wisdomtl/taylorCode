@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
-import com.github.moduth.blockcanary.BlockCanary;
 import com.taylor.easylog.EasyLog;
 
 import java.text.ParseException;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import test.taylor.com.taylorcode.block_canary.AppBlockCanaryContext;
 import test.taylor.com.taylorcode.log.interceptor.DailyOkioLogInterceptor;
 import test.taylor.com.taylorcode.log.interceptor.LogcatInterceptor;
 import test.taylor.com.taylorcode.util.DateUtil;

@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 
 class LiveDataActivity : AppCompatActivity() {
 
     private val liveDataViewModel by lazy {
-        ViewModelProviders.of(this@LiveDataActivity).get(LiveDataViewModel::class.java)
+        ViewModelProvider(this@LiveDataActivity)[LiveDataViewModel::class.java]
     }
 
     private lateinit var tv: TextView

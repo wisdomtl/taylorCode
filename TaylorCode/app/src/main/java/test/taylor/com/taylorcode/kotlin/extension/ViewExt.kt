@@ -275,7 +275,7 @@ fun EditText.textChangeFlow(): Flow<CharSequence> = callbackFlow {
         override fun onTextChanged(
             s: CharSequence?, start: Int, before: Int, count: Int
         ) {
-            s?.let { offer(it) }
+            s?.let { trySend(it) }
         }
     }
     addTextChangedListener(watcher)
@@ -285,7 +285,7 @@ fun EditText.textChangeFlow(): Flow<CharSequence> = callbackFlow {
 
 @ExperimentalCoroutinesApi
 fun View.clickFlow() = callbackFlow {
-    setOnClickListener { offer(Unit) }
+    setOnClickListener { trySend(Unit) }
     awaitClose { setOnClickListener(null) }
 }
 

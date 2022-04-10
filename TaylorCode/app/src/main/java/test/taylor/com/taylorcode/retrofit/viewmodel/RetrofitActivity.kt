@@ -3,7 +3,7 @@ package test.taylor.com.taylorcode.retrofit.viewmodel
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
@@ -40,7 +40,7 @@ class RetrofitActivity : AppCompatActivity() {
         }
     }
 
-    private val newsViewModel by lazy { ViewModelProviders.of(this).get(NewsViewModel::class.java) }
+    private val newsViewModel by lazy { ViewModelProvider(this).get(NewsViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

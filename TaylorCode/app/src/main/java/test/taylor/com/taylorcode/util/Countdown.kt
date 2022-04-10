@@ -21,7 +21,7 @@ class Countdown<T>(
 
     fun start(delay: Long = 0) {
         if (!executor.isShutdown) {
-            handler.post(onStart)
+            handler.post(onStart!!)
             executor.scheduleAtFixedRate(countdownRunnable, delay, interval, TimeUnit.MILLISECONDS)
         }
     }

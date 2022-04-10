@@ -51,6 +51,7 @@
         </provider>
 
         <activity android:name=".MainActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,10 +61,6 @@
         </activity>
         <activity android:name=".data_persistence.RoomActivity" />
         <activity android:name=".ui.surface_view.SurfaceViewActivity" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity android:name=".kotlin.KotlinExample"></activity>
 
@@ -224,14 +221,8 @@
         <activity android:name=".kotlin.coroutine.FlowActivity" />
         <activity android:name=".ui.custom_view.blur.BlurActivity2" />
         <activity android:name=".ui.custom_view.crop_view.CropActivity" />
-        <activity android:name=".ui.custom_view.shader.CropActivity" />
         <activity android:name=".ui.custom_view.shader.ShaderActivity" />
         <activity android:name=".ui.performance.RecyclerViewPerformanceActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name = "android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.performance.widget.PercentActivity" />
         <activity android:name=".interview.InterViewActivity" />
@@ -275,7 +266,8 @@
 
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />
-        <receiver android:name="test.taylor.com.taylorcode.ui.notification.NotificationReceiver">
+        <receiver android:name="test.taylor.com.taylorcode.ui.notification.NotificationReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="BROADCAST_NOTIFICATION" />
             </intent-filter>

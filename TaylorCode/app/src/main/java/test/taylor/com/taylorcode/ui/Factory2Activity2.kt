@@ -39,14 +39,20 @@ class Factory2Activity2 : AppCompatActivity() {
     @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
         LayoutInflaterCompat.setFactory2(LayoutInflater.from(this@Factory2Activity2), object : LayoutInflater.Factory2 {
-            override fun onCreateView(parent: View?, name: String?, context: Context?, attrs: AttributeSet?): View? {
+
+            override fun onCreateView(
+                parent: View?,
+                name: String,
+                context: Context,
+                attrs: AttributeSet
+            ): View? {
                 val (view, duration) = measureTimedValue { delegate.createView(parent, name, context!!, attrs!!) }
                 sum += duration.inMilliseconds
                 Log.v("ttaylor", "view=${view?.let { it::class.simpleName }} duration=${duration}  sum=${sum}")
                 return view
             }
 
-            override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View? {
+            override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
                 val v: String = "dfd"
                 return null
             }

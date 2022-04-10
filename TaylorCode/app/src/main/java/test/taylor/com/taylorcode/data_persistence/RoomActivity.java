@@ -1,9 +1,10 @@
 package test.taylor.com.taylorcode.data_persistence;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.View;
 
@@ -24,7 +25,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initViewModel() {
-        activityViewModel = ViewModelProviders.of(this).get(ActivityViewModel.class);
+        activityViewModel = new ViewModelProvider(this).get(ActivityViewModel.class);
     }
 
     private void initView() {

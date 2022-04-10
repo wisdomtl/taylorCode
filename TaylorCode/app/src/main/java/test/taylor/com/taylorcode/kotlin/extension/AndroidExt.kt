@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.callbackFlow
 fun Context.networkStateFlow(): Flow<Boolean> = callbackFlow {
     val callback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            offer(true)
+            trySend(true)
         }
 
         override fun onLost(network: Network) {
-            offer(false)
+            trySend(false)
         }
     }
     val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

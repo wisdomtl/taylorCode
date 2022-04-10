@@ -27,8 +27,9 @@ class BalanceFragment:Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myViewModel.selectsListLiveData.observe(viewLifecycleOwner) {
-            Log.v("ttaylor","onViewCreated() size=${it.size}")
-        }
+//        myViewModel.selectsListLiveData.value = listOf("ddd")
+//        myViewModel.selectsListLiveData.observe(viewLifecycleOwner) {
+//            Log.v("ttaylor","onViewCreated() size=${it.size}")
+//        }
     }
 }
