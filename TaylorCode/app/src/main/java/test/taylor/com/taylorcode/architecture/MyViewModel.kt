@@ -9,6 +9,11 @@ class MyViewModel : ViewModel() {
 
     val singleListLiveData = SingleLiveEvent<List<String>>()
 
+    /**
+     * case:convert MutableLive data into LiveData
+     */
+    val sLiveData:LiveData<List<String>> by this::selectsListLiveData
+
     fun setSelectsList(goods: List<String>) {
         selectsListLiveData.value = goods
         singleListLiveData.value = goods
