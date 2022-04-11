@@ -3,7 +3,7 @@ package test.taylor.com.taylorcode.architecture
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -29,10 +29,17 @@ class MyViewModel : ViewModel() {
 
     val selectsListFlow = MutableSharedFlow<List<String>>(replay = 1)
 
+    private val selectedListStateFlow = MutableStateFlow("")
+    val openStateFLow: StateFlow<String> = selectedListStateFlow
+
     fun setSelectsList2(goods: List<String>) {
         viewModelScope.launch {
             selectsListFlow.emit(goods)
         }
+    }
+
+    fun testFlow(){
+        selectedListStateFlow.update { "1" }
     }
 
     /**
