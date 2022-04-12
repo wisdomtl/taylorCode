@@ -6,10 +6,17 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import tech.thdev.network.flowcalladapterfactory.FlowCallAdapterFactory
+import test.taylor.com.taylorcode.retrofit.repository_livedata.LiveDataCallAdapterFactory
+import test.taylor.com.taylorcode.retrofit.repository_livedata.room.NewsDatabase
 
 class UserInfoViewModel(private val userInfoRepo: UserInfoRepo) : ViewModel() {
     private val _userInfoStateFlow = MutableStateFlow(UserInfoModel(loading = true))
     val userInfoStateFlow: StateFlow<UserInfoModel> = _userInfoStateFlow
+
 
     /**
      * case: use StateFlow like LiveData
@@ -30,6 +37,13 @@ class UserInfoViewModel(private val userInfoRepo: UserInfoRepo) : ViewModel() {
             .flattenMerge()
             .map { UserInfoModel(userName = it.name, loading = false) }
             .onStart { emit(UserInfoModel(userName = "", loading = true)) }
+            .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+
+    val newsFlow =
+        flowOf(userInfoRepo.localNewsFlow, userInfoRepo.remoteNewsFlow)
+            .flattenMerge()
+            .map { NewsModel(it, false) }
+            .onStart { emit(NewsModel(emptyList(), true)) }
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 }
 
