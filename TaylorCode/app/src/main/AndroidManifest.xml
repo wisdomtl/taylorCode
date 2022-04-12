@@ -253,6 +253,7 @@
         <activity android:name=".aysnc.concurrent.ConcurrentActivity" />
         <activity android:name=".architecture.LiveDataActivity" />
         <activity android:name=".architecture.StickyLiveDataActivity" />
+        <activity android:name=".kotlin.coroutine.mvvm.StateFlowActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

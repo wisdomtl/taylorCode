@@ -26,10 +26,8 @@ import test.taylor.com.taylorcode.interview.InterViewActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
-import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity
-import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineActivity2
-import test.taylor.com.taylorcode.kotlin.coroutine.CoroutineCancelActivity
-import test.taylor.com.taylorcode.kotlin.coroutine.SuspendCoroutineActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.*
+import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
@@ -270,6 +268,7 @@ class MainActivity : BaseActivity() {
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btnStickyFragment.setOnClickListener { startActivity<StickyLiveDataActivity> { } }
+        btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
 
 
         //SAM case:

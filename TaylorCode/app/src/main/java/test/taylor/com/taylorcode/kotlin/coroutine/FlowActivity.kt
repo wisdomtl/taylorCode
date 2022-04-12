@@ -1,13 +1,16 @@
 package test.taylor.com.taylorcode.kotlin.coroutine
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import test.taylor.com.taylorcode.GoodDialogFragment
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 
 import test.taylor.com.taylorcode.kotlin.*
@@ -53,6 +56,27 @@ class FlowActivity : AppCompatActivity() {
                 }
             }
 
+            TextView {
+                layout_id = "tvChange2"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 12f
+                textColor = "#ffffff"
+                text = "save"
+                gravity = gravity_center
+                top_toBottomOf = "tvChange"
+                start_toStartOf = parent_id
+                end_toEndOf = parent_id
+                onClick = {
+                    startActivity(Intent(this@FlowActivity, CoroutineActivity::class.java))
+                }
+                padding = 20
+                shape = shape {
+                    corner_radius = 20
+                    solid_color = "#ff00ff"
+                }
+            }
+
             EditText {
                 layout_id = "etContent"
                 layout_width = match_parent
@@ -86,10 +110,88 @@ class FlowActivity : AppCompatActivity() {
         emit(search(key))
     }
 
+    private val coldFlow = flow {
+        var count = 0
+        repeat(100) {
+            delay(1000)
+            Log.w("ttaylor4", " cold flow emiting ${count}")
+            emit("cold flow1(${count++})")
+        }
+    }
+
+    private val coldFlow2 = flow {
+        var count = 0
+        repeat(100) {
+            delay(1000)
+            Log.w("ttaylor4", "cold flow2 emiting ${count}")
+            emit("cold flow 2${count++}")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.v("ttaylor", "onPause() lifecycle=${lifecycle.currentState}")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.v("ttaylor", "onPause() lifecycle=${lifecycle.currentState}")
+    }
+
+
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
+
+        /**
+         * case: flowWithLifecycle will cancel all upstream emitting value when lifecycle state is below RESUMED
+         */
+        lifecycleScope.launch {
+            coldFlow.combine(coldFlow2) { v1, v2 ->
+                v1 + v2
+            }.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect {
+                Log.v("ttaylor4", "combine two flow =${it}")
+            }
+        }
+
+
+        /**
+         * case: flowWithLifecycle will cancel all upstream emitting value when lifecycle state is below RESUMED exclude downstream
+         */
+//        lifecycleScope.launch {
+//            coldFlow.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+//                .combine(coldFlow2) { v1, v2 ->
+//                    v1 + v2
+//                }.collect {
+//                    Log.v("ttaylor4", "combine two flow =${it}")
+//                }
+//        }
+
+        /**
+         * case: collect cold flow multiple times, the emit logic will invoked multiple times
+         *
+         * case: if this activity finished, the consumer and producer will stop their work
+         */
+//        lifecycleScope.launch {
+//            coldFlow.collect {
+//                Log.v("ttaylor", "cold flow it=${it}")
+//            }
+//
+//            coldFlow.collect {
+//                Log.v("ttaylor", "cold flow collect twice=${it}")
+//            }
+//        }
+//
+//        /**
+//         * case: cold flow is collected in CoroutineScope ,the producer and consumer wont stop even if activity finished
+//         */
+//        CoroutineScope(SupervisorJob()).launch {
+//            coldFlow.collect {
+//                Log.v("ttaylor", "cold flow2 collect in CoroutineScope it=${it}")
+//            }
+//        }
+
 
         /**
          * case : throttle first of click
@@ -115,7 +217,7 @@ class FlowActivity : AppCompatActivity() {
         GlobalScope.launch {
             flow {
                 // define the logic invoked when collect() invoked
-                (1 .. 3).forEach {
+                (1..3).forEach {
                     delay(1000)
                     emit(it)
                 }
@@ -130,7 +232,7 @@ class FlowActivity : AppCompatActivity() {
          */
         GlobalScope.launch(Dispatchers.Main) {
             flow { // thread io
-                (1 .. 5).forEach {
+                (1..5).forEach {
                     Log.v("ttaylor", "flowOn(${it}) emit thread id=${Thread.currentThread().id}")
                     emit(it)
                 }
@@ -139,7 +241,10 @@ class FlowActivity : AppCompatActivity() {
                 it * it
             }.flowOn(Dispatchers.IO)
                 .map { // thread main
-                    Log.v("ttaylor", "flowOn(${it}) map after flowOn thread id=${Thread.currentThread().id}")
+                    Log.v(
+                        "ttaylor",
+                        "flowOn(${it}) map after flowOn thread id=${Thread.currentThread().id}"
+                    )
                     it * it
                 }
                 .collect { // thread main
@@ -152,7 +257,7 @@ class FlowActivity : AppCompatActivity() {
          */
         GlobalScope.launch {
             flow {
-                (1 .. 10).forEach {
+                (1..10).forEach {
                     delay(10)
                     emit(it)
                 }
@@ -165,12 +270,17 @@ class FlowActivity : AppCompatActivity() {
          * case: launchIn() + onEach() + onCompletion(), a shorthand for scope.launch { flow.collect() }
          */
         flow {
-            (1 .. 10).forEach {
+            (1..10).forEach {
                 delay(10)
                 emit(it)
             }
         }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
-            .onCompletion { if (it == null) Log.v("ttaylor", "onEach() + onCompletion() + launchIn() completion= successful") }
+            .onCompletion {
+                if (it == null) Log.v(
+                    "ttaylor",
+                    "onEach() + onCompletion() + launchIn() completion= successful"
+                )
+            }
             .launchIn(mainScope)
 
         /**
@@ -187,7 +297,12 @@ class FlowActivity : AppCompatActivity() {
                 .flatMapConcat { name -> flow { getPhoneNumber(name).forEach { emit(it) } } }
                 .filter { number -> number.startsWith("1350") }
                 .catch { }
-                .collect { Log.v("ttaylor", "1350 numbers = $it thread id=${Thread.currentThread().id}") }
+                .collect {
+                    Log.v(
+                        "ttaylor",
+                        "1350 numbers = $it thread id=${Thread.currentThread().id}"
+                    )
+                }
         }
 
         // do this in non-flow way, logs will print together, it means
@@ -213,7 +328,12 @@ class FlowActivity : AppCompatActivity() {
         mainScope.launch {
             val ret = countdown2(10_000, 1_000) { io(it) }
                 .onStart { Log.w("ttaylor", "on countdown2 start----------") }
-                .onEach { Log.v("ttaylor", "on countdown2 ${it} thread id = ${Thread.currentThread().id}") }
+                .onEach {
+                    Log.v(
+                        "ttaylor",
+                        "on countdown2 ${it} thread id = ${Thread.currentThread().id}"
+                    )
+                }
                 .onStart { Log.v("ttaylor", "on countdown2 start again") }
                 .onCompletion { Log.w("ttaylor", "on countdown2 end--------") }
                 .reduce { acc, value -> acc + value }
@@ -225,7 +345,7 @@ class FlowActivity : AppCompatActivity() {
          */
         mainScope.launch {
             flow {
-                (1 .. 10).forEach {
+                (1..10).forEach {
                     delay(100)
                     emit(it)
                 }
@@ -237,14 +357,17 @@ class FlowActivity : AppCompatActivity() {
     }
 
     private suspend fun io(time: Long): Long {
-        Log.v("ttaylor", "countdown2 io task($time) is started thread id=${Thread.currentThread().id}")
+        Log.v(
+            "ttaylor",
+            "countdown2 io task($time) is started thread id=${Thread.currentThread().id}"
+        )
         delay(3_000)
         Log.v("ttaylor", "countdown2 io task($time) is end thread id=${Thread.currentThread().id}")
         return time
     }
 
     private fun generateUserId() = flow {
-        (1 .. 100).forEach {
+        (1..100).forEach {
             delay(300)
             emit(User(it, it.rem(2) != 0))
         }
@@ -268,7 +391,8 @@ class FlowActivity : AppCompatActivity() {
 /**
  * case: customize operator of Flow
  */
-fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -> R): Flow<R> = transform { value ->
-    if (predicate(value)) emit(transform(value))
-}
+fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -> R): Flow<R> =
+    transform { value ->
+        if (predicate(value)) emit(transform(value))
+    }
 

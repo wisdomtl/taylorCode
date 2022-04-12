@@ -9,6 +9,28 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/repository_livedata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="repository_livedata"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btnStateFlow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="state flow"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_kotlin_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="coroutine flow"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnStickyFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -139,12 +161,6 @@
             android:text="count down latch"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_kotlin_flow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="coroutine flow"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_flow"
@@ -478,12 +494,7 @@
             android:layout_height="wrap_content"
             android:text="presenter"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/repository_livedata"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="repository_livedata"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/repository_single"
             android:layout_width="match_parent"

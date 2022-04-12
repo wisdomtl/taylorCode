@@ -381,6 +381,26 @@ inline fun ViewGroup.OneViewGroup(
     return oneViewGroup.apply(init).also { if (autoAdd) addView(it) }
 }
 
+
+/**
+ * create [Progressbar] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [Progressbar] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.ProgressBar2(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: ProgressBar.() -> Unit
+): ProgressBar {
+    val progressBar =
+        if (style != null) ProgressBar(
+            ContextThemeWrapper(context, style)
+        ) else ProgressBar(context)
+    return progressBar.apply(init).also { if (autoAdd) addView(it) }
+}
+
+
 /**
  * create [Guideline] instance within a [ConstraintLayout]
  * @param style an style int value defined in xml
@@ -1041,6 +1061,16 @@ inline var View.layout_gravity: Int
     set(value) {
         updateLayoutParams<LinearLayout.LayoutParams> {
             weight = (layoutParams as? LinearLayout.LayoutParams)?.weight ?: 0f
+            gravity = value
+        }
+    }
+
+inline var View.layout_gravity2: Int
+    get() {
+        return -1
+    }
+    set(value) {
+        updateLayoutParams<FrameLayout.LayoutParams> {
             gravity = value
         }
     }

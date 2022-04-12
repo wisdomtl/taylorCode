@@ -1,8 +1,9 @@
-apply plugin: 'com.android.application'
-//apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
 
 
 android {
@@ -10,7 +11,7 @@ android {
     buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -115,6 +116,7 @@ dependencies {
     // json 转换(更好地支持data class)
     implementation "com.squareup.retrofit2:converter-moshi:2.7.1"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'tech.thdev:flow-call-adapter-factory:1.0.0'
 
     //debug database
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
@@ -141,4 +143,9 @@ dependencies {
     implementation 'com.vk.knet:core:1.0'
     implementation 'com.vk.knet:cronet:1.0'
     implementation 'com.vk.knet:okcronet:1.0'
+
+
+    //DataStore
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
