@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 import test.taylor.com.taylorcode.util.value
 
 data class NewsBean(
-    @SerializedName("code") var code: Int,
-    @SerializedName("message") var message: String,
-    @SerializedName("result") var result: List<News>?
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: List<News>?
 )
 
 data class News(

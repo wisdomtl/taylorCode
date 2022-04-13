@@ -116,7 +116,6 @@ dependencies {
     // json 转换(更好地支持data class)
     implementation "com.squareup.retrofit2:converter-moshi:2.7.1"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'tech.thdev:flow-call-adapter-factory:1.0.0'
 
     //debug database
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'

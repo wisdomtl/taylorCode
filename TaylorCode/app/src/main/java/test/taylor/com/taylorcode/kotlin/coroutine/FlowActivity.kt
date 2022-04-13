@@ -3,14 +3,11 @@ package test.taylor.com.taylorcode.kotlin.coroutine
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import test.taylor.com.taylorcode.GoodDialogFragment
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 
 import test.taylor.com.taylorcode.kotlin.*
@@ -27,6 +24,9 @@ class FlowActivity : AppCompatActivity() {
     private var nameCount = 0
 
     private lateinit var tv: TextView
+    private val flowViewModel by lazy {
+        ViewModelProvider(this)[FlowViewModel::class.java]
+    }
 
     val stateFlow = MutableStateFlow("")
 
@@ -144,16 +144,95 @@ class FlowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
+
+        /**
+         * case: keep the upstream alive for 5000 ms when ui is not alive
+         */
+        lifecycleScope.launch {
+            flowViewModel.hotStateFlow.flowWithLifecycle(lifecycle).collect {
+                Log.v("ttaylor4", "onCreate() num=${it}")
+            }
+        }
+
+        /**
+         * case: even if asLiveData is used ,the upstream cold flow will fire again when this activity is restart
+         */
+//        flowViewModel.flowLiveData.observe(this){
+//            Log.v("ttaylor4","onCreate() num=$it")
+//        }
+
+        /**
+         * case: multiple consumer for hot flow, the upstream cold flow will only be triggered once
+         */
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                flowViewModel.hotFlow.collect {
+//                    Log.v("ttaylor4", "onCreate() collect 1 num=${it}")
+//                }
+//
+//            }
+//        }
+//
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED){
+//                flowViewModel.hotFlow.collect{
+//                    Log.v("ttaylor4","onCreate() collect 2 num=${it}")
+//                }
+//            }
+//        }
+
+        /**
+         * case: the collect and emit will be stopped when another activity show and this activity go to the background
+         * and the collect and emit will restart everytime this activity is show again
+         */
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED){
+//                coldFlow.collect{
+//                    Log.v("ttaylor4","onCreate() collect num=$it")
+//                }
+//            }
+//        }
+
+        /**
+         * case: the collect and emit will stopped only when this activity is destroyed
+         */
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.CREATED){
+//                coldFlow.collect{
+//                    Log.v("ttaylor4","onCreate() collect num=$it")
+//                }
+//            }
+//        }
+
+        /**
+         * case: the collect and emit will paused if another activity is show above
+         * the collect and emit wont stop if home is click(app is in background)
+         */
+//        lifecycleScope.launch {
+//           coldFlow.collect{
+//               Log.v("ttaylor4","onCreate() collect num=${it}")
+//           }
+//        }
+
+        /**
+         * case: the collect and emit will stop when app is in background or onPause by another activity.and continue when this activity is restart
+         */
+//        lifecycleScope.launchWhenStarted {
+//            coldFlow.collect{
+//                Log.v("ttaylor4","cold flow collect num=$it")
+//            }
+//        }
+
         /**
          * case: flowWithLifecycle will cancel all upstream emitting value when lifecycle state is below RESUMED
          */
-        lifecycleScope.launch {
-            coldFlow.combine(coldFlow2) { v1, v2 ->
-                v1 + v2
-            }.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect {
-                Log.v("ttaylor4", "combine two flow =${it}")
-            }
-        }
+//        lifecycleScope.launch {
+//            coldFlow.combine(coldFlow2) { v1, v2 ->
+//                v1 + v2
+//            }.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect {
+//                Log.v("ttaylor4", "combine two flow =${it}")
+//            }
+//        }
 
 
         /**
@@ -175,17 +254,19 @@ class FlowActivity : AppCompatActivity() {
          */
 //        lifecycleScope.launch {
 //            coldFlow.collect {
-//                Log.v("ttaylor", "cold flow it=${it}")
+//                Log.v("ttaylor5", "cold flow it=${it}")
 //            }
 //
+//        }
+//        lifecycleScope.launch {
 //            coldFlow.collect {
-//                Log.v("ttaylor", "cold flow collect twice=${it}")
+//                Log.v("ttaylor5","cold flow collect twice it=${it}")
 //            }
 //        }
 //
-//        /**
-//         * case: cold flow is collected in CoroutineScope ,the producer and consumer wont stop even if activity finished
-//         */
+        /**
+         * case: cold flow is collected in CoroutineScope ,the producer and consumer wont stop even if activity finished
+         */
 //        CoroutineScope(SupervisorJob()).launch {
 //            coldFlow.collect {
 //                Log.v("ttaylor", "cold flow2 collect in CoroutineScope it=${it}")
@@ -274,7 +355,8 @@ class FlowActivity : AppCompatActivity() {
                 delay(10)
                 emit(it)
             }
-        }.onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
+        }
+            .onEach { Log.v("ttaylor", "onEach() + onCompletion() + launchIn() ret=${it}") }
             .onCompletion {
                 if (it == null) Log.v(
                     "ttaylor",
@@ -282,6 +364,39 @@ class FlowActivity : AppCompatActivity() {
                 )
             }
             .launchIn(mainScope)
+
+        /**
+         * case: onCompletion is invoked after collect logic
+         */
+        lifecycleScope.launch {
+            flow {
+                emit(1)
+            }
+                .onCompletion { Log.v("ttaylor", "onCompletion") }
+                .collect {
+                    Log.v("ttaylor", "onCompletion collect()")
+                }
+        }
+
+        /**
+         * case: the onCompletion of each flow will be invoked when they are done
+         * the final completion will be invoked after all the things done
+         */
+        lifecycleScope.launch {
+            val flow1 = flow {
+                emit(1)
+            }.onCompletion { Log.v("ttaylor", "[completions] flow1 complete") }
+
+            val flow2 = flow {
+                delay(1000)
+                emit(2)
+            }.onCompletion { Log.v("ttaylor", "[completions] flow2 complete") }
+            flowOf(flow1, flow2).flattenMerge()
+                .onCompletion { Log.v("ttaylor", "[completions]final completion of 2 flows") }
+                .collect {
+                    Log.v("ttaylor", "[completions] collect")
+                }
+        }
 
         /**
          * case: flatMapConcat(), turn one emitted value into several values as Flow, and concat all values as sequence into one flow
@@ -396,3 +511,15 @@ fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -
         if (predicate(value)) emit(transform(value))
     }
 
+
+/**
+ * case: ui show collect flow in this way
+ * it will collect when lifecycle state is above [minActiveState] and stop when state is below
+ */
+fun <T> Flow<T>.collectIn(
+    lifecycleOwner: LifecycleOwner,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    action: (T) -> Unit
+): Job = lifecycleOwner.lifecycleScope.launch {
+    flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)
+}

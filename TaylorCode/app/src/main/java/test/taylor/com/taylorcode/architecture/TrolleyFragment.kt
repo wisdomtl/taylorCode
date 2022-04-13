@@ -7,16 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
+import androidx.lifecycle.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.print
 
 class TrolleyFragment : Fragment() {
 
-    private val myViewModel by lazy { ViewModelProvider(requireActivity()).get(MyViewModel::class.java) }
+    private val myViewModel by lazy { ViewModelProvider(requireActivity())[MyViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +79,26 @@ class TrolleyFragment : Fragment() {
                 goods.takeIf { it.size >= 2 }?.let {
                     Log.v("ttaylor", "selectsListFlow")
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                myViewModel.hotFlow.collect{
+                    Log.v("ttaylor","collect hot flow num=${it}")
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            myViewModel.oneShotStateFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect{
+                Log.v("ttaylor6","one shot collect =${it}")
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            myViewModel.oneShotSharedFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect{
+                Log.v("ttaylor7","one shot collect=$it")
             }
         }
     }

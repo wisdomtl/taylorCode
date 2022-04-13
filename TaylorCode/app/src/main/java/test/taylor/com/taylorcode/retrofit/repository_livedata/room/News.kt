@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class News(
     var path:String?,
     var image:String?,
-    @PrimaryKey
     var title:String,
-    var passtime:String?
+    var passtime:String?,
+    @PrimaryKey(autoGenerate = true)
+    val id:Int = 0
 )

@@ -18,4 +18,7 @@ interface NewsDao {
 
     @Query("select * from news")
     fun queryNewsFlow(): Flow<List<News>?>
+
+    @Query("delete from news")
+    fun deleteAllNews(): Int
 }

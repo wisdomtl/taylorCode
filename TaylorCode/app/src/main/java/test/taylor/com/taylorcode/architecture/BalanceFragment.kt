@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
 
 class BalanceFragment:Fragment() {
@@ -31,5 +34,16 @@ class BalanceFragment:Fragment() {
 //        myViewModel.selectsListLiveData.observe(viewLifecycleOwner) {
 //            Log.v("ttaylor","onViewCreated() size=${it.size}")
 //        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            myViewModel.oneShotStateFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect{
+                Log.v("ttaylor6","one shot collect in another fragment = $it")
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            myViewModel.oneShotSharedFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect{
+                Log.v("ttaylor7","one shot collect in another fragment = $it")
+            }
+        }
     }
 }
