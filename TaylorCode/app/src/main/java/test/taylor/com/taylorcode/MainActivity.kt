@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.audio.encoder.HWRecorderActivity
@@ -116,7 +119,10 @@ class MainActivity : BaseActivity() {
     }
 
     private fun readPhoneInfo() {
-        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}")
+        Log.v(
+            "ttaylor",
+            "tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}"
+        )
         Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
         Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
     }
@@ -274,6 +280,55 @@ class MainActivity : BaseActivity() {
         //SAM case:
         val onClickListener = View.OnClickListener { Log.v("ttaylor", "tag=SAM, view id=${it.id}") }
 
+        /**
+         * case: list.flat and list.flatMap
+         */
+        val lists = listOf(
+            listOf(1, 2, 3),
+            listOf(4, 5, 6)
+        )
+
+        Log.v("ttaylor", "[flatten] list.flatten=${lists.flatten()}")
+        Log.v("ttaylor", "[flatten] list.=${lists.flatMap { it.map { it + 1 } }}")
+
+
+        /**
+         * case:  flow.flatMapConcat
+         */
+        fun plusFlow(num: Int) = flow {
+            emit(num + 1)
+            kotlinx.coroutines.delay(1000)
+        }
+
+        lifecycleScope.launch {
+            /**
+             * turn Flow<Int> into Flow<Flow<Int>> and flat it
+             */
+            (1..6).asFlow().flatMapConcat { plusFlow(it) }.collect {
+                Log.v("ttaylor", "[flatMapConcat] num=${it}")
+            }
+        }
+
+        /**
+         * case: concat flows by serial
+         */
+        lifecycleScope.launch {
+            flowOf(
+                flow {
+                    emit(1)
+                    emit(2)
+                },
+                flow { emit(3) },
+                flow {
+                    emit(4)
+                    emit(5)
+                },
+            ).flattenConcat().collect {
+                Log.v("ttaylor", "[flattenConcat] num=${it}")
+            }
+        }
+
+
         btn_room.setOnClickListener(onClickListener)
         1280.fmtCount().let { Log.v("ttaylor", "tag=aaaadf, MainActivity.initView()  it=${it}") }
 
@@ -298,10 +353,12 @@ class MainActivity : BaseActivity() {
             gravity = gravity_center
         }
 
-        contentView()?.addView(tv, android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
-            this.topMargin = 100.dp
-            this.marginStart = 50.dp
-        })
+        contentView()?.addView(
+            tv,
+            android.widget.FrameLayout.LayoutParams(wrap_content, wrap_content).apply {
+                this.topMargin = 100.dp
+                this.marginStart = 50.dp
+            })
 
         val atString = "//@有毛病：早安哦//@天天：小甜甜"
 
@@ -319,7 +376,12 @@ class MainActivity : BaseActivity() {
 
     }
 
-    fun String.splitAtString(onEach: (String, Boolean) -> Unit, onEntryEnd: () -> Unit, onSubEntryEnd: () -> Unit) {
+
+    private fun String.splitAtString(
+        onEach: (String, Boolean) -> Unit,
+        onEntryEnd: () -> Unit,
+        onSubEntryEnd: () -> Unit
+    ) {
         val entryList = split("//")
         entryList.forEachIndexed { index, s ->
             val subEntryList = s.split("：")
@@ -414,8 +476,12 @@ interface MessageHandler<T : Message> {
     fun handleMessage(message: T)
 }
 
-class VoiceMessage(id: String = "", content: String = "", val voiceData: String = "") : Message(id, content)
-class VideoMessage(id: String = "", content: String = "", val videoData: String = "") : Message(id, content)
+class VoiceMessage(id: String = "", content: String = "", val voiceData: String = "") :
+    Message(id, content)
+
+class VideoMessage(id: String = "", content: String = "", val videoData: String = "") :
+    Message(id, content)
+
 class VoiceMessageHandler : MessageHandler<VoiceMessage> {
     override fun handleMessage(message: VoiceMessage) {
         Log.v("ttaylor", "voice message is handled id = ${message.id} data=${message.voiceData}")

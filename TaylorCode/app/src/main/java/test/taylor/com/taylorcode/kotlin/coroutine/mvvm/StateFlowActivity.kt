@@ -28,11 +28,11 @@ import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
 
 class StateFlowActivity : AppCompatActivity() {
 
-    private val userInfoViewModel by lazy {
+    private val newsViewModel by lazy {
         ViewModelProvider(
             this,
             NewsViewModelFactory(NewsRepo(this))
-        )[UserInfoViewModel::class.java]
+        )[NewsViewModel::class.java]
     }
 
     private lateinit var tv: TextView
@@ -106,7 +106,7 @@ class StateFlowActivity : AppCompatActivity() {
 //            }
 //        }
 
-        userInfoViewModel.newsFlow.collectIn(this) { showNews(it) }
+        newsViewModel.newsFlow.collectIn(this) { showNews(it) }
     }
 
     private fun showUserName(userInfo: UserInfoModel) {
@@ -119,12 +119,19 @@ class StateFlowActivity : AppCompatActivity() {
     }
 
     private fun showNews(newsModel: NewsModel) {
-        if (newsModel.loading) {
-            showLoading()
-        } else {
-            dismissLoading()
-            newsAdapter.news = newsModel.news
-            rvNews.adapter = newsAdapter
+        when {
+            newsModel.loading -> {
+                showLoading()
+            }
+            newsModel.errorMessage.isEmpty() -> {
+                dismissLoading()
+                newsAdapter.news = newsModel.news
+                rvNews.adapter = newsAdapter
+            }
+            else -> {
+                dismissLoading()
+                tv.text = newsModel.errorMessage
+            }
         }
     }
 }

@@ -5,5 +5,6 @@ import test.taylor.com.taylorcode.retrofit.News
 
 data class NewsModel(
     val news: List<News>,
-    val loading: Boolean
+    val loading: Boolean,
+    val errorMessage: String = ""
 )

@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.6.20-M1'
-    ext.kotlinCoroutine = '1.6.0'
+    ext.kotlinCoroutine = '1.6.1'
     repositories {
         jcenter()
         google()

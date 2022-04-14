@@ -14,6 +14,16 @@ data class News(
     @SerializedName("image") var image: String?,
     @SerializedName("title") var title: String?,
     @SerializedName("passtime") var passtime: String?
-){
-    fun toNews() = test.taylor.com.taylorcode.retrofit.repository_livedata.room.News(path,image,title.value,passtime)
+) {
+    fun toNews() = test.taylor.com.taylorcode.retrofit.repository_livedata.room.News(
+        path,
+        image,
+        title.value,
+        passtime
+    )
 }
+
+data class NewsFlowWrapper(
+    val news: List<News>,
+    val abort: Boolean
+)

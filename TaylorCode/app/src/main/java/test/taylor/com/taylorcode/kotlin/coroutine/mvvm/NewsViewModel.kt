@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.kotlin.coroutine.mvvm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -7,8 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.net.ssl.SSLHandshakeException
 
-class UserInfoViewModel(private val newsRepo: NewsRepo) : ViewModel() {
+class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
     private val _userInfoStateFlow = MutableStateFlow(UserInfoModel(loading = true))
     val userInfoStateFlow: StateFlow<UserInfoModel> = _userInfoStateFlow
 
@@ -34,9 +36,32 @@ class UserInfoViewModel(private val newsRepo: NewsRepo) : ViewModel() {
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     val newsFlow =
-        flowOf(newsRepo.localNewsFlow, newsRepo.remoteNewsFlow)
+        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow)
             .flattenMerge()
+            .transformWhile {
+                emit(it.news)
+                !it.abort
+            }
             .map { NewsModel(it, false) }
+            .flowOn(Dispatchers.IO) // case: change the upstream thread
+            .onStart { emit(NewsModel(emptyList(), true)) }
+            .catch {
+                if (it is SSLHandshakeException)
+                    emit(
+                        NewsModel(
+                            emptyList(),
+                            false,
+                            "network error,show old news"
+                        )
+                    )
+            }
+            .stateIn(viewModelScope, SharingStarted.Lazily,NewsModel(emptyList(), true))
+            .shareIn(viewModelScope, SharingStarted.Lazily)
+
+    val newsSerialFlow =
+        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow)
+            .flattenConcat()
+            .map { NewsModel(it.news, false) }
             .flowOn(Dispatchers.IO) // case: change the upstream thread
             .onStart { emit(NewsModel(emptyList(), true)) }
             .shareIn(viewModelScope, SharingStarted.Lazily)
@@ -47,6 +72,6 @@ class UserInfoViewModel(private val newsRepo: NewsRepo) : ViewModel() {
  */
 class NewsViewModelFactory(private val newsRepo: NewsRepo) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return UserInfoViewModel(newsRepo) as T
+        return NewsViewModel(newsRepo) as T
     }
 }

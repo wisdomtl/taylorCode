@@ -19,6 +19,9 @@ interface NewsDao {
     @Query("select * from news")
     fun queryNewsFlow(): Flow<List<News>?>
 
+    @Query("select * from news")
+    suspend fun queryNewsSuspend(): List<News>
+
     @Query("delete from news")
     fun deleteAllNews(): Int
 }

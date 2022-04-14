@@ -144,15 +144,60 @@ class FlowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
+        /**
+         * case: kotlin flow zip, combine the first value of flow1 with the first value of flow2, and so on
+         * if flow2's value is more than flow1,than the remain value wont be emitted
+         */
+        val flowQ = (1..10).asFlow().onEach { delay(1000) }
+        val flowW = listOf("A", "B", "C").asFlow().onEach { delay(1000) }
+        lifecycleScope.launch {
+            flowQ.zip(flowW) { int, string -> "$int$string" }
+                .flowOn(Dispatchers.IO)
+                .collect{
+                    Log.v("ttaylor","[zip] ret=$it")// 1A,2B,3C
+                }
+        }
+
+        /**
+         * case: takeUntil operator of Kotlin Flow
+         * abort another flow when sth happened in current flow
+         */
+        val flowA = flow {
+            repeat(30) {
+                emit(it)
+                Log.v("ttaylor", "[transformWhile] flowA emit ${it}")
+                delay(1000)
+            }
+        }
+        val flowB = flow {
+            repeat(20) {
+                emit(it * it)
+                Log.v("ttaylor", "[transformWhile] flowB emit ${it * it}")
+                delay(1000)
+            }
+        }
+        lifecycleScope.launch {
+            flowOf(flowA, flowB)
+                .flattenMerge()
+                .flowOn(Dispatchers.IO)
+                .transformWhile {
+                    emit(it)
+                    it != 4
+                }.collect {
+                    Log.v("ttaylor", "[transformWhile] collect ${it}")
+                }
+
+        }
+
 
         /**
          * case: keep the upstream alive for 5000 ms when ui is not alive
          */
-        lifecycleScope.launch {
-            flowViewModel.hotStateFlow.flowWithLifecycle(lifecycle).collect {
-                Log.v("ttaylor4", "onCreate() num=${it}")
-            }
-        }
+//        lifecycleScope.launch {
+//            flowViewModel.hotStateFlow.flowWithLifecycle(lifecycle).collect {
+//                Log.v("ttaylor4", "onCreate() num=${it}")
+//            }
+//        }
 
         /**
          * case: even if asLiveData is used ,the upstream cold flow will fire again when this activity is restart

@@ -10,5 +10,5 @@ import test.taylor.com.taylorcode.retrofit.NewsBean
 interface NewsApi {
     @FormUrlEncoded
     @POST("/getWangYiNews")
-    fun fetchNews(@FieldMap map:Map<String,String>): Call<NewsBean>
+    suspend fun fetchNews(@FieldMap map:Map<String,String>): NewsBean
 }
