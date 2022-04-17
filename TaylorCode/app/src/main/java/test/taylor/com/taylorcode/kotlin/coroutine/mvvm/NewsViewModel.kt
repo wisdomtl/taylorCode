@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.kotlin.coroutine.mvvm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,8 +10,21 @@ import kotlinx.coroutines.launch
 import javax.net.ssl.SSLHandshakeException
 
 class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
-    private val _userInfoStateFlow = MutableStateFlow(UserInfoModel(loading = true))
+    private val _feedsIntent = MutableSharedFlow<FeedsIntent>()
+
+    val newsState =
+        _feedsIntent
+            .toNewsStateFlow()
+            .flowOn(Dispatchers.IO)
+            .shareIn(viewModelScope, SharingStarted.Eagerly)
+
+    val _userInfoStateFlow = MutableStateFlow(UserInfoModel(loading = true))
     val userInfoStateFlow: StateFlow<UserInfoModel> = _userInfoStateFlow
+
+
+    fun send(intent: FeedsIntent) {
+        viewModelScope.launch { _feedsIntent.emit(intent) }
+    }
 
     /**
      * case: use StateFlow like LiveData
@@ -36,35 +48,75 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     val newsFlow =
-        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow)
+        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow("1", "8"))
             .flattenMerge()
             .transformWhile {
                 emit(it.news)
                 !it.abort
             }
-            .map { NewsModel(it, false) }
+            .map { NewsState(it, false) }
             .flowOn(Dispatchers.IO) // case: change the upstream thread
-            .onStart { emit(NewsModel(emptyList(), true)) }
+            .onStart { emit(NewsState(emptyList(), true)) }
             .catch {
                 if (it is SSLHandshakeException)
                     emit(
-                        NewsModel(
+                        NewsState(
                             emptyList(),
                             false,
                             "network error,show old news"
                         )
                     )
             }
-            .stateIn(viewModelScope, SharingStarted.Lazily,NewsModel(emptyList(), true))
             .shareIn(viewModelScope, SharingStarted.Lazily)
 
+    /**
+     * case: multiple flow in serial
+     */
     val newsSerialFlow =
-        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow)
+        flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow("1", "8"))
             .flattenConcat()
-            .map { NewsModel(it.news, false) }
+            .map { NewsState(it.news, false) }
             .flowOn(Dispatchers.IO) // case: change the upstream thread
-            .onStart { emit(NewsModel(emptyList(), true)) }
+            .onStart { emit(NewsState(emptyList(), true)) }
             .shareIn(viewModelScope, SharingStarted.Lazily)
+
+    /**
+     * case: turn Intent flow to state flow
+     */
+    private fun Flow<FeedsIntent>.toNewsStateFlow(): Flow<NewsState> = merge(
+        filterIsInstance<FeedsIntent.InitIntent>()
+            .flatMapConcat { it.toFetchInitPageFlow() },
+        filterIsInstance<FeedsIntent.RemoveIntent>()
+            .flatMapConcat { flow { } },
+        filterIsInstance<FeedsIntent.MorePageIntent>()
+            .flatMapConcat { flow { } }
+    )
+
+    /**
+     * case: turn Intent to network fetching flow
+     */
+    private fun FeedsIntent.InitIntent.toFetchInitPageFlow() =
+        flowOf(
+            newsRepo.localNewsOneShotFlow,
+            newsRepo.remoteNewsFlow(this.type.toString(), this.count.toString())
+        )
+            .flattenMerge()
+            .transformWhile {
+                emit(it.news)
+                !it.abort
+            }
+            .map { NewsState(it, false) }
+            .onStart { emit(NewsState(emptyList(), true)) }
+            .catch {
+                if (it is SSLHandshakeException)
+                    emit(
+                        NewsState(
+                            emptyList(),
+                            false,
+                            "network error,show old news"
+                        )
+                    )
+            }
 }
 
 /**
@@ -74,4 +126,11 @@ class NewsViewModelFactory(private val newsRepo: NewsRepo) : ViewModelProvider.F
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return NewsViewModel(newsRepo) as T
     }
+}
+
+
+sealed class FeedsIntent {
+    data class InitIntent(val type: Int, val count: Int) : FeedsIntent()
+    data class MorePageIntent(val timestamp: Long, val count: Int) : FeedsIntent()
+    data class RemoveIntent(val id: Long) : FeedsIntent()
 }

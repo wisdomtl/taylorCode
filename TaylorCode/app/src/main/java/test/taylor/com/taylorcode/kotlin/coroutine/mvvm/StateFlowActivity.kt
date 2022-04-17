@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
@@ -38,6 +42,15 @@ class StateFlowActivity : AppCompatActivity() {
     private lateinit var tv: TextView
     private lateinit var rvNews: RecyclerView
     private var newsAdapter = NewsAdapter()
+
+    /**
+     * case: MVI flow style
+     */
+    private val intents by lazy {
+        merge(
+            flowOf(FeedsIntent.InitIntent(1, 5))
+        )
+    }
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -106,7 +119,20 @@ class StateFlowActivity : AppCompatActivity() {
 //            }
 //        }
 
-        newsViewModel.newsFlow.collectIn(this) { showNews(it) }
+//        newsViewModel.newsFlow.collectIn(this) { showNews(it) }
+
+        /**
+         * case: MVI flow style
+         */
+        intents
+            .onEach(newsViewModel::send)
+            .launchIn(lifecycleScope)
+
+        /**
+         * case: MVI flow style
+         */
+        newsViewModel.newsState
+            .collectIn(this) { showNews(it) }
     }
 
     private fun showUserName(userInfo: UserInfoModel) {
@@ -118,7 +144,7 @@ class StateFlowActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNews(newsModel: NewsModel) {
+    private fun showNews(newsModel: NewsState) {
         when {
             newsModel.loading -> {
                 showLoading()

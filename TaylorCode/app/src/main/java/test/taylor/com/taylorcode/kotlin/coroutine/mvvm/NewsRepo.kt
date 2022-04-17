@@ -85,22 +85,25 @@ class NewsRepo(context: Context) {
 //        }
 //    }
 
-    val remoteNewsFlow = flow {
-        val newsBean = newApi.fetchNews(mapOf("page" to "1", "count" to "8"))
-        Log.v("ttaylor", "[collect news] remote new flow thread=${Thread.currentThread().id}")
-        emit(newsBean)
-    }.map { newsBean ->
-        if (newsBean.code == 200) {
-            if (!newsBean.result.isNullOrEmpty()) {
-                newsDao.deleteAllNews()
-                newsDao.insertAll(newsBean.result.map { it.toNews() })
-                NewsFlowWrapper(newsBean.result, true)
-            } else {
-                NewsFlowWrapper(emptyList(), false)
-            }
-        } else {
-            throw Exception(newsBean.message)
+    fun remoteNewsFlow(page: String, count: String) =
+        suspend {
+            val newsBean = newApi.fetchNews(mapOf("page" to page, "count" to count))
+            Log.v("ttaylor", "[collect news] remote new flow thread=${Thread.currentThread().id}")
+            newsBean
         }
-    }
+            .asFlow()
+            .map { newsBean ->
+                if (newsBean.code == 200) {
+                    if (!newsBean.result.isNullOrEmpty()) {
+                        newsDao.deleteAllNews()
+                        newsDao.insertAll(newsBean.result.map { it.toNews() })
+                        NewsFlowWrapper(newsBean.result, true)
+                    } else {
+                        NewsFlowWrapper(emptyList(), false)
+                    }
+                } else {
+                    throw Exception(newsBean.message)
+                }
+            }
 }
 

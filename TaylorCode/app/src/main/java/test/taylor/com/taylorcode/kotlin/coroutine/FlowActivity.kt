@@ -153,8 +153,8 @@ class FlowActivity : AppCompatActivity() {
         lifecycleScope.launch {
             flowQ.zip(flowW) { int, string -> "$int$string" }
                 .flowOn(Dispatchers.IO)
-                .collect{
-                    Log.v("ttaylor","[zip] ret=$it")// 1A,2B,3C
+                .collect {
+                    Log.v("ttaylor", "[zip] ret=$it")// 1A,2B,3C
                 }
         }
 
