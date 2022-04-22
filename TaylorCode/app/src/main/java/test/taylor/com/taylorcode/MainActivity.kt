@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.annotations.AnnotationActivity2
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.audio.encoder.HWRecorderActivity
@@ -276,6 +277,7 @@ class MainActivity : BaseActivity() {
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btnStickyFragment.setOnClickListener { startActivity<StickyLiveDataActivity> { } }
         btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
+        annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
 
 
         //SAM case:

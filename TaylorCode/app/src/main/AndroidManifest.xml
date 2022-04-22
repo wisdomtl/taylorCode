@@ -254,6 +254,7 @@
         <activity android:name=".architecture.LiveDataActivity" />
         <activity android:name=".architecture.StickyLiveDataActivity" />
         <activity android:name=".kotlin.coroutine.mvvm.StateFlowActivity" />
+        <activity android:name=".annotations.AnnotationActivity2" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
