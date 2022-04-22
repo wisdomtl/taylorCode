@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.IntDef;
+
 import test.taylor.com.taylorcode.proxy.system.FakeActivity;
 
 public class HookSystemServiceActivity extends Activity {
@@ -20,7 +22,29 @@ public class HookSystemServiceActivity extends Activity {
                 startActivity(intent);
             }
         });
+        /**
+         * case: @IntDef, limit the value before compile
+         */
+//        setType(3);// there is an error
+
     }
 
+    /**
+     * case: use new annotation
+     * @param type
+     */
+    private void setType(@MyType int type){
+
+    }
+
+    /**
+     * case: define annotation
+     */
+    @IntDef({TYPE1, TYPE2})
+    @interface MyType {
+    }
+
+    public static final int TYPE1 = 1;
+    public static final int TYPE2 = 2;
 
 }

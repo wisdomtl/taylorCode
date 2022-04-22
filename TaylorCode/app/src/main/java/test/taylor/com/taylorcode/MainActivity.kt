@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.IntDef
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.flow.*
@@ -417,6 +418,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.v("ttaylor", "MainActivity.onSaveInstanceState()" + "  ")
@@ -505,3 +507,12 @@ class MessageReceiver {
         (messageHandlerMap[message::class] as? MessageHandler<Message>)?.handleMessage(message)
     }
 }
+
+/**
+ * case: @IntDef in kotlin
+ */
+@IntDef(INT1, INT2)
+annotation class IntType
+
+const val INT1 = 1
+const val INT2 = 2
