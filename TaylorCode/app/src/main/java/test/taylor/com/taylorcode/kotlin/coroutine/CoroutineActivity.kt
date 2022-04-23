@@ -29,320 +29,325 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var tvCountdown: TextView
 
     private val rootView by lazy {
-        LinearLayout {
+        NestedScrollView {
             layout_width = match_parent
             layout_height = match_parent
-            orientation = vertical
 
-            Button {
-                layout_width = wrap_content
-                layout_height = wrap_content
-                textSize = 20f
-                text = "supervisor Job"
-                textAllCaps = false
-                onClick = supervisorJob
-            }
-
-            EditText {
-                layout_width = match_parent
-                layout_height = 40
-                setDebounceListener(500) {
-                    Log.v("ttaylor", "shake less edit text listener char=${it}")
-                }
-            }
-
-            tvCountdown = TextView {
-                layout_width = match_parent
-                layout_height = wrap_content
-                gravity = gravity_center
-                textSize = 25f
-            }
-
-            Button {
-                layout_width = wrap_content
-                layout_height = wrap_content
-                textSize = 20f
-                text = "timeout and async"
-                textAllCaps = false
-                onClick = withTimeoutAndAsync
-            }
-            Button {
-                layout_width = wrap_content
-                layout_height = wrap_content
-                textSize = 20f
-                text = "withTimeout"
-                textAllCaps = false
-                onClick = withTimeout
-            }
             LinearLayout {
                 layout_width = match_parent
-                layout_height = wrap_content
-                orientation = horizontal
-
-                Button {
-                    layout_width = wrap_content
-                    layout_height = wrap_content
-                    textSize = 10f
-                    text = "GlobalScope no structure concurrency"
-                    textAllCaps = false
-                    onClick = globalScopeNoJob
-                }
-                Button {
-                    layout_width = wrap_content
-                    layout_height = wrap_content
-                    textSize = 10f
-                    text = "coroutineScope has structure concurrency "
-                    textAllCaps = false
-                    onClick = scopeCoroutineParentJob
-                }
-            }
-            Button {
-                layout_width = wrap_content
-                layout_height = wrap_content
-                textSize = 20f
-                text = "Global scope wont wait all child coroutine"
-                textAllCaps = false
-                onClick = globalScopeNoWaitChildCoroutine
-            }
-            LinearLayout {
-                layout_width = match_parent
-                layout_height = wrap_content
-                orientation = horizontal
+                layout_height = match_parent
+                orientation = vertical
 
                 Button {
                     layout_width = wrap_content
                     layout_height = wrap_content
                     textSize = 20f
-                    text = "stop main scope"
+                    text = "supervisor Job"
                     textAllCaps = false
-                    onClick = cancelMainScope
+                    onClick = supervisorJob
+                }
+
+                EditText {
+                    layout_width = match_parent
+                    layout_height = 40
+                    setDebounceListener(500) {
+                        Log.v("ttaylor", "shake less edit text listener char=${it}")
+                    }
+                }
+
+                tvCountdown = TextView {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    gravity = gravity_center
+                    textSize = 25f
+                }
+
+                Button {
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 20f
+                    text = "timeout and async"
+                    textAllCaps = false
+                    onClick = withTimeoutAndAsync
                 }
                 Button {
                     layout_width = wrap_content
                     layout_height = wrap_content
                     textSize = 20f
-                    text = "mainScope will stop"
+                    text = "withTimeout"
                     textAllCaps = false
-                    onClick = mainScopeWillStop
+                    onClick = withTimeout
                 }
-            }
-            LinearLayout {
-                layout_width = match_parent
-                layout_height = wrap_content
-                orientation = horizontal
+                LinearLayout {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    orientation = horizontal
 
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 10f
+                        text = "GlobalScope no structure concurrency"
+                        textAllCaps = false
+                        onClick = globalScopeNoJob
+                    }
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 10f
+                        text = "coroutineScope has structure concurrency "
+                        textAllCaps = false
+                        onClick = scopeCoroutineParentJob
+                    }
+                }
                 Button {
                     layout_width = wrap_content
                     layout_height = wrap_content
                     textSize = 20f
-                    text = "stop global scope"
+                    text = "Global scope wont wait all child coroutine"
                     textAllCaps = false
-                    onClick = cancelGlobalScope
+                    onClick = globalScopeNoWaitChildCoroutine
+                }
+                LinearLayout {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    orientation = horizontal
+
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 20f
+                        text = "stop main scope"
+                        textAllCaps = false
+                        onClick = cancelMainScope
+                    }
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 20f
+                        text = "mainScope will stop"
+                        textAllCaps = false
+                        onClick = mainScopeWillStop
+                    }
+                }
+                LinearLayout {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    orientation = horizontal
+
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 20f
+                        text = "stop global scope"
+                        textAllCaps = false
+                        onClick = cancelGlobalScope
+                    }
+                    Button {
+                        layout_width = wrap_content
+                        layout_height = wrap_content
+                        textSize = 20f
+                        text = "GlobalScope wont stop"
+                        textAllCaps = false
+                        onClick = globalScopeWontCancel
+                    }
+
+                }
+
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "coroutineScope waiting for all sub launch finish"
+                    textAllCaps = false
+                    onClick = coroutineScopeWaitSubLaunch
                 }
                 Button {
-                    layout_width = wrap_content
+                    layout_width = match_parent
                     layout_height = wrap_content
-                    textSize = 20f
-                    text = "GlobalScope wont stop"
+                    textSize = 15f
+                    text = "coroutineScope waiting for all sub async finish"
                     textAllCaps = false
-                    onClick = globalScopeWontCancel
+                    onClick = coroutineScopeWaitSubAsync
+                }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "coroutineScope2"
+                    textAllCaps = false
+                    onClick = coroutineScope2
+                }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "dispatch coroutin by customized thread"
+                    textAllCaps = false
+                    onClick = dispatchCoroutineByCustomThread
                 }
 
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "customContinuation"
+                    textAllCaps = false
+                    onClick = customContinuation
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "coroutineScope waiting for all sub launch finish"
-                textAllCaps = false
-                onClick = coroutineScopeWaitSubLaunch
-            }
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "coroutineScope waiting for all sub async finish"
-                textAllCaps = false
-                onClick = coroutineScopeWaitSubAsync
-            }
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "coroutineScope2"
-                textAllCaps = false
-                onClick = coroutineScope2
-            }
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "dispatch coroutin by customized thread"
-                textAllCaps = false
-                onClick = dispatchCoroutineByCustomThread
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "launch+async"
+                    textAllCaps = false
+                    onClick = launchAsync
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "customContinuation"
-                textAllCaps = false
-                onClick = customContinuation
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "coroutineScope"
+                    textAllCaps = false
+                    onClick = coroutineScope
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "launch+async"
-                textAllCaps = false
-                onClick = launchAsync
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "async"
+                    textAllCaps = false
+                    onClick = async
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "coroutineScope"
-                textAllCaps = false
-                onClick = coroutineScope
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start coroutine with different option"
+                    textAllCaps = false
+                    onClick = startCoroutineByDifferentOption
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "async"
-                textAllCaps = false
-                onClick = async
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start long run coroutine by MainScope"
+                    textAllCaps = false
+                    onClick = startLongRunCoroutineByMainScope
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start coroutine with different option"
-                textAllCaps = false
-                onClick = startCoroutineByDifferentOption
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start coroutine by MainScope"
+                    textAllCaps = false
+                    onClick = startCoroutineByMainScope
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start long run coroutine by MainScope"
-                textAllCaps = false
-                onClick = startLongRunCoroutineByMainScope
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start coroutine in background"
+                    textAllCaps = false
+                    onClick = startCoroutineInBackground
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start coroutine by MainScope"
-                textAllCaps = false
-                onClick = startCoroutineByMainScope
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start coroutine by default"
+                    textAllCaps = false
+                    onClick = startCoroutineByDefault
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start coroutine in background"
-                textAllCaps = false
-                onClick = startCoroutineInBackground
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "start coroutine in main thread"
+                    textAllCaps = false
+                    onClick = startCoroutineInMainThread
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start coroutine by default"
-                textAllCaps = false
-                onClick = startCoroutineByDefault
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    text = "cancel coroutine"
+                    textAllCaps = false
+                    onClick = doCancelCoroutine
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "start coroutine in main thread"
-                textAllCaps = false
-                onClick = startCoroutineInMainThread
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "the end of two async task"
+                    onClick = twoTaskEnd
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                text = "cancel coroutine"
-                textAllCaps = false
-                onClick = doCancelCoroutine
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "timeout"
+                    onClick = onTimeout
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "the end of two async task"
-                onClick = twoTaskEnd
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "run task parallel"
+                    onClick = runTaskParallel
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "timeout"
-                onClick = onTimeout
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "run task parallel by launch"
+                    onClick = runTaskParallelByLaunch
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "run task parallel"
-                onClick = runTaskParallel
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "long run task(activity not destroy)"
+                    onClick = startLongRunTask
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "run task parallel by launch"
-                onClick = runTaskParallelByLaunch
-            }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "join"
+                    onClick = join
+                }
 
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "long run task(activity not destroy)"
-                onClick = startLongRunTask
-            }
-
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "join"
-                onClick = join
-            }
-
-            Button {
-                layout_width = match_parent
-                layout_height = wrap_content
-                textSize = 15f
-                textAllCaps = false
-                text = "suspend coroutine"
-                onClick = suspendCoroutine
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    textSize = 15f
+                    textAllCaps = false
+                    text = "suspend coroutine"
+                    onClick = suspendCoroutine
+                }
             }
         }
     }
@@ -572,6 +577,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             tvCountdown.text = user.await()
             Log.v("ttaylor", "tag=LogContinuation, 3  thread id=${Thread.currentThread().id}")
         }
+        Log.v("ttaylor", "tag=LogContinuation, 4  thread id=${Thread.currentThread().id}")
         Unit
     }
 

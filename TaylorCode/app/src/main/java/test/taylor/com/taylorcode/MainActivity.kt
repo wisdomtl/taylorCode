@@ -278,6 +278,7 @@ class MainActivity : BaseActivity() {
         btnStickyFragment.setOnClickListener { startActivity<StickyLiveDataActivity> { } }
         btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
         annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
+        coroutineException.setOnClickListener { startActivity<CoroutineActivity3> { } }
 
 
         //SAM case:

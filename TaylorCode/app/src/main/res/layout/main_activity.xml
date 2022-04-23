@@ -9,6 +9,20 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/coroutineException"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="exception in coroutine"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_coroutine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="coroutine"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/annotation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -260,12 +274,7 @@
             android:layout_height="wrap_content"
             android:text="touch delegate"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_coroutine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="coroutine"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btnTimePicker"
             android:layout_width="match_parent"
