@@ -280,6 +280,8 @@ class MainActivity : BaseActivity() {
         annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
         coroutineException.setOnClickListener { startActivity<CoroutineActivity3> { } }
         btnExceptionCoroutine.setOnClickListener { startActivity<CoroutineExceptionActivity> { } }
+        btnStructConcurrency.setOnClickListener { startActivity<StructureConcurrencyActivity> { } }
+        continuation.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.mvvm.SuspendCoroutineActivity> { } }
 
 
         //SAM case:

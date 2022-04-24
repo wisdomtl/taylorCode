@@ -9,6 +9,21 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/continuation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="coroutine resume"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnStructConcurrency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="structure concurrency"
+            android:textAllCaps="false" />
+
+
+        <Button
             android:id="@+id/btnExceptionCoroutine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
