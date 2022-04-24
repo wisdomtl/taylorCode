@@ -279,6 +279,7 @@ class MainActivity : BaseActivity() {
         btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
         annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
         coroutineException.setOnClickListener { startActivity<CoroutineActivity3> { } }
+        btnExceptionCoroutine.setOnClickListener { startActivity<CoroutineExceptionActivity> { } }
 
 
         //SAM case:

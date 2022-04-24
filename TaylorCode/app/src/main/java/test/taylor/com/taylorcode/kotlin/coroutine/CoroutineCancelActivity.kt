@@ -62,8 +62,84 @@ class CoroutineCancelActivity : AppCompatActivity() {
                     text = "mainScope.launch + sub coroutine exception +out try catch"
                     onClick = main_scope_sub_coroutine_exception_out_try_catch
                 }
+
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "coroutineScope cancel in sub launch"
+                    onClick = coroutineScope_cancel
+                }
+
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "supervisorScope"
+                    onClick = supervisorScope_cancel
+                }
             }
         )
+    }
+
+    /**
+     * case: sub coroutine in coroutineScope throw exception will cancel the sibling coroutine and coroutineScope and grandfather scope
+     */
+    val handler = CoroutineExceptionHandler { v1, v2 ->
+        Log.v("ttaylor", "[coroutineScope.cancel] exception of sub coroutine")
+    }
+    val coroutineScope_cancel = { _: View ->
+        MainScope().launch(handler) {
+            coroutineScope {
+                launch {// exception handle in this launch has no effect
+                    Log.v("ttaylor", "[coroutineScope.cancel] launch 1()")
+                    delay(2000)
+                    throw Exception() // will cancel the sibling coroutine and father coroutineScope and grandfather scope
+                }
+                launch {
+                    repeat(10) { // the sibling coroutine will be canceled due to Exception in another coroutine
+                        delay(1000)
+                        Log.v("ttaylor", "[coroutineScope.cancel]() num=$it, isActive=$isActive")
+                    }
+                }
+                delay(5000)
+                Log.v(
+                    "ttaylor",
+                    "[coroutineScope.cancel] end of coroutineScope"
+                )// this wont be print due sub coroutine of coroutineScope throw an Exception
+            }
+            Log.v("ttaylor", "[coroutineScope.cancel] outer scope()")
+        }
+        Unit
+    }
+
+    /**
+     * case: supervisorScope has the opposite effect compared to coroutineScope
+     */
+    val handler2 = CoroutineExceptionHandler { v1, v2 ->
+        Log.v("ttaylor", "[supervisorScope.cancel] exception of sub coroutine")
+    }
+    val supervisorScope_cancel = { _: View ->
+        MainScope().launch {
+            supervisorScope {
+                launch(handler2) {// exception handle in this launch do have  effect
+                    Log.v("ttaylor", "[supervisorScope.cancel] launch 1()")
+                    delay(2000)
+                    throw Exception() // will not cancel the sibling coroutine and father coroutineScope and grandfather scope
+                }
+                launch {
+                    repeat(10) { // the sibling coroutine wont canceled due to Exception in another coroutine
+                        delay(1000)
+                        Log.v("ttaylor", "[supervisorScope.cancel]() num=$it, isActive=$isActive")
+                    }
+                }
+                delay(5000)
+                Log.v(
+                    "ttaylor",
+                    "[supervisorScope.cancel] end of supervisorScope"
+                )// this will be print
+            }
+            Log.v("ttaylor", "[supervisorScope.cancel] outer scope()")
+        }
+        Unit
     }
 
     /**
@@ -124,7 +200,7 @@ class CoroutineCancelActivity : AppCompatActivity() {
         mainScope.launch {
             Log.i(TAG, "main scope start ")
             try {
-                 loadDataByGlobalLaunch_exception()
+                loadDataByGlobalLaunch_exception()
             } catch (e: Exception) {
             }
             Log.i(TAG, "main scope end ")
@@ -161,7 +237,7 @@ class CoroutineCancelActivity : AppCompatActivity() {
     private suspend fun loadDataByGlobalLaunch_exception() = GlobalScope.launch {
         Log.i(TAG, "--loadDataByGlobalLaunch_exception: start")
         val user = async(Dispatchers.IO) { queryUser("dkfdk", 6000) }
-        val gift = async (Dispatchers.IO) { fetchGiftThrowException(3000) }
+        val gift = async(Dispatchers.IO) { fetchGiftThrowException(3000) }
         Log.i(TAG, "--loadDataByGlobalLaunch_exception: end")
     }
 

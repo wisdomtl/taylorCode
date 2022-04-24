@@ -256,6 +256,7 @@
         <activity android:name=".kotlin.coroutine.mvvm.StateFlowActivity" />
         <activity android:name=".annotations.AnnotationActivity2" />
         <activity android:name=".kotlin.coroutine.CoroutineActivity3" />
+        <activity android:name=".kotlin.coroutine.CoroutineExceptionActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
