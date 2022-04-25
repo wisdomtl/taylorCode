@@ -259,6 +259,7 @@
         <activity android:name=".kotlin.coroutine.CoroutineExceptionActivity" />
         <activity android:name=".kotlin.coroutine.StructureConcurrencyActivity" />
         <activity android:name=".kotlin.coroutine.mvvm.SuspendCoroutineActivity" />
+        <activity android:name=".kotlin.coroutine.CoroutineJobActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

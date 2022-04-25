@@ -282,6 +282,7 @@ class MainActivity : BaseActivity() {
         btnExceptionCoroutine.setOnClickListener { startActivity<CoroutineExceptionActivity> { } }
         btnStructConcurrency.setOnClickListener { startActivity<StructureConcurrencyActivity> { } }
         continuation.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.mvvm.SuspendCoroutineActivity> { } }
+        coroutineJob.setOnClickListener { startActivity<CoroutineJobActivity> { } }
 
 
         //SAM case:
@@ -294,7 +295,6 @@ class MainActivity : BaseActivity() {
             listOf(1, 2, 3),
             listOf(4, 5, 6)
         )
-
         Log.v("ttaylor", "[flatten] list.flatten=${lists.flatten()}")
         Log.v("ttaylor", "[flatten] list.=${lists.flatMap { it.map { it + 1 } }}")
 
