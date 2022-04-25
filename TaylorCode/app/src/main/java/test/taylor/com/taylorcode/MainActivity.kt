@@ -32,6 +32,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
 import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
@@ -240,7 +241,7 @@ class MainActivity : BaseActivity() {
         btn_livecomment.setOnClickListener { startActivity<LaneViewActivity>() }
         btnTransition.setOnClickListener { startActivity<test.taylor.com.taylorcode.ui.anim.transitionmanager.TransitionManagerActivity>() }
         btn_constraintlayout4.setOnClickListener { startActivity<ConstraintLayout4>() }
-        btn_kotlin_flow.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.FlowActivity>() }
+        btn_kotlin_flow.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity>() }
         btnBlur.setOnClickListener { startActivity<BlurActivity>() }
         btnBlur2.setOnClickListener { startActivity<BlurActivity2>() }
         btnCrop.setOnClickListener { startActivity<CropActivity>() }
@@ -283,6 +284,7 @@ class MainActivity : BaseActivity() {
         btnStructConcurrency.setOnClickListener { startActivity<StructureConcurrencyActivity> { } }
         continuation.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.mvvm.SuspendCoroutineActivity> { } }
         coroutineJob.setOnClickListener { startActivity<CoroutineJobActivity> { } }
+        flowBackPressure.setOnClickListener { startActivity<FlowActivity2> { } }
 
 
         //SAM case:

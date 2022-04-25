@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.coroutine.collectIn
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
 import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.layout_width
 import test.taylor.com.taylorcode.kotlin.match_parent
