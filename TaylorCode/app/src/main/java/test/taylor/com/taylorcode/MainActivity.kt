@@ -33,6 +33,7 @@ import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
@@ -285,6 +286,7 @@ class MainActivity : BaseActivity() {
         continuation.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.mvvm.SuspendCoroutineActivity> { } }
         coroutineJob.setOnClickListener { startActivity<CoroutineJobActivity> { } }
         flowBackPressure.setOnClickListener { startActivity<FlowActivity2> { } }
+        sharedFlow.setOnClickListener { startActivity<SharedFlowActivity> { } }
 
 
         //SAM case:
