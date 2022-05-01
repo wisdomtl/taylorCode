@@ -84,6 +84,16 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
             true //return true force recycle
         }
 
+        myAdapter.onViewDetachedFromWindow = {
+            val tv = (it as? TextViewHolder2)?.tv?.text
+            Log.v("ttaylor33","onViewDetachedFromWindow $tv is detach")
+        }
+
+        myAdapter.onViewRecycled = {
+            val tv = (it as? TextViewHolder2)?.tv?.text
+            Log.v("ttaylor33","onViewRecycled $tv is recycled")
+        }
+
     }
 }
 

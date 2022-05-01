@@ -45,6 +45,7 @@ import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.log.LogActivity
 import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
+import test.taylor.com.taylorcode.photo.GlideActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
@@ -287,6 +288,7 @@ class MainActivity : BaseActivity() {
         coroutineJob.setOnClickListener { startActivity<CoroutineJobActivity> { } }
         flowBackPressure.setOnClickListener { startActivity<FlowActivity2> { } }
         sharedFlow.setOnClickListener { startActivity<SharedFlowActivity> { } }
+        btn_glide.setOnClickListener { startActivity<GlideActivity> { } }
 
 
         //SAM case:

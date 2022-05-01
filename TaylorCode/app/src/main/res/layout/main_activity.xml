@@ -9,6 +9,29 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/recyclerview_item_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="recyclerview item anim"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btn_glide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="glide"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/sharedFlow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,12 +139,6 @@
             android:text="LiveData"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="solution"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_concurrent_list"
@@ -303,12 +320,6 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/recyclerview_item_anim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="recyclerview item anim"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_coordinate_layout"
