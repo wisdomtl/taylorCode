@@ -95,6 +95,8 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     implementation 'jp.wasabeef:glide-transformations:2.0.0'
+    implementation 'com.github.bumptech.glide:annotations:4.13.0'
+    kapt 'com.github.bumptech.glide:compiler:4.13.0'
     //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.31"

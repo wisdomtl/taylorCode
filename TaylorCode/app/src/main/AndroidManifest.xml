@@ -263,6 +263,7 @@
         <activity android:name=".kotlin.coroutine.flow.FlowActivity2" />
         <activity android:name=".kotlin.coroutine.flow.SharedFlowActivity" />
         <activity android:name=".photo.GlideActivity" />
+        <activity android:name=".photo.GlideActivity2" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
