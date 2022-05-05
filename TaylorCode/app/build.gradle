@@ -75,7 +75,9 @@ dependencies {
     //Stetho:app debug tool
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
+    // okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     //WorkManager
 //    implementation 'androidx.work:work-runtime:2.3.1'
     implementation "androidx.work:work-runtime-ktx:2.3.1"
