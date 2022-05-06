@@ -2,8 +2,6 @@ package test.taylor.com.taylorcode.ui.line_feed_layout
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 
@@ -12,7 +10,14 @@ import android.widget.LinearLayout
  * it spreads the children from left to right until there is not enough horizontal space for them,
  * then the next child will be placed at a new line
  */
-class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ViewGroup(context, attrs, defStyleAttr) {
+class LineFeedLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
+
+    var horizontalGap: Int = 0
+    var verticalGap: Int = 0
 
     /**
      * the height of [LineFeedLayout] depends on how much lines it has
@@ -27,15 +32,17 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
         } else {
             var remainWidth = width
             (0 until childCount).map { getChildAt(it) }.forEach { child ->
-                val lp = child.layoutParams as LinearLayout.LayoutParams
-                if (child.measuredWidth < remainWidth) {
-                    remainWidth -= child.measuredWidth
-                    if (height == 0) height = (lp.topMargin + lp.bottomMargin + child.measuredHeight)
-                } else {
+                val lp = child.layoutParams as? MarginLayoutParams
+                val childOccupation = child.measuredWidth + lp?.marginStart.value + lp?.marginEnd.value
+                if (isNewLine(childOccupation, remainWidth)) {
                     remainWidth = width - child.measuredWidth
-                    height += (lp.topMargin + lp.bottomMargin + child.measuredHeight)
+                    height += (lp?.topMargin.value + lp?.bottomMargin.value + child.measuredHeight + verticalGap)
+                } else {
+                    remainWidth -= child.measuredWidth
+                    if (height == 0) height =
+                        (lp?.topMargin.value + lp?.bottomMargin.value + child.measuredHeight + verticalGap)
                 }
-                remainWidth -= (lp.leftMargin + lp.rightMargin)
+                remainWidth -= (lp?.leftMargin.value + lp?.rightMargin.value + horizontalGap)
             }
         }
 
@@ -48,17 +55,23 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
         var lastBottom = 0
         var count = 0
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
-            val lp = child.layoutParams as LinearLayout.LayoutParams
-            if (isNewLine(left, lp, child, r - l)) {
-                left = -lp.leftMargin
+            val lp = child.layoutParams as? MarginLayoutParams
+            val childOccupation = child.measuredWidth + lp?.marginStart.value + lp?.marginEnd.value
+            if (isNewLine(childOccupation, r - l - left)) {
+                left = -lp?.leftMargin.value
                 top = lastBottom
                 lastBottom = 0
             }
-            val childLeft = left + lp.leftMargin
-            val childTop = top + lp.topMargin
-            child.layout(childLeft, childTop, childLeft + child.measuredWidth, childTop + child.measuredHeight)
-            if (lastBottom == 0) lastBottom = child.bottom
-            left += child.measuredWidth + lp.leftMargin + lp.rightMargin
+            val childLeft = left + lp?.leftMargin.value
+            val childTop = top + lp?.topMargin.value
+            child.layout(
+                childLeft,
+                childTop,
+                childLeft + child.measuredWidth,
+                childTop + child.measuredHeight
+            )
+            if (lastBottom == 0) lastBottom = child.bottom + lp?.bottomMargin.value + verticalGap
+            left += child.measuredWidth + lp?.leftMargin.value + lp?.rightMargin.value + horizontalGap
             count++
         }
     }
@@ -66,11 +79,18 @@ class LineFeedLayout @JvmOverloads constructor(context: Context, attrs: Attribut
     /**
      * place the [child] in a new line or not
      *
-     * @param left the current cursor position relative to [LineFeedLayout]
-     * @param lp LayoutParams of [child]
      * @param child child view of [LineFeedLayout]
-     * @param parentWidth the width of [LineFeedLayout]
+     * @param remainWidth the remain space of one line in [LineFeedLayout]
+     * @param horizontalGap the horizontal gap for the children of [LineFeedLayout]
      */
-    private fun isNewLine(left: Int, lp: LinearLayout.LayoutParams, child: View, parentWidth: Int) = left + lp.leftMargin + child.measuredWidth + lp.rightMargin > parentWidth
-
+    private fun isNewLine(
+        childOccupation: Int,
+        remainWidth: Int
+    ): Boolean {
+        return (childOccupation > remainWidth)
+    }
 }
+
+
+val Int?.value: Int
+    get() = this ?: 0

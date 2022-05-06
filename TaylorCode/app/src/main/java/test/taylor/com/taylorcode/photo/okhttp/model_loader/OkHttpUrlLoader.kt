@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.photo.okhttp.model_loader
 
+import android.util.Log
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.GlideUrl
@@ -7,10 +8,16 @@ import com.bumptech.glide.load.model.ModelLoader.LoadData
 import kotlin.jvm.JvmOverloads
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import kotlin.jvm.Volatile
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.LoggingEventListener
+import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.TrackCallFactory
+import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.TrackEventListenerFactory
+import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.TrackInterceptor
 import java.io.InputStream
+import kotlin.reflect.jvm.internal.impl.descriptors.FieldDescriptor
 
 /** A simple model loader for fetching media over http/https using OkHttp.  */
 class OkHttpUrlLoader     // Public API.
@@ -25,9 +32,10 @@ class OkHttpUrlLoader     // Public API.
         return LoadData(model, OkHttpStreamFetcher(client, model))
     }
 
-    /** The default factory for [OkHttpUrlLoader]s.  */ // Public API.
+    /** The default factory for [OkHttpUrlLoader]s.  */
     class Factory
-    /** Constructor for a new Factory that runs requests using a static singleton client.  */ @JvmOverloads constructor(
+    /** Constructor for a new Factory that runs requests using a static singleton client.  */
+    @JvmOverloads constructor(
         private val client: okhttp3.Call.Factory = internalClient!!
     ) : ModelLoaderFactory<GlideUrl, InputStream> {
         override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<GlideUrl, InputStream> {
@@ -45,8 +53,7 @@ class OkHttpUrlLoader     // Public API.
                     if (field == null) {
                         synchronized(Factory::class.java) {
                             if (field == null) {
-                                field = OkHttpClient.Builder()
-                                    .addInterceptor(HttpLoggingInterceptor()).build()
+                               field = okHttpClient
                             }
                         }
                     }
@@ -60,3 +67,11 @@ class OkHttpUrlLoader     // Public API.
          */
     }
 }
+
+class MyLogger : HttpLoggingInterceptor.Logger {
+    override fun log(message: String) {
+        Log.v("ttaylor", "[glide-performance] $message")
+    }
+}
+
+val myLogger = MyLogger()
