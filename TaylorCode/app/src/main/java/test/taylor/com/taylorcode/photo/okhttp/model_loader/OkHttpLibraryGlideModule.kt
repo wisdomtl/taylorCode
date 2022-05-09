@@ -20,6 +20,10 @@ class OkHttpLibraryGlideModule : LibraryGlideModule() {
     override fun registerComponents(
         context: Context, glide: Glide, registry: Registry
     ) {
-        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory())
+        registry.replace(
+            GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(
+                okHttpClient, globalCallFactory
+            )
+        )
     }
 }

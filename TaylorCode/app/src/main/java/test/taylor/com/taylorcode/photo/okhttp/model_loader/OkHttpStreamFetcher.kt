@@ -13,9 +13,11 @@ import java.io.IOException
 import java.io.InputStream
 
 /** Fetches an [InputStream] using the okhttp library.  */
-class OkHttpStreamFetcher(client: Call.Factory, url: GlideUrl) : DataFetcher<InputStream>, Callback {
-    private val client: Call.Factory = client
-    private val url: GlideUrl = url
+class OkHttpStreamFetcher(
+    private val client: OkHttpClient,
+    private val callFactory:Call.Factory,
+    private val url: GlideUrl
+) : DataFetcher<InputStream> {
     private var stream: InputStream? = null
     private var responseBody: ResponseBody? = null
     private var callback: DataFetcher.DataCallback<in InputStream>? = null
@@ -33,25 +35,23 @@ class OkHttpStreamFetcher(client: Call.Factory, url: GlideUrl) : DataFetcher<Inp
         }
         val request: Request = requestBuilder.build()
         this.callback = callback
-        call = client.newCall(request)
-        call!!.enqueue(this)
-    }
-
-    override fun onFailure(call: Call, e: IOException) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "OkHttp failed to obtain result", e)
-        }
-        callback!!.onLoadFailed(e)
-    }
-
-    override fun onResponse(call: Call, response: Response) {
-        responseBody = response.body
-        if (response.isSuccessful) {
-            val contentLength = Preconditions.checkNotNull(responseBody).contentLength()
-            stream = ContentLengthInputStream.obtain(responseBody!!.byteStream(), contentLength)
-            callback!!.onDataReady(stream)
-        } else {
-            callback!!.onLoadFailed(HttpException(response.message, response.code))
+        call = callFactory.newCall(request)
+        try {
+            val response = call!!.execute()
+            responseBody = response.body
+            if (response.isSuccessful) {
+                val contentLength = Preconditions.checkNotNull(responseBody).contentLength()
+                stream = ContentLengthInputStream.obtain(responseBody!!.byteStream(), contentLength)
+                callback!!.onDataReady(stream)
+                client.dispatcher.maxRequestsPerHost = 20
+            } else {
+                callback!!.onLoadFailed(HttpException(response.message, response.code))
+            }
+        } catch (e: Exception) {
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "OkHttp failed to obtain result", e)
+            }
+            callback!!.onLoadFailed(e)
         }
     }
 

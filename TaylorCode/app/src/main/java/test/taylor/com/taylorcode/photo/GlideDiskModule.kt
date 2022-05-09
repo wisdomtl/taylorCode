@@ -16,10 +16,5 @@ import com.bumptech.glide.request.RequestOptions
 class GlideDiskModule : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         builder.setDefaultRequestOptions { RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE) }
-        builder.setSourceExecutor(GlideExecutor.newSourceBuilder().setThreadCount(20).build())
-    }
-
-    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        super.registerComponents(context, glide, registry)
     }
 }

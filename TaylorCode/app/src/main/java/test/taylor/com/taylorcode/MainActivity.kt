@@ -165,6 +165,11 @@ class MainActivity : BaseActivity() {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
+
+        val holder = Holder(reference)
+        holder.doSth()
+        reference.count = 2
+        holder.doSth()
         val list = listOf<String>()
         btn_window.setOnClickListener { startActivity<WindowActivity>() }
         btn_touch_event.setOnClickListener { startActivity<TouchEventActivity>() }
@@ -531,3 +536,14 @@ annotation class IntType
 
 const val INT1 = 1
 const val INT2 = 2
+
+class Reference(var count: Int, var str: String)
+
+var reference = Reference(1,"ddd")
+
+
+class Holder (private var reference:Reference){
+    fun doSth(){
+        Log.v("ttaylor","[reference test] ${reference.count}")
+    }
+}

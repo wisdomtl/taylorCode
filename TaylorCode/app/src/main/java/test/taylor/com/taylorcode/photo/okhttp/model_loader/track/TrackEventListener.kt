@@ -1,10 +1,7 @@
 package test.taylor.com.taylorcode.photo.okhttp.model_loader.track
 
 import android.os.Build
-import okhttp3.Call
-import okhttp3.EventListener
-import okhttp3.Handshake
-import okhttp3.Protocol
+import okhttp3.*
 import java.io.IOException
 import java.net.InetAddress
 import java.net.InetSocketAddress
@@ -35,12 +32,14 @@ class TrackEventListener(private val callId: Long?) : EventListener() {
         const val KEY_UKI_ID = "ukiid"
         const val KEY_LONGITUDE = "longitude"
         const val KEY_LATITUDE = "latitude"
-        const val KEY_REQUEST_TOTAL_TIME = "req_total_time"
-        const val KEY_REQUEST_URL = "req_url"
-        const val KEY_REQUEST_PROTOCOL = "request_protocol"
-        const val KEY_RESPONSE_PROTOCOL = "response_protocol"
-        const val KEY_CALL_ID = "call_id"
+        const val KEY_REQUEST_TOTAL_TIME = "total_time"
+        const val KEY_REQUEST_URL = "url"
+        const val KEY_REQUEST_PROTOCOL = "rqs_protocol"
+        const val KEY_RESPONSE_PROTOCOL = "rsp_protocol"
+        const val KEY_CALL_ID = "id"
         const val KEY_NEW_CONNECTION = "new_connection"
+        const val KEY_CONNECTION = "connection"
+        const val KEY_SOCKET = "socket"
         const val KEY_DNS_TIME = "dns_time"
         const val KEY_TCP_TIME = "tcp_time"
         const val KEY_SSL_TIME = "ssl_time"
@@ -133,6 +132,13 @@ class TrackEventListener(private val callId: Long?) : EventListener() {
         callId?.let {
             tcpConnectStartMillis = System.currentTimeMillis()
             put(it, KEY_NEW_CONNECTION, true)
+        }
+    }
+
+    override fun connectionAcquired(call: Call, connection: Connection) {
+        callId?.let {
+            put(it,KEY_SOCKET,connection.socket().remoteSocketAddress.toString())
+            put(it, KEY_CONNECTION, connection.hashCode())
         }
     }
 

@@ -12,6 +12,7 @@ import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.TrackEventList
  * An [Interceptor] to get network tracking data when response is returned
  */
 class TrackInterceptor : Interceptor {
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val callId = chain.request().tag() as? Long
