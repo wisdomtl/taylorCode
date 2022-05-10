@@ -48,21 +48,21 @@ class GlideActivity3 : AppCompatActivity() {
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F68c7e4ec9a8b3804d387012c8f2c2c69f9db95a42b695-Rxfr9z_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1653817842&t=9fa35989a42b23f39f692e03aebe4672",
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.ivsky.com%2Fimg%2Ftupian%2Fpic%2F202002%2F27%2Fkatong_yingtao_png_sucai.png%3Fdownload&refer=http%3A%2F%2Fimg.ivsky.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343700&t=cc961b89a23fa161c143ca2b93629a9b",
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.90sjimg.com%2Fdesign%2F01%2F84%2F14%2F63%2F5a2e2b3b888ae.png&refer=http%3A%2F%2Fpic.90sjimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343721&t=36f54ccbfa53efc1fc91dfb74b80b89f",
-        "https://img0.baidu.com/it/u=697211124,3956615873&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
-        "https://img0.baidu.com/it/u=968428281,902750749&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500",
-        "https://img0.baidu.com/it/u=157152016,3925643688&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
-        "https://img0.baidu.com/it/u=1764448065,2695969508&fm=253&fmt=auto&app=138&f=PNG?w=500&h=296",
-        "https://img1.baidu.com/it/u=3506002250,4076074537&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281",
-        "https://img1.baidu.com/it/u=3365054696,3236689645&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
-        "https://img1.baidu.com/it/u=4264407738,2970616074&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1731",
-        "https://img1.baidu.com/it/u=1426315203,3936820487&fm=253&fmt=auto&app=138&f=JPEG?w=375&h=500",
-        "https://img1.baidu.com/it/u=2775250516,3786057343&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
-        "https://img1.baidu.com/it/u=3802458197,3531572720&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750",
-        "https://img1.baidu.com/it/u=2022213094,1337366528&fm=253&fmt=auto&app=138&f=JPG?w=500&h=281",
-        "https://img2.baidu.com/it/u=2119769400,690855938&fm=253&fmt=auto&app=138&f=JPEG?w=499&h=353",
-        "https://img2.baidu.com/it/u=1703186005,31784364&fm=253&fmt=auto&app=138&f=JPEG?w=260&h=260",
-        "https://img2.baidu.com/it/u=604657093,836796767&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=825",
-        "https://img2.baidu.com/it/u=1539918067,2492473331&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+//        "https://img0.baidu.com/it/u=697211124,3956615873&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+//        "https://img0.baidu.com/it/u=968428281,902750749&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500",
+//        "https://img0.baidu.com/it/u=157152016,3925643688&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+//        "https://img0.baidu.com/it/u=1764448065,2695969508&fm=253&fmt=auto&app=138&f=PNG?w=500&h=296",
+//        "https://img1.baidu.com/it/u=3506002250,4076074537&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281",
+//        "https://img1.baidu.com/it/u=3365054696,3236689645&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+//        "https://img1.baidu.com/it/u=4264407738,2970616074&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1731",
+//        "https://img1.baidu.com/it/u=1426315203,3936820487&fm=253&fmt=auto&app=138&f=JPEG?w=375&h=500",
+//        "https://img1.baidu.com/it/u=2775250516,3786057343&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+//        "https://img1.baidu.com/it/u=3802458197,3531572720&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750",
+//        "https://img1.baidu.com/it/u=2022213094,1337366528&fm=253&fmt=auto&app=138&f=JPG?w=500&h=281",
+//        "https://img2.baidu.com/it/u=2119769400,690855938&fm=253&fmt=auto&app=138&f=JPEG?w=499&h=353",
+//        "https://img2.baidu.com/it/u=1703186005,31784364&fm=253&fmt=auto&app=138&f=JPEG?w=260&h=260",
+//        "https://img2.baidu.com/it/u=604657093,836796767&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=825",
+//        "https://img2.baidu.com/it/u=1539918067,2492473331&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
     )
 
 //    private val images2 = listOf(
@@ -104,21 +104,21 @@ class GlideActivity3 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
-        var minTotalTime = Int.MAX_VALUE
-        var sumTime = -1L
-        TrackEventListener.networkTrackCallback = object : NetworkTrackCallback {
-            override fun onCallEnd(map: Map<String, Any>) {
-                Log.v("ttaylor", "[glide-performance] $map")
-                val totalTime = map[KEY_REQUEST_TOTAL_TIME] as Long
-                minTotalTime = Math.min(minTotalTime, totalTime.toInt())
-                sumTime += totalTime
-            }
-        }
+//        var minTotalTime = Int.MAX_VALUE
+//        var sumTime = -1L
+//        TrackEventListener.networkTrackCallback = object : NetworkTrackCallback {
+//            override fun onCallEnd(map: Map<String, Any>) {
+//                Log.v("ttaylor", "[glide-performance] $map")
+//                val totalTime = map[KEY_REQUEST_TOTAL_TIME] as Long
+//                minTotalTime = Math.min(minTotalTime, totalTime.toInt())
+//                sumTime += totalTime
+//            }
+//        }
         MainScope().launch(Dispatchers.IO) {
             countdownLatch.await()
             Log.d(
-                "ttaylor",
-                "[glide-performance] glide-time-consume=${System.currentTimeMillis() - start}, minTotalTime=$minTotalTime, avgTime=${sumTime/images.size}"
+                "test",
+                "[glide-performance] glide-time-consume=${System.currentTimeMillis() - start}"
             )
         }
 
