@@ -19,6 +19,7 @@ import test.taylor.com.taylorcode.aysnc.priority.SplashActivity
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
+import test.taylor.com.taylorcode.concurrent.ConcurrentInitActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.concurrent.countdownlatch.CountDownLatchActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
@@ -297,6 +298,7 @@ class MainActivity : BaseActivity() {
         sharedFlow.setOnClickListener { startActivity<SharedFlowActivity> { } }
         btn_glide.setOnClickListener { startActivity<GlideActivity> { } }
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
+        btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
 
 
         //SAM case:

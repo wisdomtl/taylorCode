@@ -265,6 +265,7 @@
         <activity android:name=".photo.GlideActivity" />
         <activity android:name=".photo.GlideActivity2" />
         <activity android:name=".photo.GlideActivity3" />
+        <activity android:name=".concurrent.ConcurrentInitActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
