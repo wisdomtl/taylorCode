@@ -2,7 +2,9 @@ package test.taylor.com.taylorcode;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -31,6 +33,7 @@ public class TaylorApplication extends Application {
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
 
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+        Debug.startMethodTracing("ttaylor");
         long time = 0;
         try {
             time = utcToTimestamp("2019-01-16T15:13:56Z");
@@ -89,6 +92,7 @@ public class TaylorApplication extends Application {
 //
 //        String str = null;
 //        str.toCharArray();
+        Debug.stopMethodTracing();
     }
 
     /**
@@ -103,6 +107,12 @@ public class TaylorApplication extends Application {
         df2.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = df2.parse(time);
         return date.getTime();
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
     }
 
     private void makeChange(ArrayList<String> origin) {
