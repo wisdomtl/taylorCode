@@ -1,15 +1,21 @@
 package test.taylor.com.taylorcode.ui.custom_view.overlap_anim
 
 import android.animation.ValueAnimator.INFINITE
+import android.content.Context
+import android.graphics.Canvas
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.updateLayoutParams
 import taylor.com.animation_dsl.ValueAnim
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.StrokeImageView
 import test.taylor.com.taylorcode.ui.animation_dsl.animSet
@@ -69,7 +75,7 @@ class OverlapAnimActivity : AppCompatActivity() {
 //                }.start(urls, urls.size > 4, 4)
             }
 
-            tv = TextView {
+            tv = MyTextView(context).apply {
                 layout_id = "tvChange"
                 layout_width = wrap_content
                 layout_height = wrap_content
@@ -85,14 +91,15 @@ class OverlapAnimActivity : AppCompatActivity() {
                             values = floatArrayOf(0f, 200f)
                             action = {
                                 val translationX = it as Float
-                                tv.translationX = translationX
+                                tv.left = translationX.toInt()
+                                tv.alpha = translationX/200
                             }
                         }
                     }.start()
                 }
-            }
+            }.also { addView(it) }
 
-            TextView {
+            MyTextView(context).apply {
                 layout_id = "oneShot"
                 layout_width = wrap_content
                 layout_height = wrap_content
@@ -102,11 +109,13 @@ class OverlapAnimActivity : AppCompatActivity() {
                 gravity = gravity_center
                 onClick = {
 //                    repeatAnim.start()
+                    val anim = AnimationUtils.loadAnimation(context, R.anim.slide_left_in)
+                    it.startAnimation(anim)
                 }
                 top_toBottomOf = "tvChange"
                 margin_top = 20
                 center_horizontal = true
-            }
+            }.also { addView(it) }
         }
     }
 
@@ -166,4 +175,33 @@ class OverlapAnimActivity : AppCompatActivity() {
             delay = 1000
         }.start()
     }
+}
+
+class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr){
+    override fun invalidate() {
+        super.invalidate()
+        Log.v("ttaylor","[value animation] invalidate()")
+    }
+
+    override fun invalidateOutline() {
+        super.invalidateOutline()
+    }
+
+    override fun draw(canvas: Canvas?) {
+        super.draw(canvas)
+        Log.v("ttaylor","[value animation] draw()")
+    }
+
+    override fun layout(l: Int, t: Int, r: Int, b: Int) {
+        super.layout(l, t, r, b)
+        Log.v("ttaylor","[value animation] layout() l=$l,t=$t,r=$r,b=$b")
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        Log.v("ttaylor","[value animation] onLayout() l=$left,t=$top,r=$right,b=$bottom")
+    }
+
+
+
 }

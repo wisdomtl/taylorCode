@@ -9,6 +9,20 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_overlap_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="overlap anim"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnConcurrentInit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,12 +51,7 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="solution"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/sharedFlow"
@@ -189,12 +198,7 @@
             android:layout_height="wrap_content"
             android:text="imageview scaleType"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_overlap_anim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="overlap anim"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_item_animator"
             android:layout_width="match_parent"
