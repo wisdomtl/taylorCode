@@ -142,7 +142,12 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.v("ttaylor", "MainActivity.onResume()" + "  ")
+        Log.v("ttaylor", "MainActivity.onResume()" + "  btn_touch_event.width=${btn_touch_event.measuredWidth}")
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        Log.v("ttaylor","MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}")// view has an dimension here
     }
 
     override fun onPause() {
