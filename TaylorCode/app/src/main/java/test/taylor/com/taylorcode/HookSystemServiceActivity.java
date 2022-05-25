@@ -37,7 +37,7 @@ public class HookSystemServiceActivity extends Activity {
          */
 //        setType(3);// there is an error
         Solution s = new Solution();
-        s.isPalindrome(129);
+        int[] arr = new int[]{4,3,2,7,8,2,3,1};
     }
 
     /**
@@ -62,19 +62,10 @@ public class HookSystemServiceActivity extends Activity {
 
 
 class Solution {
-    public boolean isPalindrome(int x) {
-        if(x<0)
-            return false;
-        int rem=0,y=0;
-        int quo=x;
-        /**
-         * case: revert a number
-         */
-        while(quo!=0){
-            rem=quo%10;
-            y=y*10+rem;
-            quo=quo/10;
+    public int findIndex(int[] nums,int target) {
+        for(int i=0;i<nums.length;i++){
+            if(nums[i] == target) return i;
         }
-        return y==x;
+        return -1;
     }
 }
