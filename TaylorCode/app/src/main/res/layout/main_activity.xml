@@ -9,6 +9,21 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btnStateFlow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="state flow"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/recyclerview_item_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="recyclerview item anim"
+            android:textAllCaps="false" />
+
+
+        <Button
             android:id="@+id/btn_overlap_anim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,12 +49,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="glide performance"
-            android:textAllCaps="false" />
-        <Button
-            android:id="@+id/recyclerview_item_anim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="recyclerview item anim"
             android:textAllCaps="false" />
 
 
@@ -132,12 +141,7 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btnStateFlow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="state flow"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_kotlin_flow"

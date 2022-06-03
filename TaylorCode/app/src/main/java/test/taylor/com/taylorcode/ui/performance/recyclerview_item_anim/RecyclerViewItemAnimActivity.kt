@@ -165,6 +165,9 @@ class TextViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val container = itemView.find<MyConstraintLayout>("container")
 }
 
+/**
+ * case: a new way to listen child scroll event of ItemView
+ */
 class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : androidx.appcompat.widget.AppCompatTextView(
     context,
     attrs,
@@ -188,6 +191,11 @@ class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 hasShown = false
             }
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        Log.d("ttaylor","onDetachedFromWindow() ")
     }
 }
 
