@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
@@ -37,6 +38,7 @@ class StateFlowActivity : AppCompatActivity() {
     }
 
     private lateinit var tv: TextView
+    private lateinit var loadMoreTv: TextView
     private lateinit var rvNews: RecyclerView
     private var newsAdapter = NewsAdapter()
 
@@ -45,7 +47,8 @@ class StateFlowActivity : AppCompatActivity() {
      */
     private val intents by lazy {
         merge(
-            flowOf(FeedsIntent.InitIntent(1, 5))
+            flowOf(FeedsIntent.Init(1, 5)),
+            loadMoreFlow()
         )
     }
 
@@ -75,6 +78,18 @@ class StateFlowActivity : AppCompatActivity() {
                 }
             }
 
+            loadMoreTv =  TextView {
+               layout_id = "tvChange2"
+               layout_width = wrap_content
+               layout_height = wrap_content
+               textSize = 40f
+               textColor = "#000000"
+               text = "load more"
+               gravity = gravity_center
+               top_toBottomOf = "tvChange"
+               center_horizontal = true
+           }
+
             rvNews = RecyclerView {
                 layout_id = "rvNews"
                 layout_width = match_parent
@@ -84,6 +99,15 @@ class StateFlowActivity : AppCompatActivity() {
                 bottom_toBottomOf = parent_id
                 layoutManager = LinearLayoutManager(this@StateFlowActivity)
             }
+        }
+    }
+
+    private fun loadMoreFlow() = callbackFlow {
+        loadMoreTv.setOnClickListener {
+            trySend(FeedsIntent.More(111L,2))
+        }
+        awaitClose {
+            loadMoreTv.setOnClickListener(null)
         }
     }
 
@@ -143,12 +167,12 @@ class StateFlowActivity : AppCompatActivity() {
 
     private fun showNews(newsModel: NewsState) {
         when {
-            newsModel.loading -> {
+            newsModel.isLoading -> {
                 showLoading()
             }
             newsModel.errorMessage.isEmpty() -> {
                 dismissLoading()
-                newsAdapter.news = newsModel.news
+                newsAdapter.news = newsModel.data
                 rvNews.adapter = newsAdapter
             }
             else -> {

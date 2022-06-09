@@ -94,7 +94,10 @@ class NewsRepo(context: Context) {
             newsBean
         }
             .asFlow()
-            .catch { emit(getLocalNewsBean()) }
+            .catch {
+                delay(2000)
+                emit(getLocalNewsBean())
+            }
             .map { newsBean ->
                 if (newsBean.code == 200) {
                     if (!newsBean.result.isNullOrEmpty()) {
@@ -109,7 +112,7 @@ class NewsRepo(context: Context) {
                 }
             }
 
-    private fun getLocalNewsBean() = NewsBean(
+    fun getLocalNewsBean() = NewsBean(
         200, "success", listOf(
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",

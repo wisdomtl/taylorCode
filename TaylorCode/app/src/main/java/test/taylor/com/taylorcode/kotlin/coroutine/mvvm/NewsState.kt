@@ -4,7 +4,13 @@ import test.taylor.com.taylorcode.retrofit.News
 
 
 data class NewsState(
-    val news: List<News>,
-    val loading: Boolean,
-    val errorMessage: String = ""
-)
+    val data: List<News>,
+    val isLoading: Boolean,
+    val isLoadingMore: Boolean,
+    val errorMessage: String,
+) {
+    companion object {
+        val initial =
+            NewsState(data = emptyList(), isLoading = true, isLoadingMore = false, errorMessage = "")
+    }
+}

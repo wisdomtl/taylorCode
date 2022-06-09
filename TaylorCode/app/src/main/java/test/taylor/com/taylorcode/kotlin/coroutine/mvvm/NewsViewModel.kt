@@ -54,16 +54,17 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
                 emit(it.news)
                 !it.abort
             }
-            .map { NewsState(it, false) }
+            .map { NewsState(it, false, isLoadingMore = false, errorMessage = "") }
             .flowOn(Dispatchers.IO) // case: change the upstream thread
-            .onStart { emit(NewsState(emptyList(), true)) }
+            .onStart { emit(NewsState(emptyList(), true, false, "")) }
             .catch {
                 if (it is SSLHandshakeException)
                     emit(
                         NewsState(
                             emptyList(),
                             false,
-                            "network error,show old news"
+                            isLoadingMore = false,
+                            errorMessage = "network error,show old news"
                         )
                     )
             }
@@ -75,27 +76,41 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
     val newsSerialFlow =
         flowOf(newsRepo.localNewsOneShotFlow, newsRepo.remoteNewsFlow("1", "8"))
             .flattenConcat()
-            .map { NewsState(it.news, false) }
+            .map { NewsState(it.news, false, isLoadingMore = false, errorMessage = "") }
             .flowOn(Dispatchers.IO) // case: change the upstream thread
-            .onStart { emit(NewsState(emptyList(), true)) }
+            .onStart {
+                emit(
+                    NewsState(
+                        emptyList(),
+                        true,
+                        isLoadingMore = false,
+                        errorMessage = ""
+                    )
+                )
+            }
             .shareIn(viewModelScope, SharingStarted.Lazily)
 
     /**
      * case: turn Intent flow to state flow
      */
     private fun Flow<FeedsIntent>.toNewsStateFlow(): Flow<NewsState> = merge(
-        filterIsInstance<FeedsIntent.InitIntent>()
+        filterIsInstance<FeedsIntent.Init>()
             .flatMapConcat { it.toFetchInitPageFlow() },
-        filterIsInstance<FeedsIntent.RemoveIntent>()
+        filterIsInstance<FeedsIntent.Remove>()
             .flatMapConcat { flow { } },
-        filterIsInstance<FeedsIntent.MorePageIntent>()
-            .flatMapConcat { flow { } }
+        filterIsInstance<FeedsIntent.More>()
+            .flatMapConcat {
+                flow { emit(newsRepo.getLocalNewsBean()) }
+                    .map {
+                        NewsState(it.result ?: emptyList(), false, false, "")
+                    }
+            }
     )
 
     /**
      * case: turn Intent to network fetching flow
      */
-    private fun FeedsIntent.InitIntent.toFetchInitPageFlow() =
+    private fun FeedsIntent.Init.toFetchInitPageFlow() =
         flowOf(
             newsRepo.localNewsOneShotFlow,
             newsRepo.remoteNewsFlow(this.type.toString(), this.count.toString())
@@ -105,15 +120,15 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
                 emit(it.news)
                 !it.abort
             }
-            .map { NewsState(it, false) }
-            .onStart { emit(NewsState(emptyList(), true)) }
+            .map { NewsState(it, false, false, "") }
             .catch {
                 if (it is SSLHandshakeException)
                     emit(
                         NewsState(
                             emptyList(),
-                            false,
-                            "network error,show old news"
+                            isLoading = false,
+                            isLoadingMore = false,
+                            errorMessage = "network error,show old news"
                         )
                     )
             }
@@ -130,7 +145,7 @@ class NewsViewModelFactory(private val newsRepo: NewsRepo) : ViewModelProvider.F
 
 
 sealed class FeedsIntent {
-    data class InitIntent(val type: Int, val count: Int) : FeedsIntent()
-    data class MorePageIntent(val timestamp: Long, val count: Int) : FeedsIntent()
-    data class RemoveIntent(val id: Long) : FeedsIntent()
+    data class Init(val type: Int, val count: Int) : FeedsIntent()
+    data class More(val timestamp: Long, val count: Int) : FeedsIntent()
+    data class Remove(val id: Long) : FeedsIntent()
 }
