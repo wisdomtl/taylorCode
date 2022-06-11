@@ -52,7 +52,7 @@ class NewsRepositoryImpl(context: Context) : NewsRepository {
             }
         }
         newsLiveData.addSource(localNews) { news ->
-            newsLiveData.value = news?.map { News(it.path, it.image, it.title, it.passtime) }
+            newsLiveData.value = news?.map { News(it.path, it.image, it.title, it.passtime,0L) }
         }
 
         newsLiveData.addSource(remoteNews) {

@@ -35,7 +35,7 @@ import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
-import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.StateFlowActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity

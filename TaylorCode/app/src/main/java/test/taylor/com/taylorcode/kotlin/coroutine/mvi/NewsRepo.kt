@@ -1,18 +1,15 @@
-package test.taylor.com.taylorcode.kotlin.coroutine.mvvm
+package test.taylor.com.taylorcode.kotlin.coroutine.mvi
 
 import android.content.Context
-import android.os.StrictMode
 import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.NewsApi
+import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.UserInfo
 import test.taylor.com.taylorcode.retrofit.News
 import test.taylor.com.taylorcode.retrofit.NewsBean
 import test.taylor.com.taylorcode.retrofit.NewsFlowWrapper
@@ -20,7 +17,7 @@ import test.taylor.com.taylorcode.retrofit.repository_livedata.room.NewsDatabase
 
 class NewsRepo(context: Context) {
 
-    private var count = 0
+    private var count = -1
 
     private val retrofit by lazy {
         Retrofit.Builder()
@@ -48,8 +45,9 @@ class NewsRepo(context: Context) {
 
     val localNewsOneShotFlow = flow {
         val news = newsDao.queryNewsSuspend()
-        val newsList = news.map { News(it.path, it.image, it.title, it.passtime) }
+        val newsList = news.map { News(it.path, it.image, it.title, it.passtime,0L) }
         Log.v("ttaylor", "[collect news] local one shot flow =${news.size}")
+        delay(1000)
         emit(NewsFlowWrapper(newsList, false))
     }
 
@@ -87,17 +85,25 @@ class NewsRepo(context: Context) {
 //        }
 //    }
 
+    fun reportNews(id:Long) =
+        suspend {
+            delay(1000)
+            id
+        }.asFlow()
+
     fun remoteNewsFlow(page: String, count: String) =
         suspend {
-            val newsBean = newApi.fetchNews(mapOf("page" to page, "count" to count))
-            Log.v("ttaylor", "[collect news] remote new flow thread=${Thread.currentThread().id}")
-            newsBean
+//            val newsBean = newApi.fetchNews(mapOf("page" to page, "count" to count))
+//            Log.v("ttaylor", "[collect news] remote new flow thread=${Thread.currentThread().id}")
+//            newsBean
+            delay(2000)
+            getLocalNewsBean()
         }
             .asFlow()
-            .catch {
-                delay(2000)
-                emit(getLocalNewsBean())
-            }
+//            .catch {
+//                delay(2000)
+//                emit(getLocalNewsBean())
+//            }
             .map { newsBean ->
                 if (newsBean.code == 200) {
                     if (!newsBean.result.isNullOrEmpty()) {
@@ -117,32 +123,32 @@ class NewsRepo(context: Context) {
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
             News(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
-                "title${count++}", System.currentTimeMillis().toString()
+                "title${count++}", System.currentTimeMillis().toString(),count.toLong()
             ),
         )
     )

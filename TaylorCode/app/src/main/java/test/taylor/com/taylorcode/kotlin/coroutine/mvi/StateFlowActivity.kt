@@ -1,11 +1,13 @@
-package test.taylor.com.taylorcode.kotlin.coroutine.mvvm
+package test.taylor.com.taylorcode.kotlin.coroutine.mvi
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -22,11 +24,13 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
+import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.UserInfoModel
 import test.taylor.com.taylorcode.kotlin.extension.contentView
 import test.taylor.com.taylorcode.kotlin.layout_width
 import test.taylor.com.taylorcode.kotlin.match_parent
 import test.taylor.com.taylorcode.retrofit.NewsAdapter
 import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
+import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class StateFlowActivity : AppCompatActivity() {
 
@@ -35,6 +39,12 @@ class StateFlowActivity : AppCompatActivity() {
             this,
             NewsViewModelFactory(NewsRepo(this))
         )[NewsViewModel::class.java]
+    }
+
+    private val newsAdapter2 by lazy {
+        VarietyAdapter2().apply {
+            addProxy(NewsProxy())
+        }
     }
 
     private lateinit var tv: TextView
@@ -48,7 +58,8 @@ class StateFlowActivity : AppCompatActivity() {
     private val intents by lazy {
         merge(
             flowOf(FeedsIntent.Init(1, 5)),
-            loadMoreFlow()
+            loadMoreFlow(),
+            reportFlow()
         )
     }
 
@@ -78,37 +89,50 @@ class StateFlowActivity : AppCompatActivity() {
                 }
             }
 
-            loadMoreTv =  TextView {
-               layout_id = "tvChange2"
-               layout_width = wrap_content
-               layout_height = wrap_content
-               textSize = 40f
-               textColor = "#000000"
-               text = "load more"
-               gravity = gravity_center
-               top_toBottomOf = "tvChange"
-               center_horizontal = true
-           }
+            loadMoreTv = TextView {
+                layout_id = "tvChange2"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 40f
+                textColor = "#000000"
+                text = "load more"
+                gravity = gravity_center
+                top_toBottomOf = "tvChange"
+                center_horizontal = true
+            }
 
             rvNews = RecyclerView {
                 layout_id = "rvNews"
                 layout_width = match_parent
-                layout_height = wrap_content
+                layout_height = 0
                 center_horizontal = true
-                top_toBottomOf = "tvChange"
+                top_toBottomOf = "tvChange2"
                 bottom_toBottomOf = parent_id
                 layoutManager = LinearLayoutManager(this@StateFlowActivity)
+                adapter = newsAdapter2
             }
         }
     }
 
     private fun loadMoreFlow() = callbackFlow {
         loadMoreTv.setOnClickListener {
-            trySend(FeedsIntent.More(111L,2))
+            trySend(FeedsIntent.More(111L, 2))
         }
         awaitClose {
             loadMoreTv.setOnClickListener(null)
         }
+    }
+
+    private fun reportFlow() = callbackFlow {
+        rvNews.setOnItemClickListener { view, i, fl, fl2 ->
+            val news = newsAdapter2.dataList[i] as? test.taylor.com.taylorcode.retrofit.News
+            news?.id?.let {
+                trySend(FeedsIntent.Report(it))
+            }
+            false
+        }
+
+        awaitClose { }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +141,7 @@ class StateFlowActivity : AppCompatActivity() {
             dataStore.edit { it[stringPreferencesKey("name")] = "local name" }
         }
         setContentView(contentView)
+
 
         /**
          * use StateFlow like LiveData
@@ -150,10 +175,17 @@ class StateFlowActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
 
         /**
-         * case: MVI flow style
+         * case: MVI flow style with PartialChange and reduce
          */
-        newsViewModel.newsState
+//        newsViewModel.newsState
+//            .collectIn(this) { showNews(it) }
+
+        newsViewModel.newState2
             .collectIn(this) { showNews(it) }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     private fun showUserName(userInfo: UserInfoModel) {
@@ -165,22 +197,47 @@ class StateFlowActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNews(newsModel: NewsState) {
-        when {
-            newsModel.isLoading -> {
-                showLoading()
-            }
-            newsModel.errorMessage.isEmpty() -> {
-                dismissLoading()
-                newsAdapter.news = newsModel.data
-                rvNews.adapter = newsAdapter
-            }
-            else -> {
-                dismissLoading()
-                tv.text = newsModel.errorMessage
+    private fun showNews(state: NewsState) {
+        Log.v(
+            "ttaylor",
+            "showNews() state=${state}"
+        )
+        state.apply {
+            if (isLoading) showLoading() else dismissLoading()
+            if (isLoadingMore) showLoadingMore() else dismissLoadingMore()
+            if (reportToast.isNotEmpty()) Toast.makeText(
+                this@StateFlowActivity,
+                state.reportToast,
+                Toast.LENGTH_SHORT
+            ).show()
+            if (errorMessage.isNotEmpty()) tv.text = state.errorMessage
+            if (data.isNotEmpty()) newsAdapter2.dataList = state.data
+        }
+    }
+}
+
+fun Activity.showLoadingMore() {
+    contentView()?.apply {
+        TextView {
+            layout_id = "loading more"
+            layout_width = wrap_content
+            layout_height = wrap_content
+            textSize = 50f
+            textColor = "#00ff00"
+            text = "loading more..."
+            gravity = gravity_center
+            layout_gravity2 = gravity_center
+            shape = shape {
+                solid_color = "#ff00ff"
+                corner_radius = 20
             }
         }
     }
+}
+
+fun Activity.dismissLoadingMore() {
+    val tv = contentView()?.find<TextView>("loading more")
+    tv?.let { contentView()?.removeView(it) }
 }
 
 fun Activity.showLoading() {

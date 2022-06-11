@@ -13,12 +13,13 @@ data class News(
     @SerializedName("path") var path: String?,
     @SerializedName("image") var image: String?,
     @SerializedName("title") var title: String?,
-    @SerializedName("passtime") var passtime: String?
+    @SerializedName("passtime") var passtime: String?,
+    var id:Long?
 ) {
     fun toNews() = test.taylor.com.taylorcode.retrofit.repository_livedata.room.News(
         path,
         image,
-        title.value,
+        title.value+" from db",
         passtime
     )
 }

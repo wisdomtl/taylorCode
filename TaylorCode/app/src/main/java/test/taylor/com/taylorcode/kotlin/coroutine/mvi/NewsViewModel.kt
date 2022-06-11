@@ -1,5 +1,6 @@
-package test.taylor.com.taylorcode.kotlin.coroutine.mvvm
+package test.taylor.com.taylorcode.kotlin.coroutine.mvi
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.kotlin.coroutine.mvvm.*
 import javax.net.ssl.SSLHandshakeException
 
 class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
@@ -21,6 +23,15 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
     val _userInfoStateFlow = MutableStateFlow(UserInfoModel(loading = true))
     val userInfoStateFlow: StateFlow<UserInfoModel> = _userInfoStateFlow
 
+
+    val newState2 =
+        _feedsIntent
+            .onEach { Log.v("ttaylor","showNews() feedsIntent intent=$it") }
+            .toPartialChangeFlow()
+            .scan(NewsState.initial) { oldState, partialChange -> partialChange.reduce(oldState) }
+            .onEach { Log.v("ttaylor","showNews() onEach() newState=$it") }
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Eagerly,NewsState.initial)
 
     fun send(intent: FeedsIntent) {
         viewModelScope.launch { _feedsIntent.emit(intent) }
@@ -90,13 +101,48 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
             }
             .shareIn(viewModelScope, SharingStarted.Lazily)
 
+    private fun Flow<FeedsIntent>.toPartialChangeFlow(): Flow<FeedsPartialChange> = merge(
+        filterIsInstance<FeedsIntent.Init>().flatMapConcat { it.toPartialChangeFlow() },
+        filterIsInstance<FeedsIntent.More>().flatMapConcat { it.toPartialChangeFlow() },
+        filterIsInstance<FeedsIntent.Report>().flatMapConcat { it.toPartialChangeFlow() },
+    )
+
+    private fun FeedsIntent.More.toPartialChangeFlow() =
+        newsRepo.remoteNewsFlow("", "10")
+            .map { if (it.news.isEmpty()) More.Fail("no more news") else More.Success(it.news) }
+            .onStart { emit(More.Loading) }
+            .catch { emit(More.Fail("load more failed by xxx")) }
+
+
+    private fun FeedsIntent.Init.toPartialChangeFlow() =
+        flowOf(
+            newsRepo.localNewsOneShotFlow,
+            newsRepo.remoteNewsFlow(this.type.toString(), this.count.toString())
+        )
+            .flattenMerge()
+            .transformWhile {
+                emit(it.news)
+                !it.abort
+            }
+            .map { news -> if (news.isEmpty()) Init.Fail("no more news") else Init.Success(news) }
+            .onStart { emit(Init.Loading) }
+            .catch {
+                if (it is SSLHandshakeException)
+                    emit(Init.Fail("network error,show old news"))
+            }
+
+    private fun FeedsIntent.Report.toPartialChangeFlow() =
+        newsRepo.reportNews(id)
+            .map { if(it >= 0L) Report.Success(it) else Report.Fail}
+            .catch { emit((Report.Fail)) }
+
     /**
      * case: turn Intent flow to state flow
      */
     private fun Flow<FeedsIntent>.toNewsStateFlow(): Flow<NewsState> = merge(
         filterIsInstance<FeedsIntent.Init>()
             .flatMapConcat { it.toFetchInitPageFlow() },
-        filterIsInstance<FeedsIntent.Remove>()
+        filterIsInstance<FeedsIntent.Report>()
             .flatMapConcat { flow { } },
         filterIsInstance<FeedsIntent.More>()
             .flatMapConcat {
@@ -143,9 +189,8 @@ class NewsViewModelFactory(private val newsRepo: NewsRepo) : ViewModelProvider.F
     }
 }
 
-
 sealed class FeedsIntent {
     data class Init(val type: Int, val count: Int) : FeedsIntent()
     data class More(val timestamp: Long, val count: Int) : FeedsIntent()
-    data class Remove(val id: Long) : FeedsIntent()
+    data class Report(val id: Long) : FeedsIntent()
 }

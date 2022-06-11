@@ -14,4 +14,4 @@ data class News(
 )
 
 fun News.convert(): test.taylor.com.taylorcode.retrofit.News =
-    test.taylor.com.taylorcode.retrofit.News(this.path, this.image, this.title, this.passtime)
+    test.taylor.com.taylorcode.retrofit.News(this.path, this.image, this.title, this.passtime,0L)
