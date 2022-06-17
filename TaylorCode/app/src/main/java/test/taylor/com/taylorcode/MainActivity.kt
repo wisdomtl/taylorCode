@@ -304,6 +304,7 @@ class MainActivity : BaseActivity() {
         btn_glide.setOnClickListener { startActivity<GlideActivity> { } }
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
+        btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
 
 
         //SAM case:

@@ -188,9 +188,3 @@ class NewsViewModelFactory(private val newsRepo: NewsRepo) : ViewModelProvider.F
         return NewsViewModel(newsRepo) as T
     }
 }
-
-sealed class FeedsIntent {
-    data class Init(val type: Int, val count: Int) : FeedsIntent()
-    data class More(val timestamp: Long, val count: Int) : FeedsIntent()
-    data class Report(val id: Long) : FeedsIntent()
-}

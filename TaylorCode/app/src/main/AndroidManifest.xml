@@ -267,6 +267,7 @@
         <activity android:name=".photo.GlideActivity3" />
         <activity android:name=".concurrent.ConcurrentInitActivity" />
         <activity android:name=".kotlin.coroutine.mvi.StateFlowActivity" />
+        <activity android:name=".kotlin.coroutine.channel.ChannelActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
