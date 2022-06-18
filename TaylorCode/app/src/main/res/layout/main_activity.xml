@@ -7,6 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/btnStickyFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sticky live data"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnChannelActivity2"
@@ -157,12 +163,6 @@
             android:text="coroutine flow"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btnStickyFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sticky live data"
-            android:textAllCaps="false" />
 
 
         <Button

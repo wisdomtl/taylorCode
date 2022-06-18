@@ -182,6 +182,18 @@ class StateFlowActivity : AppCompatActivity() {
 
         newsViewModel.newState2
             .collectIn(this) { showNews(it) }
+
+        newsViewModel.eventFlow.collectIn(this) { showEvent(it) }
+    }
+
+    private fun showEvent(event: FeedsEvent) {
+        when (event) {
+            is FeedsEvent.Report.Result -> Toast.makeText(
+                this@StateFlowActivity,
+                event.reportToast,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onStart() {
@@ -205,11 +217,6 @@ class StateFlowActivity : AppCompatActivity() {
         state.apply {
             if (isLoading) showLoading() else dismissLoading()
             if (isLoadingMore) showLoadingMore() else dismissLoadingMore()
-            if (reportToast.isNotEmpty()) Toast.makeText(
-                this@StateFlowActivity,
-                state.reportToast,
-                Toast.LENGTH_SHORT
-            ).show()
             if (errorMessage.isNotEmpty()) tv.text = state.errorMessage
             if (data.isNotEmpty()) newsAdapter2.dataList = state.data
         }

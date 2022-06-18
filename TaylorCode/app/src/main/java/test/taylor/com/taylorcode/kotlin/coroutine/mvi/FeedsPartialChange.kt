@@ -57,9 +57,8 @@ sealed class Report : FeedsPartialChange {
     override fun reduce(oldState: NewsState): NewsState = when (this) {
         is Success -> oldState.copy(
             data = oldState.data.filterNot { it.id == id },
-            reportToast = "举报成功"
         )
-        Fail -> oldState.copy(reportToast = "举报失败")
+        Fail -> oldState
     }
 
     class Success(val id: Long) : Report()
