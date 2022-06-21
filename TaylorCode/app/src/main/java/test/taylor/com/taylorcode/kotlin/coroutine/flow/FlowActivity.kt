@@ -87,6 +87,7 @@ class FlowActivity : AppCompatActivity() {
                 start_toStartOf = parent_id
                 /**
                  *  case: debounce on EditText input
+                 *  case flatMapLatest(): previous collection of flow will be canceled, if new flow is arrived
                  */
                 this.textChangeFlow()
                     .filter { it.isNotEmpty() }
