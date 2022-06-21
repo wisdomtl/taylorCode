@@ -512,8 +512,25 @@ class FlowActivity : AppCompatActivity() {
                     emit(it)
                 }
             }.conflate().collect {
+                Log.v("ttaylor","[flow conflate] value before suspend point=$it")
                 delay(200)
-                Log.v("ttaylor", "conflate = $it")
+                Log.v("ttaylor", "[flow conflate] = $it")
+            }
+        }
+
+        /**
+         * case: collectLatest()
+         */
+        mainScope.launch {
+            flow {
+                (1..10).forEach {
+                    delay(100)
+                    emit(it)
+                }
+            }.collectLatest {
+                Log.v("ttaylor","[flow collectLatest] value before suspend point=$it") // all value will be printed here
+                delay(200)
+                Log.v("ttaylor", "[flow collectLatest] = $it") // only the latest value will be printed here
             }
         }
     }

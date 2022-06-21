@@ -144,7 +144,7 @@ class NewsViewModel(private val newsRepo: NewsRepo) : ViewModel() {
         onEach { partialChange ->
             val event = when (partialChange) {
                 is Report.Fail -> FeedsEvent.Report.Result("举报失败")
-                is Report.Success -> FeedsEvent.Report.Result("举报失败")
+                is Report.Success -> FeedsEvent.Report.Result("举报成功")
                 else -> return@onEach
             }
             eventChannel.send(event)
