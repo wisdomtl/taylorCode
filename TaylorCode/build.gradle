@@ -27,6 +27,19 @@ allprojects {
 //        maven { url 'https://maven.google.com' }
 //        maven { url "https://jitpack.io" }
     }
+
+    afterEvaluate {
+        tasks.withType(Test){
+            testLogging {
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+                showStandardStreams = true
+                events = ["passed","started","failed"]
+                exceptionFormat = "full"
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {
