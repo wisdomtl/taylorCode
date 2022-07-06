@@ -5,7 +5,9 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Looper;
 import android.util.Log;
+import android.util.Printer;
 
 import com.facebook.stetho.Stetho;
 import com.taylor.easylog.EasyLog;
@@ -43,6 +45,13 @@ public class TaylorApplication extends Application {
         }
         Log.v("ttaylor", "TaylorApplication.onCreate()" + "  time=" + time);
 
+
+        Looper.getMainLooper().setMessageLogging(new Printer() {
+            @Override
+            public void println(String x) {
+               Log.v("ttaylor"," Printer.println() msg="+x) ;
+            }
+        });
 
         //java quote case1:
         ArrayList<String> origin = new ArrayList();
