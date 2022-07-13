@@ -269,6 +269,7 @@
         <activity android:name=".kotlin.coroutine.mvi.StateFlowActivity" />
         <activity android:name=".kotlin.coroutine.channel.ChannelActivity" />
         <activity android:name=".kotlin.coroutine.flow.FlowActivity" />
+        <activity android:name=".ui.material_design.CollapsingToolBarLayoutActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -65,7 +65,7 @@ public class ViewPagerActivity extends Activity {
     /**
      * case1:the basic use of PagerAdapter extension
      */
-    private class MyPagerAdapter extends PagerAdapter {
+    class MyPagerAdapter extends PagerAdapter {
 
         private List<View> views;
 

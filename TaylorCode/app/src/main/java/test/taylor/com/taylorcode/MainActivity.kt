@@ -8,8 +8,8 @@ import android.view.View
 import androidx.annotation.IntDef
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
@@ -47,7 +47,6 @@ import test.taylor.com.taylorcode.log.LogActivity
 import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.photo.GlideActivity
-import test.taylor.com.taylorcode.photo.GlideActivity2
 import test.taylor.com.taylorcode.photo.GlideActivity3
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
@@ -78,6 +77,7 @@ import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
+import test.taylor.com.taylorcode.ui.material_design.CollapsingToolBarLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -118,6 +118,11 @@ class MainActivity : BaseActivity() {
         readPhoneInfo()
         testValueDiliver();
 //        detectFrame()
+
+        val job = Job()
+        Log.v("ttaylor3333","onCreate() job is active=${job.isActive}")
+        val scope = CoroutineScope(Job()+Dispatchers.Default)
+        Log.v("ttaylor3333","onCreate() scope is active =${scope.isActive}")
     }
 
     private fun testValueDiliver() {
@@ -305,6 +310,7 @@ class MainActivity : BaseActivity() {
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
+        btn_collapsing.setOnClickListener { startActivity<CollapsingToolBarLayoutActivity> { } }
 
 
         //SAM case:
