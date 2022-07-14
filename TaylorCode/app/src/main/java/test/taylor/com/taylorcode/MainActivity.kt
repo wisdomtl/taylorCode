@@ -59,6 +59,7 @@ import test.taylor.com.taylorcode.ui.*
 import test.taylor.com.taylorcode.ui.anim.AddViewActivity
 import test.taylor.com.taylorcode.ui.anim.AnimActivity
 import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
+import test.taylor.com.taylorcode.ui.custom_view.DrawTriangleActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity2
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
@@ -311,6 +312,7 @@ class MainActivity : BaseActivity() {
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
         btn_collapsing.setOnClickListener { startActivity<CollapsingToolBarLayoutActivity> { } }
+        btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
 
 
         //SAM case:

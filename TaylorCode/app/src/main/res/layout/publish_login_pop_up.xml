@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvkkk"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="11dp"
+    android:paddingEnd="11dp"
+    android:paddingTop="9dp"
+    android:paddingBottom="9dp"
+    android:textColor="#D2D3DC"
+    android:text="前100名可获得现金奖励"
+    android:background="#404155"
+    android:textSize="12sp">
+
+</TextView>
