@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/coroutineException"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="exception in coroutine"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnTriangle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,12 +154,7 @@
             android:text="cancel of coroutine"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/coroutineException"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="exception in coroutine"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_coroutine"

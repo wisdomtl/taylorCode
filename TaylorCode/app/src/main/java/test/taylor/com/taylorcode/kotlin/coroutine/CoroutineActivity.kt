@@ -481,7 +481,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     /**
-     * case: coroutineScope will not end until all sub async has completed
+     * case: coroutineScope will not end until all sub coroutine has completed (because of coroutineScope{})
      */
     private val coroutineScopeWaitSubLaunch = { _: View ->
         launch {

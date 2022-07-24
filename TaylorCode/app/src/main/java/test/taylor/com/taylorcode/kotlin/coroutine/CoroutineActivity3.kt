@@ -45,6 +45,41 @@ class CoroutineActivity3 : AppCompatActivity() {
             value.await()
         }
 
+        /**
+         * case: one async crash will kill the sibling
+         */
+        val handler5 = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.v("ttaylorExceptionByAsync", "onCreate() async exception ") // this wont invoked and app will crash
+        }
+        lifecycleScope.launch(handler5) {
+            val d1 = async { throw IllegalArgumentException() }
+            val d2 = async {
+                delay(1000)
+                Log.v("ttaylorExceptionByAsync", "delay")
+            }
+
+            d2.await()
+            d1.await()
+            Log.v("ttaylorExceptionByAsync","all async is done")
+        }
+
+        /**
+         * case: supervisorScope wont kill siblings if exception happened
+         */
+        lifecycleScope.launch(handler1) {
+           supervisorScope {
+               val d1 = async { throw IllegalArgumentException() }
+               val d2 = async {
+                   delay(1000)
+                   Log.v("ttaylorExceptionByAsyncInSupervisor", "delay")
+               }
+
+               d2.await()
+               d1.await()
+               Log.v("ttaylorExceptionByAsync","all async is done")
+           }
+        }
+
 
         /**
          * case: sub jobs wont survive even if supervisor job is used in father
@@ -113,12 +148,12 @@ class CoroutineActivity3 : AppCompatActivity() {
          * case: code in one Coroutine could be executed in different thread after suspend and resume
          */
         lifecycleScope.launch(Dispatchers.Default) {
-            Log.v("ttaylor","withContext() thread=${Thread.currentThread().name}")
+            Log.v("ttaylor", "withContext() thread=${Thread.currentThread().name}")
             withContext(Dispatchers.IO) {
                 delay(1000)
             }
 
-            Log.v("ttaylor","withContext() after thread=${Thread.currentThread().name}")
+            Log.v("ttaylor", "withContext() after thread=${Thread.currentThread().name}")
         }
     }
 

@@ -1,5 +1,8 @@
 package test.taylor.com.taylorcode.file;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -47,6 +50,23 @@ public class FileUtil {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        AnimationSet animationSet = new AnimationSet(false);
+        animationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         return object;
     }
 }

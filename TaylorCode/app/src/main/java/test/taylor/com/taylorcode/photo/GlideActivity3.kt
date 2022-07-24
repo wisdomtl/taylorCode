@@ -3,8 +3,11 @@ package test.taylor.com.taylorcode.photo
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -12,9 +15,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.photo.okhttp.model_loader.okHttpClient
 import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.NetworkTrackCallback
@@ -23,11 +24,14 @@ import test.taylor.com.taylorcode.photo.okhttp.model_loader.track.TrackEventList
 import test.taylor.com.taylorcode.ui.line_feed_layout.LineFeedLayout
 import java.lang.Integer.min
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class GlideActivity3 : AppCompatActivity() {
 
     private lateinit var lf: LineFeedLayout
 
+    private val mainScope = MainScope()
     private val images = listOf(
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fppt.chnlib.com%2FFileUpload%2F2018-11%2F7-Cai_Se_Re_1i_1iu_Gao-110740_129.png&refer=http%3A%2F%2Fppt.chnlib.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343732&t=06d9d1091d3bf3ff9211e0cb27e0afe0",
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.51miz.com%2FElement%2F00%2F84%2F05%2F33%2Fb07322b0_E840533_bf6a953e.png%21%2Fquality%2F90%2Funsharp%2Ftrue%2Fcompress%2Ftrue%2Fformat%2Fpng&refer=http%3A%2F%2Fimg.51miz.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654343749&t=cacd1263d9232c376e3b59f5eb4b3254",
@@ -122,43 +126,56 @@ class GlideActivity3 : AppCompatActivity() {
             )
         }
 
-        lf.apply {
-            images.forEach { img ->
-                ImageView(autoAdd = false) {
-                    layout_id = "tvChange"
-                    layout_width = 100
-                    layout_height = 100
-                    scaleType = scale_fit_xy
-                    Glide
-                        .with(this@GlideActivity3)
-                        .load(img)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                countdownLatch.countDown()
-                                return false
-                            }
-
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                countdownLatch.countDown()
-                                return false
-                            }
-                        })
-                        .into(this)
-                }.also { addView(it) }
-            }
+mainScope.launch {
+    val startTime = SystemClock.elapsedRealtime()
+    lf.apply {
+        val defers = images.map { img ->
+            val imageView = ImageView(autoAdd = false) {
+                layout_id = "tvChange"
+                layout_width = 100
+                layout_height = 100
+                scaleType = scale_fit_xy
+              loadImage(img)
+            }.also { addView(it) }
+            async { imageView.loadImage(img) }
         }
+        defers.awaitAll()
+
+        Log.v("ttaylor","time elapsed by await=${SystemClock.elapsedRealtime() - startTime}")
     }
+}
+}
+
+private suspend fun ImageView.loadImage(img: String) = suspendCoroutine<String> { continuation ->
+    Glide
+        .with(this@GlideActivity3)
+        .load(img)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
+        .skipMemoryCache(true)
+        .listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                  countdownLatch.countDown()
+                continuation.resume("")
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                  countdownLatch.countDown()
+                continuation.resume("")
+                return false
+            }
+        })
+        .into(this)
+}
 }
