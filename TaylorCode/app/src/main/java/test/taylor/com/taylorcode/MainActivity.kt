@@ -130,6 +130,8 @@ class MainActivity : BaseActivity() {
         Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
         Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
         Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
+
+        Log.v("ttaylor","testValueDiliver() ${"0".toLong()}")
     }
 
     private fun readPhoneInfo() {
@@ -177,6 +179,7 @@ class MainActivity : BaseActivity() {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
+
 
         val holder = Holder(reference)
         holder.doSth()

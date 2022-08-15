@@ -156,4 +156,6 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     implementation "com.android.support:multidex:1.0.0"
+
+    implementation "com.alibaba:fastjson:1.1.71.android"
 }

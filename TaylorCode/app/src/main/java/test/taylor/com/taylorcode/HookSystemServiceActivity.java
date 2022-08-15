@@ -32,6 +32,10 @@ public class HookSystemServiceActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        String vdd = "01";
+       int ddd =  Integer.parseInt(vdd);
+       Log.v("ttaylor","ddd="+ddd);
         /**
          * case: @IntDef, limit the value before compile
          */
@@ -67,5 +71,14 @@ class Solution {
             if(nums[i] == target) return i;
         }
         return -1;
+    }
+    public void finddd(){
+        if(true) {
+            if(true){
+               Log.v("ttaylor","()") ;
+            }
+            Log.v("ttaylor","()");}
+
+        else Log.v("ttaylor","()");
     }
 }
