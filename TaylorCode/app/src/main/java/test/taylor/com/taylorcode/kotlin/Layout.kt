@@ -1749,6 +1749,14 @@ inline var ImageView.src: Int
         setImageResource(value)
     }
 
+inline var ImageView.imageDrawable: Drawable?
+    get() {
+        return null
+    }
+    set(value) {
+        setImageDrawable(value)
+    }
+
 inline var ImageView.bitmap: Bitmap?
     get() {
         return null
@@ -2701,5 +2709,19 @@ data class Stroke(
     var dashWidth: Float = 0f,
     var dashGap: Float = 0f
 )
+
+
+/**
+ * helper function for building [StateListDrawable]
+ */
+inline fun selector(init: StateListDrawable.() -> Unit) = StateListDrawable().apply(init)
+
+inline var StateListDrawable.items: Map<IntArray, Drawable?>
+    get() {
+        return emptyMap()
+    }
+    set(value) {
+        value.forEach { entry -> addState(entry.key, entry.value) }
+    }
 
 //</editor-fold>

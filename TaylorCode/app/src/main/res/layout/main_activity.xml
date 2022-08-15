@@ -9,6 +9,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_vp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view pager 2 + TabLayout"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,12 +259,7 @@
             android:layout_height="wrap_content"
             android:text="view pager 2 with fragment"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_vp2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="view pager 2"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/kotlinActivity2"

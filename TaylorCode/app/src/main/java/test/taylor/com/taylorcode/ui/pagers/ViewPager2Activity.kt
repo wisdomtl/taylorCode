@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -35,6 +36,10 @@ class ViewPager2Activity : AppCompatActivity() {
         "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591790054139&di=627d2e1d16d93f1f2fdcac074a623d39&imgtype=0&src=http%3A%2F%2Fpngimg.com%2Fuploads%2Fdonald_trump%2Fdonald_trump_PNG56.png"
     )
 
+    private val tabTitles by lazy {
+        listOf("home", "video", "audio")
+    }
+
     private val viewPagerFlow = MutableStateFlow<List<BaseBean>?>(null)
 
     private val handler = Handler(Looper.getMainLooper())
@@ -54,8 +59,55 @@ class ViewPager2Activity : AppCompatActivity() {
          * case: ViewPager2 with Tab
          */
         TabLayoutMediator(tablayout, vp2) { tab, position ->
-            tab.text = position.toString()
-            tab.badge
+            /**
+             * case: TabLayout text and icon which is above title by default
+             */
+//            tab.text = tabTitles.getOrElse(position) { "unknown" }
+//            tab.icon = selector {
+//                items = mapOf(
+//                    intArrayOf(state_selected) to ContextCompat.getDrawable(this@ViewPager2Activity, R.drawable.material_ic_arrow_remote_center_up),
+//                    intArrayOf(state_unselected) to ContextCompat.getDrawable(
+//                        this@ViewPager2Activity,
+//                        R.drawable.material_ic_arrow_remote_center_down
+//                    ),
+//                )
+//            }
+
+            tab.customView = LinearLayout {
+                layout_width = wrap_content
+                orientation = horizontal
+                layout_height = 60
+
+                ImageView {
+                    layout_id = "ivIcon"
+                    layout_width = 18
+                    layout_height = 18
+                    scaleType = scale_fit_xy
+                    layout_gravity = gravity_center_vertical
+                    imageDrawable = selector {
+                        items = mapOf(
+                            intArrayOf(state_selected) to ContextCompat.getDrawable(
+                                this@ViewPager2Activity,
+                                R.drawable.material_ic_arrow_remote_center_down
+                            ),
+                            intArrayOf(state_unselected) to ContextCompat.getDrawable(
+                                this@ViewPager2Activity,
+                                R.drawable.material_ic_arrow_remote_center_up
+                            ),
+                        )
+                    }
+                }
+                TextView {
+                    layout_id = "tvChange"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    layout_gravity = gravity_center_vertical
+                    textSize = 14f
+                    textColor = "#ffffff"
+                    text = tabTitles.getOrElse(position) { "unknow" }
+                    gravity = gravity_center
+                }
+            }
         }.attach()
         vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
