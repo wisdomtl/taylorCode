@@ -9,6 +9,14 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="bottom navigation view"
+            android:textAllCaps="false" />
+
+
+        <Button
             android:id="@+id/coroutineException"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

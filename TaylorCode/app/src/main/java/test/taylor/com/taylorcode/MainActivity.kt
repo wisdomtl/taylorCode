@@ -100,6 +100,7 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity1
 import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
+import test.taylor.com.taylorcode.ui.tablayout.BottomNavigationViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
@@ -316,6 +317,7 @@ class MainActivity : BaseActivity() {
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
         btn_collapsing.setOnClickListener { startActivity<CollapsingToolBarLayoutActivity> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
+        bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
 
 
         //SAM case:

@@ -158,4 +158,10 @@ dependencies {
     implementation "com.android.support:multidex:1.0.0"
 
     implementation "com.alibaba:fastjson:1.1.71.android"
+
+    def navigation_version = "2.5.1"
+    implementation "androidx.navigation:navigation-fragment:$navigation_version"
+    implementation "androidx.navigation:navigation-ui:$navigation_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 }

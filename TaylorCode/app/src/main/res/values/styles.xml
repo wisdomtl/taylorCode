@@ -21,6 +21,13 @@
         <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
     </style>
 
+    <style name="navigation_tab_inactive">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="navigation_tab_active">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 
     <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
