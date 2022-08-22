@@ -8,6 +8,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <Button
+            android:id="@+id/btn_constraintLayout_flow2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="constraintLayout flow by custom FlowLayout"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_constraintLayout_flow"
             android:layout_width="match_parent"
