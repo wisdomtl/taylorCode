@@ -272,6 +272,7 @@
         <activity android:name=".ui.material_design.CollapsingToolBarLayoutActivity" />
         <activity android:name=".ui.custom_view.DrawTriangleActivity" />
         <activity android:name=".ui.tablayout.BottomNavigationViewActivity" />
+        <activity android:name=".ui.ConstraintLayoutFlowActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -318,6 +318,7 @@ class MainActivity : BaseActivity() {
         btn_collapsing.setOnClickListener { startActivity<CollapsingToolBarLayoutActivity> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
+        btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
 
 
         //SAM case:
