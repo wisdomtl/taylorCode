@@ -63,7 +63,7 @@ class TaylorApplication : Application() {
             e.printStackTrace()
         }
         Log.v("ttaylor", "TaylorApplication.onCreate()  time=$time")
-        Looper.getMainLooper().setMessageLogging { x -> Log.v("ttaylorLooper", " msg=$x") }
+//        Looper.getMainLooper().setMessageLogging { x -> Log.v("ttaylorLooper", " msg=$x") }
 
         //java quote case1:
         val origin = mutableListOf<String>()

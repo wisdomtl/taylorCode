@@ -1,6 +1,9 @@
 package test.taylor.com.taylorcode.ui.flow
 
 import android.os.Bundle
+import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.helper.widget.Flow
@@ -11,10 +14,43 @@ class ConstraintLayoutFlowActivity2 : AppCompatActivity() {
 
     private lateinit var flowLayout: FlowLayout
 
+    private val gestureDetector by lazy {GestureDetector(this,object :GestureDetector.OnGestureListener{
+        override fun onDown(e: MotionEvent?): Boolean {
+            Log.v("ttaylor","onDown()")
+          return  true
+        }
+
+        override fun onShowPress(e: MotionEvent?) {
+            Log.v("ttaylor","onShowPress()")
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            Log.v("ttaylor","onSingleTapUp()")
+            return false
+        }
+
+        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+            Log.v("ttaylor","onScroll()")
+            return false
+        }
+
+        override fun onLongPress(e: MotionEvent?) {
+            Log.v("ttaylor","onLongPress()")
+        }
+
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            Log.v("ttaylor","onFling()")
+            return false
+        }
+    })}
+
     private val contentView by lazy {
         ConstraintLayout {
             layout_width = match_parent
             layout_height = match_parent
+            setOnTouchListener { v, event ->
+                gestureDetector.onTouchEvent(event)
+                true }
 
             flowLayout = FlowLayout(this@ConstraintLayoutFlowActivity2).apply {
                 layout_width = match_parent
@@ -44,9 +80,9 @@ class ConstraintLayoutFlowActivity2 : AppCompatActivity() {
                     solid_color = "#00ff00"
                     corner_radius = 20
                 }
-                onClick = {
-                    delete()
-                }
+//                onClick = {
+//                    delete()
+//                }
             }
 
             TextView {
@@ -64,9 +100,9 @@ class ConstraintLayoutFlowActivity2 : AppCompatActivity() {
                     solid_color = "#00ff00"
                     corner_radius = 20
                 }
-                onClick = {
-                    add()
-                }
+//                onClick = {
+//                    add()
+//                }
             }
         }
 
