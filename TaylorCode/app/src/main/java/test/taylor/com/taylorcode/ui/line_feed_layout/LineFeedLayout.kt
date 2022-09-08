@@ -18,6 +18,7 @@ class LineFeedLayout @JvmOverloads constructor(
 
     var horizontalGap: Int = 0
     var verticalGap: Int = 0
+    var onNewLine: ((Int) -> Unit)? = null
 
     /**
      * the height of [LineFeedLayout] depends on how much lines it has
@@ -31,18 +32,21 @@ class LineFeedLayout @JvmOverloads constructor(
             height = MeasureSpec.getSize(heightMeasureSpec)
         } else {
             var remainWidth = width
+            var count = 1
+            onNewLine?.invoke(1)
             (0 until childCount).map { getChildAt(it) }.forEach { child ->
                 val lp = child.layoutParams as? MarginLayoutParams
-                val childOccupation = child.measuredWidth + lp?.marginStart.value + lp?.marginEnd.value
-                if (isNewLine(childOccupation, remainWidth)) {
+                val appendWidth = child.measuredWidth + lp?.marginStart.orZero + lp?.marginEnd.orZero
+                if (isNewLine(appendWidth, remainWidth)) {
                     remainWidth = width - child.measuredWidth
-                    height += (lp?.topMargin.value + lp?.bottomMargin.value + child.measuredHeight + verticalGap)
+                    height += (lp?.topMargin.orZero + lp?.bottomMargin.orZero + child.measuredHeight + verticalGap)
+                    onNewLine?.invoke(++count)
                 } else {
                     remainWidth -= child.measuredWidth
                     if (height == 0) height =
-                        (lp?.topMargin.value + lp?.bottomMargin.value + child.measuredHeight + verticalGap)
+                        (lp?.topMargin.orZero + lp?.bottomMargin.orZero + child.measuredHeight + verticalGap)
                 }
-                remainWidth -= (lp?.leftMargin.value + lp?.rightMargin.value + horizontalGap)
+                remainWidth -= (lp?.leftMargin.orZero + lp?.rightMargin.orZero + horizontalGap)
             }
         }
 
@@ -56,41 +60,32 @@ class LineFeedLayout @JvmOverloads constructor(
         var count = 0
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
             val lp = child.layoutParams as? MarginLayoutParams
-            val childOccupation = child.measuredWidth + lp?.marginStart.value + lp?.marginEnd.value
-            if (isNewLine(childOccupation, r - l - left)) {
-                left = -lp?.leftMargin.value
+            val appendWidth = child.measuredWidth + lp?.marginStart.orZero + lp?.marginEnd.orZero
+            if (isNewLine(appendWidth, r - l - left)) {
+                left = -lp?.leftMargin.orZero
                 top = lastBottom
                 lastBottom = 0
             }
-            val childLeft = left + lp?.leftMargin.value
-            val childTop = top + lp?.topMargin.value
+            val childLeft = left + lp?.leftMargin.orZero
+            val childTop = top + lp?.topMargin.orZero
             child.layout(
                 childLeft,
                 childTop,
                 childLeft + child.measuredWidth,
                 childTop + child.measuredHeight
             )
-            if (lastBottom == 0) lastBottom = child.bottom + lp?.bottomMargin.value + verticalGap
-            left += child.measuredWidth + lp?.leftMargin.value + lp?.rightMargin.value + horizontalGap
+            if (lastBottom == 0) lastBottom = child.bottom + lp?.bottomMargin.orZero + verticalGap
+            left += child.measuredWidth + lp?.leftMargin.orZero + lp?.rightMargin.orZero + horizontalGap
             count++
         }
     }
 
     /**
      * place the [child] in a new line or not
-     *
-     * @param child child view of [LineFeedLayout]
-     * @param remainWidth the remain space of one line in [LineFeedLayout]
-     * @param horizontalGap the horizontal gap for the children of [LineFeedLayout]
      */
-    private fun isNewLine(
-        childOccupation: Int,
-        remainWidth: Int
-    ): Boolean {
-        return (childOccupation > remainWidth)
-    }
+    private fun isNewLine(usedWidth: Int, remainWidth: Int): Boolean = usedWidth > remainWidth
 }
 
 
-val Int?.value: Int
+val Int?.orZero: Int
     get() = this ?: 0
