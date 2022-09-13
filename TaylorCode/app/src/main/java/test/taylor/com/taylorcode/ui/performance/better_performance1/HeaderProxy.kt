@@ -1,12 +1,15 @@
 package test.taylor.com.taylorcode.ui.performance.better_performance1
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.performance.widget.PercentLayout
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
@@ -166,3 +169,35 @@ class HeaderViewHolder2(
     var tvCount: TextView,
     var tvTitle: TextView
 ) : RecyclerView.ViewHolder(itemView)
+
+
+/**
+ * create [PercentLayout] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [PercentLayout] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+inline fun ViewGroup.PercentLayout(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: PercentLayout.() -> Unit
+): PercentLayout {
+    val percentLayout =
+        if (style != null) PercentLayout(
+            ContextThemeWrapper(context, style)
+        ) else PercentLayout(context)
+    return percentLayout.apply(init).also { if (autoAdd) addView(it) }
+}
+
+/**
+ * create [PercentLayout] instance
+ * @param style an style int value defined in xml
+ * @param init set attributes for this view in this lambda
+ */
+inline fun Context.PercentLayout(style: Int? = null, init: PercentLayout.() -> Unit): PercentLayout {
+    val percentLayout =
+        if (style != null) PercentLayout(
+            ContextThemeWrapper(this, style)
+        ) else PercentLayout(this)
+    return percentLayout.apply(init)
+}

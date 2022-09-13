@@ -2,10 +2,10 @@ package test.taylor.com.taylorcode.ui.performance.widget
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import test.taylor.com.taylorcode.kotlin.PercentLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.layout_width
 import test.taylor.com.taylorcode.kotlin.match_parent
+import test.taylor.com.taylorcode.ui.performance.better_performance1.PercentLayout
 
 class PercentActivity:AppCompatActivity() {
 

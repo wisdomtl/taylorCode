@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.shape
@@ -213,4 +214,23 @@ class OneRankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     @RequiresApi(Build.VERSION_CODES.M)
     val tvCount = oneViewGroup?.findDrawable<Text>("tvCount")
+}
+
+/**
+ * create [OneViewGroup] instance within a [ViewGroup]
+ * @param style an style int value defined in xml
+ * @param autoAdd whether add [OneViewGroup] into [ViewGroup] automatically
+ * @param init set attributes for this view in this lambda
+ */
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun ViewGroup.OneViewGroup(
+    style: Int? = null,
+    autoAdd: Boolean = true,
+    init: OneViewGroup.() -> Unit
+): OneViewGroup {
+    val oneViewGroup =
+        if (style != null) OneViewGroup(
+            ContextThemeWrapper(context, style)
+        ) else OneViewGroup(context)
+    return oneViewGroup.apply(init).also { if (autoAdd) addView(it) }
 }

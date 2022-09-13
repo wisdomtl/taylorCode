@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.ui.performance.better_performance1.PercentLayout
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.load
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2

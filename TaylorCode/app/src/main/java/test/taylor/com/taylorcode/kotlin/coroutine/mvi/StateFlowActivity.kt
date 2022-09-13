@@ -249,7 +249,7 @@ fun Activity.dismissLoadingMore() {
 
 fun Activity.showLoading() {
     contentView()?.apply {
-        ProgressBar2 {
+        ProgressBar {
             layout_id = "pb"
             layout_width = 50
             layout_height = 50

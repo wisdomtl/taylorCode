@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.ui.custom_view.recyclerview_indicator
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -76,3 +77,6 @@ class IndicatorActivity : AppCompatActivity() {
 
     }
 }
+
+inline fun ViewGroup.Indicator(init: Indicator.() -> Unit) =
+    Indicator(context).apply(init).also { addView(it) }
