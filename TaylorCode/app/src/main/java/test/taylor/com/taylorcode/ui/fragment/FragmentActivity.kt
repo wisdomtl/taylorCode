@@ -41,8 +41,8 @@ class FragmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
-        supportFragmentManager.beginTransaction().add("container".toLayoutId(), Fragment1()).commit()
-
+//        supportFragmentManager.beginTransaction().add("container".toLayoutId(), Fragment1()).commit()
+        DialogFragment1().show(supportFragmentManager,"ddd")
         supportFragmentManager.setFragmentResultListener("abc",this) { requestKey, result -> Log.v("ttaylor","activity.onCreate() result=${result["111"]}") }
         supportFragmentManager.setFragmentResultListener("efg",this) { requestKey, result -> Log.v("ttaylor","activity.onCreate() result=${result["112"]}") }
     }

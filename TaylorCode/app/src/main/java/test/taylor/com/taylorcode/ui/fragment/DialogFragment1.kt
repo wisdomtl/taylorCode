@@ -29,7 +29,7 @@ class DialogFragment1 : DialogFragment() {
                     /**
                      * case: send a fragment result of  "abc"
                      */
-                    parentFragmentManager.setFragmentResult("abc", bundleOf("111" to 111))
+                    parentFragmentManager.setFragmentResult("abc", bundleOf("111" to 333))
                 }
             }
         }
