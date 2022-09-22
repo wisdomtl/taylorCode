@@ -274,6 +274,7 @@
         <activity android:name=".ui.tablayout.BottomNavigationViewActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity2" />
+        <activity android:name=".architecture.flow.lifecycle.FlowLifecycleActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

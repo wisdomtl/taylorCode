@@ -10,10 +10,10 @@
 
 
         <Button
-            android:id="@+id/btn_constraintLayout_flow2"
+            android:id="@+id/btn_flow_lifecycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="constraintLayout flow by custom FlowLayout"
+            android:text="flow lifecycle"
             android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_constraintLayout_flow"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_navigation"
+    app:startDestination="@id/SearchHistoryFragment">
+
+    <fragment
+        android:id="@+id/SearchHintFragment"
+        android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchHintFragment"
+        android:label="search_hint_fragment">
+        <action
+            android:id="@+id/action_to_result"
+            app:destination="@id/SearchResultFragment" />
+        <action
+            android:id="@+id/action_to_history"
+            app:popUpTo="@id/SearchHistoryFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/SearchHistoryFragment"
+        android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchHistoryFragment"
+        android:label="search_history_fragment">
+        <action
+            android:id="@+id/action_to_result"
+            app:destination="@id/SearchResultFragment" />
+        <action
+            android:id="@+id/action_to_hint"
+            app:destination="@id/SearchHintFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SearchResultFragment"
+        android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchResultFragment"
+        android:label="search_result_fragment">
+        <action
+            android:id="@+id/action_to_history"
+            app:popUpTo="@id/SearchHistoryFragment" />
+        <action
+            android:id="@+id/action_to_hint"
+            app:destination="@id/SearchHintFragment" />
+    </fragment>
+
+</navigation>
