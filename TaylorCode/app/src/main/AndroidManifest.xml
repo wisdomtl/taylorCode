@@ -275,6 +275,7 @@
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity2" />
         <activity android:name=".architecture.flow.lifecycle.FlowLifecycleActivity" />
+        <activity android:name=".ui.fragment.FragmentActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

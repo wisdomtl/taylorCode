@@ -78,8 +78,8 @@ import test.taylor.com.taylorcode.ui.custom_view.time_picker.TimePickerActivity
 import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.ConstraintLayoutFlowActivity
-import test.taylor.com.taylorcode.ui.flow.ConstraintLayoutFlowActivity2
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
+import test.taylor.com.taylorcode.ui.fragment.FragmentActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CollapsingToolBarLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
@@ -323,6 +323,7 @@ class MainActivity : BaseActivity() {
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         btn_flow_lifecycle.setOnClickListener { startActivity<FlowLifecycleActivity> { } }
+        btn_fragment_communicate.setOnClickListener { startActivity<FragmentActivity> { } }
 
 
         //SAM case:
