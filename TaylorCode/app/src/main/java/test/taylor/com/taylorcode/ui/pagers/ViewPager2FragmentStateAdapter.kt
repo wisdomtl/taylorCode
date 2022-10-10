@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.ui.pagers
 
 import android.util.SparseArray
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -21,7 +22,9 @@ class ViewPager2FragmentStateAdapter constructor(
     override fun createFragment(position: Int): Fragment {
         var fragment = fragments.get(position)
         if (fragment == null) {
-            fragment = ViewPagerFragment()
+            fragment = ViewPagerFragment().apply {
+                arguments = bundleOf("index" to position)
+            }
             fragments.put(position, fragment)
         }
         return fragment

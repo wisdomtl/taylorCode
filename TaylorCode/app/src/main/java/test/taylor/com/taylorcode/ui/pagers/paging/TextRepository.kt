@@ -8,7 +8,7 @@ class TextRepository {
     private var itemNumber: Int = 1
 
     fun getText(count: Int): List<Text2> {
-        Log.d("ttaylor", "TextRepository.getText(): ")
+        Log.v("ttaylor", "TextRepository.getText(): ")
         return listOf(*(0..count).map { Text2(itemNumber,"item ${itemNumber++}") }.toTypedArray())
     }
 }

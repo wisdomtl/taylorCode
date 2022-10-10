@@ -12,7 +12,7 @@ class MyPagingSource(private val repo: TextRepository):PagingSource<Int, Text2>(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Text2> {
-        Log.d("ttaylor", "MyPagingSource.load(param.key=${params.key},loadSize=${params.loadSize}) ")
+        Log.v("ttaylor", "MyPagingSource.load(param.key=${params.key},loadSize=${params.loadSize}) ")
         return  try {
             val key = params.key ?: 0
             val loadSize = params.loadSize ?: 10

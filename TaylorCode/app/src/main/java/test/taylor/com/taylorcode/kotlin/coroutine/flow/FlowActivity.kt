@@ -586,5 +586,5 @@ fun <T> Flow<T>.collectIn(
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     action: (T) -> Unit
 ): Job = lifecycleOwner.lifecycleScope.launch {
-    flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)
+    flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).onEach { action(it) }.collect()
 }
