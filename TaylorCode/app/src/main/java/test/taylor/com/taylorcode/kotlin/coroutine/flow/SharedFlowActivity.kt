@@ -23,7 +23,7 @@ class SharedFlowActivity : AppCompatActivity() {
 
     private val intents by lazy {
         merge(
-            onClickFlow().onEach { delay(3000) }
+            tv.clickFlow { listOf(Intent.ShowDialog) }.onEach { delay(3000) },
         )
     }
 
@@ -36,9 +36,9 @@ class SharedFlowActivity : AppCompatActivity() {
                 layout_id = "tvChange"
                 layout_width = wrap_content
                 layout_height = wrap_content
-                textSize = 50f
+                textSize = 30f
                 textColor = "#000000"
-                text = "emit"
+                text = "emit value by delay"
                 gravity = gravity_center
             }
         }
@@ -56,15 +56,7 @@ class SharedFlowActivity : AppCompatActivity() {
          * case: SharedFlow will drop the value when there is no subscribers
          */
         viewModel.viewState
-            .collectIn(this) { Log.v("ttaylor", "toast show =${(it as? ViewState.ShowDialog)?.v}") }
-    }
-
-    private fun onClickFlow() = callbackFlow {
-        tv.setOnClickListener {
-            trySend(Intent.ShowDialog)
-        }
-
-        awaitClose { tv.setOnClickListener(null) }
+            .collectIn(this) { Log.v("ttaylor[SharedFlow test]", "toast show =${(it as? ViewState.ShowDialog)?.v}") }
     }
 }
 

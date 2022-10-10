@@ -26,7 +26,14 @@ class FlowActivity2 : AppCompatActivity() {
                     Log.v("ttaylor", "[collectLatest] emit $it")
                 }
                 .collectLatest {
-                    delay(4000)
+                    /**
+                     * every upstream value will be printed
+                     */
+                    Log.d("ttaylor", "[collectLatest]FlowActivity2.collectLatest[value=$it]: ")
+                    delay(2001)
+                    /**
+                     * if the suspend function up,suspend long enough(longer than produce), all the value will be dropped except for the last one
+                     */
                     Log.v("ttaylor", "[collectLatest] collect $it")
                 }
         }

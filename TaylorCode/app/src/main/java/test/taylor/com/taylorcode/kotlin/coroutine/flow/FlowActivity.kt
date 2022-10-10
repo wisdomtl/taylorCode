@@ -568,23 +568,3 @@ class FlowActivity : AppCompatActivity() {
     }
 }
 
-/**
- * case: customize operator of Flow
- */
-fun <T, R> Flow<T>.filterMap(predicate: (T) -> Boolean, transform: suspend (T) -> R): Flow<R> =
-    transform { value ->
-        if (predicate(value)) emit(transform(value))
-    }
-
-
-/**
- * case: ui show collect flow in this way
- * it will collect when lifecycle state is above [minActiveState] and stop when state is below
- */
-fun <T> Flow<T>.collectIn(
-    lifecycleOwner: LifecycleOwner,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    action: (T) -> Unit
-): Job = lifecycleOwner.lifecycleScope.launch {
-    flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).onEach { action(it) }.collect()
-}

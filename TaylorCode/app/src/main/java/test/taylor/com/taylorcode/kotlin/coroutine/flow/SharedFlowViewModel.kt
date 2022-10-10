@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.kotlin.coroutine.flow
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,16 @@ class SharedFlowViewModel : ViewModel() {
      */
     val viewState =
         _intents
+            /**
+             * onEach wont print anything if there is no subscribers
+             */
+            .onEach { Log.d("ttaylor[SharedFlow test]", "SharedFlowViewModel._intent.onEach[intent=${it}]: ") }
             .toViewState()
             .flowOn(Dispatchers.Default)
-            .shareIn(viewModelScope, SharingStarted.Eagerly, 0)
+            /**
+             * replay = 1 cant save "dropping value when there is no subscribers", the old value will deliver to new collector and new value never comes
+             */
+            .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
     private fun Flow<Intent>.toViewState(): Flow<ViewState> = merge(
         filterIsInstance<Intent.ShowDialog>()

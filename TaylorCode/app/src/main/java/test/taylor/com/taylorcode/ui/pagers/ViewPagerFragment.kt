@@ -149,6 +149,7 @@ class ViewPagerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.i("ttaylor[flow.fragment.test]", "-------${this@ViewPagerFragment}$index.onResume[]: ")
+        // ensure emit value will happened after onResume() done
         view?.post {
             viewModel.send("hello world$index")
         }
