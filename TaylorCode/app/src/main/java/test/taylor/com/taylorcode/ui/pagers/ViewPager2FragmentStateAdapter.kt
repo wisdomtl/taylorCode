@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ViewPager2Adapter @JvmOverloads constructor(
+class ViewPager2FragmentStateAdapter constructor(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     var count: Int

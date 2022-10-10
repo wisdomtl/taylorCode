@@ -31,9 +31,37 @@ class TextAdapterProxy : VarietyAdapter.Proxy<Text, TextViewHolder>() {
     }
 }
 
-data class Text(
-    var text: String
-)
+data class Text( var text: String ) : Diff {
+    override fun diff(other: Any?): Any? {
+        return null
+    }
+
+    override fun sameAs(other: Any?): Boolean {
+        return if (other !is Text) false
+        else this.text == other.text
+    }
+
+    override fun contentSameAs(other: Any?): Boolean {
+        return if (other !is Text) false
+        else this.text == other.text
+    }
+}
+
+data class Text2(val id:Int, val text: String ) : Diff {
+    override fun diff(other: Any?): Any? {
+        return null
+    }
+
+    override fun sameAs(other: Any?): Boolean {
+        return if (other !is Text2) false
+        else this.id == other.id
+    }
+
+    override fun contentSameAs(other: Any?): Boolean {
+        return if (other !is Text2) false
+        else this.text == other.text
+    }
+}
 
 class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tvName = itemView.find<TextView>("tvName")

@@ -21,7 +21,7 @@ class ViewPager2Activity2 : AppCompatActivity() {
         setContentView(R.layout.viewpager2_activity)
 
         tabLiveData.observe(this@ViewPager2Activity2) { list ->
-            vp2.adapter = ViewPager2Adapter(supportFragmentManager, lifecycle, list.size)
+            vp2.adapter = ViewPager2FragmentStateAdapter(supportFragmentManager, lifecycle, list.size)
         }
 
         // load data
@@ -30,7 +30,10 @@ class ViewPager2Activity2 : AppCompatActivity() {
             tabLiveData.value = listOf(
                 "a",
                 "b",
-                "c"
+                "c",
+                "d",
+                "e",
+                "f",
             )
         }
     }

@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TaylorCode/TaylorCode.iml" filepath="$PROJECT_DIR$/TaylorCode/TaylorCode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/taylorCode.iml" filepath="$PROJECT_DIR$/taylorCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/taylorCode.iml" filepath="$PROJECT_DIR$/.idea/taylorCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TaylorCode/taylorCode.TaylorCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TaylorCode/taylorCode.TaylorCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/taylorCode.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/taylorCode.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/taylorCode.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/taylorCode.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/taylorCode.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/taylorCode.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/taylorCode.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/taylorCode.app.unitTest.iml" />
     </modules>
   </component>
 </project>
