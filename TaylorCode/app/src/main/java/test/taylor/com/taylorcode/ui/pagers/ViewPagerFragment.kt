@@ -23,6 +23,7 @@ class ViewPagerFragment : Fragment() {
 
     /**
      * share ViewModel instance between fragments by [requireActivity]
+     * if using with Paging3, ViewModel should use the ViewModelStoreOwner of Activity to avoid being cleared when fragment is destory
      */
     private val viewModel by lazy {
         ViewModelProvider(requireActivity(), object : ViewModelProvider.Factory {

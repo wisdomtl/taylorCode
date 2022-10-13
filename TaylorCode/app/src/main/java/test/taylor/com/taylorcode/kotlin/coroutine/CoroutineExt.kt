@@ -1,12 +1,11 @@
 package test.taylor.com.taylorcode.kotlin.coroutine
 
 import android.os.Build
+import android.util.Log
 import android.view.View
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
@@ -102,3 +101,11 @@ val View.autoDisposeScope: CoroutineScope
         setTag(tag, newScope)
         return newScope
     }
+
+fun CoroutineScope.orNew(
+    job: Job = SupervisorJob(),
+    dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
+    exceptionHandler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, _ -> }
+): CoroutineScope {
+    return this.takeIf { it.isActive } ?: run { CoroutineScope(job + dispatcher + exceptionHandler) }
+}

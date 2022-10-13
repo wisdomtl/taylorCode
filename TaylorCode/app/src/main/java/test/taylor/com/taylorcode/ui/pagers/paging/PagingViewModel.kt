@@ -6,11 +6,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.kotlin.coroutine.orNew
 
 class PagingViewModel(repository: TextRepository):ViewModel() {
 
@@ -19,8 +20,7 @@ class PagingViewModel(repository: TextRepository):ViewModel() {
         pagingSourceFactory = { MyPagingSource(repository) }
     ).flow.onEach {
         Log.d("ttaylor", "PagingViewModel.onEach(): pagingData=${it} ")
-    }.cachedIn(viewModelScope)
-
+    } .cachedIn(viewModelScope.orNew())
 
     private val _stateFlow = MutableSharedFlow<String>()
 
