@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
     //for AndroidSchedulers.mainThread()
     //rating-bar
-    implementation 'com.hedgehog.ratingbar:app:1.1.2'
+//    implementation 'com.hedgehog.ratingbar:app:1.1.2'
     //TagView
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     //ViewModel and LiveData
@@ -95,7 +95,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
     //for debug database on browse
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
+//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
 //    //UCrop
 //    implementation 'com.github.yalantis:ucrop:2.2.2'
     //Glide
@@ -125,7 +125,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
     //debug database
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     implementation "org.jetbrains.kotlin:kotlin-script-runtime:1.3.60"
 
 
@@ -155,7 +155,7 @@ dependencies {
     implementation "androidx.datastore:datastore:1.0.0"
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
-    implementation "com.android.support:multidex:1.0.0"
+//    implementation "com.android.support:multidex:1.0.0"
 
     implementation "com.alibaba:fastjson:1.1.71.android"
 

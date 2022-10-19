@@ -81,7 +81,6 @@
         <activity android:name=".ui.CheckableActivity"></activity>
         <activity android:name=".broadcast.BroadcastActivity"></activity>
         <activity android:name=".date.DateActivity"></activity>
-        <activity android:name=".ui.RatingBarActivity"></activity>
         <activity android:name=".ui.pagers.ViewPagerActivity"></activity>
         <activity android:name=".ui.TagViewActivity"></activity>
         <activity android:name=".ui.navigation.NavigationActivity"></activity>
@@ -276,6 +275,7 @@
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity2" />
         <activity android:name=".architecture.flow.lifecycle.FlowLifecycleActivity" />
         <activity android:name=".ui.fragment.FragmentActivity" />
+        <activity android:name=".hook.JavassistActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

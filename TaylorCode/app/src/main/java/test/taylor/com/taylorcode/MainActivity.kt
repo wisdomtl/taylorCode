@@ -29,6 +29,7 @@ import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityCh
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
+import test.taylor.com.taylorcode.hook.JavassistActivity
 import test.taylor.com.taylorcode.interview.InterViewActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
@@ -324,6 +325,7 @@ class MainActivity : BaseActivity() {
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         btn_flow_lifecycle.setOnClickListener { startActivity<FlowLifecycleActivity> { } }
         btn_fragment_communicate.setOnClickListener { startActivity<FragmentActivity> { } }
+        btn_javassist.setOnClickListener { startActivity<JavassistActivity> { } }
 
 
         //SAM case:

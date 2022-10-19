@@ -9,6 +9,14 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_javassist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="make class"
+            android:textAllCaps="false" />
+
+
+        <Button
             android:id="@+id/sharedFlow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
