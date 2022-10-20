@@ -46,7 +46,7 @@ class FragmentActivity : AppCompatActivity() {
         supportFragmentManager.setFragmentResultListener("abc", this) { requestKey, result -> Log.v("ttaylor", "activity.onCreate() result=${result["111"]}") }
         supportFragmentManager.setFragmentResultListener("efg", this) { requestKey, result -> Log.v("ttaylor", "activity.onCreate() result=${result["112"]}") }
 
-        val iterator = listOf("a", "b", "c", "d").iterator(4)
+        val iterator = listOf("a", "b", "c", "d").iterator(3)
         while (iterator.hasNext()) {
             Log.v("ttaylor", "onCreate()[iterator] nextItem=${iterator.next()}")
         }

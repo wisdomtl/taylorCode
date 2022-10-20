@@ -9,12 +9,25 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_vp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view pager 2 + TabLayout"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_javassist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="make class"
             android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/btn_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dialog"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/sharedFlow"
@@ -37,12 +50,6 @@
             android:text="view pager 2 with fragment"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_vp2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="view pager 2 + TabLayout"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_fragment_communicate"
@@ -917,12 +924,6 @@
             android:text="DrawerLayout"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dialog"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_rx_binding"

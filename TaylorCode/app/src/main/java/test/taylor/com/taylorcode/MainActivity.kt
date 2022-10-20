@@ -1,10 +1,11 @@
 package test.taylor.com.taylorcode
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.view.*
 import androidx.annotation.IntDef
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
@@ -12,7 +13,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
-import test.taylor.com.taylorcode.architecture.flow.lifecycle.FlowLifecycleActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.audio.encoder.HWRecorderActivity
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
@@ -29,7 +29,6 @@ import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityCh
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
-import test.taylor.com.taylorcode.hook.JavassistActivity
 import test.taylor.com.taylorcode.interview.InterViewActivity
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
@@ -40,6 +39,7 @@ import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
@@ -64,9 +64,9 @@ import test.taylor.com.taylorcode.ui.anim.TransitionManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.DrawTriangleActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity
 import test.taylor.com.taylorcode.ui.custom_view.blur.BlurActivity2
+import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneViewActivity
 import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveCommentActivity
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LaneLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.custom_view.crop_view.CropActivity
 import test.taylor.com.taylorcode.ui.custom_view.overlap_anim.OverlapAnimActivity
 import test.taylor.com.taylorcode.ui.custom_view.path.PathActivity
@@ -200,7 +200,10 @@ class MainActivity : BaseActivity() {
         btn_drawer_layout.setOnClickListener { startActivity(DrawerLayoutActivity::class.java) }
         btn_constraint_layout.setOnClickListener { startActivity(ConstraintLayoutActivity::class.java) }
         btn_tab_layout.setOnClickListener { startActivity(TableLayoutActivity::class.java) }
-        btn_dialog.setOnClickListener { startActivity(DialogActivity::class.java) }
+        btn_dialog.setOnClickListener {
+            show2()
+//            startActivity(DialogActivity::class.java)
+        }
         btn_coordinate_layout.setOnClickListener { startActivity(CoordinateLayoutActivity::class.java) }
         btn_rx_binding.setOnClickListener { startActivity(LoginActivity::class.java) }
         btn_surface_view.setOnClickListener { startActivity(SurfaceViewActivity::class.java) }
@@ -323,9 +326,19 @@ class MainActivity : BaseActivity() {
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
-        btn_flow_lifecycle.setOnClickListener { startActivity<FlowLifecycleActivity> { } }
+        btn_flow_lifecycle.setOnClickListener {
+            PoorDialogFragment.show(this@MainActivity)
+//            startActivity<FlowLifecycleActivity> { }
+        }
         btn_fragment_communicate.setOnClickListener { startActivity<FragmentActivity> { } }
-        btn_javassist.setOnClickListener { startActivity<JavassistActivity> { } }
+        btn_javassist.setOnClickListener {
+
+//            startActivity<JavassistActivity> { }
+            }
+
+        btn_javassist.onVisibilityChange { view, i ->
+            Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
+        }
 
 
         //SAM case:
@@ -424,6 +437,34 @@ class MainActivity : BaseActivity() {
         )
         Log.v("ttaylor", "tag=, MainActivity.initView()   splitAtString=${sb.toString()}")
 
+    }
+
+    private fun show2() {
+        val bottomDialog = Dialog(this, R.style.BottomDialog)
+        val contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content, null)
+        bottomDialog.setContentView(contentView)
+        val params = contentView.layoutParams as ViewGroup.MarginLayoutParams
+        params.width = ViewGroup.MarginLayoutParams.MATCH_PARENT
+        contentView.layoutParams = params
+        bottomDialog.window!!.setGravity(Gravity.BOTTOM)
+        bottomDialog.window?.attributes?.apply {
+            width = WindowManager.LayoutParams.MATCH_PARENT
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        bottomDialog.window!!.setWindowAnimations(R.style.ActionSheetDialogAnimation)
+        bottomDialog.show()
+    }
+
+    /**
+     * dialog case2:show dialog in the center of screen
+     */
+    private fun show3() {
+        val bottomDialog = Dialog(this, R.style.TransparentDialog)
+        val contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content, null)
+        bottomDialog.setContentView(contentView)
+        bottomDialog.setCanceledOnTouchOutside(false)
+        //        bottomDialog.getWindow().setGravity(Gravity.CENTER);
+        bottomDialog.show()
     }
 
 

@@ -5,6 +5,9 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -28,4 +31,15 @@ fun Context.networkStateFlow(): Flow<Boolean> = callbackFlow {
     awaitClose { // Suspends until channel closed
         manager.unregisterNetworkCallback(callback)
     }
+}
+
+fun Lifecycle.onStateChanged(action: ((event: Lifecycle.Event) -> Unit)) {
+    addObserver(object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+            action(event)
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                removeObserver(this)
+            }
+        }
+    })
 }

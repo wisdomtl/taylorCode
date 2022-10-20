@@ -12,10 +12,16 @@ import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
+import android.view.ViewTreeObserver.OnScrollChangedListener
+import android.view.ViewTreeObserver.OnWindowFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnDetach
+import com.squareup.okhttp.TlsVersion
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
@@ -34,6 +40,58 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
 
     setOnClickListener { action(this) }
 }
+
+fun View.onVisibilityChange(block: (View, Boolean) -> Unit) {
+    val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
+    val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
+    if (getTag(KEY_HAS_LISTENER) == true) return
+
+    val checkShowFunc = {
+        val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
+        val isInScreen = this.inScreen
+        Log.i("ttaylor", ".onVisibilityChange[checkShowFunc]: lastVisibility=$lastVisibility ,isInScreen=$isInScreen")
+        if (lastVisibility == null) {
+            if (isInScreen) {
+                block(this, true)
+                setTag(KEY_VISIBILITY, true)
+            }
+        } else if (lastVisibility != isInScreen) {
+            block(this, isInScreen)
+            setTag(KEY_VISIBILITY, isInScreen)
+        }
+    }
+
+    val globalLayoutListener = {
+        Log.d("ttaylor", ".onVisibilityChange[globalLayoutListener]: ")
+        checkShowFunc() }
+    viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+
+    val scrollListener = OnScrollChangedListener {
+        Log.d("ttaylor", ".onVisibilityChange[OnScrollChangedListener]: ")
+        checkShowFunc() }
+    viewTreeObserver.addOnScrollChangedListener(scrollListener)
+
+    val focusChangeListener = OnWindowFocusChangeListener { hasFocus ->
+        val isShow = if (hasFocus) this.inScreen else false
+        block.invoke(this, isShow)
+    }
+    viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
+
+
+    doOnDetach {
+        if (ViewCompat.isAttachedToWindow(this)) {
+            try {
+                it.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+            } catch (_: java.lang.Exception) {
+                it.viewTreeObserver.removeGlobalOnLayoutListener(globalLayoutListener)
+            }
+            it.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
+            it.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
+        }
+    }
+    setTag(KEY_HAS_LISTENER, true)
+}
+
 
 /**
  * get relative position of this [View] relative to [otherView]

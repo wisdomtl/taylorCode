@@ -17,11 +17,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.viewpager2_activity.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.TextView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.Diff
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
@@ -112,7 +112,7 @@ class ViewPager2Activity : AppCompatActivity() {
         vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 Log.v("ttaylor", "onPageSelected() position = $position")
-                lifecycleScope.launch { fetch(position) }
+//                lifecycleScope.launch { fetch(position) }
             }
         })
 //        bannerViewPager()
@@ -130,10 +130,10 @@ class ViewPager2Activity : AppCompatActivity() {
             delay(500)
             viewPagerFlow.value = listOf(
                 // it must be 0 ,1,2,3 which is according to the real index in adapter,or DiffUtil will consider it as remove and insert, then ViewPager will scroll automatically
-                EmptyString(0, "null"),
-                EmptyString(1, "null"),
-                EmptyString(2, "null"),
-                EmptyString(3, "null"),
+                EmptyString(0, "a"),
+                EmptyString(1, "b"),
+                EmptyString(2, "c"),
+                EmptyString(3, "d"),
             )
         }
 
@@ -236,6 +236,10 @@ class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyVie
         action: ((Any?) -> Unit)?
     ) {
         holder.tvChange?.text = data.str
+        Log.d("ttaylor", "ViewPagerProxy.onBindViewHolder[holder, data, index, action]: ")
+        holder.tvChange?.onVisibilityChange{view,isShow ->
+            Log.w("ttaylor", "ViewPagerProxy.onBindViewHolder[onVisibilityChange]: tv(${data.str}) isShow=${isShow} ")
+        }
     }
 }
 
