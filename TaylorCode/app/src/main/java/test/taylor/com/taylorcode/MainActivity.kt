@@ -86,6 +86,7 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CollapsingToolBarLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
+import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollViewActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
@@ -127,9 +128,9 @@ class MainActivity : BaseActivity() {
 //        detectFrame()
 
         val job = Job()
-        Log.v("ttaylor3333","onCreate() job is active=${job.isActive}")
-        val scope = CoroutineScope(Job()+Dispatchers.Default)
-        Log.v("ttaylor3333","onCreate() scope is active =${scope.isActive}")
+        Log.v("ttaylor3333", "onCreate() job is active=${job.isActive}")
+        val scope = CoroutineScope(Job() + Dispatchers.Default)
+        Log.v("ttaylor3333", "onCreate() scope is active =${scope.isActive}")
     }
 
     private fun testValueDiliver() {
@@ -137,7 +138,7 @@ class MainActivity : BaseActivity() {
         Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
         Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
 
-        Log.v("ttaylor","testValueDiliver() ${"0".toLong()}")
+        Log.v("ttaylor", "testValueDiliver() ${"0".toLong()}")
     }
 
     private fun readPhoneInfo() {
@@ -161,7 +162,7 @@ class MainActivity : BaseActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        Log.v("ttaylor","MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}")// view has an dimension here
+        Log.v("ttaylor", "MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}")// view has an dimension here
     }
 
     override fun onPause() {
@@ -327,6 +328,11 @@ class MainActivity : BaseActivity() {
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
+        btn_nestedScrollView.setOnClickListener {
+//            startActivity<NestedScrollViewActivity> { }
+            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
+
+        }
         btn_flow_lifecycle.setOnClickListener {
             PoorDialogFragment.show(this@MainActivity)
 //            startActivity<FlowLifecycleActivity> { }
@@ -335,7 +341,7 @@ class MainActivity : BaseActivity() {
         btn_javassist.setOnClickListener {
 
 //            startActivity<JavassistActivity> { }
-            }
+        }
 
         btn_javassist.onVisibilityChange("3333") { view, i ->
             Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
@@ -610,11 +616,11 @@ const val INT2 = 2
 
 class Reference(var count: Int, var str: String)
 
-var reference = Reference(1,"ddd")
+var reference = Reference(1, "ddd")
 
 
-class Holder (private var reference:Reference){
-    fun doSth(){
-        Log.v("ttaylor","[reference test] ${reference.count}")
+class Holder(private var reference: Reference) {
+    fun doSth() {
+        Log.v("ttaylor", "[reference test] ${reference.count}")
     }
 }

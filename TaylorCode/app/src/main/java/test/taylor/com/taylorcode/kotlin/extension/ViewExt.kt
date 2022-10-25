@@ -19,6 +19,7 @@ import android.util.Log
 import android.util.Size
 import android.view.*
 import android.view.ViewTreeObserver.OnScrollChangedListener
+import android.view.ViewTreeObserver.OnWindowAttachListener
 import android.view.ViewTreeObserver.OnWindowFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageView
@@ -30,6 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.math.log
 import kotlin.math.min
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
@@ -45,18 +47,28 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
 }
 
 /**
- * Whether the view is in screen.
- * This function works for the following scenario: [ViewPager]'s scrolling, [ScrollView]'s scrolling, [Dialog]'s showing, [DialogFragment]'s showing,
+ * Whether the view is visible to the user.
+ * This function works for the following scenario:
+ * The switch of power button,
+ * invoke [View.setVisibility] manually,
+ * [ViewPager]'s scrolling,
+ * [ScrollView]'s scrolling,
+ * [NestedScrollView]'s scrolling,
+ * [Dialog]'s showing,
+ * [DialogFragment]'s showing,
+ * [Activity]'s launching
+ *
+ * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue. Too many child lead to too many scroll listeners.
  *
  */
-fun View.onVisibilityChange(tag: String = "", block: (view:View, isShow:Boolean) -> Unit) {
+fun View.onVisibilityChange(tag: String = "", block: (view: View, isVisible: Boolean) -> Unit) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
 
     val checkVisibility = {
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen(tag)
+        val isInScreen = this.isInScreen(tag) && visibility == View.VISIBLE
         if (lastVisibility == null) {
             if (isInScreen) {
                 block(this, true)
