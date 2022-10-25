@@ -56,7 +56,7 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
  * [NestedScrollView]'s scrolling,
  * [Dialog]'s showing,
  * [DialogFragment]'s showing,
- * [Activity]'s launching
+ * [Activity]'s switching
  *
  * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue. Too many child lead to too many scroll listeners.
  *

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 
 class StickyLiveDataActivity : AppCompatActivity() {
 

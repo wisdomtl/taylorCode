@@ -11,6 +11,19 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btnStickyFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sticky live data"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btn_transparent_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="transparent fragment"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -145,12 +158,6 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btnStickyFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sticky live data"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnChannelActivity2"
@@ -862,12 +869,7 @@
 
 
 
-        <Button
-            android:id="@+id/btn_transparent_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="transparent fragment"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_vs"

@@ -11,6 +11,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.util.print
 
 class TrolleyFragment : Fragment() {
@@ -35,12 +36,18 @@ class TrolleyFragment : Fragment() {
                 layout_width = wrap_content
                 layout_height = wrap_content
                 text = "balance"
+                textSize = 50f
                 gravity = gravity_center
+                center_horizontal = true
+                center_vertical = true
                 onClick = {
                     parentFragmentManager.beginTransaction()
                         .replace("container".toLayoutId(), BalanceFragment())
                         .addToBackStack("trolley")
                         .commit()
+                }
+                onVisibilityChange { view, isVisible ->
+                    Log.d("ttaylor", "TrolleyFragment.onCreateView[view(balance), isVisible($isVisible)]: ")
                 }
             }
         }
