@@ -44,7 +44,12 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
     setOnClickListener { action(this) }
 }
 
-fun View.onVisibilityChange(tag: String = "", block: (View, Boolean) -> Unit) {
+/**
+ * Whether the view is in screen.
+ * This function works for the following scenario: [ViewPager]'s scrolling, [ScrollView]'s scrolling, [Dialog]'s showing, [DialogFragment]'s showing,
+ *
+ */
+fun View.onVisibilityChange(tag: String = "", block: (view:View, isShow:Boolean) -> Unit) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
@@ -134,11 +139,6 @@ fun Rect.relativeTo(otherRect: Rect): Rect {
     return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
 }
 
-/**
- * Whether the view is in screen.
- * This function works for the following scenario: [ViewPager]
- *
- */
 fun View.isInScreen(tag: String): Boolean {
     val screenRect = Rect(0, 0, context.screenSize.width, context.screenSize.height)
 
