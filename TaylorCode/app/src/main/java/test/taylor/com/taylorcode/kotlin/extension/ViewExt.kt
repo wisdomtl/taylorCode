@@ -2,7 +2,9 @@ package test.taylor.com.taylorcode.kotlin.extension
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.*
+import android.os.Build
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
@@ -12,7 +14,9 @@ import test.taylor.com.taylorcode.kotlin.dp
 import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
 import android.view.*
 import android.view.ViewTreeObserver.OnScrollChangedListener
 import android.view.ViewTreeObserver.OnWindowFocusChangeListener
@@ -21,7 +25,6 @@ import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnDetach
-import com.squareup.okhttp.TlsVersion
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
@@ -41,15 +44,14 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
     setOnClickListener { action(this) }
 }
 
-fun View.onVisibilityChange(block: (View, Boolean) -> Unit) {
+fun View.onVisibilityChange(tag: String = "", block: (View, Boolean) -> Unit) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
 
-    val checkShowFunc = {
+    val checkVisibility = {
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.inScreen
-        Log.i("ttaylor", ".onVisibilityChange[checkShowFunc]: lastVisibility=$lastVisibility ,isInScreen=$isInScreen")
+        val isInScreen = this.isInScreen(tag)
         if (lastVisibility == null) {
             if (isInScreen) {
                 block(this, true)
@@ -61,22 +63,28 @@ fun View.onVisibilityChange(block: (View, Boolean) -> Unit) {
         }
     }
 
-    val globalLayoutListener = {
-        Log.d("ttaylor", ".onVisibilityChange[globalLayoutListener]: ")
-        checkShowFunc() }
+    val globalLayoutListener = { checkVisibility() }
     viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
 
-    val scrollListener = OnScrollChangedListener {
-        Log.d("ttaylor", ".onVisibilityChange[OnScrollChangedListener]: ")
-        checkShowFunc() }
+    val scrollListener = OnScrollChangedListener { checkVisibility() }
     viewTreeObserver.addOnScrollChangedListener(scrollListener)
 
     val focusChangeListener = OnWindowFocusChangeListener { hasFocus ->
-        val isShow = if (hasFocus) this.inScreen else false
-        block.invoke(this, isShow)
+        val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
+        val isInScreen = this.isInScreen(tag)
+        if (hasFocus) {
+            if (lastVisibility != isInScreen) {
+                block(this, isInScreen)
+                setTag(KEY_VISIBILITY, isInScreen)
+            }
+        } else {
+            if (lastVisibility == true) {
+                block(this, false)
+                setTag(KEY_VISIBILITY, false)
+            }
+        }
     }
     viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
-
 
     doOnDetach {
         if (ViewCompat.isAttachedToWindow(this)) {
@@ -103,6 +111,19 @@ fun View.getRelativeRectTo(otherView: View): Rect {
 }
 
 /**
+ * get the screen size including navigation bar
+ */
+val Context.screenSize: Size
+    get() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            this.getSystemService(WindowManager::class.java).currentWindowMetrics.let { Size(it.bounds.width(), it.bounds.height()) }
+        } else {
+            val display = getSystemService(WindowManager::class.java).defaultDisplay
+            val metrics = if (display != null) DisplayMetrics().also { display.getRealMetrics(it) } else resources.displayMetrics
+            Size(metrics.widthPixels, metrics.heightPixels)
+        }
+
+/**
  * get the relative rect of the [Rect] according to the [otherRect] ,considering the [otherRect]'s left and top is zero
  */
 fun Rect.relativeTo(otherRect: Rect): Rect {
@@ -113,19 +134,29 @@ fun Rect.relativeTo(otherRect: Rect): Rect {
     return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
 }
 
-val View.inScreen: Boolean
-    get() {
-        val screenWidth = context?.resources?.displayMetrics?.widthPixels ?: 0
-        val screenHeight = context?.resources?.displayMetrics?.heightPixels ?: 0
-        val screenRect = Rect(0, 0, screenWidth, screenHeight)
-        return Rect().let {
-            if (getGlobalVisibleRect(it)) {
-                it.intersect(screenRect)
-            } else {
-                false
-            }
-        }
-    }
+/**
+ * Whether the view is in screen.
+ * This function works for the following scenario: [ViewPager]
+ *
+ */
+fun View.isInScreen(tag: String): Boolean {
+    val screenRect = Rect(0, 0, context.screenSize.width, context.screenSize.height)
+
+    val rect = Rect()
+    val offset1 = Point()
+    val ret = getGlobalVisibleRect(rect, offset1)
+    val localRect = Rect()
+    val localRet = getLocalVisibleRect(localRect)
+    val windowRect = Rect()
+    val locationArray = IntArray(2)
+    getLocationInWindow(locationArray)
+    getWindowVisibleDisplayFrame(windowRect)
+    Log.d(
+        "ttaylor",
+        "(tag=$tag)globalRect=${rect},offset=${offset1},localRect=${localRect},localRet=${localRet},globalRet=${ret},screenRect=${screenRect},windowRect=${windowRect},locationArray=[${locationArray[0]},${locationArray[1]}],isAttach=${this.isAttachedToWindow}"
+    )
+    return isAttachedToWindow && getLocalVisibleRect(Rect())
+}
 
 /**
  * add listener to RecyclerView which listens it's items in and out event

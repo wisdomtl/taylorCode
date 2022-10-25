@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_pager2"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

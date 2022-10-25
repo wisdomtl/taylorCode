@@ -16,15 +16,17 @@ class CollapsingToolBarLayoutActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.collasping_layout)
-        fragments.add(CCCFragment())
+        fragments.add(CCCFragment(1))
+        fragments.add(CCCFragment(2))
+        fragments.add(CCCFragment(3))
+        fragments.add(CCCFragment(4))
+        fragments.add(CCCFragment(5))
+        fragments.add(CCCFragment(6))
+        fragments.add(CCCFragment(7))
         vppp.adapter = SimpleFragmentPagerAdapter(supportFragmentManager).apply {
             mTitles = arrayOf("ddd")
-            mCount = 1
-            createFragment = {position ->
-               fragments[position]
-            }
+            mCount = 7
+            createFragment = {position -> fragments[position] }
         }
-
-
     }
 }

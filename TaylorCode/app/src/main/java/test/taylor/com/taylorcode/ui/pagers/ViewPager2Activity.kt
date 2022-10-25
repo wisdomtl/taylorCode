@@ -216,14 +216,20 @@ class ViewPagerViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
-            TextView {
-                layout_id = "tvChange"
+            ConstraintLayout {
                 layout_width = match_parent
                 layout_height = match_parent
-                textSize = 40f
-                textColor = "#00ff00"
-                fontFamily = R.font.pingfang
-                gravity = gravity_center
+                background_color = "#777777"
+
+                TextView {
+                    layout_id = "tvChange"
+                    layout_width =200
+                    layout_height = 100
+                    textSize = 40f
+                    textColor = "#00ff00"
+                    fontFamily = R.font.pingfang
+                    gravity = gravity_center
+                }
             }
         }
         return ViewPagerEmptyViewHolder(itemView)
@@ -237,7 +243,7 @@ class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyVie
     ) {
         holder.tvChange?.text = data.str
         Log.d("ttaylor", "ViewPagerProxy.onBindViewHolder[holder, data, index, action]: ")
-        holder.tvChange?.onVisibilityChange{view,isShow ->
+        holder.tvChange?.onVisibilityChange(data.str) { view, isShow ->
             Log.w("ttaylor", "ViewPagerProxy.onBindViewHolder[onVisibilityChange]: tv(${data.str}) isShow=${isShow} ")
         }
     }

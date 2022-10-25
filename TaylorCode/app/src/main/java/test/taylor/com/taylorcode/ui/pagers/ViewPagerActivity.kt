@@ -1,116 +1,126 @@
-package test.taylor.com.taylorcode.ui.pagers;
+package test.taylor.com.taylorcode.ui.pagers
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import test.taylor.com.taylorcode.R;
+import android.app.Activity
+import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.handler_activity.*
+import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 
 /**
  * Created by taylor on 2017/11/13.
  */
+class ViewPagerActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.view_pager_activity)
+        val adapter = MyPagerAdapter(prepareViews())
+        val vp = findViewById<View>(R.id.vp) as MyViewPager
+        vp.adapter = adapter
+        vp.setScrollable(true)
+        setIndicator(vp)
+//        val tv = adapter.findViewById(R.id.tv_pager1) as TextView?
+//        tv!!.setOnClickListener { Toast.makeText(this@ViewPagerActivity, "tv1", Toast.LENGTH_SHORT).show() }
+    }
 
-public class ViewPagerActivity extends Activity {
-    public static final int[] PAGE_LAYOUT_ID = new int[]{R.layout.pager1, R.layout.page2};
+    private fun setIndicator(viewPager: ViewPager) {
+        val magicIndicator = findViewById<View>(R.id.mi) as MagicIndicator
+        val indicator = Indicator(this)
+        indicator.circleCount = PAGE_LAYOUT_ID.size
+        indicator.setLongColor(Color.DKGRAY)
+        indicator.setShortColor(Color.GRAY)
+        magicIndicator.navigator = indicator
+        ViewPagerHelper.bind(magicIndicator, viewPager)
+    }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager_activity);
-        MyPagerAdapter adapter = new MyPagerAdapter(prepareViews());
-        MyViewPager vp = ((MyViewPager) findViewById(R.id.vp));
-        vp.setAdapter(adapter);
-        vp.setScrollable(true);
-        setIndicator(vp);
-        TextView tv = ((TextView) adapter.findViewById(R.id.tv_pager1));
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ViewPagerActivity.this, "tv1", Toast.LENGTH_SHORT).show();
+    private fun prepareViews(): List<View> {
+        val views: MutableList<View> = ArrayList()
+        for (i in PAGE_LAYOUT_ID.indices) {
+//            val page: View = LayoutInflater.from(this).inflate(layoutId, null)
+//            var tv: TextView? = null
+//            tv = page.findViewById(R.id.tv_pager1)
+//            if (tv == null) tv = page.findViewById(R.id.tv_pager2)
+//            if (tv == null) tv = page.findViewById(R.id.tv_pager3)
+//            if (tv == null) tv = page.findViewById(R.id.tv_pager4)
+//            if (tv == null) tv = page.findViewById(R.id.tv_pager5)
+//            tv.tag = i
+            var tv: TextView? = null
+            val page = ConstraintLayout {
+                layout_width = match_parent
+                layout_height = match_parent
+
+                tv = TextView {
+                    layout_id = "tvChange"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 30f
+                    textColor = "#00ff00"
+                    gravity = gravity_center
+                    center_horizontal = true
+                    center_vertical = true
+                    text = "page${i}"
+                    tag = i
+                }
             }
-        });
-    }
-
-    private void setIndicator(ViewPager viewPager) {
-        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.mi);
-        Indicator indicator = new Indicator(this);
-        indicator.setCircleCount(PAGE_LAYOUT_ID.length);
-        indicator.setLongColor(Color.DKGRAY);
-        indicator.setShortColor(Color.GRAY);
-        magicIndicator.setNavigator(indicator);
-        ViewPagerHelper.bind(magicIndicator, viewPager);
-    }
-
-    private List<View> prepareViews() {
-        List<View> views = new ArrayList<>();
-        for (int layoutId : PAGE_LAYOUT_ID) {
-            View page = LayoutInflater.from(this).inflate(layoutId, null);
-            views.add(page);
+            tv?.onVisibilityChange(i.toString()) { view: View, aBoolean: Boolean ->
+                Log.w("ttaylor", "ViewPagerActivity.onVisibilityChange(show=" + aBoolean + "),tag=" + view.tag + ",view=" + view)
+                Unit
+            }
+            views.add(page)
         }
-        return views;
+        return views
     }
-
 
     /**
      * case1:the basic use of PagerAdapter extension
      */
-    class MyPagerAdapter extends PagerAdapter {
-
-        private List<View> views;
-
+    internal inner class MyPagerAdapter(private val views: List<View>?) : PagerAdapter() {
         /**
          * case2:find views in ViewPagers
+         *
          * @param id
          * @return
          */
-        public View findViewById(int id) {
-            for (View view : views) {
-                View findView = view.findViewById(id);
+        fun findViewById(id: Int): View? {
+            for (view in views!!) {
+                val findView = view.findViewById<View>(id)
                 if (findView != null) {
-                    return findView;
+                    return findView
                 }
             }
-            return null;
+            return null
         }
 
-        public MyPagerAdapter(List<View> views) {
-            this.views = views;
+        override fun getCount(): Int {
+            return views!!.size
         }
 
-        @Override
-        public int getCount() {
-            return views.size();
+        override fun isViewFromObject(view: View, `object`: Any): Boolean {
+            return view === `object`
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            if (views != null && views.size() > position) {
-                container.removeView(views.get(position));
+        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+            if (views != null && views.size > position) {
+                container.removeView(views[position])
             }
         }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(views.get(position));
-            return views.get(position);
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            container.addView(views!![position])
+            return views[position]
         }
     }
 
-
+    companion object {
+        val PAGE_LAYOUT_ID = intArrayOf(R.layout.pager1, R.layout.page2, R.layout.page3, R.layout.page4, R.layout.page5)
+    }
 }

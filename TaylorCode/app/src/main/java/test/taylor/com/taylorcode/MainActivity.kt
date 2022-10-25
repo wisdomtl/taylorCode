@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.IntDef
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
@@ -336,7 +337,7 @@ class MainActivity : BaseActivity() {
 //            startActivity<JavassistActivity> { }
             }
 
-        btn_javassist.onVisibilityChange { view, i ->
+        btn_javassist.onVisibilityChange("3333") { view, i ->
             Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
         }
 

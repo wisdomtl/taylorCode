@@ -12,11 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.anim_activity.*
-import kotlinx.android.synthetic.main.fans_rank_layout2.view.*
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.extension.inScreen
+import test.taylor.com.taylorcode.kotlin.extension.isInScreen
+import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewItemAnimActivity : AppCompatActivity() {
@@ -155,6 +154,9 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
 //                duration = 30000L
 //                interpolator = AccelerateDecelerateInterpolator()
 //            }.start()
+            holder.itemView.onVisibilityChange((holder.itemView.find<TextView>("tvChange") as TextView).text.toString()) { view, b ->
+                Log.d("ttaylor", "TextProxy2.onBindViewHolder[view(), visible=$b]: ")
+            }
         }
 
     }
@@ -180,7 +182,7 @@ class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     override fun onParentScroll() {
-        if (this.inScreen) {
+        if (this.isInScreen("")) {
             if (! hasShown) {
                 Log.w("ttaylor", "onScroll() 111111111 text(${text}) is in screen")
                 hasShown = true
