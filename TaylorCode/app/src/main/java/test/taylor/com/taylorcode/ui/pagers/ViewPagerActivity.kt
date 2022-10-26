@@ -4,14 +4,11 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.handler_activity.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
@@ -71,7 +68,7 @@ class ViewPagerActivity : Activity() {
                     tag = i
                 }
             }
-            tv?.onVisibilityChange(i.toString()) { view: View, aBoolean: Boolean ->
+            tv?.onVisibilityChange { view: View, aBoolean: Boolean ->
                 Log.w("ttaylor", "ViewPagerActivity.onVisibilityChange(show=" + aBoolean + "),tag=" + view.tag + ",view=" + view)
                 Unit
             }

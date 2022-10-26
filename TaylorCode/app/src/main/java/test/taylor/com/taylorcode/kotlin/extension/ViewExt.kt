@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode.kotlin.extension
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.os.Build
@@ -18,8 +19,9 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.view.ViewGroup.OnHierarchyChangeListener
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.ViewTreeObserver.OnScrollChangedListener
-import android.view.ViewTreeObserver.OnWindowAttachListener
 import android.view.ViewTreeObserver.OnWindowFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageView
@@ -31,7 +33,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlin.math.log
+import test.taylor.com.taylorcode.kotlin.relativeTo
+import kotlin.math.abs
 import kotlin.math.min
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
@@ -49,26 +52,31 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
 /**
  * Whether the view is visible to the user.
  * This function works for the following scenario:
- * The switch of power button,
- * invoke [View.setVisibility] manually,
- * [ViewPager]'s scrolling,
- * [ScrollView]'s scrolling,
- * [NestedScrollView]'s scrolling,
- * [Dialog]'s showing,
- * [DialogFragment]'s showing,
- * [Activity]'s switching
+ * 1.The switch of power button,
+ * 2.Invoke [View.setVisibility] manually,
+ * 3.Covered by a [View] in the same view tree,
+ * 4.[ViewPager]'s scrolling,
+ * 5.[ScrollView]'s scrolling,
+ * 6.[NestedScrollView]'s scrolling,
+ * 7.[Dialog]'s showing,
+ * 8.[DialogFragment]'s showing,
+ * 9.[Activity]'s switching
  *
- * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue. Too many child lead to too many scroll listeners.
- *
+ * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue.
+ * Too many child lead to too many scroll listeners.
  */
-fun View.onVisibilityChange(tag: String = "", block: (view: View, isVisible: Boolean) -> Unit) {
+fun View.onVisibilityChange(
+    viewGroup: ViewGroup? = null,
+    childViewId: Int? = null,
+    block: (view: View, isVisible: Boolean) -> Unit
+) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
 
     val checkVisibility = {
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen(tag) && visibility == View.VISIBLE
+        val isInScreen = this.isInScreen() && visibility == View.VISIBLE
         if (lastVisibility == null) {
             if (isInScreen) {
                 block(this, true)
@@ -80,15 +88,49 @@ fun View.onVisibilityChange(tag: String = "", block: (view: View, isVisible: Boo
         }
     }
 
-    val globalLayoutListener = { checkVisibility() }
-    viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+
+    class LayoutListener : OnGlobalLayoutListener {
+        var addedView: View? = null
+        override fun onGlobalLayout() {
+            if (addedView != null) {
+                val addedRect = Rect().also { addedView?.getGlobalVisibleRect(it) }
+                val rect = Rect().also { this@onVisibilityChange.getGlobalVisibleRect(it) }
+                if (addedRect.contains(rect)) {
+                    block(this@onVisibilityChange, false)
+                    setTag(KEY_VISIBILITY, false)
+                } else {
+                    block(this@onVisibilityChange, true)
+                    setTag(KEY_VISIBILITY, true)
+                }
+            } else {
+                checkVisibility()
+            }
+        }
+    }
+
+    val layoutListener = LayoutListener()
+    viewGroup?.setOnHierarchyChangeListener(object : OnHierarchyChangeListener {
+        override fun onChildViewAdded(parent: View?, child: View?) {
+            if (childViewId != null && child?.id == abs(childViewId)) {
+                layoutListener.addedView = child
+            }
+        }
+
+        override fun onChildViewRemoved(parent: View?, child: View?) {
+            if (childViewId != null && child?.id == abs(childViewId)) {
+                layoutListener.addedView = null
+            }
+        }
+    })
+
+    viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
 
     val scrollListener = OnScrollChangedListener { checkVisibility() }
     viewTreeObserver.addOnScrollChangedListener(scrollListener)
 
     val focusChangeListener = OnWindowFocusChangeListener { hasFocus ->
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen(tag)
+        val isInScreen = this.isInScreen()
         if (hasFocus) {
             if (lastVisibility != isInScreen) {
                 block(this, isInScreen)
@@ -106,9 +148,9 @@ fun View.onVisibilityChange(tag: String = "", block: (view: View, isVisible: Boo
     doOnDetach {
         if (ViewCompat.isAttachedToWindow(this)) {
             try {
-                it.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+                it.viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
             } catch (_: java.lang.Exception) {
-                it.viewTreeObserver.removeGlobalOnLayoutListener(globalLayoutListener)
+                it.viewTreeObserver.removeGlobalOnLayoutListener(layoutListener)
             }
             it.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
             it.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
@@ -151,24 +193,7 @@ fun Rect.relativeTo(otherRect: Rect): Rect {
     return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
 }
 
-fun View.isInScreen(tag: String): Boolean {
-    val screenRect = Rect(0, 0, context.screenSize.width, context.screenSize.height)
-
-    val rect = Rect()
-    val offset1 = Point()
-    val ret = getGlobalVisibleRect(rect, offset1)
-    val localRect = Rect()
-    val localRet = getLocalVisibleRect(localRect)
-    val windowRect = Rect()
-    val locationArray = IntArray(2)
-    getLocationInWindow(locationArray)
-    getWindowVisibleDisplayFrame(windowRect)
-    Log.d(
-        "ttaylor",
-        "(tag=$tag)globalRect=${rect},offset=${offset1},localRect=${localRect},localRet=${localRet},globalRet=${ret},screenRect=${screenRect},windowRect=${windowRect},locationArray=[${locationArray[0]},${locationArray[1]}],isAttach=${this.isAttachedToWindow}"
-    )
-    return isAttachedToWindow && getLocalVisibleRect(Rect())
-}
+fun View.isInScreen(): Boolean = isAttachedToWindow && getLocalVisibleRect(Rect())
 
 /**
  * add listener to RecyclerView which listens it's items in and out event

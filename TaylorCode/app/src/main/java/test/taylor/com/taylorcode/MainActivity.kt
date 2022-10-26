@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import android.widget.TextView
 import androidx.annotation.IntDef
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
@@ -40,6 +40,7 @@ import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
+import test.taylor.com.taylorcode.kotlin.extension.decorView
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
@@ -86,7 +87,6 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.CollapsingToolBarLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
-import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollViewActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
@@ -310,7 +310,20 @@ class MainActivity : BaseActivity() {
         btn_log.setOnClickListener { startActivity<LogActivity> { } }
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
-        btnStickyFragment.setOnClickListener { startActivity<StickyLiveDataActivity> { } }
+        btnStickyFragment.setOnClickListener {
+            startActivity<StickyLiveDataActivity> { }
+//            decorView?.addView(
+//                TextView {
+//                    layout_id = "tvChange"
+//                    layout_width = wrap_content
+//                    layout_height = wrap_content
+//                    textSize = 100f
+//                    textColor = "#FFff78"
+//                    text = "dkfjdlskfjsldfkj"
+//                    gravity = gravity_center
+//                    background_color = "#0000ff"
+//                }, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 700.dp))
+        }
         btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
         annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
         coroutineException.setOnClickListener { startActivity<CoroutineActivity3> { } }
@@ -343,7 +356,7 @@ class MainActivity : BaseActivity() {
 //            startActivity<JavassistActivity> { }
         }
 
-        btn_javassist.onVisibilityChange("3333") { view, i ->
+        btn_javassist.onVisibilityChange(decorView, "tvChange".hashCode()) { view, i ->
             Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
         }
 
@@ -444,6 +457,12 @@ class MainActivity : BaseActivity() {
         )
         Log.v("ttaylor", "tag=, MainActivity.initView()   splitAtString=${sb.toString()}")
 
+    }
+
+    override fun onBackPressed() {
+        val view = decorView?.find<TextView>("tvChange")
+        decorView?.removeView(view)
+//        super.onBackPressed()
     }
 
     private fun show2() {

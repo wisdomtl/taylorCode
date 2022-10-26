@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -154,8 +153,8 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
 //                duration = 30000L
 //                interpolator = AccelerateDecelerateInterpolator()
 //            }.start()
-            holder.itemView.onVisibilityChange((holder.itemView.find<TextView>("tvChange") as TextView).text.toString()) { view, b ->
-                Log.d("ttaylor", "TextProxy2.onBindViewHolder[view(), visible=$b]: ")
+            holder.itemView.onVisibilityChange(null, null) { view, b ->
+                Log.d("ttaylor", "TextProxy2.onBindViewHolder[view(${view.tag}), visible=$b]: ")
             }
         }
 
@@ -182,7 +181,7 @@ class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     override fun onParentScroll() {
-        if (this.isInScreen("")) {
+        if (this.isInScreen()) {
             if (! hasShown) {
                 Log.w("ttaylor", "onScroll() 111111111 text(${text}) is in screen")
                 hasShown = true

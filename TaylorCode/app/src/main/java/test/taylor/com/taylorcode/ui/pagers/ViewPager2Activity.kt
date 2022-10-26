@@ -243,7 +243,7 @@ class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyVie
     ) {
         holder.tvChange?.text = data.str
         Log.d("ttaylor", "ViewPagerProxy.onBindViewHolder[holder, data, index, action]: ")
-        holder.tvChange?.onVisibilityChange(data.str) { view, isShow ->
+        holder.tvChange?.onVisibilityChange { view, isShow ->
             Log.w("ttaylor", "ViewPagerProxy.onBindViewHolder[onVisibilityChange]: tv(${data.str}) isShow=${isShow} ")
         }
     }
