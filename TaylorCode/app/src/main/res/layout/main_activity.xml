@@ -11,6 +11,20 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/staggerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="stagger layout manager"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/gridlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="grid layout manager"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btnStickyFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -335,12 +349,7 @@
             android:text="kotlin activity2"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/gridlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="grid layout manager"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/LaneLayoutManager"

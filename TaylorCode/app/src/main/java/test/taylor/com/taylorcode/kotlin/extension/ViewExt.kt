@@ -28,12 +28,14 @@ import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnDetach
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import test.taylor.com.taylorcode.kotlin.relativeTo
+import test.taylor.com.taylorcode.proxy.local.LocalDynamicProxyActivity
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -49,18 +51,52 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
     setOnClickListener { action(this) }
 }
 
+fun RecyclerView.addOnItemVisibilityChangeListener(percent:Float,block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
+    val rect = Rect()
+    val visibleAdapterIndexs = mutableSetOf<Int>()
+    val scrollListener = object : OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            for (i in 0 until childCount) {
+                val child = getChildAt(i)
+                val adapterIndex = getChildAdapterPosition(child)
+                val childVisibleRect = rect.also { child.getLocalVisibleRect(it) }
+                val visibleArea = childVisibleRect.let { it.height() * it.width() }
+                val realArea = child.width * child.height
+                if (visibleArea >= realArea * percent) {
+                    if (visibleAdapterIndexs.add(adapterIndex)) {
+                        block(child, adapterIndex, true)
+                    }
+                } else {
+                    if (adapterIndex in visibleAdapterIndexs) {
+                        block(child, adapterIndex, false)
+                        visibleAdapterIndexs.remove(adapterIndex)
+                    }
+                }
+            }
+        }
+    }
+    addOnScrollListener(scrollListener)
+    doOnDetach {
+        if (ViewCompat.isAttachedToWindow(this)) {
+            removeOnScrollListener(scrollListener)
+        }
+    }
+}
+
 /**
  * Whether the view is visible to the user.
  * This function works for the following scenario:
  * 1.The switch of power button,
  * 2.Invoke [View.setVisibility] manually,
- * 3.Covered by a [View] in the same view tree,
+ * 3.Covered by another [View] in the same view tree,
  * 4.[ViewPager]'s scrolling,
  * 5.[ScrollView]'s scrolling,
  * 6.[NestedScrollView]'s scrolling,
  * 7.[Dialog]'s showing,
  * 8.[DialogFragment]'s showing,
  * 9.[Activity]'s switching
+ * 10.[Fragment]'s switching
  *
  * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue.
  * Too many child lead to too many scroll listeners.
@@ -122,7 +158,6 @@ fun View.onVisibilityChange(
             }
         }
     })
-
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
 
     val scrollListener = OnScrollChangedListener { checkVisibility() }

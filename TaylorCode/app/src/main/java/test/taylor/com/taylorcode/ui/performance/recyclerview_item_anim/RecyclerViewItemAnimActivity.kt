@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.addOnItemVisibilityChangeListener
 import test.taylor.com.taylorcode.kotlin.extension.isInScreen
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
@@ -37,7 +38,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
             rv = RecyclerView {
                 layout_width = match_parent
                 layout_height = match_parent
-                layoutManager = LinearLayoutManager(this@RecyclerViewItemAnimActivity)
+                layoutManager = LinearLayoutManager(this@RecyclerViewItemAnimActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
                 adapter = myAdapter
             }
 
@@ -67,7 +68,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
         setContentView(contentView)
         val texts = mutableListOf<String>()
         Log.v("ttaylor", "id from intent=$id")
-        (1 .. 200).forEach {
+        (0 .. 200).forEach {
             texts.add(it.toString())
         }
         myAdapter.dataList = texts
@@ -92,6 +93,9 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
             Log.v("ttaylor33","onViewRecycled $tv is recycled")
         }
 
+        rv.addOnItemVisibilityChangeListener(0.5f) { itemView, index, isVisible ->
+            Log.w("ttaylor", "[dfdfsfd]RecyclerViewItemAnimActivity.onCreate[itemView, index($index), visible($isVisible)]: ")
+        }
     }
 }
 
@@ -101,8 +105,9 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
         val itemView = parent.context.run {
             MyConstraintLayout(this).apply {
                 layout_id = "container"
-                layout_width = match_parent
+                layout_width = 100
                 layout_height = 70
+                background_color = "#ff00ff"
 
                 MyTextView(context).apply {
                     layout_id = "tvChange"
@@ -111,7 +116,7 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
                     textSize = 30f
                     textColor = "#000000"
                     gravity = gravity_center
-                    background_color = "#ff00ff"
+
                 }.also { addView(it) }
 
                 TextView {
@@ -128,8 +133,8 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
 
                 View {
                     layout_id = "vBottom"
-                    layout_width = match_parent
-                    layout_height = 1
+                    layout_width = 2
+                    layout_height = match_parent
                     background_color = "#8e8e8e"
                     bottom_toBottomOf = parent_id
                 }
@@ -143,6 +148,7 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
         holder.container?.tag = data
         holder.tv?.let { holder.container?.addScrollListener(it) }
         holder.tv?.let { tv ->
+            holder.itemView.tag = data
 //            ViewCompat.animate(tv).translationX(900f).setDuration(10000).start()// this will set transient state to true
             // ObjectAnimator wont set transient state
 //            animSet {
@@ -153,9 +159,6 @@ class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
 //                duration = 30000L
 //                interpolator = AccelerateDecelerateInterpolator()
 //            }.start()
-            holder.itemView.onVisibilityChange(null, null) { view, b ->
-                Log.d("ttaylor", "TextProxy2.onBindViewHolder[view(${view.tag}), visible=$b]: ")
-            }
         }
 
     }

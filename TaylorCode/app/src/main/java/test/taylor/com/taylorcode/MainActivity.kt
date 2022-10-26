@@ -98,6 +98,7 @@ import test.taylor.com.taylorcode.ui.pagers.ViewPagerActivity
 import test.taylor.com.taylorcode.ui.performance.RecyclerViewPerformanceActivity
 import test.taylor.com.taylorcode.ui.performance.recyclerview_item_anim.RecyclerViewItemAnimActivity
 import test.taylor.com.taylorcode.ui.performance.widget.PercentActivity
+import test.taylor.com.taylorcode.ui.recyclerview.StaggerLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.recyclerview.anim.RecyclerViewAnimActivity
 import test.taylor.com.taylorcode.ui.recyclerview.anim2.RecyclerViewItemAnimatorActivity
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridLayoutActivity
@@ -341,6 +342,7 @@ class MainActivity : BaseActivity() {
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
+        staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
         btn_nestedScrollView.setOnClickListener {
 //            startActivity<NestedScrollViewActivity> { }
             btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE

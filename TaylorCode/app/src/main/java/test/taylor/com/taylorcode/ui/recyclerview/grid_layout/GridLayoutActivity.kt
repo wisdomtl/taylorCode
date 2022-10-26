@@ -1,6 +1,7 @@
 package test.taylor.com.taylorcode.ui.recyclerview.grid_layout
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.addOnItemVisibilityChangeListener
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class GridLayoutActivity : AppCompatActivity() {
@@ -19,12 +21,14 @@ class GridLayoutActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var rv:RecyclerView
+
     private val contentView by lazy {
         ConstraintLayout {
             layout_width = match_parent
             layout_height = match_parent
 
-            RecyclerView {
+            rv = RecyclerView {
                 layout_width = match_parent
                 layout_height = match_parent
                 layoutManager = GridLayoutManager(this@GridLayoutActivity, 2, GridLayoutManager.VERTICAL, false).apply {
@@ -50,24 +54,11 @@ class GridLayoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
 
-        gridAdapter.dataList = listOf(
-            GridBean("ddd"),
-            GridBean("ddd2"),
-            GridBean("ddd3"),
-            GridBean("ddd4"),
-            GridBean("ddd5"),
-            GridBean("ddd6"),
-            GridBean("ddd7"),
-            GridBean("ddd8"),
-            GridBean("ddd9"),
-            GridBean("ddd10"),
-            GridBean("ddd11"),
-            GridBean("ddd12"),
-            GridBean("ddd13"),
-            GridBean("ddd14"),
-            GridBean("ddd15"),
-            GridBean("ddd16"),
-        )
+        gridAdapter.dataList = (0 .. 200).map { GridBean("$it") }
+
+        rv.addOnItemVisibilityChangeListener(0.5f){itemView: View, adapterIndex: Int, isVisible: Boolean ->
+            Log.d("ttaylor", "GridLayoutActivity.onCreate[itemView, adapterIndex($adapterIndex), isVisible($isVisible)]: ")
+        }
     }
 }
 
@@ -82,8 +73,8 @@ class GridProxy : VarietyAdapter2.Proxy<GridBean, GridViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {
-                layout_width = 50
-                layout_height = 50
+                layout_width = 200
+                layout_height = 200
                 shape = shape {
                     solid_color = "#888888"
                     corner_radius = 20
