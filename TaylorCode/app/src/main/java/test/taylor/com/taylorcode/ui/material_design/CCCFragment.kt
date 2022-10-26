@@ -1,7 +1,6 @@
 package test.taylor.com.taylorcode.ui.material_design
 
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.collapsing_layout2.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
-import test.taylor.com.taylorcode.kotlin.onClick
 
 class CCCFragment(private val tag:Int) : Fragment() {
 
