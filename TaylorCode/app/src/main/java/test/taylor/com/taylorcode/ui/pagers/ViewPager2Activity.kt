@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.TextView
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.kotlin.extension.addOnPageVisibilityChangeListener
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.Diff
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
@@ -134,7 +135,17 @@ class ViewPager2Activity : AppCompatActivity() {
                 EmptyString(1, "b"),
                 EmptyString(2, "c"),
                 EmptyString(3, "d"),
+                EmptyString(4, "e"),
+                EmptyString(5, "f"),
+                EmptyString(6, "g"),
+                EmptyString(7, "h"),
+                EmptyString(8, "i"),
+                EmptyString(9, "j"),
             )
+        }
+
+        vp2.addOnPageVisibilityChangeListener { index, isVisible ->
+            Log.d("ttaylor", "ViewPager2Activity.onCreate[index($index), isVisible($isVisible)]: ")
         }
 
         // observe data
@@ -192,6 +203,9 @@ class ViewPagerProxy : VarietyAdapter2.Proxy<DataText, ViewPagerViewHolder2>() {
                 gravity = gravity_center
             }
         }
+        itemView.onVisibilityChange { view, isVisible ->
+            Log.d("ttaylor", "ViewPagerProxy.onCreateViewHolder[view(${view.tag}), isVisible(${isVisible})]: ")
+        }
         return ViewPagerViewHolder2(itemView)
     }
 
@@ -202,6 +216,7 @@ class ViewPagerProxy : VarietyAdapter2.Proxy<DataText, ViewPagerViewHolder2>() {
         action: ((Any?) -> Unit)?
     ) {
         holder.tv?.text = data.str
+        holder.tv?.tag = data.str
     }
 
 }

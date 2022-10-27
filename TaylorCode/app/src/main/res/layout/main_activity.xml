@@ -11,6 +11,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_vp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view pager 2 + TabLayout"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/staggerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,12 +89,7 @@
             android:text="recyclerview item animator"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_vp2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="view pager 2 + TabLayout"
-            android:textAllCaps="false" />
+
 
 
 

@@ -19,6 +19,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.view.View.OnAttachStateChangeListener
 import android.view.ViewGroup.OnHierarchyChangeListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.ViewTreeObserver.OnScrollChangedListener
@@ -29,6 +30,9 @@ import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnDetach
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import kotlinx.coroutines.channels.awaitClose
@@ -51,12 +55,49 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
     setOnClickListener { action(this) }
 }
 
-fun RecyclerView.addOnItemVisibilityChangeListener(percent:Float,block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
-    val rect = Rect()
+/**
+ * A simple wrapper for [OnPageChangeCallback] to tell which page is showing or gone
+ * @param block a lambda to tell the page visibility change
+ */
+fun ViewPager2.addOnPageVisibilityChangeListener(block: (index: Int, isVisible: Boolean) -> Unit) {
+    var currentPage: Int = currentItem
+    val listener = object : OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            if (currentPage != position) {
+                block(currentPage, false)
+            }
+            block(position, true)
+            currentPage = position
+        }
+    }
+    registerOnPageChangeCallback(listener)
+    addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View?) {
+        }
+
+        override fun onViewDetachedFromWindow(v: View?) {
+            if (v == null || v !is ViewPager2) return
+            if (ViewCompat.isAttachedToWindow(v)) {
+                v.unregisterOnPageChangeCallback(listener)
+            }
+            removeOnAttachStateChangeListener(this)
+        }
+
+    })
+}
+
+/**
+ * A wrapper for [OnScrollListener] to tell which ItemView is showing or gone according to [percent]
+ * @param percent the percentage of ItemView's visibility, range from 0 to 1, for example, 0.5 means the half of ItemView is visible to user.
+ * @param block a lambda to tell which ItemView is visible to user with the Adapter Index
+ */
+fun RecyclerView.addOnItemVisibilityChangeListener(percent: Float = 0.5f, block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
+    val rect = Rect() // reuse rect object rather than recreate it everytime for a better performance
     val visibleAdapterIndexs = mutableSetOf<Int>()
     val scrollListener = object : OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
+            // iterate all children of RecyclerView to check whether it is visible
             for (i in 0 until childCount) {
                 val child = getChildAt(i)
                 val adapterIndex = getChildAdapterPosition(child)
@@ -77,15 +118,22 @@ fun RecyclerView.addOnItemVisibilityChangeListener(percent:Float,block: (itemVie
         }
     }
     addOnScrollListener(scrollListener)
-    doOnDetach {
-        if (ViewCompat.isAttachedToWindow(this)) {
-            removeOnScrollListener(scrollListener)
+    addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View?) {
         }
-    }
+
+        override fun onViewDetachedFromWindow(v: View?) {
+            if (v == null || v !is RecyclerView) return
+            if (ViewCompat.isAttachedToWindow(v)) {
+                v.removeOnScrollListener(scrollListener)
+            }
+            removeOnAttachStateChangeListener(this)
+        }
+    })
 }
 
 /**
- * Whether the view is visible to the user.
+ * Check whether the view is visible to the user.
  * This function works for the following scenario:
  * 1.The switch of power button,
  * 2.Invoke [View.setVisibility] manually,
@@ -100,6 +148,10 @@ fun RecyclerView.addOnItemVisibilityChangeListener(percent:Float,block: (itemVie
  *
  * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue.
  * Too many child lead to too many scroll listeners.
+ *
+ * @param viewGroup the parent ViewGroup which new view to be added in
+ * @param childViewId id of the View to be added into [viewGroup], the current View may be covered by it
+ * @param block a lambda to tell whether the current View is visible to user
  */
 fun View.onVisibilityChange(
     viewGroup: ViewGroup? = null,
@@ -180,17 +232,24 @@ fun View.onVisibilityChange(
     }
     viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
 
-    doOnDetach {
-        if (ViewCompat.isAttachedToWindow(this)) {
-            try {
-                it.viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
-            } catch (_: java.lang.Exception) {
-                it.viewTreeObserver.removeGlobalOnLayoutListener(layoutListener)
-            }
-            it.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
-            it.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
+    addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View?) {
         }
-    }
+
+        override fun onViewDetachedFromWindow(v: View?) {
+            v ?: return
+            if (ViewCompat.isAttachedToWindow(v)) {
+                try {
+                    v.viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
+                } catch (_: java.lang.Exception) {
+                    v.viewTreeObserver.removeGlobalOnLayoutListener(layoutListener)
+                }
+                v.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
+                v.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
+            }
+            removeOnAttachStateChangeListener(this)
+        }
+    })
     setTag(KEY_HAS_LISTENER, true)
 }
 
