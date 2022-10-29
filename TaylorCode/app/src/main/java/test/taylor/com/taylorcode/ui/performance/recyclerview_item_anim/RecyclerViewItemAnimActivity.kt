@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.extension.addOnItemVisibilityChangeListener
+import test.taylor.com.taylorcode.kotlin.extension.onItemVisibilityChange
 import test.taylor.com.taylorcode.kotlin.extension.isInScreen
-import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class RecyclerViewItemAnimActivity : AppCompatActivity() {
@@ -93,7 +92,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
             Log.v("ttaylor33","onViewRecycled $tv is recycled")
         }
 
-        rv.addOnItemVisibilityChangeListener(0.5f) { itemView, index, isVisible ->
+        rv.onItemVisibilityChange(0.5f) { itemView, index, isVisible ->
             Log.w("ttaylor", "[dfdfsfd]RecyclerViewItemAnimActivity.onCreate[itemView, index($index), visible($isVisible)]: ")
         }
     }

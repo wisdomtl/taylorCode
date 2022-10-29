@@ -5,11 +5,10 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.extension.addOnItemVisibilityChangeListener
+import test.taylor.com.taylorcode.kotlin.extension.onItemVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridBean
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridViewHolder
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
@@ -43,7 +42,7 @@ class StaggerLayoutManagerActivity:AppCompatActivity() {
         setContentView(contentView)
 
         staggerAdapter.dataList = (0 .. 200).map { if(it.mod(2) == 0)GridBean("$it") else GridBean2("$it") }
-        rv.addOnItemVisibilityChangeListener(0.5f){ itemView: View, adapterIndex: Int, isVisible: Boolean ->
+        rv.onItemVisibilityChange(0.5f){ itemView: View, adapterIndex: Int, isVisible: Boolean ->
             Log.d("ttaylor", "StaggerLayoutManagerActivity.onCreate[itemView, adapterIndex($adapterIndex), isVisible($isVisible)]: ")
         }
     }

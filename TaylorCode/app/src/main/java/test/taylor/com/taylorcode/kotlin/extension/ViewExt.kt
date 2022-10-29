@@ -16,7 +16,6 @@ import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Size
 import android.view.*
 import android.view.View.OnAttachStateChangeListener
@@ -28,7 +27,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnDetach
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
@@ -39,7 +37,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import test.taylor.com.taylorcode.kotlin.relativeTo
-import test.taylor.com.taylorcode.proxy.local.LocalDynamicProxyActivity
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -59,15 +56,15 @@ fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit)
  * A simple wrapper for [OnPageChangeCallback] to tell which page is showing or gone
  * @param block a lambda to tell the page visibility change
  */
-fun ViewPager2.addOnPageVisibilityChangeListener(block: (index: Int, isVisible: Boolean) -> Unit) {
-    var currentPage: Int = currentItem
+fun ViewPager2.onPageVisibilityChange(block: (index: Int, isVisible: Boolean) -> Unit) {
+    var lastPage: Int = currentItem
     val listener = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            if (currentPage != position) {
-                block(currentPage, false)
+            if (lastPage != position) {
+                block(lastPage, false)
             }
             block(position, true)
-            currentPage = position
+            lastPage = position
         }
     }
     registerOnPageChangeCallback(listener)
@@ -91,7 +88,7 @@ fun ViewPager2.addOnPageVisibilityChangeListener(block: (index: Int, isVisible: 
  * @param percent the percentage of ItemView's visibility, range from 0 to 1, for example, 0.5 means the half of ItemView is visible to user.
  * @param block a lambda to tell which ItemView is visible to user with the Adapter Index
  */
-fun RecyclerView.addOnItemVisibilityChangeListener(percent: Float = 0.5f, block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
+fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
     val rect = Rect() // reuse rect object rather than recreate it everytime for a better performance
     val visibleAdapterIndexs = mutableSetOf<Int>()
     val scrollListener = object : OnScrollListener() {
@@ -136,15 +133,16 @@ fun RecyclerView.addOnItemVisibilityChangeListener(percent: Float = 0.5f, block:
  * Check whether the view is visible to the user.
  * This function works for the following scenario:
  * 1.The switch of power button,
- * 2.Invoke [View.setVisibility] manually,
- * 3.Covered by another [View] in the same view tree,
- * 4.[ViewPager]'s scrolling,
- * 5.[ScrollView]'s scrolling,
- * 6.[NestedScrollView]'s scrolling,
- * 7.[Dialog]'s showing,
- * 8.[DialogFragment]'s showing,
- * 9.[Activity]'s switching
- * 10.[Fragment]'s switching
+ * 2.Home clicked
+ * 3.Invoke [View.setVisibility] manually,
+ * 4.Covered by another [View] in the same view tree,
+ * 5.[ViewPager]'s scrolling,
+ * 6.[ScrollView]'s scrolling,
+ * 7.[NestedScrollView]'s scrolling,
+ * 8.[Dialog]'s showing,
+ * 9.[DialogFragment]'s showing,
+ * 10.[Activity]'s switching
+ * 11.[Fragment]'s switching
  *
  * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue.
  * Too many child lead to too many scroll listeners.

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.TextView
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.extension.addOnPageVisibilityChangeListener
+import test.taylor.com.taylorcode.kotlin.extension.onPageVisibilityChange
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.Diff
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
@@ -144,7 +144,7 @@ class ViewPager2Activity : AppCompatActivity() {
             )
         }
 
-        vp2.addOnPageVisibilityChangeListener { index, isVisible ->
+        vp2.onPageVisibilityChange { index, isVisible ->
             Log.d("ttaylor", "ViewPager2Activity.onCreate[index($index), isVisible($isVisible)]: ")
         }
 

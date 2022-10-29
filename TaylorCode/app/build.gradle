@@ -15,7 +15,7 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         renderscriptTargetApi 21
@@ -50,15 +50,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 //    implementation project(path: ':flutter')
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+//    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    testImplementation 'junit:junit:4.12'
-    testImplementation "androidx.test:core-ktx:1.4.0"
-    testImplementation "androidx.test.ext:junit-ktx:1.1.3"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+//    testImplementation 'junit:junit:4.12'
+//    testImplementation "androidx.test:core-ktx:1.4.0"
+//    testImplementation "androidx.test.ext:junit-ktx:1.1.3"
+//    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 //    implementation 'org.jetbrains:annotations-java5:15.0'
     //ReactiveX
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
@@ -93,7 +93,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    testImplementation "androidx.room:room-testing:$room_version"
+//    testImplementation "androidx.room:room-testing:$room_version"
     //for debug database on browse
 //    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
 //    //UCrop

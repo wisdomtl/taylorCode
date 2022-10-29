@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.kotlin.extension.addOnItemVisibilityChangeListener
+import test.taylor.com.taylorcode.kotlin.extension.onItemVisibilityChange
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class GridLayoutActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class GridLayoutActivity : AppCompatActivity() {
 
         gridAdapter.dataList = (0 .. 200).map { GridBean("$it") }
 
-        rv.addOnItemVisibilityChangeListener(0.5f){itemView: View, adapterIndex: Int, isVisible: Boolean ->
+        rv.onItemVisibilityChange(0.5f){ itemView: View, adapterIndex: Int, isVisible: Boolean ->
             Log.d("ttaylor", "GridLayoutActivity.onCreate[itemView, adapterIndex($adapterIndex), isVisible($isVisible)]: ")
         }
     }
