@@ -9,13 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.collapsing_layout2.*
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.architecture.flow.lifecycle.BaseFragment
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import kotlin.math.log
 
-class CCCFragment(private val tag:Int) : Fragment() {
+class CCCFragment(private val tag:Int) : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return LayoutInflater.from(context).inflate(R.layout.collapsing_layout2, null)
+        return LayoutInflater.from(context).inflate(R.layout.collapsing_layout2, null).also { it.tag = "cccFragment(${tag})" }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

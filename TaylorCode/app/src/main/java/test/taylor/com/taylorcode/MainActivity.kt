@@ -85,7 +85,7 @@ import test.taylor.com.taylorcode.ui.flow.ConstraintLayoutFlowActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
 import test.taylor.com.taylorcode.ui.fragment.FragmentActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
-import test.taylor.com.taylorcode.ui.material_design.CollapsingToolBarLayoutActivity
+import test.taylor.com.taylorcode.ui.material_design.ViewPagerActivity2
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
@@ -339,7 +339,7 @@ class MainActivity : BaseActivity() {
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
-        btn_collapsing.setOnClickListener { startActivity<CollapsingToolBarLayoutActivity> { } }
+        btn_collapsing.setOnClickListener { startActivity<ViewPagerActivity2> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }

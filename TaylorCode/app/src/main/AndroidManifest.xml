@@ -268,7 +268,7 @@
         <activity android:name=".kotlin.coroutine.mvi.StateFlowActivity" />
         <activity android:name=".kotlin.coroutine.channel.ChannelActivity" />
         <activity android:name=".kotlin.coroutine.flow.FlowActivity" />
-        <activity android:name=".ui.material_design.CollapsingToolBarLayoutActivity" />
+        <activity android:name=".ui.material_design.ViewPagerActivity2" />
         <activity android:name=".ui.custom_view.DrawTriangleActivity" />
         <activity android:name=".ui.tablayout.BottomNavigationViewActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity" />

@@ -11,7 +11,7 @@ open class BaseFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.onVisibilityChange { view, isVisible ->
-            Log.d("ttaylor", "BaseFragment.onViewCreated[Fragment(${this@BaseFragment.javaClass.simpleName}), isVisible($isVisible)]: ")
+            Log.d("ttaylor", "BaseFragment.onViewCreated[Fragment(${view.tag}), isVisible($isVisible)]: ")
         }
     }
 }

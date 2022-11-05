@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.architecture.flow.lifecycle.BaseFragment
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
 import test.taylor.com.taylorcode.ui.pagers.paging.PagingAdapter
@@ -19,7 +20,7 @@ import test.taylor.com.taylorcode.ui.pagers.paging.PagingViewModel
 import test.taylor.com.taylorcode.ui.pagers.paging.TextRepository
 
 
-class ViewPagerFragment : Fragment() {
+class ViewPagerFragment : BaseFragment() {
 
     /**
      * share ViewModel instance between fragments by [requireActivity]
@@ -89,7 +90,7 @@ class ViewPagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return contentView
+        return contentView.also { it?.tag = index }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,16 +1,13 @@
 package test.taylor.com.taylorcode.ui.material_design
 
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import android.util.Printer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import kotlinx.android.synthetic.main.collasping_layout.*
 import test.taylor.com.taylorcode.R
 
-class CollapsingToolBarLayoutActivity:AppCompatActivity() {
+class ViewPagerActivity2:AppCompatActivity() {
 
     private val fragments = mutableListOf<Fragment>()
 
