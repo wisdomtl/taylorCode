@@ -20,32 +20,51 @@ fun Int.formatNums(): String = this.let {
     }
 }
 
+/**
+ * convert [String] to [Int] in safe way
+ */
 fun String?.safeToInt(): Int = this?.let {
-    var result = 0
     try {
-        result = Integer.parseInt(it)
+        Integer.parseInt(this)
     } catch (e: NumberFormatException) {
         e.printStackTrace()
+        0
     }
-    return result
 } ?: 0
 
+/**
+ * convert [String] to [Double] in safe way
+ */
 fun String?.safeToDouble(): Double = this?.let {
-    var result = 0.0
     try {
-        result = java.lang.Double.parseDouble(it)
+        java.lang.Double.parseDouble(this)
     } catch (e: NumberFormatException) {
         e.printStackTrace()
+        0.0
     }
-    return result
 } ?: 0.0
 
+/**
+ * convert [String] to [Long] in safe way
+ */
 fun String?.safeToLong(): Long = this?.let {
-    var result = 0L
+
     try {
-        result = java.lang.Long.parseLong(it)
+        java.lang.Long.parseLong(this)
     } catch (e: NumberFormatException) {
         e.printStackTrace()
+        0L
     }
-    return result
 } ?: 0L
+
+/**
+ * convert [String] to [Float] in safe way
+ */
+fun String?.safeToFloat(): Float = this?.let {
+    try {
+        java.lang.Float.parseFloat(this)
+    } catch (e: NumberFormatException) {
+        e.printStackTrace()
+        0f
+    }
+} ?: 0f

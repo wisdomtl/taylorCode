@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.Printer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import kotlinx.android.synthetic.main.collasping_layout.*
 import test.taylor.com.taylorcode.R
 
@@ -23,7 +24,7 @@ class CollapsingToolBarLayoutActivity:AppCompatActivity() {
         fragments.add(CCCFragment(5))
         fragments.add(CCCFragment(6))
         fragments.add(CCCFragment(7))
-        vppp.adapter = SimpleFragmentPagerAdapter(supportFragmentManager).apply {
+        vppp.adapter = SimpleFragmentPagerAdapter(supportFragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT).apply {
             mTitles = arrayOf("ddd")
             mCount = 7
             createFragment = {position -> fragments[position] }

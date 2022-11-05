@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
  * email: yanglinfeng@bilibili.com
  * since: 1.0.0
  */
-open class SimpleFragmentPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+open class SimpleFragmentPagerAdapter(fm: FragmentManager,behavior:Int) : FragmentPagerAdapter(fm,behavior) {
     var mTitles: Array<String>? = null
     var mCount: Int = 0
     lateinit var createFragment: (position: Int) -> Fragment

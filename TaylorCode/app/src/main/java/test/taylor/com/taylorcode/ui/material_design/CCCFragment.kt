@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.collapsing_layout2.*
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
+import kotlin.math.log
 
 class CCCFragment(private val tag:Int) : Fragment() {
 
@@ -27,5 +28,10 @@ class CCCFragment(private val tag:Int) : Fragment() {
 //            Looper.getMainLooper().dump({ str-> Log.v("ttaylor","$str") },"ttaylorMessage")
 //
 //        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("ttaylor", "CCCFragment(${tag}).onResume[]: ")
     }
 }

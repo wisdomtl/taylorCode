@@ -1,16 +1,21 @@
 package test.taylor.com.taylorcode.ui.recyclerview.grid_layout
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.extension.onItemVisibilityChange
+import test.taylor.com.taylorcode.startActivity
+import test.taylor.com.taylorcode.ui.recyclerview.StaggerLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class GridLayoutActivity : AppCompatActivity() {
@@ -29,8 +34,10 @@ class GridLayoutActivity : AppCompatActivity() {
             layout_height = match_parent
 
             rv = RecyclerView {
+                layout_id ="rv"
                 layout_width = match_parent
-                layout_height = match_parent
+                layout_height = 500
+                top_toTopOf = parent_id
                 layoutManager = GridLayoutManager(this@GridLayoutActivity, 2, GridLayoutManager.VERTICAL, false).apply {
                     /**
                      * GridLayoutManager case: SpanSizeLookup
@@ -46,6 +53,21 @@ class GridLayoutActivity : AppCompatActivity() {
                     }
                 }
                 adapter = gridAdapter
+            }
+
+            TextView {
+                layout_id = "tvChange"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 30f
+                textColor = "#ffffff"
+                text = "jump"
+                fontFamily = R.font.pingfang
+                gravity = gravity_center
+                top_toBottomOf = "rv"
+                onClick = {
+                    this@ConstraintLayout.context.startActivity<StaggerLayoutManagerActivity>()
+                }
             }
         }
     }
@@ -96,6 +118,7 @@ class GridProxy : VarietyAdapter2.Proxy<GridBean, GridViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: GridViewHolder, data: GridBean, index: Int, action: ((Any?) -> Unit)?) {
+        Log.d("ttaylor", "GridProxy.onBindViewHolder[holder, data, index, action]: parent=${holder.itemView.parent}")
         holder.tv?.text = data.str
     }
 }

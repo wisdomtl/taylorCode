@@ -9,7 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <Button
+            android:id="@+id/btn_collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="collapsingToolBar"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/gridlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="grid layout manager"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_vp2"
             android:layout_width="match_parent"
@@ -22,13 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="stagger layout manager"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/gridlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="grid layout manager"
             android:textAllCaps="false" />
 
         <Button
@@ -63,12 +67,7 @@
             android:layout_height="wrap_content"
             android:text="make class"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_collapsing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="collapsingToolBar"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_view_pager"
             android:layout_width="match_parent"
