@@ -8,7 +8,7 @@ import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 
-class FlowLifecycleActivity:AppCompatActivity() {
+class NavigationFragmentActivity:AppCompatActivity() {
 
     private val contentView by lazy {
         ConstraintLayout {

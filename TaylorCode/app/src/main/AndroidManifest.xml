@@ -273,7 +273,7 @@
         <activity android:name=".ui.tablayout.BottomNavigationViewActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity" />
         <activity android:name=".ui.flow.ConstraintLayoutFlowActivity2" />
-        <activity android:name=".architecture.flow.lifecycle.FlowLifecycleActivity" />
+        <activity android:name=".architecture.flow.lifecycle.NavigationFragmentActivity" />
         <activity android:name=".ui.fragment.FragmentActivity" />
         <activity android:name=".hook.JavassistActivity" />
         <activity android:name=".ui.material_design.nested.NestedScrollViewActivity" />

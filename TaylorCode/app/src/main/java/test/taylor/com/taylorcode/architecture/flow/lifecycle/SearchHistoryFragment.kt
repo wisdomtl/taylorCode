@@ -186,7 +186,7 @@ class SearchHistoryFragment : BaseFragment(), IPvTracker {
                     center_vertical = true
                     background_color = "#cc33cc"
                 }
-            }
+            }.also { it.tag = "SearchHistoryFragment" }
         }
     }
 
