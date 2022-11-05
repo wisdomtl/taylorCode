@@ -183,7 +183,7 @@ class MyTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     override fun onParentScroll() {
-        if (this.isInScreen()) {
+        if (this.isInScreen) {
             if (! hasShown) {
                 Log.w("ttaylor", "onScroll() 111111111 text(${text}) is in screen")
                 hasShown = true

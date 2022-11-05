@@ -14,6 +14,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
+import test.taylor.com.taylorcode.architecture.flow.lifecycle.FlowLifecycleActivity
 import test.taylor.com.taylorcode.audio.AudioRecorderActivity
 import test.taylor.com.taylorcode.audio.encoder.HWRecorderActivity
 import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
@@ -343,6 +344,7 @@ class MainActivity : BaseActivity() {
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
+        navigation.setOnClickListener { startActivity<FlowLifecycleActivity> { } }
         btn_nestedScrollView.setOnClickListener {
 //            startActivity<NestedScrollViewActivity> { }
             btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE

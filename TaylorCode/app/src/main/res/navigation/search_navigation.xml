@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search_navigation"
-    app:startDestination="@id/SearchHistoryFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_material_navigation"
+    app:startDestination="@id/MaterialSearchHistoryFragment"
+    tools:ignore="MissingDefaultResource">
 
     <fragment
-        android:id="@+id/SearchHintFragment"
+        android:id="@+id/MaterialSearchHintFragment"
         android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchHintFragment"
         android:label="search_hint_fragment">
         <action
             android:id="@+id/action_to_result"
-            app:destination="@id/SearchResultFragment" />
+            app:popUpTo="@id/MaterialSearchHistoryFragment"
+            app:destination="@id/MaterialSearchResultFragment" />
         <action
             android:id="@+id/action_to_history"
-            app:popUpTo="@id/SearchHistoryFragment" />
+            app:destination="@id/MaterialSearchHistoryFragment" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/SearchHistoryFragment"
+        android:id="@+id/MaterialSearchHistoryFragment"
         android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchHistoryFragment"
         android:label="search_history_fragment">
         <action
             android:id="@+id/action_to_result"
-            app:destination="@id/SearchResultFragment" />
+            app:popUpTo="@id/MaterialSearchHistoryFragment"
+            app:destination="@id/MaterialSearchResultFragment" />
         <action
             android:id="@+id/action_to_hint"
-            app:destination="@id/SearchHintFragment" />
+            app:popUpTo="@id/MaterialSearchHistoryFragment"
+            app:destination="@id/MaterialSearchHintFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/SearchResultFragment"
+        android:id="@+id/MaterialSearchResultFragment"
         android:name="test.taylor.com.taylorcode.architecture.flow.lifecycle.SearchResultFragment"
         android:label="search_result_fragment">
         <action
             android:id="@+id/action_to_history"
-            app:popUpTo="@id/SearchHistoryFragment" />
+            app:destination="@id/MaterialSearchHistoryFragment" />
         <action
             android:id="@+id/action_to_hint"
-            app:destination="@id/SearchHintFragment" />
+            app:popUpTo="@id/MaterialSearchHistoryFragment"
+            app:destination="@id/MaterialSearchHintFragment" />
     </fragment>
 
 </navigation>

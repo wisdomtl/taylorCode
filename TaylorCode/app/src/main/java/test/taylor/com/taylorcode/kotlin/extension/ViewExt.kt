@@ -6,13 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.os.Build
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.doOnAttach
-import androidx.recyclerview.widget.RecyclerView
-import test.taylor.com.taylorcode.kotlin.dp
-import kotlin.math.max
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
@@ -20,24 +13,28 @@ import android.util.Size
 import android.view.*
 import android.view.View.OnAttachStateChangeListener
 import android.view.ViewGroup.OnHierarchyChangeListener
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.view.ViewTreeObserver.OnScrollChangedListener
-import android.view.ViewTreeObserver.OnWindowFocusChangeListener
+import android.view.ViewTreeObserver.*
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.coordinatorlayout.widget.ViewGroupUtils
+import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnAttach
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import test.taylor.com.taylorcode.kotlin.dp
 import test.taylor.com.taylorcode.kotlin.relativeTo
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 
 fun View.extraAnimClickListener(animator: ValueAnimator, action: (View) -> Unit) {
@@ -160,9 +157,10 @@ fun View.onVisibilityChange(
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
 
+
     val checkVisibility = {
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen() && visibility == View.VISIBLE
+        val isInScreen = this.isInScreen
         if (lastVisibility == null) {
             if (isInScreen) {
                 block(this, true)
@@ -173,7 +171,6 @@ fun View.onVisibilityChange(
             setTag(KEY_VISIBILITY, isInScreen)
         }
     }
-
 
     class LayoutListener : OnGlobalLayoutListener {
         var addedView: View? = null
@@ -215,7 +212,7 @@ fun View.onVisibilityChange(
 
     val focusChangeListener = OnWindowFocusChangeListener { hasFocus ->
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen()
+        val isInScreen = this.isInScreen
         if (hasFocus) {
             if (lastVisibility != isInScreen) {
                 block(this, isInScreen)
@@ -236,7 +233,8 @@ fun View.onVisibilityChange(
 
         override fun onViewDetachedFromWindow(v: View?) {
             v ?: return
-            if (ViewCompat.isAttachedToWindow(v)) {
+            // delay by post for giving the last execution chance to OnGlobalLayoutListener
+            post {
                 try {
                     v.viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
                 } catch (_: java.lang.Exception) {
@@ -285,7 +283,8 @@ fun Rect.relativeTo(otherRect: Rect): Rect {
     return Rect(relativeLeft, relativeTop, relativeRight, relativeBottom)
 }
 
-fun View.isInScreen(): Boolean = isAttachedToWindow && getLocalVisibleRect(Rect())
+val View.isInScreen: Boolean
+    get() = ViewCompat.isAttachedToWindow(this) && visibility == View.VISIBLE && getLocalVisibleRect(Rect())
 
 /**
  * add listener to RecyclerView which listens it's items in and out event

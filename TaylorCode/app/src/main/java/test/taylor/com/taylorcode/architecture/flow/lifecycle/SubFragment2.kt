@@ -4,26 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.fragment.visibility.IPvTracker
 
-class SearchHintFragment:BaseFragment(), IPvTracker{
+class SubFragment2:BaseFragment(),IPvTracker {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return context?.run {
             ConstraintLayout {
                 layout_width = match_parent
                 layout_height = match_parent
-                background_color = "#ff00ff"
-            }
+                background_color = "#897654"
+
+                TextView {
+                    layout_id = "tvChange"
+                    layout_width = wrap_content
+                    layout_height = wrap_content
+                    textSize = 50f
+                    textColor = "#ffffff"
+                    text = "sub Fragment 2"
+                    fontFamily = R.font.pingfang
+                    gravity = gravity_center
+                    center_vertical = true
+                    center_horizontal = true
+                }
+            }.also { it.setTag("subFragment2") }
         }
     }
-
     override fun getPvEventId(): String {
-        return "SearchHintFragment"
+        return "SubFragment2"
     }
 
     override fun getPvExtra(): Bundle {
