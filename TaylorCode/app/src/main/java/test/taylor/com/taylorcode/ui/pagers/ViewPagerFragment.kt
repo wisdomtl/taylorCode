@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +16,13 @@ import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.architecture.flow.lifecycle.BaseFragment
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
+import test.taylor.com.taylorcode.ui.fragment.visibility.IPvTracker
 import test.taylor.com.taylorcode.ui.pagers.paging.PagingAdapter
 import test.taylor.com.taylorcode.ui.pagers.paging.PagingViewModel
 import test.taylor.com.taylorcode.ui.pagers.paging.TextRepository
 
 
-class ViewPagerFragment : BaseFragment() {
+class ViewPagerFragment : BaseFragment(),IPvTracker {
 
     /**
      * share ViewModel instance between fragments by [requireActivity]
@@ -166,5 +168,13 @@ class ViewPagerFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.i("ttaylor[flow.fragment.test]", "-------${this@ViewPagerFragment}$index.onDestroyView[]: ")
+    }
+
+    override fun getPvEventId(): String {
+        return "ViewPagerFragment($index)"
+    }
+
+    override fun getPvExtra(): Bundle {
+        return bundleOf()
     }
 }
