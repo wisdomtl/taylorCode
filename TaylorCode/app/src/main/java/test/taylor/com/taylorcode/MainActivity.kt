@@ -88,6 +88,7 @@ import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.ViewPagerActivity2
 import test.taylor.com.taylorcode.ui.material_design.CoordinateLayoutActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollCoordinateLayoutActivity
+import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollViewActivity
 import test.taylor.com.taylorcode.ui.navigation.NavigationActivity
 import test.taylor.com.taylorcode.ui.night_mode.BaseActivity
 import test.taylor.com.taylorcode.ui.night_mode.TestMaskActivity
@@ -346,8 +347,8 @@ class MainActivity : BaseActivity() {
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
         navigation.setOnClickListener { startActivity<NavigationFragmentActivity> { } }
         btn_nestedScrollView.setOnClickListener {
-//            startActivity<NestedScrollViewActivity> { }
-            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
+            startActivity<NestedScrollViewActivity> { }
+//            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
 
         }
         btn_flow_lifecycle.setOnClickListener {
