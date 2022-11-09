@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import test.taylor.com.taylorcode.activitystack.NewActivity
+import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
 import test.taylor.com.taylorcode.architecture.StickyLiveDataActivity
 import test.taylor.com.taylorcode.architecture.flow.lifecycle.NavigationFragmentActivity
@@ -83,6 +85,7 @@ import test.taylor.com.taylorcode.ui.custom_view.treasure_box.TreasureActivity
 import test.taylor.com.taylorcode.ui.databinding.DataBindingActivity
 import test.taylor.com.taylorcode.ui.flow.ConstraintLayoutFlowActivity
 import test.taylor.com.taylorcode.ui.flow.FlowActivity
+import test.taylor.com.taylorcode.ui.fragment.DialogFragment1
 import test.taylor.com.taylorcode.ui.fragment.FragmentActivity
 import test.taylor.com.taylorcode.ui.line_feed_layout.TagActivity
 import test.taylor.com.taylorcode.ui.material_design.ViewPagerActivity2
@@ -120,7 +123,7 @@ import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import kotlin.reflect.KClass
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), Param {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +131,7 @@ class MainActivity : BaseActivity() {
         initView()
         readPhoneInfo()
         testValueDiliver();
-//        detectFrame()
+        //        detectFrame()
 
         val job = Job()
         Log.v("ttaylor3333", "onCreate() job is active=${job.isActive}")
@@ -165,7 +168,7 @@ class MainActivity : BaseActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        Log.v("ttaylor", "MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}")// view has an dimension here
+        Log.v("ttaylor", "MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}") // view has an dimension here
     }
 
     override fun onPause() {
@@ -206,8 +209,8 @@ class MainActivity : BaseActivity() {
         btn_constraint_layout.setOnClickListener { startActivity(ConstraintLayoutActivity::class.java) }
         btn_tab_layout.setOnClickListener { startActivity(TableLayoutActivity::class.java) }
         btn_dialog.setOnClickListener {
-            show2()
-//            startActivity(DialogActivity::class.java)
+            showDialog2()
+            //            startActivity(DialogActivity::class.java)
         }
         btn_coordinate_layout.setOnClickListener { startActivity(CoordinateLayoutActivity::class.java) }
         btn_rx_binding.setOnClickListener { startActivity(LoginActivity::class.java) }
@@ -315,17 +318,17 @@ class MainActivity : BaseActivity() {
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
-//            decorView?.addView(
-//                TextView {
-//                    layout_id = "tvChange"
-//                    layout_width = wrap_content
-//                    layout_height = wrap_content
-//                    textSize = 100f
-//                    textColor = "#FFff78"
-//                    text = "dkfjdlskfjsldfkj"
-//                    gravity = gravity_center
-//                    background_color = "#0000ff"
-//                }, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 700.dp))
+            //            decorView?.addView(
+            //                TextView {
+            //                    layout_id = "tvChange"
+            //                    layout_width = wrap_content
+            //                    layout_height = wrap_content
+            //                    textSize = 100f
+            //                    textColor = "#FFff78"
+            //                    text = "dkfjdlskfjsldfkj"
+            //                    gravity = gravity_center
+            //                    background_color = "#0000ff"
+            //                }, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 700.dp))
         }
         btnStateFlow.setOnClickListener { startActivity<StateFlowActivity> { } }
         annotation.setOnClickListener { startActivity<AnnotationActivity2> { } }
@@ -346,19 +349,21 @@ class MainActivity : BaseActivity() {
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
         navigation.setOnClickListener { startActivity<NavigationFragmentActivity> { } }
+        newActivity.setOnClickListener { startActivity<NewActivity> { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) } }
+        DialogFragment.setOnClickListener {  DialogFragment1().show(supportFragmentManager, "ddd") }
         btn_nestedScrollView.setOnClickListener {
             startActivity<NestedScrollViewActivity> { }
-//            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
+            //            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
 
         }
         btn_flow_lifecycle.setOnClickListener {
             PoorDialogFragment.show(this@MainActivity)
-//            startActivity<FlowLifecycleActivity> { }
+            //            startActivity<FlowLifecycleActivity> { }
         }
         btn_fragment_communicate.setOnClickListener { startActivity<FragmentActivity> { } }
         btn_javassist.setOnClickListener {
 
-//            startActivity<JavassistActivity> { }
+            //            startActivity<JavassistActivity> { }
         }
 
         btn_javassist.onVisibilityChange(decorView, "tvChange".hashCode()) { view, i ->
@@ -467,10 +472,10 @@ class MainActivity : BaseActivity() {
     override fun onBackPressed() {
         val view = decorView?.find<TextView>("tvChange")
         decorView?.removeView(view)
-//        super.onBackPressed()
+        //        super.onBackPressed()
     }
 
-    private fun show2() {
+    private fun showDialog2() {
         val bottomDialog = Dialog(this, R.style.BottomDialog)
         val contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content, null)
         bottomDialog.setContentView(contentView)
@@ -489,7 +494,7 @@ class MainActivity : BaseActivity() {
     /**
      * dialog case2:show dialog in the center of screen
      */
-    private fun show3() {
+    private fun showDialog3() {
         val bottomDialog = Dialog(this, R.style.TransparentDialog)
         val contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content, null)
         bottomDialog.setContentView(contentView)
@@ -574,6 +579,16 @@ class MainActivity : BaseActivity() {
             startActivity(it)
         }
     }
+
+    override val paramMap: Map<String, Any>
+        get() = mapOf(
+            "type" to 1,
+            "tabName" to "ddd",
+            "map" to mapOf(
+                "111" to 1,
+                "222" to 2,
+            )
+        )
 }
 
 /**

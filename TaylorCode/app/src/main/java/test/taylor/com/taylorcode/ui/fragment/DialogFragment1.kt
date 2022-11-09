@@ -1,11 +1,13 @@
 package test.taylor.com.taylorcode.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.*
 
 class DialogFragment1 : DialogFragment() {
@@ -37,5 +39,11 @@ class DialogFragment1 : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return contentView
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("ttaylor", "[getParam]DialogFragment1.onCreate[savedInstanceState]: type=${activity?.getParam<Int>("type")},tabName=${activity?.getParam<String>("tabName")}, map=${activity?.getParam<Map<String,Int>>("map")}")
+
     }
 }

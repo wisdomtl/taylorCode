@@ -278,6 +278,9 @@
         <activity android:name=".hook.JavassistActivity" />
         <activity android:name=".ui.material_design.nested.NestedScrollViewActivity" />
         <activity android:name=".ui.recyclerview.StaggerLayoutManagerActivity" />
+        <activity android:name=".activitystack.NewActivity"
+            android:taskAffinity="ieue.ddd"
+            android:launchMode="singleTask"/>
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

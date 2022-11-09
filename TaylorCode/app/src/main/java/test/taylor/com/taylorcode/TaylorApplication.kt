@@ -8,6 +8,7 @@ import android.os.Debug
 import android.os.Looper
 import android.util.Log
 import com.facebook.stetho.Stetho
+import test.taylor.com.taylorcode.activitystack.ActivityStack
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
 import java.text.ParseException
@@ -25,6 +26,7 @@ class TaylorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         PageViewTracker.getInstance().init(this,null)
+        registerActivityLifecycleCallbacks(ActivityStack)
         System.currentTimeMillis().milliseconds
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

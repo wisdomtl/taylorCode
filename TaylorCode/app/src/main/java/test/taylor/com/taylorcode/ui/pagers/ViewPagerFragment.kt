@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.architecture.flow.lifecycle.BaseFragment
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
@@ -85,6 +86,9 @@ class ViewPagerFragment : BaseFragment(),IPvTracker {
                 Log.d("ttaylor", "ViewPagerFragment.onStateChanged[source, event=$event]: ")
             }
         })
+
+        Log.d("ttaylor", "[getParam]ViewPagerFragment.onCreate[savedInstanceState]: type=${activity?.getParam<Int>("type")},tabName=${activity?.getParam<String>("tabName")}, map=${activity?.getParam<Map<String,Int>>("map")}")
+
     }
 
     override fun onCreateView(

@@ -1,12 +1,14 @@
 package test.taylor.com.taylorcode.architecture.flow.lifecycle
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.fragment.visibility.IPvTracker
 
@@ -40,5 +42,11 @@ class SubFragment1:BaseFragment(),IPvTracker {
 
     override fun getPvExtra(): Bundle {
         return bundleOf()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("ttaylor", "[getParam]SubFragment1.onCreate[savedInstanceState]: type=${activity?.getParam<Int>("type")},tabName=${activity?.getParam<String>("tabName")}, map=${activity?.getParam<Map<String,Int>>("map")},type2=${activity?.getParam<Int>("type2")}")
+
     }
 }

@@ -1,14 +1,16 @@
 package test.taylor.com.taylorcode.architecture.flow.lifecycle
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 
-class NavigationFragmentActivity:AppCompatActivity() {
+class NavigationFragmentActivity : AppCompatActivity() {
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -19,7 +21,7 @@ class NavigationFragmentActivity:AppCompatActivity() {
                 layout_id = "tvChange"
                 layout_width = wrap_content
                 layout_height = wrap_content
-                textSize =20f
+                textSize = 20f
                 textColor = "#ff00ff"
                 text = "go hint"
                 fontFamily = R.font.pingfang
@@ -77,7 +79,7 @@ class NavigationFragmentActivity:AppCompatActivity() {
                 layout_height = 0
                 top_toBottomOf = "tvChange"
                 bottom_toBottomOf = parent_id
-                margin_top =  20
+                margin_top = 20
 
                 NavHostFragment.create(R.navigation.search_navigation).also {
                     supportFragmentManager.beginTransaction()
@@ -92,5 +94,7 @@ class NavigationFragmentActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
+        Log.d("ttaylor", "NavigationFragmentActivity.onCreate[savedInstanceState]: type=${getParam<Int>("type")}, tabName=${getParam<String>("tabName")}")
+
     }
 }
