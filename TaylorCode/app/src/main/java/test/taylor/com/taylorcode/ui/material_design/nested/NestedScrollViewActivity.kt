@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.NestedScrollView
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
@@ -30,6 +31,7 @@ class NestedScrollViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         initView()
+        Log.d("ttaylor", "NestedScrollViewActivity.onCreate[savedInstanceState]: inner-fragment-type=${getParam<Int>("inner-fragment-type")}")
     }
 
     private fun initView() {

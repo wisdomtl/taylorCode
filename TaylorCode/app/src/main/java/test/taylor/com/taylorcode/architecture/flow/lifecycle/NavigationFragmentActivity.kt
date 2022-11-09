@@ -9,6 +9,8 @@ import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.startActivity
+import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollViewActivity
 
 class NavigationFragmentActivity : AppCompatActivity() {
 
@@ -65,7 +67,7 @@ class NavigationFragmentActivity : AppCompatActivity() {
                 fontFamily = R.font.pingfang
                 start_toEndOf = "tvChange2"
                 top_toTopOf = parent_id
-                end_toEndOf = parent_id
+                end_toStartOf = "tvChange4"
                 gravity = gravity_center
                 onClick = {
                     runCatching {
@@ -73,6 +75,24 @@ class NavigationFragmentActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            TextView {
+                layout_id = "tvChange4"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 20f
+                textColor = "#ff00ff"
+                text = "new activity"
+                fontFamily = R.font.pingfang
+                start_toEndOf = "tvChange3"
+                top_toTopOf = parent_id
+                end_toEndOf = parent_id
+                gravity = gravity_center
+                onClick = {
+                    startActivity<NestedScrollViewActivity>()
+                }
+            }
+
             FragmentContainerView {
                 layout_id = "navHost"
                 layout_width = match_parent
