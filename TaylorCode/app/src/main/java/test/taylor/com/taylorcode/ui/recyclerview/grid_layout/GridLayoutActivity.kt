@@ -60,7 +60,6 @@ class GridLayoutActivity : AppCompatActivity() {
                 layout_width = wrap_content
                 layout_height = wrap_content
                 textSize = 30f
-                textColor = "#ffffff"
                 text = "jump"
                 fontFamily = R.font.pingfang
                 gravity = gravity_center

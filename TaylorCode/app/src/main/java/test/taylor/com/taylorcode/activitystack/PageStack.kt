@@ -7,14 +7,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import test.taylor.com.taylorcode.activitystack.ActivityStack.fragmentLifecycleCallbacks
-import test.taylor.com.taylorcode.activitystack.ActivityStack.fragments
-import test.taylor.com.taylorcode.activitystack.ActivityStack.stack
-import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
-import test.taylor.com.taylorcode.ui.custom_view.bullet_screen.LiveComment.activity
 import java.util.LinkedList
 
-object ActivityStack : Application.ActivityLifecycleCallbacks {
+object PageStack : Application.ActivityLifecycleCallbacks {
     val stack = LinkedList<Activity>()
     val fragments = hashMapOf<Activity, MutableList<Fragment>>()
 

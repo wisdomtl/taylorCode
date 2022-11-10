@@ -5,16 +5,14 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.os.Debug
-import android.os.Looper
 import android.util.Log
 import com.facebook.stetho.Stetho
-import test.taylor.com.taylorcode.activitystack.ActivityStack
+import test.taylor.com.taylorcode.activitystack.PageStack
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
@@ -26,7 +24,7 @@ class TaylorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         PageViewTracker.getInstance().init(this,null)
-        registerActivityLifecycleCallbacks(ActivityStack)
+        registerActivityLifecycleCallbacks(PageStack)
         System.currentTimeMillis().milliseconds
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
