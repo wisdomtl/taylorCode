@@ -88,30 +88,48 @@ fun ViewPager2.onPageVisibilityChange(block: (index: Int, isVisible: Boolean) ->
 fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
     val rect = Rect() // reuse rect object rather than recreate it everytime for a better performance
     val visibleAdapterIndexs = mutableSetOf<Int>()
-    val scrollListener = object : OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            // iterate all children of RecyclerView to check whether it is visible
-            for (i in 0 until childCount) {
-                val child = getChildAt(i)
-                val adapterIndex = getChildAdapterPosition(child)
-                val childVisibleRect = rect.also { child.getLocalVisibleRect(it) }
-                val visibleArea = childVisibleRect.let { it.height() * it.width() }
-                val realArea = child.width * child.height
-                if (visibleArea >= realArea * percent) {
-                    if (visibleAdapterIndexs.add(adapterIndex)) {
-                        block(child, adapterIndex, true)
-                    }
-                } else {
-                    if (adapterIndex in visibleAdapterIndexs) {
-                        block(child, adapterIndex, false)
-                        visibleAdapterIndexs.remove(adapterIndex)
-                    }
+    val checkVisibility = {
+        // iterate all children of RecyclerView to check whether it is visible
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val adapterIndex = getChildAdapterPosition(child)
+            val childVisibleRect = rect.also { child.getLocalVisibleRect(it) }
+            val visibleArea = childVisibleRect.let { it.height() * it.width() }
+            val realArea = child.width * child.height
+            if (visibleArea >= realArea * percent) {
+                if (visibleAdapterIndexs.add(adapterIndex)) {
+                    block(child, adapterIndex, true)
+                }
+            } else {
+                if (adapterIndex in visibleAdapterIndexs) {
+                    block(child, adapterIndex, false)
+                    visibleAdapterIndexs.remove(adapterIndex)
                 }
             }
         }
     }
+    val scrollListener = object : OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            checkVisibility()
+        }
+    }
     addOnScrollListener(scrollListener)
+    val onWindowFocusChangeListener = OnWindowFocusChangeListener { hasFocus ->
+        if (hasFocus) {
+            checkVisibility()
+        } else {
+            for (i in 0 until childCount) {
+                val child = getChildAt(i)
+                val adapterIndex = getChildAdapterPosition(child)
+                if (adapterIndex in visibleAdapterIndexs) {
+                    block(child, adapterIndex, false)
+                    visibleAdapterIndexs.remove(adapterIndex)
+                }
+            }
+        }
+    }
+    viewTreeObserver.addOnWindowFocusChangeListener(onWindowFocusChangeListener)
     addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View?) {
         }
@@ -120,6 +138,7 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
             if (v == null || v !is RecyclerView) return
             if (ViewCompat.isAttachedToWindow(v)) {
                 v.removeOnScrollListener(scrollListener)
+                viewTreeObserver.removeOnWindowFocusChangeListener(onWindowFocusChangeListener)
             }
             removeOnAttachStateChangeListener(this)
         }
