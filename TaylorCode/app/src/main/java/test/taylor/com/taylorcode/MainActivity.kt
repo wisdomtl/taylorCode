@@ -368,7 +368,7 @@ class MainActivity : BaseActivity(), Param {
             //            startActivity<JavassistActivity> { }
         }
 
-        btn_javassist.onVisibilityChange(listOf(decorView!!), listOf("tvChange".hashCode())) { view, i ->
+        btn_javassist.onVisibilityChange(listOf(decorView!!)) { view, i ->
             Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
         }
 

@@ -85,7 +85,7 @@ class CoveredByFragmentActivity:AppCompatActivity(),Param {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
-        tv.onVisibilityChange(listOf(viewGroup1,decorView!!), listOf("subFragment2".toLayoutId(),"tvChange33".toLayoutId())) { view, isVisible ->
+        tv.onVisibilityChange(listOf(viewGroup1)) { view, isVisible ->
             Log.w("ttaylor", "[test2022] CoveredByFragmentActivity.onCreate[view, isVisible($isVisible)]: ")
         }
     }

@@ -92,7 +92,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
             Log.v("ttaylor33","onViewRecycled $tv is recycled")
         }
 
-        rv.onItemVisibilityChange(0.5f) { itemView, index, isVisible ->
+        rv.onItemVisibilityChange(percent = 0.5f) { itemView, index, isVisible ->
             Log.w("ttaylor", "[dfdfsfd]RecyclerViewItemAnimActivity.onCreate[itemView, index($index), visible($isVisible)]: ")
         }
     }

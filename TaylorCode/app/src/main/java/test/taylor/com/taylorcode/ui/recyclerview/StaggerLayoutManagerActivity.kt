@@ -42,7 +42,7 @@ class StaggerLayoutManagerActivity:AppCompatActivity() {
         setContentView(contentView)
 
         staggerAdapter.dataList = (0 .. 200).map { if(it.mod(2) == 0)GridBean("$it") else GridBean2("$it") }
-        rv.onItemVisibilityChange(0.5f){ itemView: View, adapterIndex: Int, isVisible: Boolean ->
+        rv.onItemVisibilityChange(percent = 0.5f){ itemView: View, adapterIndex: Int, isVisible: Boolean ->
             Log.d("ttaylor", "StaggerLayoutManagerActivity.onCreate[itemView, adapterIndex($adapterIndex), isVisible($isVisible)]: ")
         }
     }

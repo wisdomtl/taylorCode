@@ -81,10 +81,15 @@ fun ViewPager2.onPageVisibilityChange(block: (index: Int, isVisible: Boolean) ->
 
 /**
  * A wrapper for [OnScrollListener] to tell which ItemView is showing or gone according to [percent]
+ * @param viewGroups the parent ViewGroups which new view to be added in (like Fragment's Container View)
  * @param percent the percentage of ItemView's visibility, range from 0 to 1, for example, 0.5 means the half of ItemView is visible to user.
  * @param block a lambda to tell which ItemView is visible to user with the Adapter Index
  */
-fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit) {
+fun RecyclerView.onItemVisibilityChange(
+    percent: Float = 0.5f,
+    viewGroups: List<ViewGroup> = emptyList(),
+    block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit
+) {
     val rect = Rect() // reuse rect object rather than recreate it everytime for a better performance
     val visibleAdapterIndexs = mutableSetOf<Int>()
     val checkVisibility = {
@@ -92,6 +97,7 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             val adapterIndex = getChildAdapterPosition(child)
+            if (adapterIndex == RecyclerView.NO_POSITION) continue
             val childVisibleRect = rect.also { child.getLocalVisibleRect(it) }
             val visibleArea = childVisibleRect.let { it.height() * it.width() }
             val realArea = child.width * child.height
@@ -114,22 +120,7 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
         }
     }
     addOnScrollListener(scrollListener)
-    //    val onWindowFocusChangeListener = OnWindowFocusChangeListener { hasFocus ->
-    //        if (hasFocus) {
-    //            checkVisibility()
-    //        } else {
-    //            for (i in 0 until childCount) {
-    //                val child = getChildAt(i)
-    //                val adapterIndex = getChildAdapterPosition(child)
-    //                if (adapterIndex in visibleAdapterIndexs) {
-    //                    block(child, adapterIndex, false)
-    //                    visibleAdapterIndexs.remove(adapterIndex)
-    //                }
-    //            }
-    //        }
-    //    }
-    //    viewTreeObserver.addOnWindowFocusChangeListener(onWindowFocusChangeListener)
-    onVisibilityChange { view, isVisible ->
+    onVisibilityChange(viewGroups, false) { view, isVisible ->
         if (isVisible) {
             checkVisibility()
         } else {
@@ -143,14 +134,13 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
             }
         }
     }
-    addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+    addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View?) {
         }
 
         override fun onViewDetachedFromWindow(v: View?) {
             if (v == null || v !is RecyclerView) return
             v.removeOnScrollListener(scrollListener)
-            //            viewTreeObserver.removeOnWindowFocusChangeListener(onWindowFocusChangeListener)
             removeOnAttachStateChangeListener(this)
         }
     })
@@ -174,13 +164,13 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
  * But it is not recommend to use it in the child view of [ScrollView] or [NestedScrollView] due to the performance issue.
  * Too many child lead to too many scroll listeners.
  *
- * @param viewGroup the parent ViewGroup which new view to be added in
- * @param childViewId id of the View to be added into [viewGroup], the current View may be covered by it
+ * @param viewGroups the parent ViewGroups which new view to be added in (like Fragment's Container View)
+ * @param needScrollListener whether detects scroll or not
  * @param block a lambda to tell whether the current View is visible to user
  */
 fun View.onVisibilityChange(
     viewGroups: List<ViewGroup> = emptyList(),
-    childViewIds: List<Int> = emptyList(),
+    needScrollListener: Boolean = true,
     block: (view: View, isVisible: Boolean) -> Unit
 ) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
@@ -202,7 +192,7 @@ fun View.onVisibilityChange(
         }
     }
 
-    class LayoutListener : OnGlobalLayoutListener {
+    class LayoutListener : ViewTreeObserver.OnGlobalLayoutListener {
         var addedView: View? = null
         override fun onGlobalLayout() {
             if (addedView != null) {
@@ -223,27 +213,25 @@ fun View.onVisibilityChange(
 
     val layoutListener = LayoutListener()
     viewGroups.forEachIndexed { index, viewGroup ->
-        viewGroup.setOnHierarchyChangeListener(object : OnHierarchyChangeListener {
-            val childId = childViewIds.getOrNull(index)
+        viewGroup.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
             override fun onChildViewAdded(parent: View?, child: View?) {
-                if (childId != null && child?.id == abs(childId)) {
-                    layoutListener.addedView = child
-                }
+                layoutListener.addedView = child
             }
 
             override fun onChildViewRemoved(parent: View?, child: View?) {
-                if (childId != null && child?.id == abs(childId)) {
-                    layoutListener.addedView = null
-                }
+                layoutListener.addedView = null
             }
         })
     }
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
 
-    val scrollListener = OnScrollChangedListener { checkVisibility() }
-    viewTreeObserver.addOnScrollChangedListener(scrollListener)
+    var scrollListener: ViewTreeObserver.OnScrollChangedListener? = null
+    if (needScrollListener) {
+        scrollListener = ViewTreeObserver.OnScrollChangedListener { checkVisibility() }
+        viewTreeObserver.addOnScrollChangedListener(scrollListener)
+    }
 
-    val focusChangeListener = OnWindowFocusChangeListener { hasFocus ->
+    val focusChangeListener = ViewTreeObserver.OnWindowFocusChangeListener { hasFocus ->
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
         val isInScreen = this.isInScreen
         if (hasFocus) {
@@ -260,7 +248,7 @@ fun View.onVisibilityChange(
     }
     viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
 
-    addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+    addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View?) {
         }
 
@@ -274,7 +262,7 @@ fun View.onVisibilityChange(
                     v.viewTreeObserver.removeGlobalOnLayoutListener(layoutListener)
                 }
                 v.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
-                v.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
+                if (scrollListener != null) v.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
                 viewGroups.forEach { it.setOnHierarchyChangeListener(null) }
             }
             removeOnAttachStateChangeListener(this)
