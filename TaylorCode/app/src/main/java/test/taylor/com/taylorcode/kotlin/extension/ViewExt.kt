@@ -20,8 +20,7 @@ import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.ViewCompat
-import androidx.core.view.doOnAttach
+import androidx.core.view.*
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.viewpager.widget.ViewPager
@@ -115,8 +114,23 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
         }
     }
     addOnScrollListener(scrollListener)
-    val onWindowFocusChangeListener = OnWindowFocusChangeListener { hasFocus ->
-        if (hasFocus) {
+    //    val onWindowFocusChangeListener = OnWindowFocusChangeListener { hasFocus ->
+    //        if (hasFocus) {
+    //            checkVisibility()
+    //        } else {
+    //            for (i in 0 until childCount) {
+    //                val child = getChildAt(i)
+    //                val adapterIndex = getChildAdapterPosition(child)
+    //                if (adapterIndex in visibleAdapterIndexs) {
+    //                    block(child, adapterIndex, false)
+    //                    visibleAdapterIndexs.remove(adapterIndex)
+    //                }
+    //            }
+    //        }
+    //    }
+    //    viewTreeObserver.addOnWindowFocusChangeListener(onWindowFocusChangeListener)
+    onVisibilityChange { view, isVisible ->
+        if (isVisible) {
             checkVisibility()
         } else {
             for (i in 0 until childCount) {
@@ -129,17 +143,14 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
             }
         }
     }
-    viewTreeObserver.addOnWindowFocusChangeListener(onWindowFocusChangeListener)
     addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View?) {
         }
 
         override fun onViewDetachedFromWindow(v: View?) {
             if (v == null || v !is RecyclerView) return
-            if (ViewCompat.isAttachedToWindow(v)) {
-                v.removeOnScrollListener(scrollListener)
-                viewTreeObserver.removeOnWindowFocusChangeListener(onWindowFocusChangeListener)
-            }
+            v.removeOnScrollListener(scrollListener)
+            //            viewTreeObserver.removeOnWindowFocusChangeListener(onWindowFocusChangeListener)
             removeOnAttachStateChangeListener(this)
         }
     })
@@ -168,8 +179,8 @@ fun RecyclerView.onItemVisibilityChange(percent: Float = 0.5f, block: (itemView:
  * @param block a lambda to tell whether the current View is visible to user
  */
 fun View.onVisibilityChange(
-    viewGroup: ViewGroup? = null,
-    childViewId: Int? = null,
+    viewGroups: List<ViewGroup> = emptyList(),
+    childViewIds: List<Int> = emptyList(),
     block: (view: View, isVisible: Boolean) -> Unit
 ) {
     val KEY_VISIBILITY = "KEY_VISIBILITY".hashCode()
@@ -211,19 +222,22 @@ fun View.onVisibilityChange(
     }
 
     val layoutListener = LayoutListener()
-    viewGroup?.setOnHierarchyChangeListener(object : OnHierarchyChangeListener {
-        override fun onChildViewAdded(parent: View?, child: View?) {
-            if (childViewId != null && child?.id == abs(childViewId)) {
-                layoutListener.addedView = child
+    viewGroups.forEachIndexed { index, viewGroup ->
+        viewGroup.setOnHierarchyChangeListener(object : OnHierarchyChangeListener {
+            val childId = childViewIds.getOrNull(index)
+            override fun onChildViewAdded(parent: View?, child: View?) {
+                if (childId != null && child?.id == abs(childId)) {
+                    layoutListener.addedView = child
+                }
             }
-        }
 
-        override fun onChildViewRemoved(parent: View?, child: View?) {
-            if (childViewId != null && child?.id == abs(childViewId)) {
-                layoutListener.addedView = null
+            override fun onChildViewRemoved(parent: View?, child: View?) {
+                if (childId != null && child?.id == abs(childId)) {
+                    layoutListener.addedView = null
+                }
             }
-        }
-    })
+        })
+    }
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
 
     val scrollListener = OnScrollChangedListener { checkVisibility() }
@@ -261,6 +275,7 @@ fun View.onVisibilityChange(
                 }
                 v.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
                 v.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
+                viewGroups.forEach { it.setOnHierarchyChangeListener(null) }
             }
             removeOnAttachStateChangeListener(this)
         }

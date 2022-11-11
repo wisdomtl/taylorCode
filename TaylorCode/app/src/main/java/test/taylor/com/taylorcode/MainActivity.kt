@@ -27,6 +27,7 @@ import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentInitActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
 import test.taylor.com.taylorcode.concurrent.countdownlatch.CountDownLatchActivity
+import test.taylor.com.taylorcode.cover_by_fragment.CoveredByFragmentActivity
 import test.taylor.com.taylorcode.data_persistence.RoomActivity
 import test.taylor.com.taylorcode.data_persistence.okio.OkioActivity
 import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityChainActivity
@@ -316,6 +317,7 @@ class MainActivity : BaseActivity(), Param {
         btn_log.setOnClickListener { startActivity<LogActivity> { } }
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
+        btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
             //            decorView?.addView(
@@ -366,7 +368,7 @@ class MainActivity : BaseActivity(), Param {
             //            startActivity<JavassistActivity> { }
         }
 
-        btn_javassist.onVisibilityChange(decorView, "tvChange".hashCode()) { view, i ->
+        btn_javassist.onVisibilityChange(listOf(decorView!!), listOf("tvChange".hashCode())) { view, i ->
             Log.w("ttaylor", "[onVisibilityChange]MainActivity.onVisibilityChange view.visibility=${visible},isShow=$i")
         }
 

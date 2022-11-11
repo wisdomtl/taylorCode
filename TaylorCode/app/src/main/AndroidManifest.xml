@@ -281,6 +281,7 @@
         <activity android:name=".activitystack.NewActivity"
             android:taskAffinity="ieue.ddd"
             android:launchMode="singleTask"/>
+        <activity android:name=".cover_by_fragment.CoveredByFragmentActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

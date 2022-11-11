@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/btn_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view visibility covered by fragment"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/gridlayout"
             android:layout_width="match_parent"

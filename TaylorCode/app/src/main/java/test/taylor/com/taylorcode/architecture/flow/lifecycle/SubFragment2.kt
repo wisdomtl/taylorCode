@@ -15,6 +15,7 @@ class SubFragment2:BaseFragment(),IPvTracker {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return context?.run {
             ConstraintLayout {
+                layout_id = "subFragment2"
                 layout_width = match_parent
                 layout_height = match_parent
                 background_color = "#897654"
