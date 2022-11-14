@@ -4,9 +4,15 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import test.taylor.com.taylorcode.R
@@ -16,11 +22,12 @@ import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 /**
  * Created by taylor on 2017/11/13.
  */
-class ViewPagerActivity : Activity() {
+class ViewPagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_pager_activity)
-        val adapter = MyPagerAdapter(prepareViews())
+//        val adapter = MyPagerAdapter(prepareViews())
+        val adapter = ViewPagerFragmentAdapter(supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT)
         val vp = findViewById<View>(R.id.vp) as MyViewPager
         vp.adapter = adapter
         vp.setScrollable(true)
@@ -75,6 +82,24 @@ class ViewPagerActivity : Activity() {
             views.add(page)
         }
         return views
+    }
+
+    internal  inner class ViewPagerFragmentAdapter(fragmentManager:FragmentManager,behavior:Int) : FragmentPagerAdapter(fragmentManager,behavior) {
+        private val fragments: SparseArray<Fragment> = SparseArray()
+        override fun getCount(): Int {
+            return 5
+        }
+
+        override fun getItem(position: Int): Fragment {
+            var fragment = fragments.get(position)
+            if (fragment == null) {
+                fragment = ViewPagerFragment().apply {
+                    arguments = bundleOf("index" to position)
+                }
+                fragments.put(position, fragment)
+            }
+            return fragment
+        }
     }
 
     /**

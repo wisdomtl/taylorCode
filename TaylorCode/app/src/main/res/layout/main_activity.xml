@@ -10,6 +10,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btn_vp3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view pager 2 with fragment"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btn_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ViewPager"
+            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_cover"
@@ -46,12 +61,6 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btn_vp3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="view pager 2 with fragment"
-            android:textAllCaps="false" />
 
 
         <Button
@@ -108,12 +117,7 @@
             android:text="make class"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ViewPager"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/recyclerview_item_anim"
