@@ -6,13 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import test.taylor.com.taylorcode.R
+import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.startActivity
 import test.taylor.com.taylorcode.ui.material_design.nested.NestedScrollViewActivity
 
-class NavigationFragmentActivity : AppCompatActivity() {
+class NavigationFragmentActivity : AppCompatActivity(), Param {
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -117,4 +118,12 @@ class NavigationFragmentActivity : AppCompatActivity() {
         Log.d("ttaylor", "NavigationFragmentActivity.onCreate[savedInstanceState]: type=${getParam<Int>("type")}, tabName=${getParam<String>("tabName")}")
 
     }
+
+    override val paramMap: Map<String, Any>
+        get() = mapOf(
+            "type" to 1,
+            "tabName" to "ddd",
+            "map" to mapOf<String, Int>(),
+            "type2" to 2,
+        )
 }

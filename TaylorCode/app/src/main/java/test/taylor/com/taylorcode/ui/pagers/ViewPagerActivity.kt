@@ -26,8 +26,8 @@ class ViewPagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_pager_activity)
-//        val adapter = MyPagerAdapter(prepareViews())
-        val adapter = ViewPagerFragmentAdapter(supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT)
+        val adapter = MyPagerAdapter(prepareViews())
+//        val adapter = ViewPagerFragmentAdapter(supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT)
         val vp = findViewById<View>(R.id.vp) as MyViewPager
         vp.adapter = adapter
         vp.setScrollable(true)

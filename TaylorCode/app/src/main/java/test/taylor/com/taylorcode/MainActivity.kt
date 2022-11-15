@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.IntDef
+import androidx.annotation.Keep
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.*
@@ -124,6 +125,7 @@ import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import kotlin.reflect.KClass
 
+@Keep
 class MainActivity : BaseActivity(), Param {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -193,6 +195,7 @@ class MainActivity : BaseActivity(), Param {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
+
 
 
         val holder = Holder(reference)

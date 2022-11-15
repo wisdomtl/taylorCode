@@ -87,10 +87,10 @@ fun ViewPager2.onPageVisibilityChange(block: (index: Int, isVisible: Boolean) ->
  */
 fun RecyclerView.onItemVisibilityChange(
     percent: Float = 0.5f,
-    viewGroups: List<ViewGroup> = emptyList(),
+    viewGroups: List<ViewGroup>? = null,
     block: (itemView: View, adapterIndex: Int, isVisible: Boolean) -> Unit
 ) {
-    val rect = Rect() // reuse rect object rather than recreate it everytime for a better performance
+    val visibleRect = Rect() // reuse rect object rather than recreate it everytime for a better performance
     val visibleAdapterIndexs = mutableSetOf<Int>()
     val checkVisibility = {
         // iterate all children of RecyclerView to check whether it is visible
@@ -98,10 +98,10 @@ fun RecyclerView.onItemVisibilityChange(
             val child = getChildAt(i)
             val adapterIndex = getChildAdapterPosition(child)
             if (adapterIndex == RecyclerView.NO_POSITION) continue
-            val childVisibleRect = rect.also { child.getLocalVisibleRect(it) }
-            val visibleArea = childVisibleRect.let { it.height() * it.width() }
+            val isChildVisible = child.getLocalVisibleRect(visibleRect)
+            val visibleArea = visibleRect.let { it.height() * it.width() }
             val realArea = child.width * child.height
-            if (visibleArea >= realArea * percent) {
+            if (visiblePercent(visibleRect) > percent && isChildVisible && visibleArea >= realArea * percent) {
                 if (visibleAdapterIndexs.add(adapterIndex)) {
                     block(child, adapterIndex, true)
                 }
@@ -147,6 +147,17 @@ fun RecyclerView.onItemVisibilityChange(
 }
 
 /**
+ * Check whether the view is visible to user
+ */
+fun View.visiblePercent(rect: Rect): Float {
+    val isVisible = getLocalVisibleRect(rect)
+    return if (ViewCompat.isAttachedToWindow(this) && visibility == View.VISIBLE && isVisible) {
+        rect.let { it.width() * it.height() }.toFloat() / (width * height)
+    } else 0f
+}
+
+
+/**
  * Check whether the view is visible to the user.
  * This function works for the following scenario:
  * 1.The switch of power button,
@@ -169,7 +180,7 @@ fun RecyclerView.onItemVisibilityChange(
  * @param block a lambda to tell whether the current View is visible to user
  */
 fun View.onVisibilityChange(
-    viewGroups: List<ViewGroup> = emptyList(),
+    viewGroups: List<ViewGroup>? = null,
     needScrollListener: Boolean = true,
     block: (view: View, isVisible: Boolean) -> Unit
 ) {
@@ -177,10 +188,11 @@ fun View.onVisibilityChange(
     val KEY_HAS_LISTENER = "KEY_HAS_LISTENER".hashCode()
     if (getTag(KEY_HAS_LISTENER) == true) return
 
+    val visibleRect = Rect()
 
     val checkVisibility = {
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen
+        val isInScreen = visiblePercent(visibleRect) > 0f
         if (lastVisibility == null) {
             if (isInScreen) {
                 block(this, true)
@@ -212,7 +224,7 @@ fun View.onVisibilityChange(
     }
 
     val layoutListener = LayoutListener()
-    viewGroups.forEachIndexed { index, viewGroup ->
+    viewGroups?.forEachIndexed { index, viewGroup ->
         viewGroup.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
             override fun onChildViewAdded(parent: View?, child: View?) {
                 layoutListener.addedView = child
@@ -233,7 +245,7 @@ fun View.onVisibilityChange(
 
     val focusChangeListener = ViewTreeObserver.OnWindowFocusChangeListener { hasFocus ->
         val lastVisibility = getTag(KEY_VISIBILITY) as? Boolean
-        val isInScreen = this.isInScreen
+        val isInScreen = visiblePercent(visibleRect) > 0
         if (hasFocus) {
             if (lastVisibility != isInScreen) {
                 block(this, isInScreen)
@@ -263,7 +275,7 @@ fun View.onVisibilityChange(
                 }
                 v.viewTreeObserver.removeOnWindowFocusChangeListener(focusChangeListener)
                 if (scrollListener != null) v.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
-                viewGroups.forEach { it.setOnHierarchyChangeListener(null) }
+                viewGroups?.forEach { it.setOnHierarchyChangeListener(null) }
             }
             removeOnAttachStateChangeListener(this)
         }

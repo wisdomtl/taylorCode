@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.Keep
 import androidx.core.os.bundleOf
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import test.taylor.com.taylorcode.activitystack.getParam
 import test.taylor.com.taylorcode.architecture.flow.lifecycle.BaseFragment
+import test.taylor.com.taylorcode.file.Bean
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.collectIn
 import test.taylor.com.taylorcode.ui.fragment.visibility.IPvTracker
@@ -19,7 +21,7 @@ import test.taylor.com.taylorcode.ui.pagers.paging.PagingAdapter
 import test.taylor.com.taylorcode.ui.pagers.paging.PagingViewModel
 import test.taylor.com.taylorcode.ui.pagers.paging.TextRepository
 
-
+@Keep
 class ViewPagerFragment : BaseFragment(),IPvTracker {
 
     /**
@@ -178,4 +180,10 @@ class ViewPagerFragment : BaseFragment(),IPvTracker {
     override fun getPvExtra(): Bundle {
         return bundleOf()
     }
+}
+
+
+fun Any.logA(a:Bean) {
+    Log.d("ttaylor", ".log[]: ${this.javaClass.annotations}")
+
 }
