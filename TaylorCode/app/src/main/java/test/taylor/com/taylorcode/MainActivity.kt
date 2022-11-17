@@ -353,6 +353,9 @@ class MainActivity : BaseActivity(), Param {
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
+        staggerLayout.onVisibilityChange { view, isVisible ->
+            Log.d("ttaylor", "MainActivity.initView[view(staggerLayout), isVisible($isVisible)]: ")
+        }
         navigation.setOnClickListener { startActivity<NavigationFragmentActivity> { } }
         newActivity.setOnClickListener { startActivity<NewActivity> { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) } }
         DialogFragment.setOnClickListener {  DialogFragment1().show(supportFragmentManager, "ddd") }
