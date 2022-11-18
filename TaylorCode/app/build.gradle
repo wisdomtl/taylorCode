@@ -7,12 +7,12 @@ plugins {
 
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

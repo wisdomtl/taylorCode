@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import nullable.NullableJava
 import test.taylor.com.taylorcode.activitystack.NewActivity
 import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
@@ -109,6 +110,7 @@ import test.taylor.com.taylorcode.ui.recyclerview.StaggerLayoutManagerActivity
 import test.taylor.com.taylorcode.ui.recyclerview.anim.RecyclerViewAnimActivity
 import test.taylor.com.taylorcode.ui.recyclerview.anim2.RecyclerViewItemAnimatorActivity
 import test.taylor.com.taylorcode.ui.recyclerview.grid_layout.GridLayoutActivity
+import test.taylor.com.taylorcode.ui.recyclerview.nest_recyclerView.NestedRecyclerViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.select.SelectRecycleViewActivity
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapterActivity
 import test.taylor.com.taylorcode.ui.state_cross_activities.LiveDataActivity
@@ -357,6 +359,7 @@ class MainActivity : BaseActivity(), Param {
             Log.d("ttaylor", "MainActivity.initView[view(staggerLayout), isVisible($isVisible)]: ")
         }
         navigation.setOnClickListener { startActivity<NavigationFragmentActivity> { } }
+        btnNestedRecyclerView.setOnClickListener { startActivity<NestedRecyclerViewActivity> { } }
         newActivity.setOnClickListener { startActivity<NewActivity> { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) } }
         DialogFragment.setOnClickListener {  DialogFragment1().show(supportFragmentManager, "ddd") }
         btn_nestedScrollView.setOnClickListener {
@@ -433,8 +436,8 @@ class MainActivity : BaseActivity(), Param {
         btn_room.setOnClickListener(onClickListener)
         1280.fmtCount().let { Log.v("ttaylor", "tag=aaaadf, MainActivity.initView()  it=${it}") }
 
-        val str: String = (java.lang.String("0").bytes.sum() - 48).toString()
-        Log.v("ttaylor", "tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
+//        val str: String = (java.lang.String("0").bytes.sum() - 48).toString()
+//        Log.v("ttaylor", "tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
 
         Countdown(10000, 1000) { it }.apply {
             onStart = { Log.v("ttaylor", "countdown start---------") }

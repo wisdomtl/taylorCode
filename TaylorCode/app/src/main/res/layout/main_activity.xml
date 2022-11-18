@@ -15,6 +15,13 @@
             />
 
         <Button
+            android:id="@+id/btnNestedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nestedRecyclerView"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_vp3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

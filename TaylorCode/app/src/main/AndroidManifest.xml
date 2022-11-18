@@ -282,6 +282,7 @@
             android:taskAffinity="ieue.ddd"
             android:launchMode="singleTask"/>
         <activity android:name=".cover_by_fragment.CoveredByFragmentActivity" />
+        <activity android:name=".ui.recyclerview.nest_recyclerView.NestedRecyclerViewActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
