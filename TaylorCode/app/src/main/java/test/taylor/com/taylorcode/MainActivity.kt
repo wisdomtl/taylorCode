@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import nullable.NullableJava
 import test.taylor.com.taylorcode.activitystack.NewActivity
 import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2

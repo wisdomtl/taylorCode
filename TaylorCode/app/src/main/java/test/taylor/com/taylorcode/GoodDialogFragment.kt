@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import test.taylor.com.taylorcode.file.Bean
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
@@ -196,5 +197,9 @@ class GoodDialogFragment : DialogFragment() {
             )
         )
     }
+
+}
+
+fun ddd(bean:Bean) {
 
 }

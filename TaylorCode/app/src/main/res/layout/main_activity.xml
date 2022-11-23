@@ -14,6 +14,13 @@
             android:layout_height="wrap_content"
             />
 
+
+        <Button
+            android:id="@+id/btn_kotlin_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin Activity"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btnNestedRecyclerView"
             android:layout_width="match_parent"
@@ -569,12 +576,6 @@
             android:text="Override property"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_kotlin_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="kotlin Activity"
-            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_constraintlayout4"
             android:layout_width="match_parent"

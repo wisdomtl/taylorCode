@@ -38,6 +38,12 @@ class KotlinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.constraint_layout_activity)
 
+        /**
+         * case: kotlin reduce
+         */
+        listOf(1, 2, 3, 4, 5, 6, 7).runningReduce { acc, i -> acc + i }.let { Log.d("ttaylor", "KotlinActivity.onCreate[]: runningReduce=${it.print { "$it" }}") }
+        listOf(1, 2, 3, 4, 5, 6, 7).runningFold(1) { acc, i -> acc + i }.let { Log.d("ttaylor", "KotlinActivity.onCreate[]: runningFold=${it.print { "$it" }}") }
+
 
         Log.v("ttaylor", "10000 = ${10000.format1}")
         Log.v("ttaylor", "19000 = ${19000.format1}")
@@ -497,7 +503,7 @@ class KotlinActivity : AppCompatActivity() {
             it.timeInMillis
         }
 
-        return timestamp in beginningOfToday .. endingOfToday
+        return timestamp in beginningOfToday..endingOfToday
 
     }
 

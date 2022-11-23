@@ -2,6 +2,7 @@ package test.taylor.com.taylorcode;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.text.ListFormatter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +44,7 @@ public class HookSystemServiceActivity extends Activity {
      * @param type
      */
     private void setType(@MyType int type){
-
+        GoodDialogFragmentKt.ddd(null);
     }
 
     /**
