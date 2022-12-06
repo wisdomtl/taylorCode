@@ -338,6 +338,18 @@ class FlowActivity : AppCompatActivity() {
             }
         }
 
+        val fff = flowOf(listOf("ddd","dddd"))
+
+        val dddd = flowOf(listOf("2222","111"))
+
+        GlobalScope.launch {
+            flowOf(fff,dddd)
+                .flattenMerge()
+                .collect {
+                    Log.d("ttaylor", "merge list in flow: list=${it}")
+                }
+        }
+
         /**
          * case
          * flow() to create a flow
