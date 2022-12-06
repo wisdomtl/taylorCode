@@ -21,7 +21,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
 
     private val myAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(TextProxy2())
+            addItemBuilder(TextProxy2())
         }
     }
 
@@ -99,7 +99,7 @@ class RecyclerViewItemAnimActivity : AppCompatActivity() {
 }
 
 
-class TextProxy2 : VarietyAdapter2.Proxy<String, TextViewHolder2>() {
+class TextProxy2 : VarietyAdapter2.ItemBuilder<String, TextViewHolder2>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             MyConstraintLayout(this).apply {

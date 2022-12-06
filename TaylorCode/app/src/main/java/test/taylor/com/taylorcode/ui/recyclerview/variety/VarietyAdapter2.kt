@@ -13,7 +13,7 @@ import kotlin.math.max
 
 /**
  * A special [RecyclerView.Adapter] which could show variety types of item without rewrite [onCreateViewHolder], [onBindViewHolder] and [getItemViewType].
- * New type of item is added dynamically by [addProxy].
+ * New type of item is added dynamically by [addItemBuilder].
  *
  * the typical usage is like the following:
  *
@@ -42,9 +42,9 @@ import kotlin.math.max
  */
 open class VarietyAdapter2(
     /**
-     * the list of [Proxy]
+     * the list of [ItemBuilder]
      */
-    private var proxyList: MutableList<Proxy<*, *>> = mutableListOf(),
+    private var proxyList: MutableList<ItemBuilder<*, *>> = mutableListOf(),
     /**
      * the dispatcher used by [dataDiffer]
      */
@@ -86,14 +86,14 @@ open class VarietyAdapter2(
     /**
      * add a new type of item for RecyclerView
      */
-    fun <T, VH : ViewHolder> addProxy(proxy: Proxy<T, VH>) {
+    fun <T, VH : ViewHolder> addItemBuilder(proxy: ItemBuilder<T, VH>) {
         proxyList.add(proxy)
     }
 
     /**
      * remove a type of item for RecyclerView
      */
-    fun <T, VH : ViewHolder> removeProxy(proxy: Proxy<T, VH>) {
+    fun <T, VH : ViewHolder> removeProxy(proxy: ItemBuilder<T, VH>) {
         proxyList.remove(proxy)
     }
 
@@ -118,14 +118,14 @@ open class VarietyAdapter2(
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val index = getIndex(position)
-        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action)
+        (proxyList[getItemViewType(position)] as ItemBuilder<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action)
         checkPreload(position)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         val index = getIndex(position)
-        (proxyList[getItemViewType(position)] as Proxy<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action, payloads)
+        (proxyList[getItemViewType(position)] as ItemBuilder<Any, ViewHolder>).onBindViewHolder(holder, dataList[index], position, action, payloads)
         checkPreload(position)
     }
 
@@ -184,7 +184,7 @@ open class VarietyAdapter2(
     }
 
     /**
-     * find the index of [Proxy] according to the [data] in the [proxyList]
+     * find the index of [ItemBuilder] according to the [data] in the [proxyList]
      */
     private fun getProxyIndex(data: Any): Int = proxyList.indexOfFirst {
         val firstTypeParamClassName = (it.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0].toString()
@@ -195,9 +195,9 @@ open class VarietyAdapter2(
 
     /**
      * the proxy of [RecyclerView.Adapter], which has the similar function to it.
-     * the business layer implements [Proxy] to define how does the item look like
+     * the business layer implements [ItemBuilder] to define how does the item look like
      */
-    abstract class Proxy<T, VH : ViewHolder> {
+    abstract class ItemBuilder<T, VH : ViewHolder> {
 
         abstract fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
 

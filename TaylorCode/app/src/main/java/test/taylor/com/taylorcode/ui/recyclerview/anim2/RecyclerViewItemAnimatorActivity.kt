@@ -14,7 +14,7 @@ class RecyclerViewItemAnimatorActivity : AppCompatActivity() {
     private lateinit var rv: RecyclerView
     private val overlapAdapter by lazy {
         OverlapAdapter().apply {
-            addProxy(ImageProxy())
+            addItemBuilder(ImageProxy())
         }
     }
     private val contentView by lazy {
@@ -100,7 +100,7 @@ class OverlapAdapter : VarietyAdapter2() {
 }
 
 
-class ImageProxy : VarietyAdapter2.Proxy<Image, ImageViewHolder>() {
+class ImageProxy : VarietyAdapter2.ItemBuilder<Image, ImageViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {

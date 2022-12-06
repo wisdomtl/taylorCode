@@ -10,7 +10,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.retrofit.News
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class NewsProxy: VarietyAdapter2.Proxy<News, NewsViewHolder>() {
+class NewsProxy: VarietyAdapter2.ItemBuilder<News, NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import test.taylor.com.taylorcode.file.Bean
 import test.taylor.com.taylorcode.kotlin.*
-import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
 import test.taylor.com.taylorcode.ui.performance.better_performance3.OneRankProxy
@@ -20,7 +19,7 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 class GoodDialogFragment : DialogFragment() {
 
     private val myAdapter = VarietyAdapter2().apply {
-        addProxy(OneRankProxy())
+        addItemBuilder(OneRankProxy())
     }
 
     companion object {

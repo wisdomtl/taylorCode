@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +19,8 @@ class PoorDialogFragment : DialogFragment() {
 
     private val myAdapter = VarietyAdapter2().apply {
         // several item by xml
-        addProxy(PoorHeaderProxy())
-        addProxy(PoorRankProxy())
+        addItemBuilder(PoorHeaderProxy())
+        addItemBuilder(PoorRankProxy())
     }
 
     companion object {

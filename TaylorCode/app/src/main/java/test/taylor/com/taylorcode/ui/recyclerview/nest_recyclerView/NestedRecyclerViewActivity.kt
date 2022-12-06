@@ -1,6 +1,5 @@
 package test.taylor.com.taylorcode.ui.recyclerview.nest_recyclerView
 
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,7 +16,7 @@ import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 class NestedRecyclerViewActivity : AppCompatActivity() {
     private val verticalAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(VerticalItemBuilder())
+            addItemBuilder(VerticalItemBuilder())
         }
     }
 
@@ -68,13 +67,13 @@ class VerticalTexts {
 
 class VerticalViewHolder(itemView: View) : ViewHolder(itemView) {
     val adapter = VarietyAdapter2().apply {
-        addProxy(HorizontalItemBuilder())
+        addItemBuilder(HorizontalItemBuilder())
     }
 
     val rv = itemView.find<RecyclerView>("rv11")
 }
 
-class VerticalItemBuilder : VarietyAdapter2.Proxy<VerticalTexts, VerticalViewHolder>() {
+class VerticalItemBuilder : VarietyAdapter2.ItemBuilder<VerticalTexts, VerticalViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = parent.context.run {
             RecyclerView {
@@ -98,7 +97,7 @@ class HorizontalViewHolder(itemView: View) : ViewHolder(itemView) {
     val tv = itemView.find<TextView>("tv")
 }
 
-class HorizontalItemBuilder : VarietyAdapter2.Proxy<String, HorizontalViewHolder>() {
+class HorizontalItemBuilder : VarietyAdapter2.ItemBuilder<String, HorizontalViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = parent.context.run {
             TextView {

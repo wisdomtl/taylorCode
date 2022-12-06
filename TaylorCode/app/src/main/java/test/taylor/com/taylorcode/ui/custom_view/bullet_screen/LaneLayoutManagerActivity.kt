@@ -22,8 +22,8 @@ class LaneLayoutManagerActivity : AppCompatActivity() {
 
     private val contentViewAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(LanesProxy())
-            addProxy(StringProxy())
+            addItemBuilder(LanesProxy())
+            addItemBuilder(StringProxy())
         }
     }
 
@@ -132,7 +132,7 @@ class LaneAdapter : VarietyAdapter2() {
     override fun getIndex(position: Int): Int = position % dataList.size
 }
 
-class LaneProxy : VarietyAdapter2.Proxy<LaneBean, LaneViewHolder>() {
+class LaneProxy : VarietyAdapter2.ItemBuilder<LaneBean, LaneViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {
@@ -185,10 +185,10 @@ class LanesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val rv = itemView.find<RecyclerView>("rv")
 }
 
-class LanesProxy : VarietyAdapter2.Proxy<LaneBeans, LanesViewHolder>() {
+class LanesProxy : VarietyAdapter2.ItemBuilder<LaneBeans, LanesViewHolder>() {
     private val laneAdapter by lazy {
         LaneAdapter().apply {
-            addProxy(LaneProxy())
+            addItemBuilder(LaneProxy())
         }
     }
 
@@ -233,7 +233,7 @@ class StringViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tv = itemView.find<TextView>("tvChange")
 }
 
-class StringProxy : VarietyAdapter2.Proxy<Text, StringViewHolder>() {
+class StringProxy : VarietyAdapter2.ItemBuilder<Text, StringViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

@@ -52,8 +52,8 @@ class ViewPager2Activity : AppCompatActivity() {
          * case: ViewPager2 with views
          */
         val viewPagerAdapter = VarietyAdapter2().apply {
-            addProxy(ViewPagerProxy())
-            addProxy(ViewPagerEmptyProxy())
+            addItemBuilder(ViewPagerProxy())
+            addItemBuilder(ViewPagerEmptyProxy())
         }
         vp2.adapter = viewPagerAdapter
         /**
@@ -190,7 +190,7 @@ class ViewPager2Activity : AppCompatActivity() {
     }
 }
 
-class ViewPagerProxy : VarietyAdapter2.Proxy<DataText, ViewPagerViewHolder2>() {
+class ViewPagerProxy : VarietyAdapter2.ItemBuilder<DataText, ViewPagerViewHolder2>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {
@@ -228,7 +228,7 @@ class ViewPagerViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 
-class ViewPagerEmptyProxy : VarietyAdapter2.Proxy<EmptyString, ViewPagerEmptyViewHolder>() {
+class ViewPagerEmptyProxy : VarietyAdapter2.ItemBuilder<EmptyString, ViewPagerEmptyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

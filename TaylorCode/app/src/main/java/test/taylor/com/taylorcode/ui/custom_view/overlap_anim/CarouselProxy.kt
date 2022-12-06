@@ -12,7 +12,7 @@ import test.taylor.com.taylorcode.ui.StrokeImageView
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 
-class CarouselProxy : VarietyAdapter2.Proxy<CarouselData, CarouselViewHolder>() {
+class CarouselProxy : VarietyAdapter2.ItemBuilder<CarouselData, CarouselViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

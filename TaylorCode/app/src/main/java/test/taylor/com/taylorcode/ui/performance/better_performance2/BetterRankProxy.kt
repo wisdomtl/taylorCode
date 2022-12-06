@@ -12,7 +12,7 @@ import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.performance.load
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class BetterRankProxy : VarietyAdapter2.Proxy<BetterRank, BetterRankViewHolder>() {
+class BetterRankProxy : VarietyAdapter2.ItemBuilder<BetterRank, BetterRankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             LinearLayout {

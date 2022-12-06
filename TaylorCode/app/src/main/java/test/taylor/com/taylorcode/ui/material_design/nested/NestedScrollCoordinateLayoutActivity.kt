@@ -32,7 +32,7 @@ class NestedScrollCoordinateLayoutActivity : Activity() {
         )
     }
     private val varietyAdapter = VarietyAdapter2().apply {
-        addProxy(TextProxy())
+        addItemBuilder(TextProxy())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class NestedScrollCoordinateLayoutActivity : Activity() {
     }
 }
 
-class TextProxy : VarietyAdapter2.Proxy<String, TextViewHolder>() {
+class TextProxy : VarietyAdapter2.ItemBuilder<String, TextViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {

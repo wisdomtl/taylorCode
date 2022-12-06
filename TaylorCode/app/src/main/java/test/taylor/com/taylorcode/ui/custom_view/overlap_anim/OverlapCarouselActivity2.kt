@@ -15,7 +15,7 @@ class OverlapCarouselActivity2 : AppCompatActivity() {
 
     private val carouselAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(CarouselProxy())
+            addItemBuilder(CarouselProxy())
         }
     }
 

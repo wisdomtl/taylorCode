@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class TimeProxy : VarietyAdapter2.Proxy<Time, TimeViewHolder>() {
+class TimeProxy : VarietyAdapter2.ItemBuilder<Time, TimeViewHolder>() {
     override fun onBindViewHolder(holder: TimeViewHolder, data: Time, index: Int, action: ((Any?) -> Unit)?) {
         holder.tvHour?.text = data.hour
         holder.tvMinute?.text = data.minute

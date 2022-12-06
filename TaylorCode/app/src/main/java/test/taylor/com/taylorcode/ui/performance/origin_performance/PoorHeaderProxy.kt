@@ -10,7 +10,7 @@ import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class PoorHeaderProxy:VarietyAdapter2.Proxy<Header, PoorHeaderViewHolder>() {
+class PoorHeaderProxy:VarietyAdapter2.ItemBuilder<Header, PoorHeaderViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val start = System.currentTimeMillis()
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fans_rank_header_layout,parent,false)

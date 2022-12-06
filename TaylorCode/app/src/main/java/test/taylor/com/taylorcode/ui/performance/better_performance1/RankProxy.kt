@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class RankProxy : VarietyAdapter2.Proxy<Rank, RankViewHolder>() {
+class RankProxy : VarietyAdapter2.ItemBuilder<Rank, RankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val start = System.currentTimeMillis()
         lateinit var tvRank: TextView

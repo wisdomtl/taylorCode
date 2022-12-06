@@ -1,7 +1,6 @@
 package test.taylor.com.taylorcode.ui.recyclerview.anim
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,7 +16,7 @@ class RecyclerViewAnimActivity : AppCompatActivity() {
     private lateinit var rv: RecyclerView
     private val overlapAdapter by lazy {
         OverlapAdapter().apply {
-            addProxy(ImageProxy())
+            addItemBuilder(ImageProxy())
         }
     }
     private val contentView by lazy {
@@ -103,7 +102,7 @@ class OverlapAdapter : VarietyAdapter2() {
 }
 
 
-class ImageProxy : VarietyAdapter2.Proxy<Image, ImageViewHolder>() {
+class ImageProxy : VarietyAdapter2.ItemBuilder<Image, ImageViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             TextView {

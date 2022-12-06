@@ -43,7 +43,7 @@ class StateFlowActivity : AppCompatActivity() {
 
     private val newsAdapter2 by lazy {
         VarietyAdapter2().apply {
-            addProxy(NewsProxy())
+            addItemBuilder(NewsProxy())
         }
     }
 

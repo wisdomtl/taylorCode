@@ -17,8 +17,8 @@ class StaggerLayoutManagerActivity:AppCompatActivity() {
 
     private val staggerAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(StaggerProxy())
-            addProxy(StaggerProxy2())
+            addItemBuilder(StaggerProxy())
+            addItemBuilder(StaggerProxy2())
         }
     }
 
@@ -48,7 +48,7 @@ class StaggerLayoutManagerActivity:AppCompatActivity() {
     }
 }
 
-class StaggerProxy : VarietyAdapter2.Proxy<GridBean, GridViewHolder>() {
+class StaggerProxy : VarietyAdapter2.ItemBuilder<GridBean, GridViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {
@@ -81,7 +81,7 @@ class StaggerProxy : VarietyAdapter2.Proxy<GridBean, GridViewHolder>() {
 
 data class GridBean2(val str: String)
 
-class StaggerProxy2 : VarietyAdapter2.Proxy<GridBean2, GridViewHolder>() {
+class StaggerProxy2 : VarietyAdapter2.ItemBuilder<GridBean2, GridViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

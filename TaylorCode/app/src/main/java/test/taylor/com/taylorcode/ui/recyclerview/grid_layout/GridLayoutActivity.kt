@@ -1,13 +1,11 @@
 package test.taylor.com.taylorcode.ui.recyclerview.grid_layout
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import test.taylor.com.taylorcode.R
@@ -22,7 +20,7 @@ class GridLayoutActivity : AppCompatActivity() {
 
     private val gridAdapter by lazy {
         VarietyAdapter2().apply {
-            addProxy(GridProxy())
+            addItemBuilder(GridProxy())
         }
     }
 
@@ -90,7 +88,7 @@ class GridViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val tv = itemView.find<TextView>("tv")
 }
 
-class GridProxy : VarietyAdapter2.Proxy<GridBean, GridViewHolder>() {
+class GridProxy : VarietyAdapter2.ItemBuilder<GridBean, GridViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {

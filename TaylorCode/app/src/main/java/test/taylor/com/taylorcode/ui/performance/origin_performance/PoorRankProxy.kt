@@ -13,7 +13,7 @@ import test.taylor.com.taylorcode.kotlin.formatNums
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class PoorRankProxy : VarietyAdapter2.Proxy<Rank, PoorFansRankViewHolder>() {
+class PoorRankProxy : VarietyAdapter2.ItemBuilder<Rank, PoorFansRankViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val start = System.currentTimeMillis()
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fans_rank_layout2, parent, false)

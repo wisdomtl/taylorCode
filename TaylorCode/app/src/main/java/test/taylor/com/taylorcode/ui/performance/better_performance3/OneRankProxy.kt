@@ -14,7 +14,7 @@ import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
 import test.taylor.com.taylorcode.ui.performance.load
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class OneRankProxy : VarietyAdapter2.Proxy<BetterRank, OneRankViewHolder>() {
+class OneRankProxy : VarietyAdapter2.ItemBuilder<BetterRank, OneRankViewHolder>() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {

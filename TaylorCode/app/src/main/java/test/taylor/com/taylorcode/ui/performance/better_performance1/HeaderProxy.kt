@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
-import test.taylor.com.taylorcode.kotlin.ConstraintLayout
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.widget.PercentLayout
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class HeaderProxy : VarietyAdapter2.Proxy<Header, HeaderViewHolder>() {
+class HeaderProxy : VarietyAdapter2.ItemBuilder<Header, HeaderViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val start = System.currentTimeMillis()
         lateinit var tvTitle: TextView

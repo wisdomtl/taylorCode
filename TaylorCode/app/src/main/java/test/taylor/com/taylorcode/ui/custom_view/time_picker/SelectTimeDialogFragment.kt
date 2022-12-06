@@ -227,7 +227,7 @@ class SelectTimeDialogFragment : DialogFragment() {
     }
 
     private val timesAdapter = VarietyAdapter2().apply {
-        addProxy(TimeProxy())
+        addItemBuilder(TimeProxy())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

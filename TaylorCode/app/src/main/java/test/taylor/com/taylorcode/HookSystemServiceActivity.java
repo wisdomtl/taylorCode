@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.IntDef;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import test.taylor.com.taylorcode.proxy.system.FakeActivity;
@@ -37,6 +38,10 @@ public class HookSystemServiceActivity extends Activity {
 //        setType(3);// there is an error
         Solution s = new Solution();
         int[] arr = new int[]{4,3,2,7,8,2,3,1};
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Log.d("test", "list item="+list.get(i));
+        }
     }
 
     /**

@@ -16,11 +16,8 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Header
-import test.taylor.com.taylorcode.ui.performance.better_performance1.HeaderProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance1.Rank
-import test.taylor.com.taylorcode.ui.performance.better_performance1.RankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRank
-import test.taylor.com.taylorcode.ui.performance.better_performance2.BetterRankProxy
 import test.taylor.com.taylorcode.ui.performance.better_performance3.OneRankProxy
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
@@ -38,7 +35,7 @@ class RecyclerViewPerformanceActivity : AppCompatActivity(), CoroutineScope by M
 //        addProxy(BetterRankProxy())
 
         //OneViewGroup
-        addProxy(OneRankProxy())
+        addItemBuilder(OneRankProxy())
     }
 
     private val contentView by lazy {
