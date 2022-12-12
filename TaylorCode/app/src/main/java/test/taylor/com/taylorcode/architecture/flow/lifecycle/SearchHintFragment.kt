@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.viewpager2.widget.ViewPager2
+import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.fragment.visibility.IPvTracker
 import test.taylor.com.taylorcode.ui.pagers.ViewPager2FragmentStateAdapter
 
-class SearchHintFragment : BaseFragment(), IPvTracker {
+class SearchHintFragment : BaseFragment(), IPvTracker,Param {
 
     private lateinit var vp2:ViewPager2
 
@@ -42,4 +43,8 @@ class SearchHintFragment : BaseFragment(), IPvTracker {
     override fun getPvExtra(): Bundle {
         return bundleOf()
     }
+
+    override val paramMap: Map<String, Any>
+        get() = mapOf("abc2" to "abc1",
+        "type" to 100)
 }

@@ -124,6 +124,7 @@ import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
+import kotlin.math.log
 import kotlin.reflect.KClass
 
 @Keep
@@ -141,6 +142,25 @@ class MainActivity : BaseActivity(), Param {
         Log.v("ttaylor3333", "onCreate() job is active=${job.isActive}")
         val scope = CoroutineScope(Job() + Dispatchers.Default)
         Log.v("ttaylor3333", "onCreate() scope is active =${scope.isActive}")
+
+        /**
+         * case: continue in loop lambda
+         */
+        listOf<String>("d","dd","ddd").forEach lit@{
+            if(it == "dd") return@lit
+            Log.d("ttaylor", "[return]MainActivity.onCreate[]: dd@=${it}")
+        }
+
+        /**
+         * case: return the outer function
+         */
+        listOf<String>("d","dd","ddd").forEach {
+            if(it == "dd") return
+            Log.d("ttaylor", "[return]MainActivity.onCreate[]: dd=${it}")
+        }
+        Log.d("ttaylor", "[return]MainActivity.onCreate[savedInstanceState]: ") // this log wont be printed
+
+
     }
 
     private fun testValueDiliver() {

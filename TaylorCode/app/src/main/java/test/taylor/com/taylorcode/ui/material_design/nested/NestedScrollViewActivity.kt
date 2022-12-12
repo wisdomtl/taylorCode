@@ -31,7 +31,7 @@ class NestedScrollViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
         initView()
-        Log.d("ttaylor", "NestedScrollViewActivity.onCreate[savedInstanceState]: inner-fragment-type=${getParam<Int>("inner-fragment-type")}")
+        Log.d("ttaylor", "[getparam]NestedScrollViewActivity.onCreate[savedInstanceState]: inner-fragment-type=${getParam<Int>("inner-fragment-type")}, abc2=${getParam<String>("abc1")} type2=${getParam<Int>("type2")}")
     }
 
     private fun initView() {

@@ -37,11 +37,11 @@ public class HookSystemServiceActivity extends Activity {
          */
 //        setType(3);// there is an error
         Solution s = new Solution();
-        int[] arr = new int[]{4,3,2,7,8,2,3,1};
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Log.d("test", "list item="+list.get(i));
-        }
+        int[] nnn = new int[3];
+        nnn[0] = 1;
+        nnn[1] = 1;
+        nnn[2] = 2;
+        s.removeDuplicates(nnn);
     }
 
     /**
@@ -64,21 +64,19 @@ public class HookSystemServiceActivity extends Activity {
 
 }
 
-
 class Solution {
-    public int findIndex(int[] nums,int target) {
-        for(int i=0;i<nums.length;i++){
-            if(nums[i] == target) return i;
-        }
-        return -1;
-    }
-    public void finddd(){
-        if(true) {
-            if(true){
-               Log.v("ttaylor","()") ;
+    public int removeDuplicates(int[] nums) {
+        int j, k, size = nums.length;
+        for(int i = 0; i< nums.length;i++){
+            j = i+1;
+            while(j< nums.length && nums[j] == nums[i]) j++;
+            int gap = j -i -1;
+            k = i+1;
+            while(j < size){
+                nums[k++]=nums[j++];
             }
-            Log.v("ttaylor","()");}
-
-        else Log.v("ttaylor","()");
+            size = size - gap;
+        }
+        return size;
     }
 }

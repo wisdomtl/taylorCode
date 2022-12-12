@@ -14,7 +14,33 @@
             android:layout_height="wrap_content"
             />
 
+        <Button
+            android:id="@+id/btn_fragment_communicate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="fragment communicate"
+            android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/DialogFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DialogFragment"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="navigation"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btn_kotlin_flow"
             android:layout_width="match_parent"
@@ -65,19 +91,9 @@
             android:text="grid layout manager"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="navigation"
-            android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/DialogFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="DialogFragment"
-            android:textAllCaps="false" />
+
+
         <Button
             android:id="@+id/newActivity"
             android:layout_width="match_parent"
@@ -183,12 +199,7 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btn_fragment_communicate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="fragment communicate"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_flow_lifecycle"
@@ -254,12 +265,7 @@
             android:text="overlap anim"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="solution"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btnConcurrentInit"

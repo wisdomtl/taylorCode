@@ -115,15 +115,15 @@ class NavigationFragmentActivity : AppCompatActivity(), Param {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
-        Log.d("ttaylor", "NavigationFragmentActivity.onCreate[savedInstanceState]: type=${getParam<Int>("type")}, tabName=${getParam<String>("tabName")}")
+        Log.d("ttaylor", "[getParam]NavigationFragmentActivity.onCreate[savedInstanceState]: type=${getParam<Int>("type")}" )
 
     }
 
     override val paramMap: Map<String, Any>
         get() = mapOf(
-            "type" to 1,
-            "tabName" to "ddd",
-            "map" to mapOf<String, Int>(),
-            "type2" to 2,
+            "type3" to 1,
+            "tabName2" to "ddd2",
+            "map2" to mapOf<String, Int>(),
+            "type3" to 2,
         )
 }

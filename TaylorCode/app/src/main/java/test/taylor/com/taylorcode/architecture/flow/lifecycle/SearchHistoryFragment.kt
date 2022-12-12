@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.kotlin.*
@@ -201,6 +200,8 @@ class SearchHistoryFragment : BaseFragment(), IPvTracker,Param {
 
     override val paramMap: Map<String, Any>
         get() = mapOf(
-            "inner-fragment-type" to 1234
+            "inner-fragment-type" to 1234,
+            "abc1" to "abc2",
+            "type2" to 333
         )
 }
