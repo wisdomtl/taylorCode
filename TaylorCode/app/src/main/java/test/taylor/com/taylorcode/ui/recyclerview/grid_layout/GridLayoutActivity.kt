@@ -66,6 +66,21 @@ class GridLayoutActivity : AppCompatActivity() {
                     this@ConstraintLayout.context.startActivity<StaggerLayoutManagerActivity>()
                 }
             }
+
+            TextView {
+                layout_id = "tvChange2"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 30f
+                text = "visibility"
+                fontFamily = R.font.pingfang
+                gravity = gravity_center
+                top_toBottomOf = "rv"
+                end_toEndOf = parent_id
+                onClick = {
+                    rv.visibility = if(rv.visibility == View.VISIBLE) gone else visible
+                }
+            }
         }
     }
 

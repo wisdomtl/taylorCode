@@ -13,6 +13,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+        <Button
+            android:id="@+id/recyclerview_item_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="recyclerview item anim"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_fragment_communicate"
@@ -35,12 +47,7 @@
             android:text="navigation"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="solution"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_kotlin_flow"
             android:layout_width="match_parent"
@@ -160,12 +167,7 @@
 
 
 
-        <Button
-            android:id="@+id/recyclerview_item_anim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="recyclerview item anim"
-            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_item_animator"
             android:layout_width="match_parent"
