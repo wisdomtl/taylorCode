@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.stetho.Stetho
 import test.taylor.com.taylorcode.activitystack.PageStack
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
@@ -26,6 +27,7 @@ class TaylorApplication : Application() {
         PageViewTracker.getInstance().init(this,null)
         registerActivityLifecycleCallbacks(PageStack)
         System.currentTimeMillis().milliseconds
+        Fresco.initialize(this)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             }

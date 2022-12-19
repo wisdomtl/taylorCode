@@ -285,6 +285,7 @@
         <activity android:name=".cover_by_fragment.CoveredByFragmentActivity" />
         <activity android:name=".ui.recyclerview.nest_recyclerView.NestedRecyclerViewActivity" />
         <activity android:name=".gif.FastGifGlideActivity" />
+        <activity android:name=".gif.FrescoActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -8,10 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.drawee.view.SimpleDraweeView
+import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
-class FastGifGlideActivity : AppCompatActivity() {
+class FrescoActivity : AppCompatActivity() {
 
     private val gifUrls = listOf(
         "http://i0.hdslb.com/bfs/creative/296d79807e4a854206bfc947877bf81312ca2674.webp",
@@ -64,13 +67,14 @@ class FastGifGlideActivity : AppCompatActivity() {
         "http://i0.hdslb.com/bfs/creative/b256982f67c9b45e7f6a3aa4c0166bc952562f13.webp",
     )
 
+
     private val gridAdapter by lazy {
         VarietyAdapter2().apply {
-            addItemBuilder(GridProxy())
+            addItemBuilder(FrescoGridProxy())
         }
     }
 
-    private lateinit var rv: RecyclerView
+    private var rv: RecyclerView? = null
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -78,34 +82,46 @@ class FastGifGlideActivity : AppCompatActivity() {
             layout_height = match_parent
 
             rv = RecyclerView {
-                layout_id ="rv"
+                layout_id = "rv"
                 layout_width = match_parent
                 layout_height = match_parent
                 top_toTopOf = parent_id
-                layoutManager = GridLayoutManager(this@FastGifGlideActivity, 4, GridLayoutManager.VERTICAL, false)
+                layoutManager = GridLayoutManager(this@FrescoActivity, 4, GridLayoutManager.VERTICAL, false)
                 adapter = gridAdapter
             }
 
         }
     }
 
+
+    private lateinit var iv: SimpleDraweeView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentView)
+        initView()
+    }
 
+    private fun initView() {
+        rv = find<RecyclerView>("rv")
+        rv?.adapter = gridAdapter
         gridAdapter.dataList = gifUrls.map { GridBean(it) }
+        /**
+         * case: load static webp by Fresco
+         */
+        //        iv.setImageURI(gifUrls[0])
+        /**
+         * case: load animated webp by Fresco
+         */
+        //        iv.controller = Fresco.newDraweeControllerBuilder().setAutoPlayAnimations(true).setUri(gifUrls[0]).build()
+
 
     }
+
+
 }
 
-
-data class GridBean(val str: String)
-
-class GridViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val iv = itemView.find<ImageView>("iv")
-}
-
-class GridProxy : VarietyAdapter2.ItemBuilder<GridBean, GridViewHolder>() {
+class FrescoGridProxy : VarietyAdapter2.ItemBuilder<GridBean, GridFrescoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.context.run {
             ConstraintLayout {
@@ -115,23 +131,24 @@ class GridProxy : VarietyAdapter2.ItemBuilder<GridBean, GridViewHolder>() {
                     solid_color = "#888888"
                     corner_radius = 20
                 }
-                ImageView {
+                SimpleDraweeView(this@run).apply {
                     layout_id = "iv"
                     layout_width = match_parent
                     layout_height = match_parent
-                    scaleType = scale_fit_xy
-                }
+                }.also { addView(it) }
 
             }
         }
-        return GridViewHolder(itemView)
+        return GridFrescoViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: GridViewHolder, data: GridBean, index: Int, action: ((Any?) -> Unit)?) {
+    override fun onBindViewHolder(holder: GridFrescoViewHolder, data: GridBean, index: Int, action: ((Any?) -> Unit)?) {
         holder.iv?.also {
-            Glide.with(it)
-                .load(data.str)
-                .into(it)
+            it.controller = Fresco.newDraweeControllerBuilder().setAutoPlayAnimations(true).setUri(data.str).build()
         }
     }
+}
+
+class GridFrescoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val iv = itemView.find<SimpleDraweeView>("iv")
 }
