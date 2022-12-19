@@ -34,6 +34,7 @@ import test.taylor.com.taylorcode.data_persistence.okio.OkioActivity
 import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityChainActivity
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
+import test.taylor.com.taylorcode.gif.FastGifGlideActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
 import test.taylor.com.taylorcode.interview.InterViewActivity
 import test.taylor.com.taylorcode.kotlin.*
@@ -391,6 +392,7 @@ class MainActivity : BaseActivity(), Param {
             //            startActivity<FlowLifecycleActivity> { }
         }
         btn_fragment_communicate.setOnClickListener { startActivity<FragmentActivity> { } }
+        btn_gif.setOnClickListener { startActivity<FastGifGlideActivity> { } }
         btn_javassist.setOnClickListener {
 
             //            startActivity<JavassistActivity> { }

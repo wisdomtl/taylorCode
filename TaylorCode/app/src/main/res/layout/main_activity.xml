@@ -13,6 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+
+        <Button
+            android:id="@+id/btn_gif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gif with glide"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/recyclerview_item_anim"
             android:layout_width="match_parent"
