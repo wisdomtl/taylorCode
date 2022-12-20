@@ -35,7 +35,7 @@ class NewsViewModel : ViewModel() {
             )
         ).enqueue(object : Callback<NewsBean> {
             override fun onFailure(call: Call<NewsBean>, t: Throwable) {
-                newsLiveData.value = null
+                newsLiveData.value = emptyList()
             }
 
             override fun onResponse(call: Call<NewsBean>, response: Response<NewsBean>) {

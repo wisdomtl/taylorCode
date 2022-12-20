@@ -84,7 +84,7 @@ class FrescoActivity : AppCompatActivity() {
             rv = RecyclerView {
                 layout_id = "rv"
                 layout_width = match_parent
-                layout_height = match_parent
+                layout_height = 280
                 top_toTopOf = parent_id
                 layoutManager = GridLayoutManager(this@FrescoActivity, 4, GridLayoutManager.VERTICAL, false)
                 adapter = gridAdapter

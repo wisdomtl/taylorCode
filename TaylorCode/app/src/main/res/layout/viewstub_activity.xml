@@ -86,7 +86,6 @@
     <androidx.constraintlayout.widget.Group
         android:id="@+id/gBottom"
         android:layout_width="wrap_content"
-        app:constraint_referenced_ids="tviii,tvooo"
         android:layout_height="wrap_content" />
 
 

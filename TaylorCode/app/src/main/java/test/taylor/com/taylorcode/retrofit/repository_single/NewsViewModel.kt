@@ -20,7 +20,7 @@ class NewsViewModel(var newsRepository: NewsRepository) : ViewModel() {
                 newsLiveData.value = news
             },
             {error->
-                newsLiveData.value = null
+                newsLiveData.value = emptyList()
             }
         )
     }

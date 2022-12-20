@@ -21,7 +21,7 @@ class ZoomActivity : AppCompatActivity() {
     private lateinit var iv: ImageView
     private lateinit var iv2: ImageView
 
-    private val imgRes = R.drawable.portrait
+//    private val imgRes = R.drawable.portrait
 
     private val contentView by lazy {
         ConstraintLayout {
@@ -45,7 +45,7 @@ class ZoomActivity : AppCompatActivity() {
                 layout_height = 500
                 center_horizontal = true
                 center_vertical = true
-                src = R.drawable.dkfdjsdk
+//                src = R.drawable.dkfdjsdk
                 background_color = "#ff0000"
 //                fitIntoRect(RectF(0.17f,0.38f,0.83f,0.62f))
 
