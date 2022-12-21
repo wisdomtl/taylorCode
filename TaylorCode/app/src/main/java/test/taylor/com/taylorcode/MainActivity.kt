@@ -34,6 +34,7 @@ import test.taylor.com.taylorcode.data_persistence.okio.OkioActivity
 import test.taylor.com.taylorcode.design_mode.responsible_chain.ResponsibilityChainActivity
 import test.taylor.com.taylorcode.dns.DnsActivity
 import test.taylor.com.taylorcode.file.FileActivity
+import test.taylor.com.taylorcode.frame_sequence.FrameSequenceActivity
 import test.taylor.com.taylorcode.gif.FastGifGlideActivity
 import test.taylor.com.taylorcode.gif.FrescoActivity
 import test.taylor.com.taylorcode.gson.GsonActivity
@@ -126,7 +127,6 @@ import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
 import test.taylor.com.taylorcode.webview.WebViewActivity
-import kotlin.math.log
 import kotlin.reflect.KClass
 
 @Keep
@@ -218,7 +218,6 @@ class MainActivity : BaseActivity(), Param {
             Log.v("ttaylor", "tag=, MainActivity.initView()  ")
             startActivity(LiveDataActivity1::class.java)
         }
-
 
 
         val holder = Holder(reference)
@@ -344,6 +343,7 @@ class MainActivity : BaseActivity(), Param {
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
+        btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
             //            decorView?.addView(
