@@ -25,6 +25,7 @@ interface Param {
 fun <T> Activity.getParam(key: String): T {
     val iterator = PageStack.stack.let { it.listIterator(it.size) }
     var value: T? = null
+
     while (iterator.hasPrevious()) {
         val activity = iterator.previous()
         //1. find value in activity
@@ -46,6 +47,9 @@ fun <T> Activity.getParam(key: String): T {
                 throw IllegalArgumentException("duplicated key=${key} in previous ${paramFragments?.first()?.javaClass?.simpleName}")
             }
         }
+    }
+    if(value == null){
+        value = PageStack.destroyMap.getOrDefault(key,null) as T
     }
     return value ?: throw IllegalArgumentException("missing Parameter for key=$key the previous Activity/Fragment")
 }

@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/TaylorCode" />
+            <option value="$PROJECT_DIR$/TaylorCode/app" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

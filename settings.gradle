@@ -1,1 +1,1 @@
-include ':app',':TaylorCode'
+include ':app',':TaylorCode:app'

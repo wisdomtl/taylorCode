@@ -1,2 +1,2 @@
-include ':app', ':app-monitor'
+include ':app', ':app-monitor',':TaylorCode:app'
 

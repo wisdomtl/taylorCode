@@ -11,6 +11,7 @@ import java.util.LinkedList
 
 object PageStack : Application.ActivityLifecycleCallbacks {
     val stack = LinkedList<Activity>()
+    val destroyMap = mutableMapOf<String,Any>()
     val fragments = hashMapOf<Activity, MutableList<Fragment>>()
 
     private val fragmentLifecycleCallbacks by lazy(LazyThreadSafetyMode.NONE) {
@@ -33,6 +34,9 @@ object PageStack : Application.ActivityLifecycleCallbacks {
         (activity as? FragmentActivity)?.supportFragmentManager?.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         fragments[activity]?.clear()
         fragments.remove(activity)
+        (activity as? Param)?.also {
+            it.paramMap.forEach { entry -> destroyMap[entry.key] = entry.value }
+        }
     }
 
     override fun onActivityStarted(activity: Activity) {
