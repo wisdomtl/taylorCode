@@ -22,4 +22,3 @@ fun Any.ofMap(): Map<String, Any?>? {
         }
 }
 
-

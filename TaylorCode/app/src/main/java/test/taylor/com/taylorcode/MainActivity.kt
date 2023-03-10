@@ -138,7 +138,16 @@ class MainActivity : BaseActivity(), Param {
         initView()
         readPhoneInfo()
         testValueDiliver();
+        val str = ""
+        val i = 1
+        val f = 1f
+        val l = 1L
+        /**
+         * case: whether is the primitive type by reflection
+         */
+        Log.i("ttaylor", "onCreate: members=${i::class.java.isPrimitive},${f::class.java.isPrimitive},${l::class.java.isPrimitive}")
         //        detectFrame()
+
 
         val job = Job()
         Log.v("ttaylor3333", "onCreate() job is active=${job.isActive}")
