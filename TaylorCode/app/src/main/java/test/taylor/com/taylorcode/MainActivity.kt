@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import org.json.JSONObject
 import test.taylor.com.taylorcode.activitystack.NewActivity
 import test.taylor.com.taylorcode.activitystack.Param
 import test.taylor.com.taylorcode.annotations.AnnotationActivity2
@@ -126,6 +127,7 @@ import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
+import test.taylor.com.taylorcode.util.toList
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import kotlin.reflect.KClass
 
@@ -138,6 +140,25 @@ class MainActivity : BaseActivity(), Param {
         initView()
         readPhoneInfo()
         testValueDiliver();
+
+        val json = "{\n" +
+                "    \"networkName\": \"string\",\n" +
+                "    \"param\": \"string\",\n" +
+                "    \"ints\": [\n" +
+                "        0,\n" +
+                "        1,\n" +
+                "        2\n" +
+                "    ]\n" +
+                "}"
+        val jsonObject = JSONObject(json)
+        val jsonArray = jsonObject.getJSONArray("ints")
+        val result = kotlin.runCatching {
+            jsonArray.toList<Int>().forEach {
+                Log.i("ttaylor", "jsonArrayToList=${it}")
+            }
+        }.isSuccess
+        Log.i("ttaylor", "runCatching=${result} ")
+
         val str = ""
         val i = 1
         val f = 1f
