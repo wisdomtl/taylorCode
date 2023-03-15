@@ -141,6 +141,18 @@ class MainActivity : BaseActivity(), Param {
         readPhoneInfo()
         testValueDiliver();
 
+        val valTest = ValTest()
+        valTest.complete()
+        lifecycleScope.launch{
+            /**
+             * case: Property in interface cannot have a backing field, there will be a new deferred object created
+             */
+            valTest.deferred.isCompleted
+        }
+
+        /**
+         * case: turn JsonArray to List
+         */
         val json = "{\n" +
                 "    \"networkName\": \"string\",\n" +
                 "    \"param\": \"string\",\n" +
@@ -726,4 +738,18 @@ class Holder(private var reference: Reference) {
     fun doSth() {
         Log.v("ttaylor", "[reference test] ${reference.count}")
     }
+}
+
+interface Val {
+    val deferred:CompletableDeferred<Boolean>
+}
+
+class ValTest :Val {
+    override val deferred: CompletableDeferred<Boolean>
+        get() = CompletableDeferred()
+
+    fun complete(){
+        deferred.complete(false)
+    }
+
 }
