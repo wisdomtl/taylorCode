@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +29,7 @@ import test.taylor.com.taylorcode.kotlin.layout_width
 import test.taylor.com.taylorcode.kotlin.match_parent
 import test.taylor.com.taylorcode.retrofit.NewsAdapter
 import test.taylor.com.taylorcode.ui.ConstraintLayoutActivity
+import test.taylor.com.taylorcode.ui.custom_view.progress_view.ProgressBar
 import test.taylor.com.taylorcode.ui.recyclerview.variety.VarietyAdapter2
 
 class StateFlowActivity : AppCompatActivity() {
