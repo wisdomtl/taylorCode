@@ -11,7 +11,7 @@ android {
     buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -22,7 +22,7 @@ android {
         renderscriptSupportModeEnabled true
         multiDexEnabled true
         ndk {
-            abiFilters "armeabi-v7a", "x86", 'armeabi'
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a"
         }
     }
     sourceSets {

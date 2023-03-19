@@ -25,6 +25,7 @@ import test.taylor.com.taylorcode.aysnc.HandlerThreadVsCoroutineActivity
 import test.taylor.com.taylorcode.aysnc.priority.SplashActivity
 import test.taylor.com.taylorcode.aysnc.workmanager.WorkManagerActivity
 import test.taylor.com.taylorcode.broadcast.BroadcastActivity
+import test.taylor.com.taylorcode.concurrent.CompleteFutureActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentActivity
 import test.taylor.com.taylorcode.concurrent.ConcurrentInitActivity
 import test.taylor.com.taylorcode.concurrent.ThreadPoolActivity
@@ -54,6 +55,7 @@ import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
+import test.taylor.com.taylorcode.kotlin.select.SelectFlowActivity
 import test.taylor.com.taylorcode.lifecycle.LifecycleActivity
 import test.taylor.com.taylorcode.list.ListActivity
 import test.taylor.com.taylorcode.log.LogActivity
@@ -409,6 +411,8 @@ class MainActivity : BaseActivity(), Param {
         coroutineJob.setOnClickListener { startActivity<CoroutineJobActivity> { } }
         flowBackPressure.setOnClickListener { startActivity<FlowActivity2> { } }
         sharedFlow.setOnClickListener { startActivity<SharedFlowActivity> { } }
+        completeFuture.setOnClickListener { startActivity<CompleteFutureActivity> { } }
+        flowFirst.setOnClickListener { startActivity<SelectFlowActivity> { } }
         btn_glide.setOnClickListener { startActivity<GlideActivity> { } }
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }

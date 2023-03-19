@@ -15,6 +15,19 @@
             />
 
         <Button
+            android:id="@+id/flowFirst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow first"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/completeFuture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="complete future"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_frame_sequence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

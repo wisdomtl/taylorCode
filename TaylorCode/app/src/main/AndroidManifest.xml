@@ -288,6 +288,8 @@
         <activity android:name=".gif.FastGifGlideActivity" />
         <activity android:name=".gif.FrescoActivity" />
         <activity android:name=".frame_sequence.FrameSequenceActivity" />
+        <activity android:name=".concurrent.CompleteFutureActivity" />
+        <activity android:name=".kotlin.select.SelectFlowActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
