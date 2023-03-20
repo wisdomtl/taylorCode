@@ -14,9 +14,10 @@ import test.taylor.com.taylorcode.kotlin.*
  */
 class SelectActivity : AppCompatActivity() {
     private val contentView by lazy {
-        ConstraintLayout {
+        LinearLayout {
             layout_width = match_parent
             layout_height = match_parent
+            orientation = vertical
 
             TextView {
                 layout_id = "tv_d1"
@@ -24,8 +25,6 @@ class SelectActivity : AppCompatActivity() {
                 layout_height = wrap_content
                 textSize = 30f
                 text = "deferred1 complete"
-                center_horizontal = true
-                center_vertical = true
                 onClick = {
                     deferred1.complete(true)
                 }
@@ -36,10 +35,19 @@ class SelectActivity : AppCompatActivity() {
                 layout_height = wrap_content
                 textSize = 30f
                 text = "deferred2 complete"
-                top_toBottomOf = "tv_d1"
-                center_horizontal = true
                 onClick = {
                     deferred2.complete(true)
+                }
+            }
+
+            TextView {
+                layout_id = "tv_d2"
+                layout_width = wrap_content
+                layout_height = wrap_content
+                textSize = 30f
+                text = "deferred2 complete"
+                onClick = {
+                    deferred2.completeExceptionally(java.lang.IllegalArgumentException("wrong arguement"))// the select below will crash app due to IllegalArgumentException
                 }
             }
         }

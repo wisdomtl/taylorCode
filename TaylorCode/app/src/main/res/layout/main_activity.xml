@@ -15,6 +15,19 @@
             />
 
 
+        <Button
+            android:id="@+id/coroutineException"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="exception in coroutine"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin select"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnCancelCoroutine"
@@ -267,13 +280,6 @@
             android:text="bottom navigation view"
             android:textAllCaps="false" />
 
-
-        <Button
-            android:id="@+id/coroutineException"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="exception in coroutine"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnTriangle"

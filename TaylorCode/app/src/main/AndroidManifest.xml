@@ -290,6 +290,7 @@
         <activity android:name=".frame_sequence.FrameSequenceActivity" />
         <activity android:name=".concurrent.CompleteFutureActivity" />
         <activity android:name=".kotlin.select.SelectFlowActivity" />
+        <activity android:name=".kotlin.select.SelectActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

@@ -14,6 +14,18 @@ class CoroutineActivity3 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         /**
+         * case: CoroutineExceptionHandler and  invokeOnCompletion both catch the exception
+         */
+        val handler0 = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.i("ttaylor", "CoroutineActivity3.invokeOnCompletion exception handler=${throwable}");//will be printed
+        }
+        lifecycleScope.launch(handler0) {// if no handler app wil crash
+            throw IllegalArgumentException("ddd")
+        }.invokeOnCompletion {
+            Log.i("ttaylor", "CoroutineActivity3.invokeOnCompletion throwable=${it}"); // will be printed
+        }
+
+        /**
          * case: sub coroutine will throw exception to it's father
          */
         val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
@@ -60,24 +72,24 @@ class CoroutineActivity3 : AppCompatActivity() {
 
             d2.await()
             d1.await()
-            Log.v("ttaylorExceptionByAsync","all async is done")
+            Log.v("ttaylorExceptionByAsync", "all async is done")
         }
 
         /**
          * case: supervisorScope wont kill siblings if exception happened
          */
         lifecycleScope.launch(handler1) {
-           supervisorScope {
-               val d1 = async { throw IllegalArgumentException() }
-               val d2 = async {
-                   delay(1000)
-                   Log.v("ttaylorExceptionByAsyncInSupervisor", "delay")
-               }
+            supervisorScope {
+                val d1 = async { throw IllegalArgumentException() }
+                val d2 = async {
+                    delay(1000)
+                    Log.v("ttaylorExceptionByAsyncInSupervisor", "delay")
+                }
 
-               d2.await()
-               d1.await()
-               Log.v("ttaylorExceptionByAsync","all async is done")
-           }
+                d2.await()
+                d1.await()
+                Log.v("ttaylorExceptionByAsync", "all async is done")
+            }
         }
 
 

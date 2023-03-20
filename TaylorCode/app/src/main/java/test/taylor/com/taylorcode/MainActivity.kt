@@ -55,6 +55,7 @@ import test.taylor.com.taylorcode.kotlin.extension.onVisibilityChange
 import test.taylor.com.taylorcode.kotlin.invoke.InvokeActivity
 import test.taylor.com.taylorcode.kotlin.override_operator.OverrideOperatorActivity
 import test.taylor.com.taylorcode.kotlin.override_property.OverridePropertyActivity
+import test.taylor.com.taylorcode.kotlin.select.SelectActivity
 import test.taylor.com.taylorcode.kotlin.select.SelectFlowActivity
 import test.taylor.com.taylorcode.lifecycle.LifecycleActivity
 import test.taylor.com.taylorcode.list.ListActivity
@@ -328,6 +329,7 @@ class MainActivity : BaseActivity(), Param {
         repository_livedata.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.repository_livedata.RetrofitActivity>() }
         presenter.setOnClickListener { startActivity<test.taylor.com.taylorcode.retrofit.presenter.RetrofitActivity>() }
         btn_no_field.setOnClickListener { startActivity<NoFieldActivity>() }
+        select.setOnClickListener { startActivity<SelectActivity>() }
         btnViewFlipper.setOnClickListener { startActivity<ViewFlipperActivity>() }
         btnCoroutineSample.setOnClickListener { startActivity<HandlerThreadVsCoroutineActivity>() }
         btnSuspendCrossActivities.setOnClickListener { startActivity<SplashActivity>() }
