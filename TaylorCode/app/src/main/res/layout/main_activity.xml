@@ -14,6 +14,15 @@
             android:layout_height="wrap_content"
             />
 
+
+
+        <Button
+            android:id="@+id/btnCancelCoroutine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="cancel of coroutine"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/flowFirst"
             android:layout_width="match_parent"
@@ -352,13 +361,6 @@
             android:text="exception of coroutine"
             android:textAllCaps="false" />
 
-
-        <Button
-            android:id="@+id/btnCancelCoroutine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="cancel of coroutine"
-            android:textAllCaps="false" />
 
 
 

@@ -3,9 +3,14 @@ package test.taylor.com.taylorcode.kotlin.coroutine
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.*
+import test.taylor.com.taylorcode.util.Timer
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock
 
 /**
  * CancellationException will only cancel current coroutine and sub coroutine
@@ -15,6 +20,8 @@ class CoroutineCancelActivity : AppCompatActivity() {
 
     private val TAG = "CoroutineCancel1"
     private val mainScope = MainScope()
+
+    private var btn: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(
@@ -76,8 +83,126 @@ class CoroutineCancelActivity : AppCompatActivity() {
                     text = "supervisorScope"
                     onClick = supervisorScope_cancel
                 }
+
+                btn = Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "exception in launch"
+                    onClick = normalExceptionInLaunch
+                }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "suspendCoroutine"
+                    onClick = suspendCoroutine
+                }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "try-catch cancellation exception"
+                    onClick = tryCatchCancellationException
+                }
+                Button {
+                    layout_width = match_parent
+                    layout_height = wrap_content
+                    text = "withTimeout"
+                    onClick = withTimeout
+                }
             }
         )
+    }
+
+    val withTimeout = { _: View ->
+        MainScope().launch {
+            withTimeout(1000) {
+                delay(4000)
+            }
+            Log.i("ttaylor", "withTimeout after withTimeout()");// this wont be printed due to TimeoutCancellationException throw by withTimeout()
+        }
+        Unit
+    }
+
+    val handler0 = CoroutineExceptionHandler { coroutineContext, throwable ->
+        Log.i("ttaylor", "normalExceptionInLaunch.exception=${throwable}");
+    }
+
+
+    val normalExceptionInLaunch = { _: View ->
+        MainScope().launch(handler0) {//handler prevent app from crash
+            launch(Dispatchers.IO) {
+                throw java.lang.RuntimeException()// will cancel the sibling coroutine and throw the exception upward to outer coroutine
+//                throw CancellationException()// if throw CancellationException, nothing will be canceled and crash
+            }
+            launch {
+                delay(1000)
+                Log.i("ttaylor", "normalExceptionInLaunch 1"); // wont invoke due to the exception above and the suspend function above,if no suspend function coroutine cant be canceled
+            }.invokeOnCompletion {
+                Log.i("ttaylor", "normalExceptionInLaunch.invokeOnCompletion"); // will be invoked due to the exception above
+            }
+            Log.i("ttaylor", "normalExceptionInLaunch.2"); // invoke immediately
+        }
+        Unit
+    }
+
+
+    val handler00 = CoroutineExceptionHandler { coroutineContext, throwable ->
+        Log.i("ttaylor", "suspendCoroutine.exception=${throwable}");
+    }
+
+    /**
+     * case:suspendCoroutine cant be canceled
+     */
+    val suspendCoroutine = { _: View ->
+        MainScope().launch(handler00) {
+            launch {
+                delay(6000L)
+                Log.i("ttaylor", "suspendCoroutine 1");
+            }.invokeOnCompletion {
+                Log.i("ttaylor", "suspendCoroutine 3");
+            }
+            val job = launch(Dispatchers.IO) {
+                while (true) {
+                    suspendFunc()// there is a prerequisite for canceling the outer coroutine, it is cancelable suspend point.  but suspendCoroutine cant be canceled
+                }
+                Log.i("ttaylor", "suspendCoroutine 2");
+            }
+            delay(5)// make the job running or it will be canceled without running
+            job.cancelAndJoin() // this have no effect because suspendCoroutine is not a qualified suspend point
+            Log.i("ttaylor", "suspendCoroutine 4");
+        }
+        Unit
+    }
+
+    /**
+     * if try-catch a suspend function, it breaks the cancellation mechanism of coroutine
+     */
+    val tryCatchCancellationException = { _: View ->
+        MainScope().launch {
+            val job = launch {
+                try {
+                    Log.i("ttaylor", "tryCatchCancellationException doing the work");
+                    delay(Long.MAX_VALUE)
+                } catch (e: java.lang.Exception) {
+                    Log.i("ttaylor", "tryCatchCancellationException work is interrupted");
+                    // rethrow the CancellationException recover the cancellation mechanism
+//                    if(e is CancellationException){
+//                        throw CancellationException()
+//                    }
+                }
+                Log.i("ttaylor", "tryCatchCancellationException the work's coroutine has not been canceled");// this will be printed due to the try-catch for CancellationException
+            }
+            delay(5)
+            job.cancelAndJoin()
+            Log.i("ttaylor", "tryCatchCancellationException after cancel");
+        }
+        Unit
+    }
+
+    private suspend fun suspendFunc() {
+        suspendCoroutine<Int> {// if use suspendCancellableCoroutine, the outer coroutine would be able to be canceled
+            it.resume(222)
+        }
+        Log.i("ttaylor", "suspendCoroutine after resume");// this will print forever because suspendCoroutine cant be canceled
     }
 
     /**

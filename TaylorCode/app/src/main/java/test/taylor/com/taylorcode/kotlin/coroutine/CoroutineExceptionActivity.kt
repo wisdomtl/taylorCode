@@ -92,6 +92,9 @@ class CoroutineExceptionActivity : AppCompatActivity() {
                     Log.v("ttaylor","[action after sibling throw exception] catch=${e}")
                 } finally {
                     Log.v("ttaylor","[action after sibling throw exception] finally")
+                    /**
+                     * The way for doing suspend clean up work when coroutine is canceled
+                     */
                     withContext(NonCancellable){
                         delay(2000)
                         Log.v("ttaylor","[action after sibling throw exception] delay father coroutine dying")
