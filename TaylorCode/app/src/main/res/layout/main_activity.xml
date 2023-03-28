@@ -14,6 +14,12 @@
             android:layout_height="wrap_content"
             />
 
+        <Button
+            android:id="@+id/btnSuspendCoroutine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="suspend coroutine"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/coroutineException"
@@ -758,12 +764,7 @@
             android:layout_height="wrap_content"
             android:text="dark acitivty"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btnSuspendCoroutine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="suspend coroutine"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btnSuspendCrossActivities"

@@ -14,6 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import test.taylor.com.taylorcode.retrofit.News
 import test.taylor.com.taylorcode.retrofit.NewsApi
@@ -25,7 +26,7 @@ class SuspendCoroutineActivity : AppCompatActivity() {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.apiopen.top")
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(OkHttpClient.Builder().build())
         .build()
@@ -42,19 +43,19 @@ class SuspendCoroutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        fetchNewsSingle().subscribe(
-//            { news ->
-//                Log.v("ttaylor", "tag=asdf, suspendCoroutineActivity.onCreate()  news.size=${news?.size}")
-//            },
-//            { error ->
-//                Log.v("ttaylor", "tag=asdf, suspendCoroutineActivity.onCreate()  error")
-//            }
-//        )
+        fetchNewsSingle().subscribe(
+            { news ->
+                Log.v("ttaylor", "tag=asdf, suspendCoroutineActivity.onCreate()  news.size=${news?.size}")
+            },
+            { error ->
+                Log.v("ttaylor", "tag=asdf, suspendCoroutineActivity.onCreate()  error")
+            }
+        )
 
-        mainScope.launch {
-            val news = fetchNew2()
-            Log.v("ttaylor", "tag=asdf, SuspendCoroutineActivity.onCreate()  news.size=${news.size}")
-        }
+//        mainScope.launch {
+//            val news = fetchNew2()
+//            Log.v("ttaylor", "tag=asdf, SuspendCoroutineActivity.onCreate()  news.size=${news.size}")
+//        }
     }
 
     /**
