@@ -64,6 +64,7 @@ import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.photo.GlideActivity
 import test.taylor.com.taylorcode.photo.GlideActivity3
+import test.taylor.com.taylorcode.player.ExoPlayerActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
@@ -137,6 +138,16 @@ import kotlin.reflect.KClass
 @Keep
 class MainActivity : BaseActivity(), Param {
 
+    fun aaa() {
+        throw java.lang.RuntimeException()
+    }
+
+    private var ii = 0
+
+    fun bbb(d: Int) {
+        Log.i("ttaylor", "MainActivity.bbb() =${d}");
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -144,9 +155,19 @@ class MainActivity : BaseActivity(), Param {
         readPhoneInfo()
         testValueDiliver();
 
+        try {
+            StringBuffer().also {
+                aaa()
+                ii = 2// wont invoke due to exception
+                bbb(ii)// wont invoke due to exception
+            }
+        } catch (e: Exception) {
+
+        }
+
         val valTest = ValTest()
         valTest.complete()
-        lifecycleScope.launch{
+        lifecycleScope.launch {
             /**
              * case: Property in interface cannot have a backing field, there will be a new deferred object created
              */
@@ -193,16 +214,16 @@ class MainActivity : BaseActivity(), Param {
         /**
          * case: continue in loop lambda
          */
-        listOf<String>("d","dd","ddd").forEach lit@{
-            if(it == "dd") return@lit
+        listOf<String>("d", "dd", "ddd").forEach lit@{
+            if (it == "dd") return@lit
             Log.d("ttaylor", "[return]MainActivity.onCreate[]: dd@=${it}")
         }
 
         /**
          * case: return the outer function
          */
-        listOf<String>("d","dd","ddd").forEach {
-            if(it == "dd") return
+        listOf<String>("d", "dd", "ddd").forEach {
+            if (it == "dd") return
             Log.d("ttaylor", "[return]MainActivity.onCreate[]: dd=${it}")
         }
         Log.d("ttaylor", "[return]MainActivity.onCreate[savedInstanceState]: ") // this log wont be printed
@@ -390,6 +411,7 @@ class MainActivity : BaseActivity(), Param {
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
         btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
+        btnExoPlayer.setOnClickListener { startActivity<ExoPlayerActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
             //            decorView?.addView(
@@ -430,7 +452,7 @@ class MainActivity : BaseActivity(), Param {
         navigation.setOnClickListener { startActivity<NavigationFragmentActivity> { } }
         btnNestedRecyclerView.setOnClickListener { startActivity<NestedRecyclerViewActivity> { } }
         newActivity.setOnClickListener { startActivity<NewActivity> { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) } }
-        DialogFragment.setOnClickListener {  DialogFragment1().show(supportFragmentManager, "ddd") }
+        DialogFragment.setOnClickListener { DialogFragment1().show(supportFragmentManager, "ddd") }
         btn_nestedScrollView.setOnClickListener {
             startActivity<NestedScrollViewActivity> { }
             //            btn_javassist.visibility = if (btn_javassist.visibility == View.GONE) View.VISIBLE else View.GONE
@@ -747,14 +769,14 @@ class Holder(private var reference: Reference) {
 }
 
 interface Val {
-    val deferred:CompletableDeferred<Boolean>
+    val deferred: CompletableDeferred<Boolean>
 }
 
-class ValTest :Val {
+class ValTest : Val {
     override val deferred: CompletableDeferred<Boolean>
         get() = CompletableDeferred()
 
-    fun complete(){
+    fun complete() {
         deferred.complete(false)
     }
 

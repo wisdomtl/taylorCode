@@ -78,18 +78,18 @@ class LiveCommentActivity : AppCompatActivity() {
                     .translationXBy(translationX.toFloat())
                     .setInterpolator(LinearInterpolator())
                     .setListener(object : AnimatorListener {
-                        override fun onAnimationStart(animation: Animator?) {
+                        override fun onAnimationStart(animation: Animator) {
                         }
 
-                        override fun onAnimationEnd(animation: Animator?) {
+                        override fun onAnimationEnd(animation: Animator) {
                             Log.v("ttaylor", "tag=, LiveCommentActivity.onAnimationEnd()  ")
 //                            onAnimationEnd(view)
                         }
 
-                        override fun onAnimationCancel(animation: Animator?) {
+                        override fun onAnimationCancel(animation: Animator) {
                         }
 
-                        override fun onAnimationRepeat(animation: Animator?) {
+                        override fun onAnimationRepeat(animation: Animator) {
                         }
                     })
                     .start()

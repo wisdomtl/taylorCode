@@ -365,10 +365,10 @@ val View.viewScope: CoroutineScope
             scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
             setTag(key, scope)
             val listener = object : View.OnAttachStateChangeListener {
-                override fun onViewAttachedToWindow(v: View?) {
+                override fun onViewAttachedToWindow(v: View) {
                 }
 
-                override fun onViewDetachedFromWindow(v: View?) {
+                override fun onViewDetachedFromWindow(v: View) {
                     scope.cancel()
                 }
 

@@ -111,10 +111,10 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     private val gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
-        override fun onShowPress(e: MotionEvent?) {
+        override fun onShowPress(e: MotionEvent) {
         }
 
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
             e?.let {
                 findDataUnder(it.x, it.y)?.let { pair ->
                     onItemClick?.invoke(pair.first, pair.second)
@@ -123,13 +123,13 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             return false
         }
 
-        override fun onDown(e: MotionEvent?): Boolean {
+        override fun onDown(e: MotionEvent): Boolean {
             return false
         }
 
         override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
+            e1: MotionEvent,
+            e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
@@ -137,15 +137,15 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
 
         override fun onScroll(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
+            e1: MotionEvent,
+            e2: MotionEvent,
             distanceX: Float,
             distanceY: Float
         ): Boolean {
             return false
         }
 
-        override fun onLongPress(e: MotionEvent?) {
+        override fun onLongPress(e: MotionEvent) {
         }
     })
 
@@ -245,7 +245,7 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         gestureDetector.onTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
     }
@@ -407,19 +407,19 @@ class LaneView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     fun ValueAnimator.addListener(action: AnimatorListenerBuilder.() -> Unit): ValueAnimator {
         AnimatorListenerBuilder().apply(action).let { builder ->
             addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
+                override fun onAnimationRepeat(animation: Animator) {
                     animation?.let { builder.onRepeat?.invoke(animation) }
                 }
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     animation?.let { builder.onEnd?.invoke(animation) }
                 }
 
-                override fun onAnimationCancel(animation: Animator?) {
+                override fun onAnimationCancel(animation: Animator) {
                     animation?.let { builder.onCancel?.invoke(animation) }
                 }
 
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                     animation?.let { builder.onStart?.invoke(animation) }
                 }
 

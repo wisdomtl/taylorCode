@@ -37,29 +37,29 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
      */
     fun setOnItemClickListener(onItemClickListener: (String) -> Unit) {
         gestureDetector = GestureDetector(context, object : GestureDetector.OnGestureListener {
-            override fun onShowPress(e: MotionEvent?) {
+            override fun onShowPress(e: MotionEvent) {
             }
 
-            override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
                 e?.let {
                     findDrawableUnder(e.x, e.y)?.let { onItemClickListener.invoke(it.layoutIdString) }
                 }
                 return true
             }
 
-            override fun onDown(e: MotionEvent?): Boolean {
+            override fun onDown(e: MotionEvent): Boolean {
                 return true
             }
 
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
                 return false
             }
 
-            override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+            override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
                 return false
             }
 
-            override fun onLongPress(e: MotionEvent?) {
+            override fun onLongPress(e: MotionEvent) {
             }
         })
     }
@@ -97,7 +97,7 @@ class OneViewGroup @JvmOverloads constructor(context: Context, attrs: AttributeS
         drawables.forEach { it.doDraw(canvas) }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureDetector?.onTouchEvent(event) ?: super.onTouchEvent(event)
     }
 

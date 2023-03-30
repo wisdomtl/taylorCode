@@ -15,30 +15,30 @@ class ConstraintLayoutFlowActivity2 : AppCompatActivity() {
     private lateinit var flowLayout: FlowLayout
 
     private val gestureDetector by lazy {GestureDetector(this,object :GestureDetector.OnGestureListener{
-        override fun onDown(e: MotionEvent?): Boolean {
+        override fun onDown(e: MotionEvent): Boolean {
             Log.v("ttaylor","onDown()")
           return  true
         }
 
-        override fun onShowPress(e: MotionEvent?) {
+        override fun onShowPress(e: MotionEvent) {
             Log.v("ttaylor","onShowPress()")
         }
 
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
             Log.v("ttaylor","onSingleTapUp()")
             return false
         }
 
-        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
             Log.v("ttaylor","onScroll()")
             return false
         }
 
-        override fun onLongPress(e: MotionEvent?) {
+        override fun onLongPress(e: MotionEvent) {
             Log.v("ttaylor","onLongPress()")
         }
 
-        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             Log.v("ttaylor","onFling()")
             return false
         }

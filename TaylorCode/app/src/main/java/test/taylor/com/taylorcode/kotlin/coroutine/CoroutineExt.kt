@@ -33,12 +33,12 @@ fun Job.autoDispose(view: View?): Job {
     view ?: return this
 
     val listener = object : View.OnAttachStateChangeListener {
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             cancel()
             v?.removeOnAttachStateChangeListener(this)
         }
 
-        override fun onViewAttachedToWindow(v: View?) = Unit
+        override fun onViewAttachedToWindow(v: View) = Unit
     }
 
     view.addOnAttachStateChangeListener(listener)
@@ -57,12 +57,12 @@ fun <T> SendChannel<T>.autoDispose(view: View?): SendChannel<T> {
     val isAttached =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && view.isAttachedToWindow || view.windowToken != null
     val listener = object : View.OnAttachStateChangeListener {
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             close()
             v?.removeOnAttachStateChangeListener(this)
         }
 
-        override fun onViewAttachedToWindow(v: View?) = Unit
+        override fun onViewAttachedToWindow(v: View) = Unit
     }
 
     view.addOnAttachStateChangeListener(listener)

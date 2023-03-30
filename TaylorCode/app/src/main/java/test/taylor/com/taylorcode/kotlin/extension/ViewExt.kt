@@ -65,10 +65,10 @@ fun ViewPager2.onPageVisibilityChange(block: (index: Int, isVisible: Boolean) ->
     }
     registerOnPageChangeCallback(listener)
     addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(v: View) {
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             if (v == null || v !is ViewPager2) return
             if (ViewCompat.isAttachedToWindow(v)) {
                 v.unregisterOnPageChangeCallback(listener)
@@ -135,10 +135,10 @@ fun RecyclerView.onItemVisibilityChange(
         }
     }
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(v: View) {
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             if (v == null || v !is RecyclerView) return
             v.removeOnScrollListener(scrollListener)
             removeOnAttachStateChangeListener(this)
@@ -261,10 +261,10 @@ fun View.onVisibilityChange(
     viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
 
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(v: View) {
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             v ?: return
             // delay by post for giving the last execution chance to OnGlobalLayoutListener
             post {
