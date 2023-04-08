@@ -291,7 +291,6 @@
         <activity android:name=".concurrent.CompleteFutureActivity" />
         <activity android:name=".kotlin.select.SelectFlowActivity" />
         <activity android:name=".kotlin.select.SelectActivity" />
-        <activity android:name=".player.ExoPlayerActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

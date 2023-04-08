@@ -64,7 +64,6 @@ import test.taylor.com.taylorcode.new_activity_result.NewActivityResultActivity
 import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.photo.GlideActivity
 import test.taylor.com.taylorcode.photo.GlideActivity3
-import test.taylor.com.taylorcode.player.ExoPlayerActivity
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
@@ -411,7 +410,6 @@ class MainActivity : BaseActivity(), Param {
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
         btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
-        btnExoPlayer.setOnClickListener { startActivity<ExoPlayerActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
             //            decorView?.addView(
