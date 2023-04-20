@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.ListFormatter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.IntDef;
 
+import org.jcheck.generator.primitive.IntegerGen;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import test.taylor.com.taylorcode.proxy.system.FakeActivity;
@@ -37,11 +44,9 @@ public class HookSystemServiceActivity extends Activity {
          */
 //        setType(3);// there is an error
         Solution s = new Solution();
-        int[] nnn = new int[3];
-        nnn[0] = 1;
-        nnn[1] = 1;
-        nnn[2] = 2;
-        s.removeDuplicates(nnn);
+        int[] nnn = new int[]{1,22,7,26,3,4,5,23,2};
+        s.heapSort(nnn);
+        Log.i("ttaylor", ".()");
     }
 
     /**
@@ -65,18 +70,113 @@ public class HookSystemServiceActivity extends Activity {
 }
 
 class Solution {
-    public int removeDuplicates(int[] nums) {
-        int j, k, size = nums.length;
-        for(int i = 0; i< nums.length;i++){
-            j = i+1;
-            while(j< nums.length && nums[j] == nums[i]) j++;
-            int gap = j -i -1;
-            k = i+1;
-            while(j < size){
-                nums[k++]=nums[j++];
-            }
-            size = size - gap;
+    public void heapSort(int[] nums) {
+        List<? extends  Number> numbers = new ArrayList<Integer>();
+        numbers.get(1);
+
+        List<? super  Number> nuuu = new ArrayList<Number>();
+        nuuu.add(1);
+
+        for(int i=nums.length/2-1;i>=0;i--){
+            shiftDown(nums,i,nums.length);
         }
-        return size;
+
+        for(int i=nums.length-1;i>=0;i--){
+            swap(nums,0,i);
+            shiftDown(nums,0,i);
+        }
+        Log.i("ttaylor", ".()");
     }
+
+    public void shiftDown(int[] arr,int low,int len){
+        int left = 2*low+1;
+        int father=  low;
+        while(left<len){
+            int large = left+1 < len && arr[left] > arr[left+1] ? left : left+1;
+            if(arr[large]>arr[father]) swap(arr,large,father);
+            else break;
+            father = large;
+            left = 2*father +1;
+        }
+    }
+
+    public void swap(int[] arr,int i,int j){
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+//    public void heapSort(int[] nums) {
+//        // 构建大顶堆
+//        for (int i = nums.length / 2 - 1; i >= 0; i--) {
+//            shiftDown(nums, i, nums.length);
+//        }
+//
+//        // 交换堆顶元素与末尾元素,然后调整堆
+//        for (int i = nums.length - 1; i > 0; i--) {
+//            swap(nums, 0, i);
+//            shiftDown(nums, 0, i);
+//            Log.i("ttaylor", "heapSort="+nums[0]);
+//        }
+//    }
+//
+//    // 向下调整堆
+//    private void shiftDown(int[] nums, int i, int len) {
+//        int left = 2 * i + 1;
+//        while (left < len) {
+//            int large = left + 1 < len && nums[left + 1] > nums[left] ? left + 1 : left;
+//            large = nums[large] > nums[i] ? large : i;
+//            if (large == i) break;
+//            swap(nums, i, large);
+//            i = large;
+//            left = 2 * i + 1;
+//        }
+//    }
+
+    private long firstSendTimestamp = 0;
+    int sendCount = 0;
+    int oneMinute = 1000 * 60;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable run  = new Runnable() {
+        @Override
+        public void run() {
+            sendCount = 0 ;
+        }
+    };
+
+   public boolean isValid(){
+       sendCount++;
+       if(sendCount <= 10){
+           handler.removeCallbacks(run);
+           handler.postDelayed(run,oneMinute);
+           return true;
+       }else {
+           return false;
+       }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

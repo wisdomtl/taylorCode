@@ -9,11 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-
+        <Button
+            android:id="@+id/btnViewpager3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="viewpager3"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="solution"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnExoPlayer"
@@ -88,12 +101,7 @@
             android:layout_height="wrap_content"
             android:text="recyclerview item anim"
             android:textAllCaps="false" />
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="solution"
-            android:textAllCaps="false" />
+
 
         <Button
             android:id="@+id/btn_fragment_communicate"

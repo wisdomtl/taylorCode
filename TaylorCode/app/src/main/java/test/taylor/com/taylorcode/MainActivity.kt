@@ -125,6 +125,7 @@ import test.taylor.com.taylorcode.ui.surface_view.SurfaceViewActivity
 import test.taylor.com.taylorcode.ui.tablayout.BottomNavigationViewActivity
 import test.taylor.com.taylorcode.ui.touch_event.TouchEventActivity
 import test.taylor.com.taylorcode.ui.transparent_fragment.TransparentFragmentActivity
+import test.taylor.com.taylorcode.ui.viewpager3.demo.Viewpager3Activity
 import test.taylor.com.taylorcode.ui.viewstub.ViewStubActivity
 import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
@@ -382,6 +383,7 @@ class MainActivity : BaseActivity(), Param {
         btnPercentLayout.setOnClickListener { startActivity<PercentActivity>() }
         btnInterView.setOnClickListener { startActivity<InterViewActivity>() }
         btnTimePicker.setOnClickListener { startActivity<TimePickerActivity>() }
+        btnViewpager3.setOnClickListener { startActivity<Viewpager3Activity>() }
         btn_touch_delegate.setOnClickListener { startActivity<TouchDelegateActivity>() }
         btn_coordinate_layout2.setOnClickListener { startActivity<NestedScrollCoordinateLayoutActivity>() }
         recyclerview_item_anim.setOnClickListener { startActivity<RecyclerViewItemAnimActivity> { } }
