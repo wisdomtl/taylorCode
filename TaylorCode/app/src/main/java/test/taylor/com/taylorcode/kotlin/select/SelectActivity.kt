@@ -3,6 +3,7 @@ package test.taylor.com.taylorcode.kotlin.select
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.custom_view_activity.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -71,6 +72,16 @@ class SelectActivity : AppCompatActivity() {
                 deferred2.onAwait { 2 }
             }
             Log.i("ttaylor", "after select value=${value}")
+        }
+
+        scope.launch {
+            select {
+                deferred1.onAwait {1}
+                // if  deferred1 没有值，则超时逻辑会被执行
+                onTimeout(5000){
+                    Log.e("ttaylor", "onTimeout");
+                }
+            }
         }
     }
 }

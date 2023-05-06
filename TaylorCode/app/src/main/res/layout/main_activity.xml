@@ -15,6 +15,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+
+
+        <Button
+            android:id="@+id/select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin select"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btnSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="select"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/btnViewpager3"
             android:layout_width="match_parent"
@@ -49,12 +63,6 @@
             android:text="exception in coroutine"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="kotlin select"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnCancelCoroutine"
