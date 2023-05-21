@@ -13,14 +13,15 @@ class Counting @JvmOverloads constructor(@NonNull context: Context, @NonNull wor
         val KEY_INIT = "int"
         val KEY_STEP = "step"
     }
+    var randomNumber = 1
 
     override fun doWork(): Result {
         val init = inputData.getInt(KEY_INIT, 0)
         val step = inputData.getInt(KEY_STEP, 2)
         var sum = init
-        for (i in init..10 step step) {
-            Thread.sleep(300)
-            Log.v("ttaylor", "tag=couting work, Counting.doWork()  count=$i")
+        for (i in init..1000 step step) {
+            Thread.sleep(1500)
+            Log.v("ttaylor", "tag=couting work, Counting.doWork($randomNumber)  count=$i")
             sum += i
         }
         Log.v("ttaylor","tag=, Counting.doWork()  sum=${sum}")

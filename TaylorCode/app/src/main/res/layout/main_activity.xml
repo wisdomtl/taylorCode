@@ -16,6 +16,20 @@
             android:layout_height="wrap_content"
             />
 
+        <Button
+            android:id="@+id/flowBackPressure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow back pressure"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/btn_workmanager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WorkManager"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/select"
@@ -278,12 +292,7 @@
             android:text="sharedFlow"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/flowBackPressure"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="flow back pressure"
-            android:textAllCaps="false" />
+
 
 
 
@@ -1042,12 +1051,6 @@
             android:textAllCaps="false" />
 
 
-        <Button
-            android:id="@+id/btn_workmanager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="WorkManager"
-            android:textAllCaps="false" />
 
 
         <Button

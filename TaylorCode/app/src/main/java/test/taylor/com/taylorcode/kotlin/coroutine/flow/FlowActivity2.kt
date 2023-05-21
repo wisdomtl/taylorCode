@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.IllegalArgumentException
 
 class FlowActivity2 : AppCompatActivity() {
 
@@ -104,6 +105,29 @@ class FlowActivity2 : AppCompatActivity() {
                         "[flowOn] $it thread=${Thread.currentThread().name}"
                     )
                 }
+        }
+
+        /**
+         * case: the only way to keep flow not completed when exception throw
+         */
+        lifecycleScope.launch {
+            flow {
+                repeat(10) {
+                    emit(it)
+                    // use try-catch in risky function in flow
+//                    try {
+                        if (it == 3) throw IllegalArgumentException("wrong number")
+//                    } catch (e: Exception) {
+//                    }
+                    delay(1000)
+                }
+            }.onEach {
+                Log.i("exception flow", "FlowActivity2.onCreate() onEach=${it}");
+            }.catch {
+                Log.i("exception flow", "FlowActivity2.onCreate() catch=$it");
+            }.onCompletion {
+                Log.i("exception flow", "FlowActivity2.onCreate() onCompletion");
+            }.collect()
         }
     }
 

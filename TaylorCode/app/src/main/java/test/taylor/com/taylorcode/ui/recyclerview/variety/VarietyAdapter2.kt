@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode.ui.recyclerview.variety
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView

@@ -97,7 +97,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     //WorkManager
 //    implementation 'androidx.work:work-runtime:2.3.1'
-    implementation "androidx.work:work-runtime-ktx:2.3.1"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
     //Navigation
 //    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
 //    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'

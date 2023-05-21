@@ -15,7 +15,7 @@ class WorkManagerActivity : AppCompatActivity() {
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        doBasicWork();
+        doBasicWork();
 //        doPeriodWork();
 //        returnValueFromWorkManager()
         returnValueFromPeriodWork()
@@ -31,7 +31,7 @@ class WorkManagerActivity : AppCompatActivity() {
      * WorkManager case1:do the simplest background work
      */
     private fun doBasicWork() {
-        val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).build()
+        val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).setInitialDelay(1,TimeUnit.MINUTES).build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 
