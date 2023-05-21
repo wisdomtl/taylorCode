@@ -115,10 +115,10 @@ class FlowActivity2 : AppCompatActivity() {
                 repeat(10) {
                     emit(it)
                     // use try-catch in risky function in flow
-//                    try {
+                    try {
                         if (it == 3) throw IllegalArgumentException("wrong number")
-//                    } catch (e: Exception) {
-//                    }
+                    } catch (e: Exception) {
+                    }
                     delay(1000)
                 }
             }.onEach {
