@@ -12,9 +12,9 @@ fun printCallStack(deep: Int): String {
  * print collection bean in which you interested defined by [map]
  */
 fun <T> Collection<T>.print(map: (T) -> String) =
-    StringBuilder("\n[").also { sb ->
-        this.forEach { e -> sb.append("\n\t${map(e)},") }
-        sb.append("\n]")
+    StringBuilder("[").also { sb ->
+        this.forEach { e -> sb.append("\t${map(e)},") }
+        sb.append("]")
     }.toString()
 
 

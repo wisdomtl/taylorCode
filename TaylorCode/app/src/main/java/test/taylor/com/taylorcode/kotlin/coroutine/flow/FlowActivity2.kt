@@ -129,6 +129,31 @@ class FlowActivity2 : AppCompatActivity() {
                 Log.i("exception flow", "FlowActivity2.onCreate() onCompletion");
             }.collect()
         }
+
+        /**
+         * case: slow consumer vs fast producer, producer will suspend until the previous value has been consumed
+         */
+        val sharedFlow = MutableSharedFlow<Int>()
+        // make sure consume is before produce
+        lifecycleScope.launch(Dispatchers.IO) {
+            sharedFlow.collect {
+                collectFlow(it)
+            }
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            repeat(100) {
+                sharedFlow.emit(it)
+                Log.i("ttaylor", "[shared flow] emit(${it})");
+                delay(1000)
+            }
+        }
+
+
+    }
+
+    private suspend fun collectFlow(value: Int) {
+        delay(5000)
+        Log.i("ttaylor", "[shared flow] collect(${value})");
     }
 
     private suspend fun generateValues(value: Int) = withContext(Dispatchers.Default) {
