@@ -73,10 +73,11 @@ class ChannelActivity : AppCompatActivity() {
 
 
         /**
-         * case: multiple send and one consume, every 5 consume
+         * case: multiple send and one consume, every 5 consume,
+         * if channel is full and choose BufferOverflow.SUSPEND ,then subsequence value wont be drop ,it is just suspend(not sending)
          */
-        val channel = Channel<Int>(50)
-        repeat(100) {
+        val channel = Channel<Int>(5)
+        repeat(500) {
             lifecycleScope.launch(Dispatchers.IO) { channel.send(it) }
         }
         val list = mutableListOf<Int>()
