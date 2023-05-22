@@ -16,6 +16,15 @@
             android:layout_height="wrap_content"
             />
 
+
+
+        <Button
+            android:id="@+id/btnChannelActivity2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kotlin channel"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_concurrent"
             android:layout_width="match_parent"
@@ -338,12 +347,6 @@
 
 
 
-        <Button
-            android:id="@+id/btnChannelActivity2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="kotlin channel"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnStateFlow"

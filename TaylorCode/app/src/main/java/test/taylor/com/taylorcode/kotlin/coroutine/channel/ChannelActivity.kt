@@ -3,12 +3,17 @@ package test.taylor.com.taylorcode.kotlin.coroutine.channel
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import test.taylor.com.taylorcode.util.print
 
 class ChannelActivity : AppCompatActivity() {
 
@@ -41,9 +46,8 @@ class ChannelActivity : AppCompatActivity() {
         }
 
 
-
         /**
-         * case: use channel as pipeline(flow)
+         * case: use channel as pipeline(flow) 责任链模式
          */
         val orders = listOf(
             PizzaOrder(id = orderId++, Math.random().toInt(), 0),
@@ -63,11 +67,28 @@ class ChannelActivity : AppCompatActivity() {
         mainScope.launch {
             val readyOrders = topping(baking(realOrders))
             for (order in readyOrders) {
-                Log.v("ttaylor","[channel pipeline]ready orders=$order")
+                Log.v("ttaylor", "[channel pipeline]ready orders=$order")
             }
         }
 
 
+        /**
+         * case: multiple send and one consume, every 5 consume
+         */
+        val channel = Channel<Int>(50)
+        repeat(100) {
+            lifecycleScope.launch(Dispatchers.IO) { channel.send(it) }
+        }
+        val list = mutableListOf<Int>()
+        lifecycleScope.launch(Dispatchers.IO) {
+            channel.consumeEach {
+                list.add(it)
+                if (list.size == 5) {
+                    Log.i("ttaylor", "[2324244] list=${list.print { it.toString() }}");
+                    list.clear()
+                }
+            }
+        }
     }
 
     private fun CoroutineScope.baking(orders: ReceiveChannel<PizzaOrder>) = produce {
