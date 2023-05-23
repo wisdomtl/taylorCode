@@ -412,6 +412,7 @@ class MainActivity : BaseActivity(), Param {
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
         btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
+
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }
             //            decorView?.addView(
@@ -502,7 +503,7 @@ class MainActivity : BaseActivity(), Param {
              * turn Flow<Int> into Flow<Flow<Int>> and flat it
              */
             (1..6).asFlow().flatMapConcat { plusFlow(it) }.collect {
-                Log.v("ttaylor", "[flatMapConcat] num=${it}")
+                Log.v("flatMapConcat", "[flatMapConcat] num=${it}")
             }
         }
 

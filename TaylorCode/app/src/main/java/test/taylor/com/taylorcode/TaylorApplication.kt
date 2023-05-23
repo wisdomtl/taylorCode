@@ -2,13 +2,17 @@ package test.taylor.com.taylorcode
 
 import android.app.Activity
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.stetho.Stetho
 import test.taylor.com.taylorcode.activitystack.PageStack
+import test.taylor.com.taylorcode.lifecycle.ProcessLifecycleOwner
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
 import java.text.ParseException
@@ -24,7 +28,7 @@ class TaylorApplication : Application() {
     @OptIn(ExperimentalTime::class)
     override fun onCreate() {
         super.onCreate()
-        PageViewTracker.getInstance().init(this,null)
+        PageViewTracker.getInstance().init(this, null)
         registerActivityLifecycleCallbacks(PageStack)
         System.currentTimeMillis().milliseconds
         Fresco.initialize(this)
@@ -54,6 +58,12 @@ class TaylorApplication : Application() {
             override fun onActivityDestroyed(activity: Activity) {
             }
         })
+
+
+        ProcessLifecycleOwner.init(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
+
+        detectRecents()
         //        ClipboardHook.getInstance().init(this);
 //        ActivityHook.getInstance().init(HookSystemServiceActivity.class);
 
@@ -114,6 +124,11 @@ class TaylorApplication : Application() {
         Debug.stopMethodTracing()
     }
 
+    private fun detectRecents() {
+        // only work before api level lower than 31
+        registerReceiver(RecentReceiver(), IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    }
+
     /**
      * time case: convert utc to timestamp
      *
@@ -168,5 +183,21 @@ class TaylorApplication : Application() {
 
     private interface AppStatusListener {
         fun onAppBackground()
+    }
+}
+
+class RecentReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent?.action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+            val reason = intent?.getStringExtra("reason")
+            if (reason != null) {
+                if (reason == "homekey") {
+                    Log.i("ttaylor", "RecentReceiver.onReceive() home");
+                    // Home Button click
+                } else if (reason == "recentapps") {
+                    Log.i("ttaylor", "RecentReceiver.onReceive() recent");
+                }
+            }
+        }
     }
 }

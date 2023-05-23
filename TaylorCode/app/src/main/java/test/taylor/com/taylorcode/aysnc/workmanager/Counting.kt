@@ -21,10 +21,10 @@ class Counting @JvmOverloads constructor(@NonNull context: Context, @NonNull wor
         var sum = init
         for (i in init..1000 step step) {
             Thread.sleep(1500)
-            Log.v("ttaylor", "tag=couting work, Counting.doWork($randomNumber)  count=$i")
+//            Log.v("ttaylor", "tag=couting work, Counting.doWork($randomNumber)  count=$i")
             sum += i
         }
-        Log.v("ttaylor","tag=, Counting.doWork()  sum=${sum}")
+//        Log.v("ttaylor","tag=, Counting.doWork()  sum=${sum}")
         return Result.success(Data.Builder().putInt("sum", sum).build())
     }
 }
