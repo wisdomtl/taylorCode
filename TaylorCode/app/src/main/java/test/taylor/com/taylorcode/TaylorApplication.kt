@@ -3,18 +3,29 @@ package test.taylor.com.taylorcode
 import android.app.Activity
 import android.app.Application
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Debug
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.os.Process
+import android.os.RemoteException
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.stetho.Stetho
 import test.taylor.com.taylorcode.activitystack.PageStack
 import test.taylor.com.taylorcode.lifecycle.ProcessLifecycleOwner
+import test.taylor.com.taylorcode.proxy.remote.RemoteService
+import test.taylor.com.taylorcode.service.NewService
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
+import test.taylor.com.taylorcode.util.print
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,32 +43,11 @@ class TaylorApplication : Application() {
         registerActivityLifecycleCallbacks(PageStack)
         System.currentTimeMillis().milliseconds
         Fresco.initialize(this)
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            }
 
-            override fun onActivityStarted(activity: Activity) {
-            }
 
-            override fun onActivityResumed(activity: Activity) {
-            }
+//        bindServiceByApplicationContext()
 
-            override fun onActivityPaused(activity: Activity) {
-                val now = System.currentTimeMillis()
-                Log.v("test", "onActivityPaused(${activity.componentName}) time=${now.milliseconds.inWholeSeconds}")
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-                val now = System.currentTimeMillis()
-                Log.v("test", "onActivityStopped(${activity.componentName}) time=${now.milliseconds.inWholeSeconds}")
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-            }
-        })
+//        startServiceAndBoundIt()
 
 
         ProcessLifecycleOwner.init(this)
@@ -121,7 +111,39 @@ class TaylorApplication : Application() {
 //
 //        String str = null;
 //        str.toCharArray();
+        SavedStateHandle()
         Debug.stopMethodTracing()
+    }
+
+    private fun startServiceAndBoundIt() {
+        startService(Intent(applicationContext,NewService::class.java))
+    }
+
+    private fun bindServiceByApplicationContext() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(Runnable {
+            val intent = Intent(applicationContext, RemoteService::class.java)
+            this.bindService(intent, serviceConnection2, BIND_AUTO_CREATE)
+        },0)
+    }
+
+    private var iRemoteSingleton: IRemoteSingleton? = null
+    private val serviceConnection2 by lazy {
+        object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                /**
+                 * bind service with application context will work, onServiceConnected wont call
+                 */
+                iRemoteSingleton = IRemoteSingleton.Stub.asInterface(service)
+                Log.i("ttaylor", "TaylorApplication.onServiceConnected() list=${iRemoteSingleton?.list?.print { it.toString() }}");
+
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                Log.i("ttaylor", "TaylorApplication.onServiceDisconnected()");
+                iRemoteSingleton = null
+            }
+        }
     }
 
     private fun detectRecents() {

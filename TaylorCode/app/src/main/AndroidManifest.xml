@@ -297,12 +297,16 @@
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
         <!--a service in another process-->
+<!--        <service-->
+<!--            android:name=".proxy.remote.RemoteService"-->
+<!--            android:process=":alienProcess" />&lt;!&ndash;: means affiliated to current process but not the same process as the current&ndash;&gt;-->
         <service
             android:name=".proxy.remote.RemoteService"
-            android:process=":alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
+            android:process=".alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
         <service android:name=".lockscreen.LockScreenService" />
         <service android:name=".service.ServiceA" />
         <service android:name=".aidl.LocalSingletonService" />
+        <service android:name=".service.NewService" />
 
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".broadcast.Receiver" />

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,7 +56,7 @@ import androidx.lifecycle.ReportFragment;
 public class ProcessLifecycleOwner implements LifecycleOwner {
 
     @VisibleForTesting
-    static final long TIMEOUT_MS = 700; //mls
+    static final long TIMEOUT_MS = 0; //mls
 
     // ground truth counters
     private int mStartedCounter = 0;
@@ -115,9 +116,8 @@ public class ProcessLifecycleOwner implements LifecycleOwner {
     void activityPaused() {
         mResumedCounter--;
         if (mResumedCounter == 0) {
-//            mHandler.postDelayed(mDelayedPauseRunnable, TIMEOUT_MS);
-            dispatchPauseIfNeeded();
-            dispatchStopIfNeeded();
+            mHandler.postDelayed(mDelayedPauseRunnable, TIMEOUT_MS);
+
         }
     }
 
@@ -191,6 +191,18 @@ public class ProcessLifecycleOwner implements LifecycleOwner {
             public void onActivityStopped(Activity activity) {
                 activityStopped();
             }
+
+            @Override
+            public void onActivityPreSaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+                super.onActivityPreSaveInstanceState(activity, outState);
+                Log.e("saveinstance", "onActivityPreSaveInstanceState.()");
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+                super.onActivitySaveInstanceState(activity, outState);
+                Log.e("saveinstance", "onActivitySaveInstanceState.()");
+            }
         });
     }
 
@@ -199,4 +211,8 @@ public class ProcessLifecycleOwner implements LifecycleOwner {
     public Lifecycle getLifecycle() {
         return mRegistry;
     }
+
+//    interface AppKill{
+//        public void onAppKilled()
+//    }
 }

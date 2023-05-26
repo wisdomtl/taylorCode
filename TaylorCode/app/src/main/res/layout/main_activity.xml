@@ -17,6 +17,12 @@
             />
 
 
+        <Button
+            android:id="@+id/btn_ipc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ipc"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnChannelActivity2"
@@ -964,12 +970,6 @@
             android:text="aidl"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_ipc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ipc"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_tag_textview"

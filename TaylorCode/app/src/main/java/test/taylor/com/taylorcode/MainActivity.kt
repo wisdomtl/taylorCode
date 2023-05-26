@@ -1,9 +1,12 @@
 package test.taylor.com.taylorcode
 
 import android.app.Dialog
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -65,6 +68,7 @@ import test.taylor.com.taylorcode.no_field.NoFieldActivity
 import test.taylor.com.taylorcode.photo.GlideActivity
 import test.taylor.com.taylorcode.photo.GlideActivity3
 import test.taylor.com.taylorcode.proxy.remote.RemoteDynamicProxyActivity
+import test.taylor.com.taylorcode.proxy.remote.RemoteService
 import test.taylor.com.taylorcode.retrofit.god_activity.GodActivity
 import test.taylor.com.taylorcode.retrofit.repository_single.RetrofitActivity
 import test.taylor.com.taylorcode.rxjava.LoginActivity
@@ -131,6 +135,7 @@ import test.taylor.com.taylorcode.ui.window.WindowActivity
 import test.taylor.com.taylorcode.ui.zoom.ZoomActivity
 import test.taylor.com.taylorcode.util.Countdown
 import test.taylor.com.taylorcode.util.PhoneUtil
+import test.taylor.com.taylorcode.util.print
 import test.taylor.com.taylorcode.util.toList
 import test.taylor.com.taylorcode.webview.WebViewActivity
 import kotlin.reflect.KClass
@@ -154,7 +159,7 @@ class MainActivity : BaseActivity(), Param {
         initView()
         readPhoneInfo()
         testValueDiliver();
-
+        bindService()
         try {
             StringBuffer().also {
                 aaa()
@@ -216,7 +221,7 @@ class MainActivity : BaseActivity(), Param {
          */
         listOf<String>("d", "dd", "ddd").forEach lit@{
             if (it == "dd") return@lit
-            Log.d("ttaylor", "[return]MainActivity.onCreate[]: dd@=${it}")
+            Log.d("coroutine", "[return]MainActivity.onCreate[]: dd@=${it}")
         }
 
         /**
@@ -232,50 +237,70 @@ class MainActivity : BaseActivity(), Param {
     }
 
     private fun testValueDiliver() {
-        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
-        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
-        Log.v("ttaylor", "tag=, MainActivity.testValueDiliver()  ")
+        Log.v("testValueDiliver", "tag=, MainActivity.testValueDiliver()  ")
+        Log.v("testValueDiliver", "tag=, MainActivity.testValueDiliver()  ")
+        Log.v("testValueDiliver", "tag=, MainActivity.testValueDiliver()  ")
 
-        Log.v("ttaylor", "testValueDiliver() ${"0".toLong()}")
+        Log.v("testValueDiliver", "testValueDiliver() ${"0".toLong()}")
     }
 
     private fun readPhoneInfo() {
         Log.v(
-            "ttaylor",
+            "readPhoneInfo",
             "tag=, MainActivity.readPhoneInfo()  version=${PhoneUtil.getSystemVersion()}"
         )
-        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
-        Log.v("ttaylor", "tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
+        Log.v("readPhoneInfo", "tag=, MainActivity.readPhoneInfo()  model=${PhoneUtil.getSystemModel()}")
+        Log.v("readPhoneInfo", "tag=, MainActivity.readPhoneInfo()  brand=${PhoneUtil.getBrand()}")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.v("ttaylor", "MainActivity.onStart()" + "  ")
+        Log.v("lifecycle", "MainActivity.onStart()" + "  ")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.v("ttaylor", "MainActivity.onResume()" + "  btn_touch_event.width=${btn_touch_event.measuredWidth}")
+        Log.v("lifecycle", "MainActivity.onResume()" + "  btn_touch_event.width=${btn_touch_event.measuredWidth}")
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        Log.v("ttaylor", "MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}") // view has an dimension here
+        Log.v("lifecycle", "MainActivity.onWindowFocusChanged() btn_touch_event.width=${btn_touch_event.measuredWidth}") // view has an dimension here
     }
 
     override fun onPause() {
         super.onPause()
-        Log.v("ttaylor", "MainActivity.onPause()" + "  ")
+        Log.v("lifecycle", "MainActivity.onPause()" + "  ")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.v("ttaylor", "MainActivity.onStop()" + "  ")
+        Log.v("lifecycle", "MainActivity.onStop()" + "  ")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.v("ttaylor", "MainActivity.onDestroy()" + "  ")
+        Log.v("lifecycle", "MainActivity.onDestroy()" + "  ")
+    }
+
+    private var iRemoteSingleton: IRemoteSingleton? = null
+    private val serviceConnection2 =
+        object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                iRemoteSingleton = IRemoteSingleton.Stub.asInterface(service)
+                Log.i("bound-service-in-service", "Mainactivity.onServiceConnected() list=${iRemoteSingleton?.list?.print { it.toString() }}");
+
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                Log.i("bound-service-in-service", "Mainactivity.onServiceDisconnected()");
+                iRemoteSingleton = null
+            }
+        }
+
+    private fun bindService() {
+        val intent = Intent(this, RemoteService::class.java)
+        this.bindService(intent, serviceConnection2, BIND_AUTO_CREATE)
     }
 
     private fun initView() {
@@ -534,8 +559,8 @@ class MainActivity : BaseActivity(), Param {
 //        Log.v("ttaylor", "tag=asdff, MainActivity.initView()  ${java.lang.String(str).bytes.sum()}")
 
         Countdown(10000, 1000) { it }.apply {
-            onStart = { Log.v("ttaylor", "countdown start---------") }
-            onEnd = { ret -> Log.v("ttaylor", "countdown end--------- ret=${ret}") }
+            onStart = { Log.v("count", "countdown start---------") }
+            onEnd = { ret -> Log.v("count", "countdown end--------- ret=${ret}") }
             accumulator = { acc, value -> acc + value }
         }.start()
 
@@ -645,6 +670,7 @@ class MainActivity : BaseActivity(), Param {
                     .append("k")
                     .toString()
             }
+
             else -> it.toString()
         }
     }
