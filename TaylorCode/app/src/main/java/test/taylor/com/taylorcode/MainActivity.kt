@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.os.SharedMemory
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -151,6 +152,7 @@ class MainActivity : BaseActivity(), Param {
 
     fun bbb(d: Int) {
         Log.i("ttaylor", "MainActivity.bbb() =${d}");
+//        val share = SharedMemory.create("dd",1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

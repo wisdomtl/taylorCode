@@ -1,5 +1,6 @@
 package test.taylor.com.taylorcode
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.BroadcastReceiver
@@ -13,8 +14,8 @@ import android.os.Debug
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.os.Process
-import android.os.RemoteException
+import android.os.MemoryFile
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -26,11 +27,15 @@ import test.taylor.com.taylorcode.service.NewService
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
 import test.taylor.com.taylorcode.util.print
+import java.io.FileDescriptor
+import java.io.IOException
+import java.lang.reflect.Method
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
+
 
 /**
  * Created on 17/7/26.
@@ -43,6 +48,7 @@ class TaylorApplication : Application() {
         registerActivityLifecycleCallbacks(PageStack)
         System.currentTimeMillis().milliseconds
         Fresco.initialize(this)
+        memoryFile()
 
 
 //        bindServiceByApplicationContext()
@@ -115,8 +121,13 @@ class TaylorApplication : Application() {
         Debug.stopMethodTracing()
     }
 
+    private fun memoryFile() {
+        val str = "abcdefg".toByteArray()
+        SharedMemoryUtil.writeToSharedMemory(str, str.size)
+    }
+
     private fun startServiceAndBoundIt() {
-        startService(Intent(applicationContext,NewService::class.java))
+        startService(Intent(applicationContext, NewService::class.java))
     }
 
     private fun bindServiceByApplicationContext() {
@@ -124,7 +135,7 @@ class TaylorApplication : Application() {
         handler.postDelayed(Runnable {
             val intent = Intent(applicationContext, RemoteService::class.java)
             this.bindService(intent, serviceConnection2, BIND_AUTO_CREATE)
-        },0)
+        }, 0)
     }
 
     private var iRemoteSingleton: IRemoteSingleton? = null
@@ -221,5 +232,40 @@ class RecentReceiver : BroadcastReceiver() {
                 }
             }
         }
+    }
+}
+
+
+object SharedMemoryUtil {
+    const val TAG = "SharedMemoryUtil"
+
+    /**
+     * Write data to anonymous shared memory.
+     *
+     * @param data     The data to write.
+     * @param dataSize The size of the data.
+     * @return The ParcelFileDescriptor of the memory file.
+     */
+    fun writeToSharedMemory(data: ByteArray?, dataSize: Int): ParcelFileDescriptor? {
+        var memoryFile: MemoryFile? = null
+        var pfd: ParcelFileDescriptor? = null
+        try {
+            memoryFile = MemoryFile("shared_memory", dataSize)
+            memoryFile.writeBytes(data, 0, 0, dataSize)
+            @SuppressLint("PrivateApi") val method: Method = MemoryFile::class.java.getDeclaredMethod("getFileDescriptor")
+            val fileDescriptor = method.invoke(memoryFile) as FileDescriptor
+            pfd = ParcelFileDescriptor.dup(fileDescriptor)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to write to shared memory: " + e.message)
+        } finally {
+            if (memoryFile != null) {
+                try {
+                    memoryFile.close()
+                } catch (e: IOException) {
+                    Log.e(TAG, "Failed to close memory file: " + e.message)
+                }
+            }
+        }
+        return pfd
     }
 }

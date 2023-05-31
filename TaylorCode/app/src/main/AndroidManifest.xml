@@ -301,7 +301,7 @@
 <!--            android:name=".proxy.remote.RemoteService"-->
 <!--            android:process=":alienProcess" />&lt;!&ndash;: means affiliated to current process but not the same process as the current&ndash;&gt;-->
         <service
-            android:name=".proxy.remote.RemoteService"
+            android:name="test.taylor.com.taylorcode.proxy.remote.RemoteService"
             android:process=".alienProcess" /><!--: means affiliated to current process but not the same process as the current-->
         <service android:name=".lockscreen.LockScreenService" />
         <service android:name=".service.ServiceA" />

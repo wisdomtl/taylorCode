@@ -135,32 +135,32 @@ public class RemoteDynamicProxyActivity extends Activity {
     private ServiceConnection serviceConnection2 = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-//            iRemoteSingleton = IRemoteSingleton.Stub.asInterface(iBinder);
-//            try {
-//                Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  count=" + iRemoteSingleton.getCount());
-//                Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  text=" + iRemoteSingleton.getText2());
-//                List<String> list = iRemoteSingleton.getList();
-//                if (list != null) {
-//                    for (String element : list) {
-//                        Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  element=" + element);
-//                    }
-//                }
-//                //case: change value in remote service
-//                iRemoteSingleton.setCount(20);
-//                Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  count=" + iRemoteSingleton.getCount());
-//                iRemoteSingleton.setText2("changed by main process");
-//                Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  text=" + iRemoteSingleton.getText2());
-//                iRemoteSingleton.add("e");
-//                List<String> list1 = iRemoteSingleton.getList();
-//                if (list1 != null) {
-//                    for (String element : list1) {
-//                        Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  element=" + element);
-//                    }
-//                }
-//
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
+            iRemoteSingleton = IRemoteSingleton.Stub.asInterface(iBinder);
+            try {
+                Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  count=" + iRemoteSingleton.getCount());
+                Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  text=" + iRemoteSingleton.getText2());
+                List<String> list = iRemoteSingleton.getList();
+                if (list != null) {
+                    for (String element : list) {
+                        Log.v("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  element=" + element);
+                    }
+                }
+                //case: change value in remote service
+                iRemoteSingleton.setCount(20);
+                Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  count=" + iRemoteSingleton.getCount());
+                iRemoteSingleton.setText2("changed by main process");
+                Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  text=" + iRemoteSingleton.getText2());
+                iRemoteSingleton.add("e");
+                List<String> list1 = iRemoteSingleton.getList();
+                if (list1 != null) {
+                    for (String element : list1) {
+                        Log.d("ttaylor", "RemoteDynamicProxyActivity.onServiceConnected()"+ " pid="+ Process.myPid() + "  element=" + element);
+                    }
+                }
+
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
