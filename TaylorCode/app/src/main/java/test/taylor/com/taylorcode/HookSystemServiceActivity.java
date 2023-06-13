@@ -2,14 +2,13 @@ package test.taylor.com.taylorcode;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.ListFormatter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 import test.taylor.com.taylorcode.proxy.system.FakeActivity;
@@ -17,7 +16,7 @@ import test.taylor.com.taylorcode.proxy.system.FakeActivity;
 public class HookSystemServiceActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hook_system_service_activity);
         Stack<Integer> stack = new Stack<>();
