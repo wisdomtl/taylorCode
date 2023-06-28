@@ -1,9 +1,5 @@
 package test.taylor.com.taylorcode.kotlin
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-
 fun Int.formatNums(): String = this.let {
     return when {
         it >= 10000 -> {    //1w以上

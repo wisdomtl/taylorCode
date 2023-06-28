@@ -14,6 +14,15 @@
             android:layout_height="wrap_content"
             />
 
+
+
+        <Button
+            android:id="@+id/btnConcurrentInit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="concurrent init"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_frame_sequence"
             android:layout_width="match_parent"
@@ -288,13 +297,6 @@
             android:textAllCaps="false" />
 
 
-
-        <Button
-            android:id="@+id/btnConcurrentInit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="concurrent init"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_glide_performance"

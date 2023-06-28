@@ -432,7 +432,7 @@ class MainActivity : BaseActivity(), Param {
              * turn Flow<Int> into Flow<Flow<Int>> and flat it
              */
             (1..6).asFlow().flatMapConcat { plusFlow(it) }.collect {
-                Log.v("ttaylor", "[flatMapConcat] num=${it}")
+                Log.v("ttaylor2333", "[flatMapConcat] num=${it}")
             }
         }
 
