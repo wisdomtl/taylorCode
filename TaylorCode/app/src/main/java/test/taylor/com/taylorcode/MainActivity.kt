@@ -44,6 +44,7 @@ import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity3
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
@@ -373,6 +374,7 @@ class MainActivity : BaseActivity(), Param {
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
         btn_collapsing.setOnClickListener { startActivity<ViewPagerActivity2> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
+        flowConcurrent.setOnClickListener { startActivity<FlowActivity3> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }
