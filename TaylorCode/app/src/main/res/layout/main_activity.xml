@@ -19,7 +19,7 @@
             android:id="@+id/flowConcurrent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="triangle"
+            android:text="flow concurrent"
             android:textAllCaps="false" />
 
         <Button

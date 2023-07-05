@@ -19,35 +19,35 @@ class FlowActivity3 : AppCompatActivity() {
     )
 
     private val alphas = listOf(
-        AdSource("a", 300, 11),
-        AdSource("b", 100, 9),
-        AdSource("c", 150, 8),
-        AdSource("d", 500, 7),
+        AdSource("a", 30, 200),
+        AdSource("b", 10, 9),
+        AdSource("c", 13, 8),
+        AdSource("d", 20, 7),
         AdSource("e", 80, 6),
         AdSource("f", 200, 5),
         AdSource("g", 100, 5),
         AdSource("h", 30, 4),
-        AdSource("i", 200, 3),
+        AdSource("i", 200, 100),
     )
 
     private val alphaFlow = alphas.asFlow().map { AdSourceState(loadAlpha(it), false) }
 
     private val numberFlow = flow {
-        val maxAdSource = numbers.asFlow()
+        numbers.asFlow()
             .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } }
             .reduce { max, cur -> if (cur.price > max.price) cur else max }
-        emit(AdSourceState(maxAdSource, true))
+            .also { emit(AdSourceState(it, true)) }
     }
 
     private suspend fun loadAlpha(adSource: AdSource): AdSource {
         delay(adSource.delay)
-        Log.d("ttaylor", "FlowActivity3.loadAlpha[adSource]: source(${adSource.name}).price=${adSource.price}")
+        Log.d("FlowActivity3", "FlowActivity3.loadAlpha[adSource]: source(${adSource.name}).price=${adSource.price}")
         return adSource
     }
 
     private suspend fun loadNumber(adSource: AdSource): AdSource {
         delay(adSource.delay)
-        Log.i("ttaylor", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
+        Log.i("FlowActivity3", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
         return adSource
     }
 
@@ -61,7 +61,7 @@ class FlowActivity3 : AppCompatActivity() {
                     !it.isDone
                 }
                 .reduce { accumulator: AdSource, value: AdSource -> if (value.price > accumulator.price) value else accumulator }
-            Log.e("ttaylor", "FlowActivity3.onCreate[]: max AdSource=${maxAdSource}")
+            Log.e("FlowActivity3", "FlowActivity3.onCreate[]: max AdSource=${maxAdSource}")
         }
     }
 }
