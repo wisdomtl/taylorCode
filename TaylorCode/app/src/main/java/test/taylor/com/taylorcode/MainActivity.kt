@@ -45,6 +45,7 @@ import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity3
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity4
 import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
@@ -344,6 +345,7 @@ class MainActivity : BaseActivity(), Param {
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
+        btn_flow_filtered.setOnClickListener { startActivity<FlowActivity4> { } }
         btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
         btnStickyFragment.setOnClickListener {
             startActivity<StickyLiveDataActivity> { }

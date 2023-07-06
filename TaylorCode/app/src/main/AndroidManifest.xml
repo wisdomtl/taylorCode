@@ -289,6 +289,7 @@
         <activity android:name=".gif.FrescoActivity" />
         <activity android:name=".frame_sequence.FrameSequenceActivity" />
         <activity android:name=".kotlin.coroutine.flow.FlowActivity3" />
+        <activity android:name=".kotlin.coroutine.flow.FlowActivity4" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

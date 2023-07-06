@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class FlowActivity3 : AppCompatActivity() {
 
     private val numbers = listOf(
-        AdSource("1", 20, 10),
+        AdSource("1", 5000, 10),
         AdSource("2", 100, 20),
         AdSource("3", 200, 1),
         AdSource("4", 150, 3),
@@ -34,7 +34,7 @@ class FlowActivity3 : AppCompatActivity() {
 
     private val numberFlow = flow {
         numbers.asFlow()
-            .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } }
+            .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } }//case: parallel in flow, suspend function must in floatMapMerge()
             .reduce { max, cur -> if (cur.price > max.price) cur else max }
             .also { emit(AdSourceState(it, true)) }
     }
@@ -47,7 +47,7 @@ class FlowActivity3 : AppCompatActivity() {
 
     private suspend fun loadNumber(adSource: AdSource): AdSource {
         delay(adSource.delay)
-        Log.i("FlowActivity3", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
+        Log.i("ttaylorasdf", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
         return adSource
     }
 
