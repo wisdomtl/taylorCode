@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class FlowActivity3 : AppCompatActivity() {
 
@@ -30,11 +31,17 @@ class FlowActivity3 : AppCompatActivity() {
         AdSource("i", 200, 100),
     )
 
+    /**
+     * case: sequence in flow
+     */
     private val alphaFlow = alphas.asFlow().map { AdSourceState(loadAlpha(it), false) }
 
+    /**
+     * case: parallel in flow
+     */
     private val numberFlow = flow {
         numbers.asFlow()
-            .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } }//case: parallel in flow, suspend function must in floatMapMerge()
+            .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } } //case: parallel in flow, suspend function must in floatMapMerge()
             .reduce { max, cur -> if (cur.price > max.price) cur else max }
             .also { emit(AdSourceState(it, true)) }
     }
@@ -47,12 +54,16 @@ class FlowActivity3 : AppCompatActivity() {
 
     private suspend fun loadNumber(adSource: AdSource): AdSource {
         delay(adSource.delay)
-        Log.i("ttaylorasdf", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
+        Log.i("ttaylor1111", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
         return adSource
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /**
+         * case: parallel cut sequence in flow
+         */
         lifecycleScope.launch {
             val maxAdSource = flowOf(alphaFlow, numberFlow)
                 .flattenMerge()
