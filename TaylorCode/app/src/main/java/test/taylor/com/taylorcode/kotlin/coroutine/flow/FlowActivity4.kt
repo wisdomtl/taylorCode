@@ -6,17 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
 class FlowActivity4 : AppCompatActivity() {
     private val numbers = listOf(
-        AdSource("1", 20, 10),
-        AdSource("2", 100, 20),
-        AdSource("3", 200, 1),
-        AdSource("4", 150, 3),
-        AdSource("5", 50, 15),
+        Request("1", 20, 10,),
+        Request("2", 100, 20,),
+        Request("3", 200, 1,),
+        Request("4", 150, 3,),
+        Request("5", 50, 15,),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

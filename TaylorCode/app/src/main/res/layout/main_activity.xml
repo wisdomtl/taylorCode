@@ -15,6 +15,13 @@
             />
 
         <Button
+            android:id="@+id/btnFlowThread"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow thread"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_flow_filtered"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

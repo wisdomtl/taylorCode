@@ -43,10 +43,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity3
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity4
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.*
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
@@ -374,6 +371,7 @@ class MainActivity : BaseActivity(), Param {
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
+        btnFlowThread.setOnClickListener { startActivity<FlowActivity5> { } }
         btn_collapsing.setOnClickListener { startActivity<ViewPagerActivity2> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
         flowConcurrent.setOnClickListener { startActivity<FlowActivity3> { } }

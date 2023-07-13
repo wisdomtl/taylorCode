@@ -7,55 +7,53 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class FlowActivity3 : AppCompatActivity() {
 
-    private val numbers = listOf(
-        AdSource("1", 5000, 10),
-        AdSource("2", 100, 20),
-        AdSource("3", 200, 1),
-        AdSource("4", 150, 3),
-        AdSource("5", 50, 15),
+    private val parallelList = listOf(
+        Request("parallel1", 1600, 10),
+        Request("parallel2", 2900, 20),
+        Request("parallel3", 2000, 11),
+        Request("parallel4", 3000, 30),
+        Request("parallel5", 5000, 50),
+        Request("parallel6", 10000, 60),
     )
 
-    private val alphas = listOf(
-        AdSource("a", 30, 200),
-        AdSource("b", 10, 9),
-        AdSource("c", 13, 8),
-        AdSource("d", 20, 7),
-        AdSource("e", 80, 6),
-        AdSource("f", 200, 5),
-        AdSource("g", 100, 5),
-        AdSource("h", 30, 4),
-        AdSource("i", 200, 100),
+    private val sequenceList = listOf(
+        Request("sequence1", 2100, 30, 30),
+        Request("sequence2", 1100, 19, 20),
+        Request("sequence3", 2000, 15, 16),
+        Request("sequence4", 2200, 7, 10),
+        Request("sequence5", 3000, 6, 5),
+        Request("sequence6", 2000, 5, 5),
+        Request("sequence7", 400, 5, 5),
     )
 
     /**
      * case: sequence in flow
      */
-    private val alphaFlow = alphas.asFlow().map { AdSourceState(loadAlpha(it), false) }
+    private val sequenceFlow = sequenceList.asFlow().map {
+        val isDone = it.run { price >= bottomPrice }
+        RequestSwitch(load(it), isDone)
+    }.transformWhile {
+        emit(RequestSwitch(it.request, false))
+        !it.isDone
+    }
 
     /**
      * case: parallel in flow
      */
-    private val numberFlow = flow {
-        numbers.asFlow()
-            .flatMapMerge { adSource -> flow { emit(loadNumber(adSource)) } } //case: parallel in flow, suspend function must in floatMapMerge()
+    private val parallelFlow = flow {
+        parallelList.asFlow()
+            .flatMapMerge { request -> flow { emit(load(request)) } } //case: parallel in flow, suspend function must in floatMapMerge()
             .reduce { max, cur -> if (cur.price > max.price) cur else max }
-            .also { emit(AdSourceState(it, true)) }
+            .also { emit(RequestSwitch(it, true)) }
     }
 
-    private suspend fun loadAlpha(adSource: AdSource): AdSource {
-        delay(adSource.delay)
-        Log.d("FlowActivity3", "FlowActivity3.loadAlpha[adSource]: source(${adSource.name}).price=${adSource.price}")
-        return adSource
-    }
-
-    private suspend fun loadNumber(adSource: AdSource): AdSource {
-        delay(adSource.delay)
-        Log.i("ttaylor1111", "FlowActivity3.loadNumber[adSource]: source(${adSource.name}).price=${adSource.price}")
-        return adSource
+    private suspend fun load(request: Request): Request {
+        delay(request.delay)
+        Log.i("test", "source(${request.name}).price=${request.price}")
+        return request
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,19 +63,19 @@ class FlowActivity3 : AppCompatActivity() {
          * case: parallel cut sequence in flow
          */
         lifecycleScope.launch {
-            val maxAdSource = flowOf(alphaFlow, numberFlow)
+            val maxRequest = flowOf(sequenceFlow, parallelFlow)
                 .flattenMerge()
-                .transformWhile<AdSourceState, AdSource> {
-                    emit(it.adSource)
+                .transformWhile<RequestSwitch, Request> {
+                    emit(it.request)
                     !it.isDone
                 }
-                .reduce { accumulator: AdSource, value: AdSource -> if (value.price > accumulator.price) value else accumulator }
-            Log.e("FlowActivity3", "FlowActivity3.onCreate[]: max AdSource=${maxAdSource}")
+                .reduce { accumulator: Request, value: Request -> if (value.price > accumulator.price) value else accumulator }
+            Log.e("FlowActivity3", "FlowActivity3.onCreate[]: max AdSource=${maxRequest}")
         }
     }
 }
 
-data class AdSource(val name: String, val delay: Long, val price: Int)
+data class Request(val name: String, val delay: Long, val price: Int, val bottomPrice: Int = 0)
 
 
-data class AdSourceState(val adSource: AdSource, val isDone: Boolean)
+data class RequestSwitch(val request: Request, val isDone: Boolean)
