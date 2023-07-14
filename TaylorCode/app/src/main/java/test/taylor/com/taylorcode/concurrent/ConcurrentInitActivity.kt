@@ -71,7 +71,7 @@ class ConcurrentInitActivity : AppCompatActivity() {
         }
     }
 
-    private fun delayFlushList() = scope2.launch {
+    private fun delayFlushList() = scope2.launch(logDispatcher) {
         delay(50)
         Log.d("ttaylor", "ConcurrentInitActivity.delayFlushList[]: threadId=${Thread.currentThread().id}")
         flushList()
@@ -103,7 +103,7 @@ class ConcurrentInitActivity : AppCompatActivity() {
             }
         }
 
-        scope.launch() {
+        scope.launch(logDispatcher) {
             channel.consumeEach {
                 /**
                  * Channel is sequence, so it is thread-safe
