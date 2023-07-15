@@ -121,6 +121,35 @@
             android:textAllCaps="false" />
 
         <Button
+            android:id="@+id/btnFlowThread"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow thread"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_flow_filtered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow filtered"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/flowConcurrent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flow concurrent"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnConcurrentInit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="concurrent init"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_frame_sequence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -371,13 +400,6 @@
             android:textAllCaps="false" />
 
 
-
-        <Button
-            android:id="@+id/btnConcurrentInit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="concurrent init"
-            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_glide_performance"

@@ -49,8 +49,7 @@ import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.kotlin.Channel.ChannelActivity
 import test.taylor.com.taylorcode.kotlin.collection.KotlinCollectionActivity
 import test.taylor.com.taylorcode.kotlin.coroutine.*
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.FlowActivity2
-import test.taylor.com.taylorcode.kotlin.coroutine.flow.SharedFlowActivity
+import test.taylor.com.taylorcode.kotlin.coroutine.flow.*
 import test.taylor.com.taylorcode.kotlin.coroutine.mvi.StateFlowActivity
 import test.taylor.com.taylorcode.kotlin.delegate.DelegateActivity
 import test.taylor.com.taylorcode.kotlin.extension.contentView
@@ -438,6 +437,7 @@ class MainActivity : BaseActivity(), Param {
         btn_concurrent_list.setOnClickListener { startActivity<test.taylor.com.taylorcode.aysnc.concurrent.ConcurrentActivity> { } }
         btn_test.setOnClickListener { startActivity<HookSystemServiceActivity> { } }
         btn_cover.setOnClickListener { startActivity<CoveredByFragmentActivity> { } }
+        btn_flow_filtered.setOnClickListener { startActivity<FlowActivity4> { } }
         btn_frame_sequence.setOnClickListener { startActivity<FrameSequenceActivity> { } }
 
         btnStickyFragment.setOnClickListener {
@@ -469,8 +469,10 @@ class MainActivity : BaseActivity(), Param {
         btn_glide_performance.setOnClickListener { startActivity<GlideActivity3> { } }
         btnConcurrentInit.setOnClickListener { startActivity<ConcurrentInitActivity> { } }
         btnChannelActivity2.setOnClickListener { startActivity<test.taylor.com.taylorcode.kotlin.coroutine.channel.ChannelActivity> { } }
+        btnFlowThread.setOnClickListener { startActivity<FlowActivity5> { } }
         btn_collapsing.setOnClickListener { startActivity<ViewPagerActivity2> { } }
         btnTriangle.setOnClickListener { startActivity<DrawTriangleActivity> { } }
+        flowConcurrent.setOnClickListener { startActivity<FlowActivity3> { } }
         bottom_navigation_view.setOnClickListener { startActivity<BottomNavigationViewActivity> { } }
         btn_constraintLayout_flow.setOnClickListener { startActivity<ConstraintLayoutFlowActivity> { } }
         staggerLayout.setOnClickListener { startActivity<StaggerLayoutManagerActivity> { } }

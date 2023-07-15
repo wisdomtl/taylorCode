@@ -293,6 +293,9 @@
         <activity android:name=".kotlin.select.SelectActivity" />
         <activity android:name=".ui.viewpager3.demo.Viewpager3Activity" />
         <activity android:name=".kotlin.coroutine.select.SelectActivity" />
+        <activity android:name=".kotlin.coroutine.flow.FlowActivity3" />
+        <activity android:name=".kotlin.coroutine.flow.FlowActivity4" />
+        <activity android:name=".kotlin.coroutine.flow.FlowActivity5" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />
