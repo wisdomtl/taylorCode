@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import test.taylor.com.taylorcode.kotlin.coroutine.LogContinuationInterceptor
 
 class SuspendCoroutineActivity : AppCompatActivity() {
+
+    private val scope = CoroutineScope(SupervisorJob()+Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +21,16 @@ class SuspendCoroutineActivity : AppCompatActivity() {
             ddd()
             Log.v("ttaylor", "4444")
         }
+
+        /**
+         *case: log.e will be printed after delay resume
+         */
+       scope.launch {
+           delay()
+           repeat(30){
+               Log.e("ttaylor", "SuspendCoroutineActivity.onCreate[]: after outer delay(${it}) ")
+           }
+       }
     }
 
     suspend fun ddd() = withContext(Dispatchers.Default)
@@ -30,5 +39,15 @@ class SuspendCoroutineActivity : AppCompatActivity() {
         Log.v("ttaylor", "2222()")
         delay(2000)
         Log.v("ttaylor", "3333()")
+    }
+
+    /**
+     * case: log.d will be printed after delay resume and before out delay return
+     */
+    private suspend fun delay(){
+        delay(3000)
+        repeat(30){
+            Log.d("ttaylor", "SuspendCoroutineActivity.delay[]: after delay($it)")
+        }
     }
 }
