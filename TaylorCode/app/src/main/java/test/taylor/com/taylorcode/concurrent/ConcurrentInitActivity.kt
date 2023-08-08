@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import okhttp3.internal.platform.android.AndroidLogHandler.flush
 import test.taylor.com.taylorcode.R
 import test.taylor.com.taylorcode.kotlin.*
 import test.taylor.com.taylorcode.util.print
@@ -14,13 +13,12 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.random.Random
 
 class ConcurrentInitActivity : AppCompatActivity() {
 
     private var hasInit = AtomicBoolean(false)
 
-    private val list =ConcurrentLinkedQueue<Int>()
+    private val list = ConcurrentLinkedQueue<Int>()
 //    private val list = mutableListOf<Int>()
     private var lastFlushTime = 0L
     private var flushJob: Job? = null
@@ -65,19 +63,19 @@ class ConcurrentInitActivity : AppCompatActivity() {
         list.add(value)
         flushJob?.cancel()
         if (list.size >= 5 || System.currentTimeMillis() - lastFlushTime >= 50) {
-            flushList()
+            flush()
         } else {
-            flushJob = delayFlushList()
+            flushJob = delayFlush()
         }
     }
 
-    private fun delayFlushList() = scope2.launch(logDispatcher) {
+    private fun delayFlush() = scope2.launch(logDispatcher) {
         delay(50)
         Log.d("ttaylor", "ConcurrentInitActivity.delayFlushList[]: threadId=${Thread.currentThread().id}")
-        flushList()
+        flush()
     }
 
-    private fun flushList() {
+    private fun flush() {
         val batch = list.map { Value(it) }
         process(batch)
         list.clear()
