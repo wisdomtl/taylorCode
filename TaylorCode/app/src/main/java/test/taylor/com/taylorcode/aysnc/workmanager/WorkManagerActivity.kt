@@ -16,7 +16,7 @@ class WorkManagerActivity : AppCompatActivity() {
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        doBasicWork();
-//        doPeriodWork();
+        doPeriodWork();
 //        returnValueFromWorkManager()
         returnValueFromPeriodWork()
 //
