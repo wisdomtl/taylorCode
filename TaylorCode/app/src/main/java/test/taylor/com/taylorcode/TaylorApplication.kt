@@ -26,6 +26,8 @@ import test.taylor.com.taylorcode.proxy.remote.RemoteService
 import test.taylor.com.taylorcode.service.NewService
 import test.taylor.com.taylorcode.ui.fragment.visibility.PageViewTracker
 import test.taylor.com.taylorcode.util.DateUtil.formatDate
+import test.taylor.com.taylorcode.util.isAppInstalled
+import test.taylor.com.taylorcode.util.isPackageInstalled
 import test.taylor.com.taylorcode.util.print
 import java.io.FileDescriptor
 import java.io.IOException
@@ -49,7 +51,21 @@ class TaylorApplication : Application() {
         System.currentTimeMillis().milliseconds
         Fresco.initialize(this)
         memoryFile()
+        Log.d("ttaylor22", "onCreate: com.android.updater isInstall=${isAppInstalled(this,"com.android.updater")}")
+        Log.d("ttaylor22", "onCreate: com.taobao.idlefish isInstall=${isAppInstalled(this,"com.taobao.idlefish")}")
+        Log.d("ttaylor22", "onCreate: com.sina.weibo isInstall=${isAppInstalled(this,"cn.soulapp.android")}")
+        Log.d("ttaylor22", "onCreate: com.sina.weibo isInstall=${isAppInstalled(this,"com.sina.weibo")}")
+        Log.d("ttaylor22", "onCreate: tv.danmaku.bili isInstall=${isAppInstalled(this,"tv.danmaku.bili")}")
+        Log.d("ttaylor22", "onCreate: com.baidu.newapp isInstall=${isAppInstalled(this,"com.baidu.newapp")}")
+        Log.d("ttaylor22", "onCreate: ctrip.android.view isInstall=${isAppInstalled(this,"ctrip.android.view")}")
 
+        Log.e("ttaylor22", "onCreate: com.android.updater isInstall=${isPackageInstalled(this,"com.android.updater")}")
+        Log.e("ttaylor22", "onCreate: com.taobao.idlefish isInstall=${isPackageInstalled(this,"com.taobao.idlefish")}")
+        Log.e("ttaylor22", "onCreate: com.sina.weibo isInstall=${isPackageInstalled(this,"cn.soulapp.android")}")
+        Log.e("ttaylor22", "onCreate: com.sina.weibo isInstall=${isPackageInstalled(this,"com.sina.weibo")}")
+        Log.e("ttaylor22", "onCreate: tv.danmaku.bili isInstall=${isPackageInstalled(this,"tv.danmaku.bili")}")
+        Log.e("ttaylor22", "onCreate: com.baidu.newapp isInstall=${isPackageInstalled(this,"com.baidu.newapp")}")
+        Log.e("ttaylor22", "onCreate: ctrip.android.view isInstall=${isPackageInstalled(this,"ctrip.android.view")}")
 
 //        bindServiceByApplicationContext()
 
@@ -57,7 +73,7 @@ class TaylorApplication : Application() {
 
 
         ProcessLifecycleOwner.init(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
+                ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
 
         detectRecents()
         //        ClipboardHook.getInstance().init(this);

@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "test.taylor.com.taylorcode"
         minSdkVersion 24
-        targetSdkVersion 32
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
