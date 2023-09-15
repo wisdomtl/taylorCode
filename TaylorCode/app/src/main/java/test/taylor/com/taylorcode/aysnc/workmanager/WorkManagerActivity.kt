@@ -15,8 +15,8 @@ class WorkManagerActivity : AppCompatActivity() {
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        doBasicWork();
-//        doPeriodWork();
+//        doBasicWork();
+        doPeriodWork();
 //        returnValueFromWorkManager()
         returnValueFromPeriodWork()
 //
@@ -31,7 +31,7 @@ class WorkManagerActivity : AppCompatActivity() {
      * WorkManager case1:do the simplest background work
      */
     private fun doBasicWork() {
-        val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).setInitialDelay(1,TimeUnit.MINUTES).build()
+        val workRequest: WorkRequest = OneTimeWorkRequest.Builder(Counting::class.java).build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 
@@ -102,7 +102,7 @@ class WorkManagerActivity : AppCompatActivity() {
      */
     private fun doPeriodWork() {
         //the interval cannot be less than 15 minutes
-        val workRequest1 = PeriodicWorkRequest.Builder(Counting::class.java, 10, TimeUnit.SECONDS).build()
+        val workRequest1 = PeriodicWorkRequest.Builder(Counting::class.java, 15, TimeUnit.MINUTES).build()
         WorkManager.getInstance(this).enqueue(workRequest1)
     }
 

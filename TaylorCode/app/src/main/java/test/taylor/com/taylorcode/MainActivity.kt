@@ -157,6 +157,12 @@ class MainActivity : BaseActivity(), Param {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        val str2 = "0123456"
+        for (i in 1 until str2.length){
+            val sub1 = str2.substring(0,i)
+            val sub2 = str2.substring(i,str2.length)
+            Log.d("ttaylor111", "onCreate: 1=$sub1,2=$sub2")
+        }
         initView()
         readPhoneInfo()
         testValueDiliver();
