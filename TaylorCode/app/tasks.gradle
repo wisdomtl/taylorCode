@@ -1,0 +1,21 @@
+
+//case: customize gradle task in a separate file
+class TaylorTask extends DefaultTask{
+
+    @Internal
+    def taskName = "default"
+
+    @TaskAction
+    def action1(){
+        println("taylor task($taskName) action1")
+    }
+
+    @TaskAction
+    def action2(){
+        println("taylor action2")
+    }
+}
+println("this is tasks.gradle")
+tasks.register("taylor",TaylorTask){
+    taskName = "xxxx"
+}
