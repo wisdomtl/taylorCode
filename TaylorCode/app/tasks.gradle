@@ -1,21 +1,80 @@
-
 //case: customize gradle task in a separate file
-class TaylorTask extends DefaultTask{
+class TaylorTask extends DefaultTask {
 
     @Internal
     def taskName = "default"
 
     @TaskAction
-    def action1(){
+    def action1() {
         println("taylor task($taskName) action1")
     }
 
+
     @TaskAction
-    def action2(){
+    def action2() {
         println("taylor action2")
     }
 }
+
 println("this is tasks.gradle")
-tasks.register("taylor",TaylorTask){
+def task1 = tasks.register("taylor", TaylorTask) {
     taskName = "xxxx"
+    //case: configure the attribute of task
+    it.configure {
+        description = "this is a taylor task"
+    }
+    it.doFirst {// case: it is an action invoked before all taskActions
+        println("do first")
+    }
+
+    println("task configuration") // case: invoked in configuration
+
+    it.doLast {// case: it is an action invoked after all taskActions
+        println("do last")
+    }
+}
+
+def task2 = tasks.register("taylor2") {
+    println("task2") // case: invoked in configuration
+    it.doLast {
+        println("task2 do last")
+    }
+}
+
+def task3 = tasks.register("taylor3") {
+    println("task3") // case: invoked in configuration
+    it.doLast {
+        println("task3 do last")
+    }
+}
+
+def task4 = tasks.register("taylor4") {
+    println("task4") // case: invoked in configuration
+    it.doLast {
+        println("task4 do last")
+    }
+}
+
+//case: task dependency
+task1.configure{
+    dependsOn task2
+    finalizedBy task3
+    mustRunAfter task4 // task4 不会被执行，但如果被执行了，则一定会在task1之前执行
+    onlyIf {
+        def provider = providers.gradleProperty("taylor")
+        provider.present
+    } // task1 不会被执行（只有当lambda返回true时才执行当前任务,即./gradlew taylor -Ptaylor），但 task2和task3 都会被执行
+    doLast {
+        println("task1 do last")
+        def provider = providers.gradleProperty("stop")
+        if(provider.present) {
+            throw new StopExecutionException()
+        }
+        println("this wont be executed") // not executed due to StopExecutionException
+    }
+}
+
+//case: find task and add action dynamically
+tasks.findByName("taylor2").doFirst{
+    println("taylor2 dynamically add action doFirst")
 }
