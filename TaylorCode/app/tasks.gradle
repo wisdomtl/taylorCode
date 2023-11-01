@@ -1,3 +1,6 @@
+apply from: "${projectDir}/util.gradle"
+println("util.gradle.path=${"${projectDir}/util.gradle"}")
+
 //case: customize gradle task in a separate file
 class TaylorTask extends DefaultTask {
 
@@ -51,6 +54,7 @@ def task3 = tasks.register("taylor3") {
 def task4 = tasks.register("taylor4") {
     println("task4") // case: invoked in configuration
     it.doLast {
+        println("get version(${getVersionFromCmd()}) from cmd")
         println("task4 do last")
     }
 }

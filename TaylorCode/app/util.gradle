@@ -1,0 +1,6 @@
+
+
+//custom function in separate gradle file
+ext.getVersionFromCmd = { ->
+    return project.findProperty("version")
+}
