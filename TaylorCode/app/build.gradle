@@ -203,6 +203,7 @@ dependencies {
 }
 
 apply from: "${projectDir}/tasks.gradle"
+apply plugin: TaylorPlugin
 ////case: customize gradle task
 //class TaylorTask extends DefaultTask{
 //
@@ -223,3 +224,17 @@ apply from: "${projectDir}/tasks.gradle"
 //    taskName = "xxxx"
 //}
 
+//case: custom plugin
+class TaylorPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project target) {
+        println("Taylor plugin")
+        //case : create task in plugin
+        target.task("plugin-task") {task->
+            task.doFirst {
+                println("plugin-task doFirst")
+            }
+        }
+    }
+}
