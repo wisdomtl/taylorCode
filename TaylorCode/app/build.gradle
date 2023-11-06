@@ -5,6 +5,9 @@ plugins {
     id 'kotlin-kapt'
 }
 
+// case: define val and read it in separate file
+apply from: "${projectDir}/util.gradle"
+println("printing val in gradle.ext=${gradle.taylorVal}")
 
 android {
     compileSdkVersion 33
