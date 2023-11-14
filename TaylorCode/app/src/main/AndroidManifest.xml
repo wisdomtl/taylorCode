@@ -296,6 +296,7 @@
         <activity android:name=".kotlin.coroutine.flow.FlowActivity3" />
         <activity android:name=".kotlin.coroutine.flow.FlowActivity4" />
         <activity android:name=".kotlin.coroutine.flow.FlowActivity5" />
+        <activity android:name="com.taylor.test.ad.AdActivity" />
 
         <service android:name=".aidl.LocalServer" />
         <service android:name=".broadcast.MyIntentService" />

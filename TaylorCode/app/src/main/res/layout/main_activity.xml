@@ -17,6 +17,13 @@
             />
 
         <Button
+            android:id="@+id/btnAd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ad"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/btn_workmanager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

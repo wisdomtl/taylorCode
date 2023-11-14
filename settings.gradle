@@ -1,3 +1,5 @@
 include ':app',':TaylorCode:app'
 include ':mylibrary'
 include ':TaylorCode:gradle_plugin'
+include ':ad-api'
+include ':ad-imp-popad'
