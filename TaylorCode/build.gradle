@@ -41,6 +41,28 @@ allprojects {
         }
     }
 }
+// for detekt
+configurations {
+    detekt
+}
+dependencies {
+    detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.23.3'
+}
+
+def detektTask = tasks.register("detekt", JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+
+    def input = "$projectDir"
+    def config = "$projectDir/default-detekt-config.yml"
+    def exclude = ".*/build/.*,.*/resources/.*"
+    def path = "html:${projectDir}/detekt-output.html"
+    def params = [ '-i', input, '-c', config, '-ex', exclude, '-r',path]
+
+    args(params)
+}
+// for detekt
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
