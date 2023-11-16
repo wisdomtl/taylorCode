@@ -2,10 +2,10 @@ package com.taylor.ad
 
 import android.app.Activity
 
-interface Ad {
-    var stateListener: StateListener?
-    fun load(activity: Activity)
-    fun release()
+abstract class Ad(protected val slotId: String) {
+    abstract var stateListener: StateListener?
+    abstract fun load(activity: Activity)
+    abstract fun release()
 
     sealed class State(private val order: Int) : Comparable<State> {
         override fun compareTo(other: State): Int {
@@ -26,12 +26,6 @@ interface Ad {
         object CLOSED : State(7)
         object SKIP : State(8)
     }
-
-    interface StateListener {
-        /**
-         * A callback when ad state changes.
-         * All States is defined in [Ad.State]
-         */
-        fun onStateChange(state: State)
-    }
 }
+
+typealias StateListener = (Ad.State) -> Unit

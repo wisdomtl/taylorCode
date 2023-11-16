@@ -2,6 +2,6 @@ package com.taylor.ad
 
 import android.app.Activity
 
-interface InterstitialAd:Ad {
-    fun show(activity:Activity)
+abstract class InterstitialAd(slotId: String) : Ad(slotId) {
+    abstract fun show(activity: Activity)
 }

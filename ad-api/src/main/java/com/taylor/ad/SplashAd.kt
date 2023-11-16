@@ -2,6 +2,6 @@ package com.taylor.ad
 
 import android.view.ViewGroup
 
-interface SplashAd : Ad {
-    fun show(viewGroup: ViewGroup)
+abstract class SplashAd(slotId: String) : Ad(slotId) {
+    abstract fun show(viewGroup: ViewGroup)
 }
