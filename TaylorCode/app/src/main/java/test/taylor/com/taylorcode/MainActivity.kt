@@ -5,6 +5,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageInfo
+import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.os.IBinder
 import android.os.SharedMemory
@@ -157,6 +159,12 @@ class MainActivity : BaseActivity(), Param {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        try {
+            val info = packageManager.getPackageInfo("com.xingin.xhs",0)
+            Log.d("ttaylor", "MainActivity.onCreate: info=${info}")
+        } catch (e: Exception) {
+            Log.d("ttaylor", "MainActivity.onCreate: info not found")
+        }
         val str2 = "0123456"
         for (i in 1 until str2.length){
             val sub1 = str2.substring(0,i)
@@ -267,7 +275,16 @@ class MainActivity : BaseActivity(), Param {
 
     override fun onResume() {
         super.onResume()
+
+       val list =  getInstalledApplication()
+        list.print { it.packageName }.let { Log.d("ttaylor", "MainActivity.installApp=${it}") }
+        val list2 = getInstalledPackages(this,0)
+        list2.print { it.packageName }.let { Log.d("ttaylor", "MainActivity.install pkg=$it ") }
         Log.v("lifecycle", "MainActivity.onResume()" + "  btn_touch_event.width=${btn_touch_event.measuredWidth}")
+        val queryList = queryIntentActivities(this, Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }, 0)
+        queryList.print { it.activityInfo.packageName }.let { Log.d("ttaylor", "MainActivity. queryList=$it ") }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -308,6 +325,35 @@ class MainActivity : BaseActivity(), Param {
     private fun bindService() {
         val intent = Intent(this, RemoteService::class.java)
         this.bindService(intent, serviceConnection2, BIND_AUTO_CREATE)
+    }
+
+    private fun getInstalledApplication(): List<PackageInfo> {
+        val queryList = queryIntentActivities(this, Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }, 0)
+        val list = mutableListOf<PackageInfo>()
+        queryList.forEach {
+            val pkg: String = it.activityInfo.packageName.trim()
+            val packageInfo: PackageInfo = packageManager.getPackageInfo(pkg, 0)
+            list.add(packageInfo)
+        }
+        return list
+    }
+
+    private fun getInstalledPackages(context: Context, flags: Int): List<PackageInfo> {
+        try {
+            return context.packageManager.getInstalledPackages(flags) ?: listOf()
+        } catch (e: Exception) {
+        }
+        return listOf()
+    }
+
+    private fun queryIntentActivities(context: Context, intent: Intent, flags: Int): List<ResolveInfo> {
+        try {
+            return context.packageManager.queryIntentActivities(intent, flags) ?: listOf()
+        } catch (t: Throwable) {
+        }
+        return listOf()
     }
 
     private fun initView() {

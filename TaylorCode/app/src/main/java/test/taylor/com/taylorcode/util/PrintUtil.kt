@@ -13,7 +13,7 @@ fun printCallStack(deep: Int): String {
  */
 fun <T> Collection<T>.print(map: (T) -> String) =
     StringBuilder("[").also { sb ->
-        this.forEach { e -> sb.append("\t${map(e)},") }
+        this.forEach { e -> sb.append("\t${map(e)},\n") }
         sb.append("]")
     }.toString()
 
